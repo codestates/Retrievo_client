@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Button, ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Button } from "@chakra-ui/react";
 import theme from "./styles/theme";
 
 const App: React.FC<Record<string, never>> = () => (
   <ChakraProvider theme={theme}>
-    <Button width={100}>커스텀버튼</Button>
+    <Button>테스트 버튼</Button>
   </ChakraProvider>
 );
 
