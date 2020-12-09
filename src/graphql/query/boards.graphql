@@ -1,0 +1,13 @@
+query GetBoards{
+  getBoards{
+    error{
+      code
+      message
+      field
+    }
+    boards{
+      boardColumnIndex
+      title
+    }
+  }
+}

@@ -43,7 +43,7 @@ module.exports = {
       },
     ],
     "prettier/prettier": "error",
-    "no-unused-vars": "error",
+    "no-unused-vars": "warn",
     "no-console": "warn",
     "click-events-have-key-events": "off",
     "max-classes-per-file": "off",
