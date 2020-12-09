@@ -1,14 +1,31 @@
-import * as React from "react";
-import { ChakraProvider, Button } from "@chakra-ui/react";
-// import { DragDropContext, Draggable } from "react-beautiful-dnd";
+import React from "react";
+import { gql, useQuery } from "@apollo/client";
+import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./styles/theme";
 
-const App: React.FC<Record<string, never>> = () => (
-  <ChakraProvider theme={theme}>
-    <Button>ㅠ.ㅠ</Button>
-  </ChakraProvider>
-);
+const GET_BOARDS = gql`
+  query getBoards {
+    boards {
+      boardColumnIndex
+      title
+      task {
+        description
+        title
+        boardRowIndex
+      }
+    }
+  }
+`;
+const App: React.FC<Record<string, never>> = () => {
+  const { loading, data } = useQuery(GET_BOARDS);
+
+  return (
+    <>
+      <ChakraProvider theme={theme}>
+        <p>{loading ? "로딩중" : data}</p>
+      </ChakraProvider>
+    </>
+  );
+};
 
 export default App;
-
-// Type 'Element' is not assignable to type 'DraggableChildrenFn & ReactPortal'.
