@@ -1,43 +1,53 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
-  styles: {
-    colors: {
-      primary: {
-        black: "#003434",
-        normal: "#31D5BF",
-        normalLight: "#41E1CC",
-        light: "#CDF1EC",
-      },
-      achromatic: {
-        black: "#343434",
-        gray900: "#4F4F4F",
-        gray800: "#828282",
-        gray700: "#C4C4C4",
-        gray600: "#D0D0D0",
-        gray500: "#E9E9E9",
-        gray400: "#F5F5F5",
-        white: "#FFFFFF",
-      },
-      palette: {
-        labelYellow: "#FFE81D",
-        labelOrange: "#FD5C02",
-        labelGreen: "#76B515",
-        labelViolet: "#933183",
-        labelPurple: "#9F7AEA",
-        labelPink: "#B83280",
-        labelTeal: "#38B2AC",
-        labelCyan: "#0987A0",
-        violetLight: "#C4C9E7",
-        blueLight: "#E7F5FF",
-        warning: "#EE8030",
-        fail: "#FF6262",
-        failDark: "#DE5B5B",
-      },
+  fonts: {
+    body: "Open Sans, sans-serif",
+    heading: "Open Sans, sans-serif",
+    title: "Righteous, cursive",
+  },
+  fontWeights: {
+    light: 300,
+    normal: 400,
+    medium: 600,
+    bold: 700,
+  },
+  colors: {
+    primary: {
+      100: "#003434",
+      200: "#31D5BF",
+      300: "#41E1CC",
+      400: "#CDF1EC",
     },
+    achromatic: {
+      100: "#FFFFFF",
+      200: "#F5F5F5",
+      300: "#E9E9E9",
+      400: "#D0D0D0",
+      500: "#C4C4C4",
+      600: "#828282",
+      700: "#4F4F4F",
+      800: "#343434",
+    },
+    labelYellow: "#FFE81D",
+    labelOrange: "#FD5C02",
+    labelGreen: "#76B515",
+    labelViolet: "#933183",
+    labelPurple: "#9F7AEA",
+    labelPink: "#B83280",
+    labelTeal: "#38B2AC",
+    labelCyan: "#0987A0",
+    violetLight: "#C4C9E7",
+    blueLight: "#E7F5FF",
+    warning: "#EE8030",
+    fail: "#FF6262",
+    failDark: "#DE5B5B",
+  },
+  styles: {
     global: () => ({
       "html, body": {
-        fontSize: "sm",
+        fontFamily: "body",
+        fontSize: "md",
         color: "#343434",
       },
       a: {
@@ -49,4 +59,5 @@ const theme = extendTheme({
     }),
   },
 });
+
 export default theme;
