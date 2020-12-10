@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "css.lint.float": "warning",
+  "html.format.indentInnerHtml": true,
+  "auto-close-tag.SublimeText3Mode": true
+}
