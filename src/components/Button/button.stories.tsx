@@ -2,10 +2,19 @@ import React from "react";
 import { FaBeer } from "react-icons/fa";
 import Button, { buttonProps } from "./index";
 
-export const basicButton = (args: buttonProps): React.ReactElement => (
+export const BasicButton = (args: buttonProps): React.ReactElement => (
   <Button {...args} />
 );
-basicButton.args = {
+BasicButton.args = {
+  buttonType: "primary",
+  isFullWidth: true,
+};
+
+export const IconButton = (args: buttonProps): React.ReactElement => (
+  <Button {...args} />
+);
+
+IconButton.args = {
   buttonType: "primary",
   rightIcon: <FaBeer />,
   isFullWidth: true,
