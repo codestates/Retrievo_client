@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton, Text, Heading } from "@chakra-ui/react";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
 export enum buttonColor {
   primary = "primary",
@@ -38,8 +39,6 @@ const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
       >
         text
       </ChakraButton>
-      <Text>text</Text>
-      <Heading fontFamily="title">Retrievo</Heading>
     </>
   );
 };

@@ -47,8 +47,8 @@ const theme = extendTheme({
     global: () => ({
       "html, body": {
         fontFamily: "body",
-        fontSize: "md",
         color: "#343434",
+        fontSize: "md",
       },
       a: {
         color: "teal.500",
