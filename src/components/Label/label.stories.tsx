@@ -1,8 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import Label, { LabelProps } from "./index";
-import theme from "../../styles/theme";
-
-const { colors } = theme;
 
 export const basicLabel = ({
   children,
@@ -24,7 +22,6 @@ export const dropdownLabel = ({
 dropdownLabel.args = {
   hasDropdown: true,
   children: "IN PROGRESS",
-  onClick: () => console.log("click"),
 };
 
 const LabelStories = {
