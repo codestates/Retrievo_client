@@ -1,13 +1,12 @@
 import React from "react";
-import { ChakraProvider, Button } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./styles/theme";
+import Button from "./components/Button/Button";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
     <>
-      <ChakraProvider theme={theme}>
-        <Button>다른가?</Button>
-      </ChakraProvider>
+      <ChakraProvider theme={theme}>테스트</ChakraProvider>
     </>
   );
 };
