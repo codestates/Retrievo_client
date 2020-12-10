@@ -49,7 +49,7 @@ const theme = extendTheme({
     labelCyan: "#0987A0",
     violetLight: "#C4C9E7",
     blueLight: "#E7F5FF",
-    warning: "#EE8030",
+    danger: "#EE8030",
     fail: "#FF6262",
     failDark: "#DE5B5B",
   },
