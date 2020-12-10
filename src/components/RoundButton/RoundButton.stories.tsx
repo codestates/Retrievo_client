@@ -7,14 +7,6 @@ export const NormalButton = (args: roundButtonProps): React.ReactElement => (
 NormalButton.args = {
   buttonType: "yellow",
 };
-// export const SocialButton = (args: roundButtonProps): React.ReactElement => (
-//   <RoundButton {...args} />
-// );
-
-// SocialButton.args = {
-//   buttonType: "socialButton",
-//   rightIcon: <FcGoogle />,
-// };
 
 const ButtonStories = {
   title: "components/RoundButton",
@@ -26,12 +18,6 @@ const ButtonStories = {
         options: Object.keys(roundBtnColors),
       },
     },
-    // socialButton: {
-    //   control: {
-    //     type: "select",
-    //     options: Object.keys(socialButton),
-    //   },
-    // },
   },
 };
 
