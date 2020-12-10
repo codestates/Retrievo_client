@@ -1,12 +1,12 @@
 import React from "react";
-import Heading, { HeadingProps, headingStyle } from "./index";
+import Heading, { HeadingProps, headingEnum } from "./index";
 
 export const HomepageHeading = ({
   children,
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 HomepageHeading.args = {
-  headingType: headingStyle.homepage,
+  headingType: headingEnum.homepage,
   children: "Retrievo",
 };
 
@@ -15,7 +15,7 @@ export const authHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 authHeading.args = {
-  headingType: headingStyle.auth,
+  headingType: headingEnum.auth,
   children: "Register",
 };
 
@@ -24,7 +24,7 @@ export const pageHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 pageHeading.args = {
-  headingType: headingStyle.page,
+  headingType: headingEnum.page,
   children: "Dashboard",
 };
 
@@ -33,7 +33,7 @@ export const tableHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 tableHeading.args = {
-  headingType: headingStyle.table,
+  headingType: headingEnum.table,
   children: "Activity Stream",
 };
 
@@ -42,7 +42,7 @@ export const sprintHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 sprintHeading.args = {
-  headingType: headingStyle.sprint,
+  headingType: headingEnum.sprint,
   children: "Sprint Name",
 };
 
@@ -51,7 +51,7 @@ export const boardHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 boardHeading.args = {
-  headingType: headingStyle.board,
+  headingType: headingEnum.board,
   children: "In Progress",
 };
 
@@ -60,7 +60,7 @@ export const taskCardHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 taskCardHeading.args = {
-  headingType: headingStyle.taskCard,
+  headingType: headingEnum.taskCard,
   children: "Task Title",
 };
 
@@ -69,7 +69,7 @@ export const taskHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 taskHeading.args = {
-  headingType: headingStyle.task,
+  headingType: headingEnum.task,
   children: "Write Task Name",
 };
 
@@ -78,7 +78,7 @@ export const modalHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 modalHeading.args = {
-  headingType: headingStyle.modal,
+  headingType: headingEnum.modal,
   children: "Invite New Members",
 };
 
@@ -87,7 +87,7 @@ export const articleHeading = ({
   ...args
 }: HeadingProps): React.ReactElement => <Heading {...args}>{children}</Heading>;
 articleHeading.args = {
-  headingType: headingStyle.article,
+  headingType: headingEnum.article,
   children: "Make your data come to life",
 };
 
@@ -98,7 +98,7 @@ const HeadingStories = {
     headingType: {
       control: {
         type: "select",
-        options: Object.keys(headingStyle),
+        options: Object.keys(headingEnum),
       },
     },
   },

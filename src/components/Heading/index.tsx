@@ -1,7 +1,7 @@
 import React from "react";
 import { Heading as ChakraHeading } from "@chakra-ui/react";
 
-export enum headingStyle {
+export enum headingEnum {
   homepage = "for Retrievo hompage title",
   auth = "for register, login, new project title",
   page = "for project pages title",
@@ -15,7 +15,7 @@ export enum headingStyle {
 }
 
 export type HeadingProps = {
-  headingType: headingStyle;
+  headingType: headingEnum;
   children: string;
 };
 
@@ -25,67 +25,56 @@ const Heading: React.FC<HeadingProps> = ({
   ...props
 }) => {
   const renderHeadings = () => {
-    // let headingAs = "h2";
     let fontFamily = "heading";
     let fontSize = "6xl";
     let fontWeight = "normal";
     let color = "achromatic.700";
 
-    if (headingType === headingStyle.homepage) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.homepage) {
       fontFamily = "title";
       fontSize = "5xl";
     }
 
-    if (headingType === headingStyle.auth) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.auth) {
       fontSize = "6xl";
       color = "achromatic.800";
     }
 
-    if (headingType === headingStyle.page) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.page) {
       fontSize = "4xl";
       fontWeight = "bold";
     }
 
-    if (headingType === headingStyle.table) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.table) {
       fontSize = "xl";
       fontWeight = "bold";
     }
 
-    if (headingType === headingStyle.sprint) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.sprint) {
       fontSize = "3xl";
       fontWeight = "medium";
     }
 
-    if (headingType === headingStyle.board) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.board) {
       fontSize = "md";
     }
 
-    if (headingType === headingStyle.taskCard) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.taskCard) {
       fontSize = "md";
       fontWeight = "medium";
     }
 
-    if (headingType === headingStyle.task) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.task) {
       fontSize = "3xl";
       fontWeight = "medium";
     }
 
-    if (headingType === headingStyle.modal) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.modal) {
       fontSize = "xl";
       color = "achromatic.800";
     }
 
-    if (headingType === headingStyle.article) {
-      // headingAs = "h1";
+    if (headingType === headingEnum.article) {
       fontSize = "4xl";
       fontWeight = "bold";
     }
