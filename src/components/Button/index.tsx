@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton, Text, Heading } from "@chakra-ui/react";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
 export enum buttonColor {
   primary = "primary",
@@ -16,7 +17,7 @@ const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
   const buttonConfig = { buttonType };
   const renderBgColors = (): string => {
     if (buttonType === buttonColor.primary) return "primary.200";
-    if (buttonType === buttonColor.danger) return "fall";
+    if (buttonType === buttonColor.danger) return "fail";
     if (buttonType === buttonColor.white) return "achromatic.100";
     if (buttonType === buttonColor.gray) return "achromatic.500";
     return "primary.200";
@@ -38,8 +39,6 @@ const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
       >
         text
       </ChakraButton>
-      <Text>text</Text>
-      <Heading fontFamily="title">Retrievo</Heading>
     </>
   );
 };
