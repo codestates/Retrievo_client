@@ -1,6 +1,6 @@
 import React from "react";
 import { FaBeer } from "react-icons/fa";
-import Button, { buttonProps } from "./Button";
+import Button, { buttonProps } from "./index";
 
 export const basicButton = (args: buttonProps): React.ReactElement => (
   <Button {...args} />
