@@ -1,6 +1,6 @@
 import React from "react";
 import { FaBeer } from "react-icons/fa";
-import Button, { buttonProps } from "./index";
+import Button, { buttonProps, buttonColor } from "./index";
 
 export const BasicButton = (args: buttonProps): React.ReactElement => (
   <Button {...args} />
@@ -27,7 +27,7 @@ const ButtonStories = {
     buttonType: {
       control: {
         type: "select",
-        options: ["primary", "danger", "white", "gray"],
+        options: Object.keys(buttonColor),
       },
     },
   },
