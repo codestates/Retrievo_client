@@ -1,15 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
 
-// interface BetterColorHues  {
-//   [keys: string]: string;
-// }
-// 🍫 😻
-// body: "system-ui, sans-serif",
-// heading: "Georgia, serif",
-// mono: "Menlo, monospace",
-
-// import component
-
 const theme = extendTheme({
   fonts: {
     body: "Open Sans, sans-serif",
@@ -47,9 +37,12 @@ const theme = extendTheme({
     labelPink: "#B83280",
     labelTeal: "#38B2AC",
     labelCyan: "#0987A0",
+    violet: "#3949AB",
+    violetBg: "#E6E9FA",
     violetLight: "#C4C9E7",
     blueLight: "#E7F5FF",
     warning: "#EE8030",
+    danger: "#EE8030",
     fail: "#FF6262",
     failDark: "#DE5B5B",
   },
@@ -57,8 +50,8 @@ const theme = extendTheme({
     global: () => ({
       "html, body": {
         fontFamily: "body",
-        fontSize: "md",
         color: "#343434",
+        fontSize: "md",
       },
       a: {
         color: "teal.500",
