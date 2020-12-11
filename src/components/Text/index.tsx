@@ -7,7 +7,7 @@ export type TextProps = {
   children: string;
 };
 
-const Heading: React.FC<TextProps> = ({ color, children, ...props }) => {
+const Text: React.FC<TextProps> = ({ color, children, ...props }) => {
   const fontColor = color || "achromatic.700";
   const textConfig = { color: fontColor };
   return (
@@ -17,4 +17,4 @@ const Heading: React.FC<TextProps> = ({ color, children, ...props }) => {
   );
 };
 
-export default Heading;
+export default Text;

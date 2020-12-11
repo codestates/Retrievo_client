@@ -41,10 +41,16 @@ const TextStories = {
   title: "components/Text",
   component: Text,
   argTypes: {
-    headingType: {
+    paragraphType: {
       control: {
         type: "select",
-        options: [""],
+        options: [
+          "primary.100",
+          "primary.200",
+          "achromatic.600",
+          "achromatic.700",
+          "achromatic.800",
+        ],
       },
     },
   },
