@@ -1,7 +1,10 @@
 import React from "react";
-import { Text as ChakraText } from "@chakra-ui/react";
+import {
+  Text as ChakraText,
+  TextProps as ChakraTextPropsType,
+} from "@chakra-ui/react";
 
-export type TextProps = {
+export type TextProps = ChakraTextPropsType & {
   color?: string;
   fontSize?: string;
   children: string;

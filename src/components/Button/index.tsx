@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton } from "@chakra-ui/react";
+import {
+  Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
+} from "@chakra-ui/react";
 
 export enum buttonColor {
   primary = "primary",
@@ -9,11 +12,12 @@ export enum buttonColor {
   gray = "gray",
 }
 
-export type buttonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type buttonProps = ChakraButtonProps & {
   buttonType: buttonColor;
+  children: React.ReactNode;
 };
 
-const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
+const Button: React.FC<buttonProps> = ({ buttonType, children, ...props }) => {
   const buttonConfig = { buttonType };
   const renderBgColors = (): string => {
     if (buttonType === buttonColor.primary) return "primary.200";
@@ -37,7 +41,7 @@ const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
         {...buttonConfig}
         {...props}
       >
-        text
+        {children}
       </ChakraButton>
     </>
   );
