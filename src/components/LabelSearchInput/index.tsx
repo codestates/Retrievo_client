@@ -1,14 +1,20 @@
+/* eslint-disable react/jsx-fragments */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
 import React, { useState } from "react";
 import CreatableSelect from "react-select/creatable";
+import { Box } from "@chakra-ui/react";
 import _ from "lodash";
+import Label from "../Label";
 
-type item = { id: string; value: string; label: string };
+type item = { id: string; value: string; label: string; color: string };
 
-type OptionsType = {
+export type OptionsType = {
   options: item[];
-  defaultValue: item[];
+  defaultValue?: item[];
+  createTaskLabel: (item: item) => void;
+  deleteTaskLabel: (item: item) => void;
 };
 
 enum actionTypes {
@@ -21,8 +27,15 @@ enum actionTypes {
   createOption = "create-option",
 }
 
-const ReactSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
-  const [currentOptions, setCurrentOptions] = useState<item[]>(defaultValue);
+const LabelSearchInput: React.FC<OptionsType> = ({
+  options,
+  defaultValue,
+  createTaskLabel,
+  deleteTaskLabel,
+}) => {
+  const [currentOptions, setCurrentOptions] = useState<item[]>(
+    defaultValue || []
+  );
 
   const getCreatedValue = (newValue: item[]): item[] => {
     return _.difference(newValue, currentOptions);
@@ -31,7 +44,18 @@ const ReactSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
   const getDeletedValue = (newValue: item[]): item[] => {
     return _.difference(currentOptions, newValue);
   };
-  // label, value, __isNew__: true;
+
+  const handleCreateChange = (newValue: item[]) => {
+    const created = getCreatedValue(newValue);
+    createTaskLabel(created[0]);
+    setCurrentOptions(newValue);
+  };
+
+  const handleDeleteChange = (newValue: item[]) => {
+    const deleted = getDeletedValue(newValue);
+    deleteTaskLabel(deleted[0]);
+    setCurrentOptions(newValue);
+  };
 
   const handleChange = (newValue: any, { action }: { action: string }) => {
     console.log("newValue:", newValue);
@@ -39,34 +63,13 @@ const ReactSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
     switch (action) {
       case actionTypes.selectOption:
       case actionTypes.createOption:
-        // selectOption: 리스트 선택시
-        // createOption: 없던 옵션 생성시
-        // TODO : create mutation
-        const created = getCreatedValue(newValue);
-        console.log(created);
-        setCurrentOptions(newValue);
+        handleCreateChange(newValue);
         break;
 
+      // TODO : 라벨 삭제하기 기능
       case actionTypes.removeValue:
       case actionTypes.popValue:
-        const deleted = getDeletedValue(newValue);
-        console.log(deleted);
-        // removeValue: 라벨 하나의 x 버튼 눌렀을시
-        // popvalue: 백스페이스로 삭제시
-        setCurrentOptions(newValue);
-        break;
-
-      case actionTypes.clear:
-        console.log("clear");
-        // 전체삭제 버튼 눌렀을 시
-        break;
-
-      case actionTypes.deselectOption:
-        console.log("deselectOption");
-        break;
-
-      case actionTypes.setValue:
-        console.log("setValue");
+        handleDeleteChange(newValue);
         break;
 
       default:
@@ -74,14 +77,41 @@ const ReactSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
     }
   };
 
+  const renderLabels = () => {
+    return currentOptions?.map((label) => {
+      return (
+        <Label key={label.id} m={1} bgColor={label.color} hasCloseButton>
+          {label.value}
+        </Label>
+      );
+    });
+  };
+
   return (
-    <CreatableSelect
-      isMulti
-      onChange={handleChange}
-      options={options}
-      defaultValue={defaultValue}
-    />
+    <React.Fragment>
+      <Box spacing="5px" marginBottom="0.5rem">
+        {renderLabels()}
+      </Box>
+      <CreatableSelect
+        isMulti
+        onChange={handleChange}
+        options={options}
+        defaultValue={defaultValue}
+        placeholder="Select Task's Label"
+        styles={{
+          multiValue: (base) => ({
+            ...base,
+            // display: "none",
+            backgroundColor: "primary.100",
+          }),
+          clearIndicator: (base) => ({
+            ...base,
+            display: "none",
+          }),
+        }}
+      />
+    </React.Fragment>
   );
 };
 
-export default ReactSelect;
+export default LabelSearchInput;
