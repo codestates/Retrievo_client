@@ -24,6 +24,21 @@ dropdownLabel.args = {
   children: "IN PROGRESS",
 };
 
+export const closeButtonLabel = ({
+  children,
+  ...args
+}: LabelProps): React.ReactElement => (
+  <>
+    <p>cursor pointer와 onClose props 가능</p>
+    <Label {...args}>{children}</Label>
+  </>
+);
+closeButtonLabel.args = {
+  hasCloseButton: true,
+  children: "DONE",
+  onClose: () => console.log("close"),
+};
+
 const LabelStories = {
   title: "components/Label",
   component: Label,
