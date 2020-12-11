@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-fragments */
 import React, { useState } from "react";
 import Select, { components } from "react-select";
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import _ from "lodash";
 import DeleteableAvatar from "../DeleteableAvatar";
 
@@ -55,7 +55,9 @@ const MemberSelect: React.FC<OptionsType> = ({
   deleteAssignee,
   createAssignee,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<item[]>(defaultValue);
+  const [currentOptions, setCurrentOptions] = useState<item[]>(
+    defaultValue || []
+  );
 
   const getCreatedValue = (newValue: item[]): item => {
     return _.difference(newValue, currentOptions)[0];
@@ -112,10 +114,6 @@ const MemberSelect: React.FC<OptionsType> = ({
     }
   };
 
-  const handleOnFocus = () => {
-    console.log("포커스");
-  };
-
   const renderMembers = () => {
     return currentOptions
       ? currentOptions.map((user) => {
@@ -158,14 +156,6 @@ const MemberSelect: React.FC<OptionsType> = ({
           options={options}
           onChange={handleChange}
         />
-        {/* <Text
-          position="absolute"
-          top={0}
-          left={3}
-          color="achromatic.600"
-        >
-          add user to assignee
-        </Text> */}
       </Box>
     </React.Fragment>
   );
