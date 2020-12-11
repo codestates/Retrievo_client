@@ -80,7 +80,6 @@ const IconButton: React.FC<IconButtonProps> = ({
         bgColor="transparent"
         _hover={{
           background: "transparent",
-          color: "teal.500",
         }}
         {...props}
       />
