@@ -109,16 +109,18 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
   };
 
   const renderMembers = () => {
-    return currentOptions.map((user) => {
-      return (
-        <DeleteableAvatar
-          src={user.avatar}
-          name={user.username}
-          userId={user.id}
-          handleDelete={(id) => console.log(id)}
-        />
-      );
-    });
+    return currentOptions
+      ? currentOptions.map((user) => {
+          return (
+            <DeleteableAvatar
+              src={user.avatar}
+              name={user.username}
+              userId={user.id}
+              handleDelete={(id) => console.log(id)}
+            />
+          );
+        })
+      : null;
   };
 
   return (

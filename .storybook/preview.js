@@ -22,4 +22,5 @@ export const parameters = {
         ? 0
         : a[1].id.localeCompare(b[1].id, undefined, { numeric: true }),
   },
+  controls: { expanded: true },
 };
