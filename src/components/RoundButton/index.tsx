@@ -1,31 +1,94 @@
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton } from "@chakra-ui/react";
+import { IconButton as ChakraRoundButton } from "@chakra-ui/react";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub, FaPlus } from "react-icons/fa";
+import { FiCamera } from "react-icons/fi";
 
-export enum roundBtnColors {
+export enum RoundButtonColor {
   yellow = "yellow",
   red = "red",
+  primary = "primary",
+  white = "white",
+  black = "black",
+}
+
+export enum IconType {
+  google = "google",
+  github = "github",
+  plus = "plus",
+  camera = "camera",
+  none = "none",
+}
+
+export enum SizeType {
+  xxs = "2xs",
+  xs = "xs",
+  sm = "sm",
+  md = "md",
+  lg = "lg",
+  xl = "xl",
+  xxl = "2xl",
+}
+
+export enum ShadowType {
+  xs = "xs",
+  sm = "sm",
+  base = "Base",
+  md = "md",
+  lg = "lg",
+  xl = "xl",
+  xxl = "2xl",
 }
 
 export type roundButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  buttonType: roundBtnColors;
+  buttonColor: RoundButtonColor;
+  iconType: string | undefined;
 };
 
-const RoundButton: React.FC<roundButtonProps> = ({ buttonType, ...props }) => {
-  const roundBtnConfig = { buttonType };
+const RoundButton: React.FC<roundButtonProps> = ({
+  buttonColor,
+  iconType,
+  ...props
+}) => {
+  const roundBtnConfig = { buttonColor };
+
   const renderBgColors = (): string => {
-    if (buttonType === roundBtnColors.yellow) return "yellow.300";
-    if (buttonType === roundBtnColors.red) return "red.500";
+    if (buttonColor === RoundButtonColor.yellow) return "yellow.300";
+    if (buttonColor === RoundButtonColor.red) return "red.500";
+    if (buttonColor === RoundButtonColor.primary) return "primary.200";
+    if (buttonColor === RoundButtonColor.white) return "achromatic.100";
+    if (buttonColor === RoundButtonColor.black) return "achromatic.800";
+
     return "primary.200";
+  };
+  const renderIcon = (): React.ReactElement => {
+    if (iconType === IconType.google) return <FcGoogle />;
+    if (iconType === IconType.github) return <FaGithub />;
+    if (iconType === IconType.plus) return <FaPlus />;
+    if (iconType === IconType.camera) return <FiCamera />;
+    return <FcGoogle />;
   };
 
   return (
     <>
-      <ChakraButton
-        bgColor={renderBgColors()}
-        borderRadius="full"
-        {...props}
-        {...roundBtnConfig}
-      />
+      {iconType ? (
+        <ChakraRoundButton
+          aria-label="Button with Icon"
+          bgColor={renderBgColors()}
+          borderRadius="full"
+          icon={renderIcon()}
+          {...props}
+          {...roundBtnConfig}
+        />
+      ) : (
+        <ChakraRoundButton
+          aria-label="Button without Icon"
+          bgColor={renderBgColors()}
+          borderRadius="full"
+          {...props}
+          {...roundBtnConfig}
+        />
+      )}
     </>
   );
 };
