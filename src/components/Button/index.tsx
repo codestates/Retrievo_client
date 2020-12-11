@@ -11,9 +11,10 @@ export enum buttonColor {
 
 export type buttonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   buttonType: buttonColor;
+  children: React.ReactNode;
 };
 
-const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
+const Button: React.FC<buttonProps> = ({ buttonType, children, ...props }) => {
   const buttonConfig = { buttonType };
   const renderBgColors = (): string => {
     if (buttonType === buttonColor.primary) return "primary.200";
@@ -37,7 +38,7 @@ const Button: React.FC<buttonProps> = ({ buttonType, ...props }) => {
         {...buttonConfig}
         {...props}
       >
-        text
+        {children}
       </ChakraButton>
     </>
   );
