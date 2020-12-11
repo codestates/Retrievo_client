@@ -4,7 +4,8 @@ import "react-dates/initialize";
 import * as moment from "moment";
 import { DateRangePicker, FocusedInputShape } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
-import "./react_dates_override.css";
+import { StyledCalendar, StyledTextContainer } from "./calendar.styled";
+import Text from "../Text";
 
 export type calendarProps = HTMLAttributes<HTMLElement>;
 
@@ -26,11 +27,11 @@ const Calendar: React.FC<calendarProps> = () => {
     setEndDate(endDate);
   };
   return (
-    <div className="calendar">
-      <div className="calendar__dateTextContainer">
-        <span className="calendar__dateText">Start date</span>
-        <span className="calendar__dueDate">Due date</span>
-      </div>
+    <StyledCalendar>
+      <StyledTextContainer>
+        <Text>Start Date</Text>
+        <Text ml="4">Due Date</Text>
+      </StyledTextContainer>
       <DateRangePicker
         startDate={startDate}
         startDateId="tata-start-date"
@@ -41,7 +42,7 @@ const Calendar: React.FC<calendarProps> = () => {
         focusedInput={focusedInput}
         onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
       />
-    </div>
+    </StyledCalendar>
   );
 };
 
