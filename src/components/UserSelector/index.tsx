@@ -49,7 +49,7 @@ export type OptionsType = {
   createAssignee: (id: string) => void;
 };
 
-const MemberSelect: React.FC<OptionsType> = ({
+const UserSelect: React.FC<OptionsType> = ({
   options,
   defaultValue,
   deleteAssignee,
@@ -161,4 +161,4 @@ const MemberSelect: React.FC<OptionsType> = ({
   );
 };
 
-export default MemberSelect;
+export default UserSelect;
