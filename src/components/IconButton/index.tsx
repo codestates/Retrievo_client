@@ -1,5 +1,8 @@
-import React, { ButtonHTMLAttributes } from "react";
-import { IconButton as ChakraIconButton } from "@chakra-ui/react";
+import React from "react";
+import {
+  IconButton as ChakraIconButton,
+  IconButtonProps as ChakraIconButtonProps,
+} from "@chakra-ui/react";
 import { FiBell, FiUser, FiDelete, FiPlus } from "react-icons/fi";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import {
@@ -9,19 +12,6 @@ import {
   RiPencilLine,
 } from "react-icons/ri";
 import { BsPaperclip } from "react-icons/bs";
-
-// export const IconsElement = {
-//   BUTTON_NOTIFICATION: <FiBell />,
-//   BUTTON_USER: <FiUser />,
-//   BUTTON_DELETE: <FiDelete />,
-//   BUTTON_PLUS: <FiPlus />,
-//   BUTTON_CALENDAR: <FaRegCalendarAlt />,
-//   BUTTON_DELETE_BIN: <RiDeleteBin2Line />,
-//   BUTTON_SAVE: <RiSave2Line />,
-//   BUTTON_CLOSE: <RiCloseFill />,
-//   BUTTON_PENCIL: <RiPencilLine />,
-//   BUTTON_CLIP: <BsPaperclip />,
-// };
 
 export enum SizeType {
   xs = "xs",
@@ -49,7 +39,7 @@ export enum IconButtonBgColors {
   red = "red",
 }
 
-export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type IconButtonProps = ChakraIconButtonProps & {
   iconButtonType?: string;
 };
 
@@ -75,7 +65,6 @@ const IconButton: React.FC<IconButtonProps> = ({
   return (
     <>
       <ChakraIconButton
-        aria-label="IconButtons without background"
         icon={renderIcons()}
         bgColor="transparent"
         _hover={{
