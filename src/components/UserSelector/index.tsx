@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-fragments */
 import React, { useState } from "react";
 import Select, { components } from "react-select";
-import { HStack } from "@chakra-ui/react";
+import { Box, HStack, Text } from "@chakra-ui/react";
 import _ from "lodash";
 import DeleteableAvatar from "../DeleteableAvatar";
 
@@ -44,7 +44,7 @@ enum actionTypes {
 
 export type OptionsType = {
   options: item[];
-  defaultValue: item[];
+  defaultValue?: item[];
   deleteAssignee: (id: string) => void;
   createAssignee: (id: string) => void;
 };
@@ -112,6 +112,10 @@ const MemberSelect: React.FC<OptionsType> = ({
     }
   };
 
+  const handleOnFocus = () => {
+    console.log("포커스");
+  };
+
   const renderMembers = () => {
     return currentOptions
       ? currentOptions.map((user) => {
@@ -134,24 +138,35 @@ const MemberSelect: React.FC<OptionsType> = ({
       <HStack spacing="5px" marginBottom="0.5rem">
         {renderMembers()}
       </HStack>
-      <Select
-        closeMenuOnSelect={false}
-        components={{ MultiValueContainer, ClearIndicator }}
-        styles={{
-          multiValue: (base) => ({
-            ...base,
-            display: "none",
-          }),
-          clearIndicator: (base) => ({
-            ...base,
-            display: "none",
-          }),
-        }}
-        defaultValue={defaultValue}
-        isMulti
-        options={options}
-        onChange={handleChange}
-      />
+      <Box position="relative">
+        <Select
+          closeMenuOnSelect={false}
+          components={{ MultiValueContainer, ClearIndicator }}
+          styles={{
+            multiValue: (base) => ({
+              ...base,
+              display: "none",
+            }),
+            clearIndicator: (base) => ({
+              ...base,
+              display: "none",
+            }),
+          }}
+          defaultValue={defaultValue}
+          isMulti
+          placeholder="add user to assignee"
+          options={options}
+          onChange={handleChange}
+        />
+        {/* <Text
+          position="absolute"
+          top={0}
+          left={3}
+          color="achromatic.600"
+        >
+          add user to assignee
+        </Text> */}
+      </Box>
     </React.Fragment>
   );
 };
