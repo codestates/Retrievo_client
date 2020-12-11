@@ -1,13 +1,15 @@
 import React from "react";
-import UserSelector from "./index";
+import UserSelector, { OptionsType } from "./index";
 
-export const basicUserSelector = ({ ...args }): React.ReactElement => {
+export const basicUserSelector = ({
+  ...args
+}: OptionsType): React.ReactElement => {
   return <UserSelector {...args} />;
 };
 
 const users = [
   {
-    id: "aksdkakd",
+    id: "stupy",
     value: "stupy",
     label: "stupy",
     username: "stupy",
@@ -15,7 +17,7 @@ const users = [
       "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
   },
   {
-    id: "afwws",
+    id: "prettie",
     value: "prettie",
     label: "prettie",
     username: "prettie",
@@ -23,7 +25,7 @@ const users = [
       "https://images.unsplash.com/photo-1592159371936-61a70cbeb5f7?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGhhbXN0ZXJ8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
   },
   {
-    id: "akdnsbamk",
+    id: "bunny",
     value: "bunny",
     label: "bunny",
     username: "bunny",
@@ -31,7 +33,7 @@ const users = [
       "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
   },
   {
-    id: "5asfja",
+    id: "cuttie pie",
     value: "cuttie pie",
     label: "cuttie pie",
     username: "cuttie pie",
@@ -42,7 +44,7 @@ const users = [
 
 const defaultValue = [
   {
-    id: "akdnsbamk",
+    id: "bunny",
     value: "bunny",
     label: "bunny",
     username: "bunny",
@@ -54,6 +56,8 @@ const defaultValue = [
 basicUserSelector.args = {
   defaultValue,
   options: users,
+  deleteAssignee: (id: string) => console.log(`delete user ${id}`),
+  createAssignee: (id: string) => console.log(`create user ${id}`),
 };
 
 const ListItemStories = {

@@ -42,31 +42,39 @@ enum actionTypes {
   createOption = "create-option",
 }
 
-type OptionsType = {
+export type OptionsType = {
   options: item[];
   defaultValue: item[];
+  deleteAssignee: (id: string) => void;
+  createAssignee: (id: string) => void;
 };
 
-const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
+const MemberSelect: React.FC<OptionsType> = ({
+  options,
+  defaultValue,
+  deleteAssignee,
+  createAssignee,
+}) => {
   const [currentOptions, setCurrentOptions] = useState<item[]>(defaultValue);
 
-  const getCreatedValue = (newValue: item[]): item[] => {
-    return _.difference(newValue, currentOptions);
+  const getCreatedValue = (newValue: item[]): item => {
+    return _.difference(newValue, currentOptions)[0];
   };
 
-  const getDeletedValue = (newValue: item[]): item[] => {
-    return _.difference(currentOptions, newValue);
+  const getDeletedValue = (newValue: item[]): item => {
+    return _.difference(currentOptions, newValue)[0];
   };
 
   const handleCreateChange = (newValue: item[]) => {
-    getCreatedValue(newValue);
+    const newUser = getCreatedValue(newValue);
     // TODO: create api 실행
+    createAssignee(newUser.id);
     setCurrentOptions(newValue);
   };
 
   const handleDeleteChange = (newValue: item[]) => {
     getDeletedValue(newValue);
-    // TODO : delete Mutation
+    // TODO: delete Mutation
     setCurrentOptions(newValue);
   };
 
@@ -81,12 +89,8 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
         break;
 
       case actionTypes.removeValue:
-      case actionTypes.popValue:
         handleDeleteChange(newValue);
-
-        // console.log(deleted);
         // removeValue: 라벨 하나의 x 버튼 눌렀을시
-        // popvalue: 백스페이스로 삭제시
         setCurrentOptions(newValue);
         break;
 
@@ -116,7 +120,9 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
               src={user.avatar}
               name={user.username}
               userId={user.id}
-              handleDelete={(id) => console.log(id)}
+              handleDelete={(id) => {
+                deleteAssignee(id);
+              }}
             />
           );
         })
