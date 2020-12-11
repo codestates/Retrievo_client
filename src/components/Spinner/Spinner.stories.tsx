@@ -17,7 +17,7 @@ basicSpinner.args = {
 };
 
 const spinnerStories = {
-  title: "components/spinner",
+  title: "components/Spinner",
   component: Spinner,
   argTypes: {
     size: {
