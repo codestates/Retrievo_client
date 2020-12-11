@@ -1,20 +1,27 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import {
   Tag as ChakraTag,
   TagLabel,
-  TagRightIcon,
   TagCloseButton,
+  Select,
+  TagProps as ChakraLabelPropsType,
 } from "@chakra-ui/react";
-import { FaCaretDown } from "react-icons/fa";
 
-export type LabelProps = {
+export type option = {
+  id: string;
+  name: string;
+  color: string;
+};
+
+export type LabelProps = ChakraLabelPropsType & {
   color?: string;
   bgColor?: string;
-  // labelId: string;
   hasDropdown?: boolean;
   hasCloseButton?: boolean;
   onClose?: () => void;
   children: string | ReactElement;
+  options?: option[];
+  defaultValue?: option;
 };
 
 const Label: React.FC<LabelProps> = ({
@@ -23,10 +30,14 @@ const Label: React.FC<LabelProps> = ({
   hasDropdown = false,
   hasCloseButton = false,
   children,
-  // labelId,
   onClose,
+  options,
+  defaultValue,
   ...props
 }) => {
+  const [selectedColor, setSelectedColor] = useState(
+    defaultValue?.color || "primary.300"
+  );
   const fontColor = color || "achromatic.100";
   const backgroundColor = bgColor || "primary.300";
   const hover = hasDropdown ? { cursor: "pointer" } : { cursor: "none" };
@@ -35,12 +46,32 @@ const Label: React.FC<LabelProps> = ({
     bgColor: backgroundColor,
     _hover: hover,
   };
+  const renderOptions = () => {
+    return options?.map((option: option) => {
+      return (
+        <option
+          key={option.id}
+          value={option.color}
+          selected={defaultValue?.id === option.id}
+        >
+          {option.name}
+        </option>
+      );
+    });
+  };
+
   if (hasDropdown) {
     return (
-      <ChakraTag {...labelConfig} {...props}>
-        {children}
-        <TagRightIcon as={FaCaretDown} />
-      </ChakraTag>
+      <Select
+        onChange={(e) => setSelectedColor(e.target.value)}
+        bg={selectedColor}
+        color="white"
+        fontSize="sm"
+        height={6}
+        maxW={150}
+      >
+        {renderOptions()}
+      </Select>
     );
   }
 
