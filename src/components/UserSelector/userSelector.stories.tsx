@@ -54,7 +54,7 @@ const defaultValue = [
 ];
 
 basicUserSelector.args = {
-  defaultValue,
+  // defaultValue,
   options: users,
   deleteAssignee: (id: string) => console.log(`delete user ${id}`),
   createAssignee: (id: string) => console.log(`create user ${id}`),
