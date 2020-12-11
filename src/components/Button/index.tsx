@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton } from "@chakra-ui/react";
+import {
+  Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
+} from "@chakra-ui/react";
 
 export enum buttonColor {
   primary = "primary",
@@ -9,7 +12,7 @@ export enum buttonColor {
   gray = "gray",
 }
 
-export type buttonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type buttonProps = ChakraButtonProps & {
   buttonType: buttonColor;
   children: React.ReactNode;
 };
