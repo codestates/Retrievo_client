@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-fragments */
 import React, { useState } from "react";
 import Select, { components } from "react-select";
-import { HStack } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import _ from "lodash";
 import DeleteableAvatar from "../DeleteableAvatar";
 
@@ -43,31 +43,41 @@ enum actionTypes {
   createOption = "create-option",
 }
 
-type OptionsType = {
+export type OptionsType = {
   options: item[];
-  defaultValue: item[];
+  defaultValue?: item[];
+  deleteAssignee: (id: string) => void;
+  createAssignee: (id: string) => void;
 };
 
-const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
-  const [currentOptions, setCurrentOptions] = useState<item[]>(defaultValue);
+const UserSelect: React.FC<OptionsType> = ({
+  options,
+  defaultValue,
+  deleteAssignee,
+  createAssignee,
+}) => {
+  const [currentOptions, setCurrentOptions] = useState<item[]>(
+    defaultValue || []
+  );
 
-  const getCreatedValue = (newValue: item[]): item[] => {
-    return _.difference(newValue, currentOptions);
+  const getCreatedValue = (newValue: item[]): item => {
+    return _.difference(newValue, currentOptions)[0];
   };
 
-  const getDeletedValue = (newValue: item[]): item[] => {
-    return _.difference(currentOptions, newValue);
+  const getDeletedValue = (newValue: item[]): item => {
+    return _.difference(currentOptions, newValue)[0];
   };
 
   const handleCreateChange = (newValue: item[]) => {
-    getCreatedValue(newValue);
+    const newUser = getCreatedValue(newValue);
     // TODO: create api 실행
+    createAssignee(newUser.id);
     setCurrentOptions(newValue);
   };
 
   const handleDeleteChange = (newValue: item[]) => {
     getDeletedValue(newValue);
-    // TODO : delete Mutation
+    // TODO: delete Mutation
     setCurrentOptions(newValue);
   };
 
@@ -82,12 +92,8 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
         break;
 
       case actionTypes.removeValue:
-      case actionTypes.popValue:
         handleDeleteChange(newValue);
-
-        // console.log(deleted);
         // removeValue: 라벨 하나의 x 버튼 눌렀을시
-        // popvalue: 백스페이스로 삭제시
         setCurrentOptions(newValue);
         break;
 
@@ -110,16 +116,20 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
   };
 
   const renderMembers = () => {
-    return currentOptions.map((user) => {
-      return (
-        <DeleteableAvatar
-          src={user.avatar}
-          name={user.username}
-          userId={user.id}
-          handleDelete={(id) => console.log(id)}
-        />
-      );
-    });
+    return currentOptions
+      ? currentOptions.map((user) => {
+          return (
+            <DeleteableAvatar
+              src={user.avatar}
+              name={user.username}
+              userId={user.id}
+              handleDelete={(id) => {
+                deleteAssignee(id);
+              }}
+            />
+          );
+        })
+      : null;
   };
 
   return (
@@ -127,26 +137,29 @@ const MemberSelect: React.FC<OptionsType> = ({ options, defaultValue }) => {
       <HStack spacing="5px" marginBottom="0.5rem">
         {renderMembers()}
       </HStack>
-      <Select
-        closeMenuOnSelect={false}
-        components={{ MultiValueContainer, ClearIndicator }}
-        styles={{
-          multiValue: (base) => ({
-            ...base,
-            display: "none",
-          }),
-          clearIndicator: (base) => ({
-            ...base,
-            display: "none",
-          }),
-        }}
-        defaultValue={defaultValue}
-        isMulti
-        options={options}
-        onChange={handleChange}
-      />
+      <Box position="relative">
+        <Select
+          closeMenuOnSelect={false}
+          components={{ MultiValueContainer, ClearIndicator }}
+          styles={{
+            multiValue: (base) => ({
+              ...base,
+              display: "none",
+            }),
+            clearIndicator: (base) => ({
+              ...base,
+              display: "none",
+            }),
+          }}
+          defaultValue={defaultValue}
+          isMulti
+          placeholder="add user to assignee"
+          options={options}
+          onChange={handleChange}
+        />
+      </Box>
     </React.Fragment>
   );
 };
 
-export default MemberSelect;
+export default UserSelect;
