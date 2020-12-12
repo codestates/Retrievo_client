@@ -21,7 +21,12 @@ export const dropdownLabel = ({
 );
 dropdownLabel.args = {
   hasDropdown: true,
-  children: "IN PROGRESS",
+  options: [
+    { id: "1", name: "TO DO", color: "labelOrange" },
+    { id: "2", name: "IN PROGRESS", color: "labelYellow" },
+    { id: "3", name: "DONE", color: "labelTeal" },
+  ],
+  defaultValue: { id: "2", name: "IN PROGRESS", color: "labelYellow" },
 };
 
 export const closeButtonLabel = ({
