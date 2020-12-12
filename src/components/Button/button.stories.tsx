@@ -28,7 +28,7 @@ const ButtonStories = {
   title: "components/Button",
   component: Button,
   argTypes: {
-    buttonType: {
+    buttontype: {
       control: {
         type: "select",
         options: Object.keys(buttonColor),
