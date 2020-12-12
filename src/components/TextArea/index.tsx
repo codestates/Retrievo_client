@@ -51,16 +51,17 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
           {...props}
           id={field.name}
           fontSize={fontSize}
-          autoComplete={autoCompleteDisable ? "off" : "on"}
           fontWeight={fontWeight}
-          borderColor={isEditable ? "transparent" : "achromatic.400"}
+          w="100%"
+          padding={paddingNone ? "0" : [1, 2]}
           minRows={1}
           minH="unset"
           overflow="hidden"
-          w="100%"
+          borderColor={isEditable ? "transparent" : "achromatic.400"}
           resize="none"
           as={ResizeTextarea}
-          padding={paddingNone ? "0" : [1, 2]}
+          bgColor="achromatic.100"
+          autoComplete={autoCompleteDisable ? "off" : "on"}
         />
       ) : (
         <Textarea
@@ -68,11 +69,12 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
           {...props}
           id={field.name}
           fontSize={fontSize}
-          autoComplete={autoCompleteDisable ? "off" : "on"}
-          fontWeight={fontWeight}
-          borderColor={isEditable ? "transparent" : "achromatic.400"}
           w="100%"
           resize="none"
+          fontWeight={fontWeight}
+          bgColor="achromatic.100"
+          borderColor={isEditable ? "transparent" : "achromatic.400"}
+          autoComplete={autoCompleteDisable ? "off" : "on"}
         />
       )}
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
