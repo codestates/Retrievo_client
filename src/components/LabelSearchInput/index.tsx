@@ -57,6 +57,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     setCurrentOptions(newValue);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
       case actionTypes.selectOption:
