@@ -7,7 +7,7 @@ import Text from "../../../components/Text";
 
 export const ReportHero: React.FC = () => {
   return (
-    <Container maxW="60%">
+    <Container maxW="70%">
       <Flex justifyContent="center">
         <Flex w="25rem">
           <svg
@@ -50,12 +50,12 @@ export const ReportHero: React.FC = () => {
             />
           </svg>
         </Flex>
-        <Flex flexDirection="column" justifyContent="center">
+        <Flex flexDirection="column" justifyContent="center" maxW="60rem">
           <Heading headingType={headingEnum.article}>
             Make your data come to life
           </Heading>
 
-          <Text mt={3} maxW="40rem">
+          <Text mt={3}>
             Make your data come to life Dashboards automatically populate your
             project data into powerful, infographic powerhouse. Assign tasks or
             add custom fields to see the state of your team’s woirk in real-time

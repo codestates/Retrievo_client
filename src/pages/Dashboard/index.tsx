@@ -9,6 +9,7 @@ import PageHeading from "../../layouts/PageHeader";
 import MyTasks from "./MyTasks";
 import ActivityStream from "./ActivityStream";
 import ReportHero from "./ReportHero";
+import ReportCard from "./ReportCard";
 
 // interface indexProps {
 
@@ -79,6 +80,9 @@ export const Dashboard: React.FC = () => {
             </Box>
             <Box mt={9}>
               <ReportHero />
+            </Box>
+            <Box mt={9}>
+              <ReportCard />
             </Box>
           </Box>
         </Box>
