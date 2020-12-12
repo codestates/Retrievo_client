@@ -11,11 +11,11 @@ import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
 
 type avatar = { name: string; src: string };
 
-export type TopVarPropsType = ProjectListDropdownPropsType & {
+export type TopNavPropsType = ProjectListDropdownPropsType & {
   avatars: avatar[];
 };
 
-const TopNav: React.FC<TopVarPropsType> = ({
+const TopNav: React.FC<TopNavPropsType> = ({
   avatars,
   projects,
   currentProject,
@@ -41,6 +41,8 @@ const TopNav: React.FC<TopVarPropsType> = ({
       justifyContent="space-between"
       px={10}
       h={50}
+      boxShadow="0 2px 2px rgba(0,0,0,0.1)"
+      z-index="1"
     >
       <Box
         display="flex"
