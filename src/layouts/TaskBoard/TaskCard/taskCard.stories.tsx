@@ -45,6 +45,7 @@ taskCard.args = {
     ],
   },
   handleTaskDelete: (id: string) => console.log(id),
+  handleTaskClick: (id: string) => console.log(id),
 };
 
 export const dragPositionCard = ({ ...args }: TaskCardProps): ReactElement => (
