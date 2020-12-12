@@ -22,7 +22,7 @@ export const StyledCalendar = styled.div`
     text-align: center;
     padding: 0.4rem;
     width: 100%;
-    border: 1px solid rgb(219, 219, 219);
+    border: 1px solid #d0d0d0;
     border-radius: 0.3rem;
     font-family: "Open Sans, sans-serif";
     font-weight: 400;
@@ -32,7 +32,7 @@ export const StyledCalendar = styled.div`
 
   input.DateInput_input::placeholder {
     font-family: "Open Sans, sans-serif";
-    color: #c4c4c4;
+    color: #828282;
     font-weight: 400;
   }
 
@@ -46,7 +46,7 @@ export const StyledCalendar = styled.div`
 
   .calendar__dateText {
     margin-left: 0.3rem;
-    color: #4f4f4f;
+    color: #c4c4c4;
   }
 
   .calendar__dueDate {

@@ -161,7 +161,7 @@ export const TaskBar: React.FC<taskProps> = () => {
             <DrawerBody padding="0">
               <Box
                 bgColor="achromatic.100"
-                mt="3"
+                mt={2}
                 borderRadius="md"
                 py="4"
                 px="10"
@@ -202,11 +202,11 @@ export const TaskBar: React.FC<taskProps> = () => {
                   <TextLabel>Sprint</TextLabel>
                   <SprintListDropdown {...sprintArg} />
                 </Box>
-                <Box mt={3}>
+                <Box mt={2}>
                   <TextLabel>Assignee Users</TextLabel>
                   <UserSelect {...userSelectArg} />
                 </Box>
-                <Box mt={3}>
+                <Box mt={2}>
                   <Calendar />
                 </Box>
               </Box>
