@@ -1,6 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
+  useSystemColorMode: false,
+  initialColorMode: "light",
+
   fonts: {
     body: "Open Sans, sans-serif",
     heading: "Open Sans, sans-serif",
@@ -62,5 +65,7 @@ const theme = extendTheme({
     }),
   },
 });
+
+// ㅁ
 
 export default theme;

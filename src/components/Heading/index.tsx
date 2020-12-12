@@ -45,7 +45,7 @@ const Heading: React.FC<HeadingProps> = ({
     }
 
     if (headingType === headingEnum.page) {
-      fontSize = "4xl";
+      fontSize = "3xl";
       fontWeight = "bold";
     }
 

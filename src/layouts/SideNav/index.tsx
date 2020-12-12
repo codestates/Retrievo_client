@@ -10,16 +10,51 @@ export type MenuType = {
   path: string;
   name: string;
   icon: ReactElement;
-  currnetPage?: boolean;
+  description: string;
 };
 
-const sideBarMenu = [
-  { name: "Dashboard", icon: <BiChalkboard />, path: "/project/dashboard" },
-  { name: "Sprint", icon: <FiFastForward />, path: "/project/sprint" },
-  { name: "Board", icon: <CgBoard />, path: "/project/board" },
-  { name: "Timeline", icon: <FiClock />, path: "/project/timeline" },
-  { name: "Calendar", icon: <BiCalendarEvent />, path: "/project/calendar" },
-  { name: "Setting", icon: <FiSettings />, path: "/project/setting" },
+export const sideBarMenu = [
+  {
+    name: "Dashboard",
+    icon: <BiChalkboard />,
+    path: "/project/dashboard",
+    description:
+      "Dashboard enables you to monitor the status of individual task",
+  },
+  {
+    name: "Sprint",
+    icon: <FiFastForward />,
+    path: "/project/sprint",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+  },
+  {
+    name: "Board",
+    icon: <CgBoard />,
+    path: "/project/board",
+    description:
+      "Dashboard enables you to monitor the status of individual task",
+  },
+  {
+    name: "Timeline",
+    icon: <FiClock />,
+    path: "/project/timeline",
+    description:
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
+  },
+  {
+    name: "Calendar",
+    icon: <BiCalendarEvent />,
+    path: "/project/calendar",
+    description:
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  },
+  {
+    name: "Setting",
+    icon: <FiSettings />,
+    path: "/project/setting",
+    description:
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  },
 ];
 
 const SideNav = (): ReactElement => {

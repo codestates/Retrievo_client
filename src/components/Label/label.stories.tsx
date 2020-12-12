@@ -21,7 +21,7 @@ export const dropdownLabel = ({
 );
 dropdownLabel.args = {
   hasDropdown: true,
-  options: [
+  labels: [
     { id: "1", name: "TO DO", color: "labelOrange" },
     { id: "2", name: "IN PROGRESS", color: "labelYellow" },
     { id: "3", name: "DONE", color: "labelTeal" },
@@ -51,7 +51,7 @@ const LabelStories = {
     bgColor: {
       control: {
         type: "select",
-        options: [
+        labels: [
           "labelYellow",
           "labelOrange",
           "labelGreen",
