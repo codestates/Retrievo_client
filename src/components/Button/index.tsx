@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import {
   Button as ChakraButton,
   ButtonProps as ChakraButtonProps,
