@@ -28,7 +28,7 @@ const Button: React.FC<buttonProps> = ({ buttontype, children, ...props }) => {
   };
 
   const renderColors = () => {
-    if (buttontype === buttonColor.white) return "achromatic.800";
+    if (buttontype === buttonColor.white) return "achromatic.700";
     return "achromatic.100";
   };
 
