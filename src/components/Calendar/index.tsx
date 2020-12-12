@@ -4,6 +4,7 @@ import "react-dates/initialize";
 import * as moment from "moment";
 import { DateRangePicker, FocusedInputShape } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
+import { Box, Grid } from "@chakra-ui/react";
 import { StyledCalendar, StyledTextContainer } from "./calendar.styled";
 import Text from "../Text";
 
@@ -28,10 +29,14 @@ const Calendar: React.FC<calendarProps> = () => {
   };
   return (
     <StyledCalendar>
-      <StyledTextContainer>
-        <Text>Start Date</Text>
-        <Text ml="4">Due Date</Text>
-      </StyledTextContainer>
+      <Grid templateColumns="1fr 1fr" gap="1rem" w="full">
+        <Text fontSize="sm" color="achromatic.600" mb="1">
+          Start Date
+        </Text>
+        <Text fontSize="sm" color="achromatic.600" mb="1">
+          Due Date
+        </Text>
+      </Grid>
       <DateRangePicker
         startDate={startDate}
         startDateId="tata-start-date"
