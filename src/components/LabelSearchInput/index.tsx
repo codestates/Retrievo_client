@@ -41,8 +41,12 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     return _.difference(newValue, currentOptions);
   };
 
-  const getDeletedValue = (newValue: item[]): item[] => {
-    return _.difference(currentOptions, newValue);
+  // const getDeletedValue = (newValue: item[]): item[] => {
+  //   return _.difference(currentOptions, newValue);
+  // };
+
+  const deleteValueFromValues = (deletedValue: item): item[] => {
+    return _.without(currentOptions, deletedValue);
   };
 
   const handleCreateChange = (newValue: item[]) => {
@@ -51,22 +55,19 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     setCurrentOptions(newValue);
   };
 
-  const handleDeleteChange = (newValue: item[]) => {
-    const deleted = getDeletedValue(newValue);
-    deleteTaskLabel(deleted[0]);
+  const handleDeleteChange = (deletedValue: item) => {
+    const newValue = deleteValueFromValues(deletedValue);
+    deleteTaskLabel(deletedValue);
     setCurrentOptions(newValue);
   };
 
   const handleChange = (newValue: any, { action }: { action: string }) => {
-    console.log("newValue:", newValue);
-
     switch (action) {
       case actionTypes.selectOption:
       case actionTypes.createOption:
         handleCreateChange(newValue);
         break;
 
-      // TODO : 라벨 삭제하기 기능
       case actionTypes.removeValue:
       case actionTypes.popValue:
         handleDeleteChange(newValue);
@@ -80,7 +81,13 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   const renderLabels = () => {
     return currentOptions?.map((label) => {
       return (
-        <Label key={label.id} m={1} bgColor={label.color} hasCloseButton>
+        <Label
+          key={label.id}
+          m={1}
+          bgColor={label.color}
+          hasCloseButton
+          onClose={() => handleDeleteChange(label)}
+        >
           {label.value}
         </Label>
       );
