@@ -1,32 +1,60 @@
 import React from "react";
-import CustomForm, { FormProps } from "./Form";
-import InputField from "./InputField";
+import * as yup from "yup";
+import CustomForm, { FormProps } from ".";
+import InputField from "../Input";
 
-export const BasicForm = ({ initialValues }: FormProps): React.ReactElement => {
+const testValidationSchema = yup.object({
+  username: yup.string().max(20).required(),
+  email: yup.string().email().required(),
+});
+
+export const Form = (args: FormProps): React.ReactElement => {
   return (
-    <CustomForm
-      initialValues={initialValues}
-      submitButtonOption={{ isFull: false }}
-      cancelButtonOption={{ onCancel: () => console.log("cancel clicked") }}
-      onSubmit={(value: Record<string, string>) => console.log(value)}
-    >
+    <CustomForm {...args}>
       <InputField label="email" name="email" type="email" placeholder="email" />
       <InputField label="username" name="username" placeholder="username" />
     </CustomForm>
   );
 };
 
-BasicForm.props = {
-  initialValue: { email: "test@gmail.com", username: "user default name" },
-  submitButtonOption: { isFull: true },
+Form.args = {
+  initialValues: { email: "test@gmail.com", username: "user default name" },
+  isSubmitButton: true,
+  isCancelButton: true,
+  validationSchema: testValidationSchema,
   cancelButtonOption: { onCancel: () => console.log("cancel clicked") },
   onSubmit: (value: Record<string, string>) => console.log(value),
+  onCancel: () => console.log("cancel button clicked"),
 };
 
-const AvatarStories = {
+const formStories = {
   title: "components/Form",
-  component: InputField,
-  argTypes: {},
+  component: Form,
+  argTypes: {
+    initialValues: {
+      control: {},
+    },
+    isSubmitButton: {
+      control: { type: "boolean" },
+    },
+    submitButtonOption: {
+      control: {},
+    },
+    isCancelButton: {
+      control: { type: "boolean" },
+    },
+    cancelButtonOption: {
+      control: {},
+    },
+    isFullButton: {
+      control: {
+        type: "boolean",
+      },
+    },
+    buttonPosition: {
+      control: { type: "select", options: ["right", "left", "center"] },
+    },
+  },
 };
 
-export default AvatarStories;
+export default formStories;
