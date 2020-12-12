@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
+import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
 import ProjectListDropdown, {
   ProjectListDropdownPropsType,
@@ -21,6 +22,15 @@ const TopNav: React.FC<TopVarPropsType> = ({
   onProjectSelect,
 }) => {
   const projectConfig = { projects, currentProject, onProjectSelect };
+  const changeIconColor = () => {
+    return (
+      <>
+        <IconContext.Provider value={{ color: "#4F4F4F", size: "25" }}>
+          <GiSittingDog />
+        </IconContext.Provider>
+      </>
+    );
+  };
   return (
     <Box
       bg="achromatic.200"
@@ -39,7 +49,8 @@ const TopNav: React.FC<TopVarPropsType> = ({
         width={450}
       >
         <Box display="flex" alignItems="center">
-          <GiSittingDog size={25} />
+          {/* <GiSittingDog size={25} color="achromatic.700" /> */}
+          {changeIconColor()}
           <Heading ml={1} headingType={headingEnum.homepage}>
             Retrievo
           </Heading>
@@ -51,12 +62,12 @@ const TopNav: React.FC<TopVarPropsType> = ({
         alignItems="center"
         justifyContent="space-between"
         // w={270}
-        w={200}
+        w={180}
       >
         <AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />
         <a href="/notification">
           <IconButton
-            fontSize="2xl"
+            fontSize="xl"
             color="achromatic.700"
             aria-label="notification"
             iconButtonType={IconButtonType.notification}
@@ -64,7 +75,7 @@ const TopNav: React.FC<TopVarPropsType> = ({
         </a>
         <a href="/myProfile">
           <IconButton
-            fontSize="2xl"
+            fontSize="xl"
             color="achromatic.700"
             aria-label="project member list"
             iconButtonType={IconButtonType.user}
