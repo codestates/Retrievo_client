@@ -1,21 +1,10 @@
 import React, { ReactElement } from "react";
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { BiChalkboard, BiCalendarEvent } from "react-icons/bi";
 import { CgBoard } from "react-icons/cg";
 import { FiClock, FiSettings, FiFastForward } from "react-icons/fi";
 import { AiOutlineDoubleLeft } from "react-icons/ai";
 import { IconContext } from "react-icons";
-
-import Heading from "../../components/Heading";
-
-import IconButton, { IconButtonType } from "../../components/IconButton";
-import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
-
-// type avatar = { name: string; src: string };
-
-export type SideNavPropsType = {
-  // avatars: avatar[];
-};
 
 export type MenuType = {
   path: string;
@@ -33,9 +22,7 @@ const sideBarMenu = [
   { name: "Setting", icon: <FiSettings />, path: "/project/setting" },
 ];
 
-const SideNav: React.FC<SideNavPropsType> = () => {
-  // const projectConfig = { projects, currentProject, onProjectSelect };
-  // const currnetPage = "Sprint";
+const SideNav = (): ReactElement => {
   const changeIconColor = (icon: ReactElement) => {
     return (
       <Box mx={3}>
@@ -104,7 +91,5 @@ const SideNav: React.FC<SideNavPropsType> = () => {
     </Box>
   );
 };
-
-// TODO : setCurrentPage vs windowPath
 
 export default SideNav;
