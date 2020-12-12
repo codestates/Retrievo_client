@@ -21,7 +21,27 @@ export const dropdownLabel = ({
 );
 dropdownLabel.args = {
   hasDropdown: true,
-  children: "IN PROGRESS",
+  options: [
+    { id: "1", name: "TO DO", color: "labelOrange" },
+    { id: "2", name: "IN PROGRESS", color: "labelYellow" },
+    { id: "3", name: "DONE", color: "labelTeal" },
+  ],
+  defaultValue: { id: "2", name: "IN PROGRESS", color: "labelYellow" },
+};
+
+export const closeButtonLabel = ({
+  children,
+  ...args
+}: LabelProps): React.ReactElement => (
+  <>
+    <p>cursor pointer와 onClose props 가능</p>
+    <Label {...args}>{children}</Label>
+  </>
+);
+closeButtonLabel.args = {
+  hasCloseButton: true,
+  children: "DONE",
+  onClose: () => console.log("close"),
 };
 
 const LabelStories = {

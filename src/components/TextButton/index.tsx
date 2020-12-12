@@ -1,5 +1,8 @@
 import React, { ButtonHTMLAttributes } from "react";
-import { Button as ChakraButton } from "@chakra-ui/react";
+import {
+  Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
+} from "@chakra-ui/react";
 
 export enum txtColor {
   primary = "primary",
@@ -10,7 +13,7 @@ export enum txtColor {
   teal = "teal",
 }
 
-export type buttonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type buttonProps = ChakraButtonProps & {
   textColorType: txtColor;
   children: React.ReactNode;
 };
@@ -22,7 +25,6 @@ const TextButton: React.FC<buttonProps> = ({
 }) => {
   const buttonConfig = { textColorType };
   const renderTxtColors = (): string => {
-    console.log(textColorType, txtColor);
     if (textColorType === txtColor.primary) return "primary.200";
     if (textColorType === txtColor.fail) return "fail";
     if (textColorType === txtColor.white) return "achromatic.100";
