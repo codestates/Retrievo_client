@@ -89,7 +89,7 @@ export const ActivityStream: React.FC = () => {
         return (
           <>
             <StyledActivityStream p={2} bg="achromatic.100" w="100%">
-              <Flex w="5%" justifyContent="center" alignItems="center">
+              <Flex w="6rem" justifyContent="center" alignItems="center">
                 <CustomAvatar
                   name={`${item.username}`}
                   src={`${item.avatar}`}
@@ -122,13 +122,7 @@ export const ActivityStream: React.FC = () => {
   };
 
   return (
-    <Container
-      bg="achromatic.200"
-      borderRadius={6}
-      p="0"
-      boxShadow="base"
-      maxW="70%"
-    >
+    <Box bg="achromatic.200" borderRadius={6} p="0" boxShadow="base">
       <Flex alignItems="center" p={4}>
         <FiActivity />
         <Box pl={2}>
@@ -149,7 +143,7 @@ export const ActivityStream: React.FC = () => {
           </Flex>
         </button>
       </Flex>
-    </Container>
+    </Box>
   );
 };
 
