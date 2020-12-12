@@ -1,9 +1,9 @@
 // export {};
 /* eslint-disable no-unused-vars */
 import React from "react";
-import TopNav, { TopVarPropsType } from "./index";
+import TopNav, { TopNavPropsType } from "./index";
 
-export const topNav = ({ ...args }: TopVarPropsType): React.ReactElement => (
+export const topNav = ({ ...args }: TopNavPropsType): React.ReactElement => (
   <TopNav {...args} />
 );
 topNav.args = {
