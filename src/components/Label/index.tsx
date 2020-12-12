@@ -7,7 +7,7 @@ import {
   TagProps as ChakraLabelPropsType,
 } from "@chakra-ui/react";
 
-export type option = {
+export type label = {
   id: string;
   name: string;
   color: string;
@@ -20,8 +20,8 @@ export type LabelProps = ChakraLabelPropsType & {
   hasCloseButton?: boolean;
   onClose?: () => void;
   children: string | ReactElement;
-  options?: option[];
-  defaultValue?: option;
+  labels?: label[];
+  defaultValue?: label;
 };
 
 const Label: React.FC<LabelProps> = ({
@@ -31,7 +31,7 @@ const Label: React.FC<LabelProps> = ({
   hasCloseButton = false,
   children,
   onClose,
-  options,
+  labels,
   defaultValue,
   ...props
 }) => {
@@ -47,14 +47,14 @@ const Label: React.FC<LabelProps> = ({
     _hover: hover,
   };
   const renderOptions = () => {
-    return options?.map((option: option) => {
+    return labels?.map((label: label) => {
       return (
         <option
-          key={option.id}
-          value={option.color}
-          selected={defaultValue?.id === option.id}
+          key={label.id}
+          value={label.color}
+          selected={defaultValue?.id === label.id}
         >
-          {option.name}
+          {label.name}
         </option>
       );
     });
