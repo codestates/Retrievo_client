@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Heading as ChakraHeading } from "@chakra-ui/react";
+import {
+  Heading as ChakraHeading,
+  HeadingProps as ChakraHeadingPropsType,
+} from "@chakra-ui/react";
 
 export enum headingEnum {
   homepage = "for Retrievo hompage title",
@@ -15,7 +18,7 @@ export enum headingEnum {
   article = "for article title",
 }
 
-export type HeadingProps = {
+export type HeadingProps = ChakraHeadingPropsType & {
   headingType: headingEnum;
   children: string;
 };
@@ -33,7 +36,7 @@ const Heading: React.FC<HeadingProps> = ({
 
     if (headingType === headingEnum.homepage) {
       fontFamily = "title";
-      fontSize = "5xl";
+      fontSize = "3xl";
     }
 
     if (headingType === headingEnum.auth) {
