@@ -115,13 +115,7 @@ export const MyTasks: React.FC = () => {
   };
 
   return (
-    <Container
-      bg="achromatic.200"
-      borderRadius={6}
-      p="0"
-      boxShadow="base"
-      maxW="70%"
-    >
+    <Box bg="achromatic.200" borderRadius={6} p="0" boxShadow="base">
       <Flex alignItems="center" p={4}>
         <ImClipboard />
         <Box pl={2}>
@@ -142,7 +136,7 @@ export const MyTasks: React.FC = () => {
           </Flex>
         </button>
       </Flex>
-    </Container>
+    </Box>
   );
 };
 
