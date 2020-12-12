@@ -41,10 +41,6 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     return _.difference(newValue, currentOptions);
   };
 
-  // const getDeletedValue = (newValue: item[]): item[] => {
-  //   return _.difference(currentOptions, newValue);
-  // };
-
   const deleteValueFromValues = (deletedValue: item): item[] => {
     return _.without(currentOptions, deletedValue);
   };
