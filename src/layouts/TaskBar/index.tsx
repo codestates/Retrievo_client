@@ -5,13 +5,16 @@ import {
   DrawerCloseButton,
   DrawerBody,
   Drawer,
-  DrawerFooter,
   Text,
   Box,
+  Avatar,
+  Button as ChakraButton,
 } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
 import { FcCheckmark } from "react-icons/fc";
+import { BsPaperclip } from "react-icons/bs";
+/* custom components */
 import Form from "../../components/Form";
 import Button, { buttonColor } from "../../components/Button";
 import Textarea from "../../components/TextArea";
@@ -20,6 +23,8 @@ import SprintListDropdown from "./SprintSelector";
 import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
 import Calendar from "../../components/Calendar";
+import IconButton, { IconButtonType } from "../../components/IconButton";
+import LabelSearchInput from "../../components/LabelSearchInput";
 
 export interface taskProps {
   sample?: string;
@@ -119,7 +124,47 @@ const sprints = [
   },
 ];
 
+const labelSearchOptions = [
+  { id: "1", value: "apple", label: "Apple", color: "labelOrange" },
+  { id: "2", value: "banana", label: "Banana", color: "labelYellow" },
+  { id: "3", value: "mango", label: "Mango", color: "warning" },
+  { id: "4", value: "kiwi", label: "Kiwi", color: "labelGreen" },
+  { id: "5", value: "치킨밸류", label: "치킨", color: "failDark" },
+  { id: "6", value: "만두", label: "만두", color: "violet" },
+  { id: "7", value: "탕수육", label: "탕수육", color: "labelPink" },
+  { id: "8", value: "초밥", label: "초밥", color: "violet" },
+];
+
+const labelSearchDefaultValue = [
+  { id: "1", value: "apple", label: "Apple", color: "labelOrange" },
+  { id: "2", value: "banana", label: "Banana", color: "labelYellow" },
+];
+
+const comments = [
+  {
+    contents:
+      "예시 코멘트 치킨 내일 먹을거에요 노랑 통닭 매운 후라이드 맛있어요",
+    user: {
+      avatar: "test",
+      username: "유저 이름2",
+      id: "5678",
+    },
+  },
+  {
+    contents: "예시 코멘트 어쩌고 저쩌고 왜 잠이 안오지 미쳤나 내가?",
+    user: {
+      avatar: "test",
+      username: "념념이",
+      id: "1234",
+    },
+  },
+];
+
+type labelItem = { id: string; value: string; label: string; color: string };
 const titleValidation = yup.object({
+  email: yup.string().max(5).required(),
+});
+const commentValidation = yup.object({
   email: yup.string().max(5).required(),
 });
 
@@ -136,6 +181,41 @@ export const TaskBar: React.FC<taskProps> = () => {
     // defaultValue,
     deleteAssignee: (id) => console.log(id),
     createAssignee: (id) => console.log(id),
+  };
+
+  const labelSelectArgs = {
+    options: labelSearchOptions,
+    defaultValue: labelSearchDefaultValue,
+    createTaskLabel: (item: labelItem) => console.log(item),
+    deleteTaskLabel: (item: labelItem) => console.log(item),
+  };
+
+  const renderComments = () => {
+    return comments.map((comment) => {
+      return (
+        <Box display="flex" mb="2">
+          <Avatar size="sm" name={comment.user.username} />
+          <Box ml="2">
+            <Box display="flex" alignItems="center">
+              <Text fontSize="sm" fontWeight="bold">
+                {comment.user.username}
+              </Text>
+              {comment.user.id === "1234" ? (
+                <IconButton
+                  aria-label="delete task"
+                  iconButtonType="deleteBin"
+                  padding="0"
+                  h="1rem"
+                  w="1rem"
+                  onClick={() => console.log("delete comment clicked")}
+                />
+              ) : null}
+            </Box>
+            <Text fontSize="sm">{comment.contents}</Text>
+          </Box>
+        </Box>
+      );
+    });
   };
 
   return (
@@ -162,12 +242,12 @@ export const TaskBar: React.FC<taskProps> = () => {
               <Box
                 bgColor="achromatic.100"
                 mt={2}
-                borderRadius="md"
                 py="4"
                 px="10"
+                borderTopRadius="md"
                 boxShadow="sm"
               >
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" mb={2}>
                   <Text mr="2" fontSize="sm" color="primary.200">
                     RE-120
                   </Text>
@@ -209,11 +289,82 @@ export const TaskBar: React.FC<taskProps> = () => {
                 <Box mt={2}>
                   <Calendar />
                 </Box>
+                <Box mt={2}>
+                  <TextLabel>Label</TextLabel>
+                  <LabelSearchInput {...labelSelectArgs} />
+                </Box>
+                <Box mt={2}>
+                  <TextLabel>Description</TextLabel>
+
+                  <Form
+                    validationSchema={titleValidation}
+                    onSubmit={(value) => console.log(value)}
+                    initialValues={{ description: "" }}
+                  >
+                    <Textarea
+                      label="description"
+                      name="description"
+                      isLabelNonVisible
+                      placeholder="description here"
+                      autoHeight
+                    />
+                  </Form>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  color="achromatic.600"
+                >
+                  <ChakraButton
+                    leftIcon={<BsPaperclip />}
+                    size="sm"
+                    bgColor="transparent"
+                    padding="0"
+                    _hover={{ backgroundColor: "transparent" }}
+                    fontWeight="normal"
+                  >
+                    Add a file
+                  </ChakraButton>
+                  <IconButton
+                    aria-label="delete task"
+                    iconButtonType="deleteBin"
+                    padding="0"
+                    h="1rem"
+                    w="0"
+                  />
+                </Box>
+              </Box>
+
+              <Box
+                bgColor="achromatic.200"
+                borderBottomRadius="md"
+                py="4"
+                px="10"
+                boxShadow="sm"
+              >
+                {renderComments()}
+
+                <Box display="flex" mt={5}>
+                  <Avatar name="myName" size="sm" mr={2} />
+                  <Box width="full">
+                    <Form
+                      validationSchema={commentValidation}
+                      onSubmit={(value) => console.log(value)}
+                      initialValues={{ comment: "" }}
+                      isSubmitButton
+                    >
+                      <Textarea
+                        label="comment"
+                        name="comment"
+                        isLabelNonVisible
+                        placeholder="new comment here"
+                      />
+                    </Form>
+                  </Box>
+                </Box>
               </Box>
             </DrawerBody>
-            <DrawerFooter justifyContent="flex-start">
-              여기 코멘트 자리
-            </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
