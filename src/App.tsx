@@ -3,13 +3,13 @@ import { ChakraProvider, Box } from "@chakra-ui/react";
 import theme from "./styles/theme";
 // import Button from "./components/Button";
 // import Heading, { headingStyle } from "./components/Heading";
-import Dashboard from "./pages/Dashboard";
+import MyProfile from "./pages/MyProfile/Forms";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <Dashboard />
+        <MyProfile />
       </ChakraProvider>
     </>
   );

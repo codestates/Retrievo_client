@@ -257,7 +257,7 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
   };
 
   // TODO: api 작성
-  type formValue = Record<string, any>;
+  type formValue = Record<string, unknown>;
   const updateTask = (value: formValue) => console.log("task update", value);
   const createLabel = (value: formValue) => console.log("create label", value);
   const createFile = (value: formValue) => console.log("create file", value);
@@ -400,7 +400,7 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
                       Number(task.startDate) / 1000
                     )}
                     defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
-                    onSubmit={(value) => {
+                    handleSubmit={(value: dateIFC) => {
                       submitDates(value);
                     }}
                   />
