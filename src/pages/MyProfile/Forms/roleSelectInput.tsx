@@ -2,8 +2,8 @@ import React from "react";
 import { FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { useField } from "formik";
 
-type role = { id: string; roleName: string };
-type roleType = {
+export type role = { id: string; roleName: string };
+export type roleType = {
   [key: string]: string | number | readonly string[] | undefined;
 };
 // interface roleSelectInputProps {
@@ -16,7 +16,7 @@ const roles = [
 ];
 
 const RoleSelectInput: React.FC = () => {
-  const [field, meta, helpers] = useField("role");
+  const [field] = useField("role");
   const renderRoleOptions = () => {
     return roles?.map((role: roleType) => {
       return <option value={role.value}>{role.key}</option>;
