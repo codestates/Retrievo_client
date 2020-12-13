@@ -29,8 +29,6 @@ export const CustomForm: React.FC<FormProps> = ({
   children,
   ...arg
 }) => {
-  const [complete, setComplete] = useState(false);
-
   const renderSubmitButton = (isSubmitting: boolean) => (
     <>
       {buttonPosition === "right" && !isCancelButton ? <Spacer /> : null}
@@ -69,14 +67,11 @@ export const CustomForm: React.FC<FormProps> = ({
       initialValues={initialValues}
       onSubmit={(value) => {
         onSubmit(value);
-        setComplete(true);
       }}
       {...arg}
     >
       {({ isSubmitting }) => {
-        return complete ? (
-          "form submitted"
-        ) : (
+        return (
           <Form>
             {children}
             <Flex justifyContent={buttonBoxPosition}>

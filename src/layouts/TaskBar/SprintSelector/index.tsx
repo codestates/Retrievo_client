@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { HiChevronDown } from "react-icons/hi";
 
-type sprint = { id: string; name: string };
+type sprint = { id: string; title: string };
 
 export type SprintListDropdownPropsType = {
   sprints: sprint[];
@@ -21,7 +21,7 @@ const SprintListDropdown: React.FC<SprintListDropdownPropsType> = ({
       return (
         <MenuItem
           key={sprint.id}
-          value={sprint.name}
+          value={sprint.title}
           backgroundColor={
             selectedProject?.id === sprint.id ? "primary.400" : "achromatic.100"
           }
@@ -30,7 +30,7 @@ const SprintListDropdown: React.FC<SprintListDropdownPropsType> = ({
             onProjectSelect(sprint.id);
           }}
         >
-          {sprint.name}
+          {sprint.title}
         </MenuItem>
       );
     });
@@ -54,7 +54,7 @@ const SprintListDropdown: React.FC<SprintListDropdownPropsType> = ({
           justifyContent="space-between"
           color="achromatic.600"
         >
-          {selectedProject ? selectedProject.name : "Select Project"}
+          {selectedProject ? selectedProject.title : "Select Project"}
           <Box
             borderLeft="1px"
             borderColor="achromatic.400"

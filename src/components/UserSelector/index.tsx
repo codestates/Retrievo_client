@@ -30,7 +30,7 @@ type item = {
   value?: string;
   label?: string;
   username: string;
-  avatar?: string;
+  avatar?: string | null;
 };
 
 enum actionTypes {
@@ -120,7 +120,7 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
       ? currentOptions.map((user) => {
           return (
             <DeleteableAvatar
-              src={user.avatar}
+              src={user.avatar || ""}
               name={user.username}
               userId={user.id}
               handleDelete={(id) => {
