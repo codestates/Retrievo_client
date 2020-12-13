@@ -9,12 +9,16 @@ import {
   Box,
   Avatar,
   Button as ChakraButton,
+  ListItem,
+  List,
 } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
 import { FcCheckmark } from "react-icons/fc";
 import { BsPaperclip } from "react-icons/bs";
+import { BiPlus } from "react-icons/bi";
 /* custom components */
+import moment from "moment";
 import Form from "../../components/Form";
 import Button, { buttonColor } from "../../components/Button";
 import Textarea from "../../components/TextArea";
@@ -22,61 +26,47 @@ import Label from "../../components/Label";
 import SprintListDropdown from "./SprintSelector";
 import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
-import Calendar from "../../components/Calendar";
+import Calendar, { dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
-
-export interface taskProps {
-  sample?: string;
-}
 
 // DUMMY DATA
 
 const users = [
   {
-    id: "stupy",
-    value: "stupy",
-    label: "stupy",
-    username: "stupy",
-    avatar:
-      "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    user: {
+      id: "stupy",
+      username: "stupy",
+      avatar:
+        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    },
   },
   {
-    id: "prettie",
-    value: "prettie",
-    label: "prettie",
-    username: "prettie",
-    avatar:
-      "https://images.unsplash.com/photo-1592159371936-61a70cbeb5f7?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGhhbXN0ZXJ8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    user: {
+      id: "prettie",
+      username: "prettie",
+      avatar:
+        "https://images.unsplash.com/photo-1592159371936-61a70cbeb5f7?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGhhbXN0ZXJ8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    },
   },
   {
-    id: "bunny",
-    value: "bunny",
-    label: "bunny",
-    username: "bunny",
-    avatar:
-      "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    user: {
+      id: "bunny",
+      username: "bunny",
+      avatar:
+        "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    },
   },
   {
-    id: "cuttie pie",
-    value: "cuttie pie",
-    label: "cuttie pie",
-    username: "cuttie pie",
-    avatar:
-      "https://images.unsplash.com/photo-1561948955-570b270e7c36?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    user: {
+      id: "cuttie pie",
+      username: "cuttie pie",
+      avatar:
+        "https://images.unsplash.com/photo-1561948955-570b270e7c36?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+    },
   },
 ];
 
-const defaultValue = [
-  {
-    id: "bunny",
-    value: "bunny",
-    label: "bunny",
-    username: "bunny",
-    avatar:
-      "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-  },
-];
 const labelDefaultValue = {
   color: "labelTeal",
   id: "3",
@@ -100,26 +90,22 @@ const labelOptions = [
   },
 ];
 
-const currentSprint = {
-  id: "4",
-  name: "sprint 4",
-};
 const sprints = [
   {
     id: "1",
-    name: "sprint 1",
+    title: "sprint 1",
   },
   {
     id: "2",
-    name: "sprint 2",
+    title: "sprint 2",
   },
   {
     id: "3",
-    name: "sprint 3",
+    title: "sprint 3",
   },
   {
     id: "4",
-    name: "sprint 4",
+    title: "sprint 4",
   },
 ];
 
@@ -139,25 +125,70 @@ const labelSearchDefaultValue = [
   { id: "2", value: "banana", label: "Banana", color: "labelYellow" },
 ];
 
-const comments = [
-  {
-    contents:
-      "예시 코멘트 치킨 내일 먹을거에요 노랑 통닭 매운 후라이드 맛있어요",
-    user: {
-      avatar: "test",
-      username: "유저 이름2",
-      id: "5678",
-    },
+const task = {
+  id: "018da5e5-a28e-4183-bc8e-8adeac1df54d",
+  title: "payment Sleek solutions loooooooooog title ok?",
+  description:
+    "At repudiandae esse doloribus.Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis quod praesentium dolores beatae ullam quae dicta eum dolor corporis harum. Omnis ut dolore saepe quae explicabo labore reprehenderit vel voluptatibus?",
+  startDate: "1602948368862",
+  endDate: "1616167277590",
+  taskIndex: 50,
+  completed: false,
+  board: null,
+  sprint: {
+    id: "4b19004a-f210-4db1-80ad-1a199569a279",
+    title: "driver Plains Wyoming",
   },
-  {
-    contents: "예시 코멘트 어쩌고 저쩌고 왜 잠이 안오지 미쳤나 내가?",
-    user: {
-      avatar: "test",
-      username: "념념이",
-      id: "1234",
+  file: [
+    {
+      fileLink: "payment_israel.fgd",
     },
-  },
-];
+  ],
+  comment: [
+    {
+      content: "solid state Optimization",
+      user: {
+        id: "1234",
+        username: "Miss Clinton Langosh",
+      },
+    },
+    {
+      content:
+        "예시 코멘트 2번 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rem quae rerum doloremque voluptate reiciendis dolore, nobis blanditiis atque ullam, tempore dolorum explicabo expedita? Ipsam, odit ex nam temporibus minus inventore!",
+      user: {
+        id: "5555",
+        username: "Popping Vova",
+      },
+    },
+  ],
+  taskLabel: [
+    {
+      label: {
+        name: "B2C",
+        id: "aee2822a-7055-42a2-a12a-fc9ccf793efc",
+      },
+    },
+  ],
+  userTask: [
+    {
+      user: {
+        id: "b290eacd-819a-4f2a-a486-9dd5152a619c",
+        username: "Miss Clinton Langosh",
+        avatar: null,
+      },
+    },
+  ],
+};
+
+const mappingUserOption = (
+  userArr: {
+    user: { id: string; username: string; avatar: string | null };
+  }[]
+) => {
+  return userArr.map(({ user }) => {
+    return { ...user, label: user.id, value: user.username };
+  });
+};
 
 type labelItem = { id: string; value: string; label: string; color: string };
 const titleValidation = yup.object({
@@ -167,21 +198,57 @@ const commentValidation = yup.object({
   email: yup.string().max(5).required(),
 });
 
-export const TaskBar: React.FC<taskProps> = () => {
+export interface taskProps {
+  taskId?: string;
+  task?: {
+    id: string;
+    title: string | null;
+    description: string | null;
+    startDate: number | null;
+    endDate: number | null;
+    taskIndex: number;
+    completed: boolean;
+    board: { title: string; id: string } | null;
+    sprint: {
+      id: string;
+      title: string;
+    } | null;
+    file: { fileLink: string }[] | null;
+    comment:
+      | { content: string; user: { username: string; id: string } }[]
+      | null;
+    userTask:
+      | {
+          user: {
+            id: string;
+            username: string;
+          };
+        }[]
+      | null;
+    taskLabel:
+      | {
+          label: { name: string; id: string };
+        }[]
+      | null;
+  };
+}
+
+export const TaskBar: React.FC<taskProps> = (taskId) => {
   // TODO: Context로 분리해야함
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const onSprintSelect = (value: string) => console.log(value);
-  const sprintArg = { currentSprint, sprints, onSprintSelect };
 
+  // TODO: getTask API 연결
+  // const task = getTask({id:taskId}); 이런 느낌으로
+
+  // TODO: api와 연결
+  const sprintArg = { currentSprint: task.sprint, sprints, onSprintSelect };
   const userSelectArg: UserSelectPropTypes = {
-    // TODO: api와 연결
-    options: users,
-    // defaultValue,
-    deleteAssignee: (id) => console.log(id),
-    createAssignee: (id) => console.log(id),
+    options: mappingUserOption(users),
+    defaultValue: mappingUserOption(task.userTask),
+    deleteAssignee: (id) => console.log(id), // TODO
+    createAssignee: (id) => console.log(id), // TODO
   };
-
   const labelSelectArgs = {
     options: labelSearchOptions,
     defaultValue: labelSearchDefaultValue,
@@ -189,8 +256,20 @@ export const TaskBar: React.FC<taskProps> = () => {
     deleteTaskLabel: (item: labelItem) => console.log(item),
   };
 
+  // TODO: api 작성
+  type formValue = Record<string, unknown>;
+  const updateTask = (value: formValue) => console.log("task update", value);
+  const createLabel = (value: formValue) => console.log("create label", value);
+  const createFile = (value: formValue) => console.log("create file", value);
+  const createComment = (value: formValue) =>
+    console.log("create Comment", value);
+
+  // TODO: project의 모든 user 불러오기
+  // TODO: project의 모든 board 목록 불러오기
+  // TODO: project의 모든 sprint 목록 불러오기
+
   const renderComments = () => {
-    return comments.map((comment) => {
+    return task.comment.map((comment) => {
       return (
         <Box display="flex" mb="2">
           <Avatar size="sm" name={comment.user.username} />
@@ -202,7 +281,7 @@ export const TaskBar: React.FC<taskProps> = () => {
               {comment.user.id === "1234" ? (
                 <IconButton
                   aria-label="delete task"
-                  iconButtonType="deleteBin"
+                  iconButtonType="close"
                   padding="0"
                   h="1rem"
                   w="1rem"
@@ -210,11 +289,35 @@ export const TaskBar: React.FC<taskProps> = () => {
                 />
               ) : null}
             </Box>
-            <Text fontSize="sm">{comment.contents}</Text>
+            <Text fontSize="sm">{comment.content}</Text>
           </Box>
         </Box>
       );
     });
+  };
+
+  const renderFileList = () => {
+    return (
+      <List color="achromatic.600" fontSize="sm">
+        {task.file.map((el) => {
+          return (
+            <ListItem key={el.fileLink} display="flex" alignItems="flex-end">
+              <BsPaperclip />
+              <a target="blank" href="https://naver.com">
+                {el.fileLink}
+              </a>
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
+  const submitDates = ({ startDate, endDate }: dateIFC) => {
+    const unixStartDate = moment(startDate).unix();
+    const unixEndDate = moment(endDate).unix();
+    console.log("unixStartDate:", unixStartDate);
+    console.log("unixEndDate:", unixEndDate);
   };
 
   return (
@@ -228,8 +331,11 @@ export const TaskBar: React.FC<taskProps> = () => {
             <Box>
               <Button
                 buttontype={buttonColor.white}
-                onClick={() => console.log("TODO: update api연결")}
-                rightIcon={<FcCheckmark />}
+                onClick={() => {
+                  updateTask({ completed: !task.completed });
+                  // TODO : task complete update api
+                }}
+                rightIcon={task.completed ? <FcCheckmark /> : <></>}
                 size="sm"
                 boxShadow="sm"
               >
@@ -248,22 +354,22 @@ export const TaskBar: React.FC<taskProps> = () => {
               >
                 <Box display="flex" alignItems="center" mb={2}>
                   <Text mr="2" fontSize="sm" color="primary.200">
-                    RE-120
+                    Task - {task.taskIndex}
                   </Text>
                   <Label
-                    defaultValue={{
+                    defaultValues={{
                       color: "labelTeal",
                       id: "3",
                       name: "DONE",
                     }}
                     hasDropdown
-                    options={labelOptions}
+                    labels={labelOptions}
                   />
                 </Box>
                 <Form
                   validationSchema={titleValidation}
-                  onSubmit={(value) => console.log(value)}
-                  initialValues={{ title: "테스트" }}
+                  onSubmit={(value) => updateTask(value)}
+                  initialValues={{ title: task.title }}
                 >
                   <Textarea
                     label="title"
@@ -272,6 +378,9 @@ export const TaskBar: React.FC<taskProps> = () => {
                     isLabelNonVisible
                     fontSize="2xl"
                     fontWeight="bold"
+                    onBlur={(e) => {
+                      console.log(e);
+                    }}
                     placeholder="Task Title Here"
                     autoHeight
                     paddingNone
@@ -286,7 +395,15 @@ export const TaskBar: React.FC<taskProps> = () => {
                   <UserSelect {...userSelectArg} />
                 </Box>
                 <Box mt={2}>
-                  <Calendar />
+                  <Calendar
+                    defaultStartDate={moment.unix(
+                      Number(task.startDate) / 1000
+                    )}
+                    defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
+                    handleSubmit={(value: dateIFC) => {
+                      submitDates(value);
+                    }}
+                  />
                 </Box>
                 <Box mt={2}>
                   <TextLabel>Label</TextLabel>
@@ -298,17 +415,21 @@ export const TaskBar: React.FC<taskProps> = () => {
                   <Form
                     validationSchema={titleValidation}
                     onSubmit={(value) => console.log(value)}
-                    initialValues={{ description: "" }}
+                    initialValues={{ description: task.description }}
                   >
                     <Textarea
                       label="description"
                       name="description"
                       isLabelNonVisible
+                      onBlur={(e) => {
+                        console.log(e);
+                      }}
                       placeholder="description here"
                       autoHeight
                     />
                   </Form>
                 </Box>
+                <Box>{renderFileList()}</Box>
                 <Box
                   display="flex"
                   justifyContent="space-between"
@@ -316,7 +437,7 @@ export const TaskBar: React.FC<taskProps> = () => {
                   color="achromatic.600"
                 >
                   <ChakraButton
-                    leftIcon={<BsPaperclip />}
+                    leftIcon={<BiPlus />}
                     size="sm"
                     bgColor="transparent"
                     padding="0"
@@ -349,7 +470,7 @@ export const TaskBar: React.FC<taskProps> = () => {
                   <Box width="full">
                     <Form
                       validationSchema={commentValidation}
-                      onSubmit={(value) => console.log(value)}
+                      onSubmit={(value) => createComment(value)}
                       initialValues={{ comment: "" }}
                       isSubmitButton
                     >

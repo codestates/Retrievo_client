@@ -19,9 +19,9 @@ export type LabelProps = ChakraLabelPropsType & {
   hasDropdown?: boolean;
   hasCloseButton?: boolean;
   onClose?: () => void;
-  children: string | ReactElement;
+  children?: string | ReactElement;
   labels?: label[];
-  defaultValue?: label;
+  defaultValues?: label;
 };
 
 const Label: React.FC<LabelProps> = ({
@@ -32,11 +32,11 @@ const Label: React.FC<LabelProps> = ({
   children,
   onClose,
   labels,
-  defaultValue,
+  defaultValues,
   ...props
 }) => {
   const [selectedColor, setSelectedColor] = useState(
-    defaultValue?.color || "primary.300"
+    defaultValues?.color || "primary.300"
   );
   const fontColor = color || "achromatic.100";
   const backgroundColor = bgColor || "primary.300";
@@ -52,7 +52,7 @@ const Label: React.FC<LabelProps> = ({
         <option
           key={label.id}
           value={label.color}
-          selected={defaultValue?.id === label.id}
+          selected={defaultValues?.id === label.id}
         >
           {label.name}
         </option>

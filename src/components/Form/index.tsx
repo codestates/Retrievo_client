@@ -6,16 +6,18 @@ import Button, { buttonColor } from "../Button";
 // import { testValidationSchema } from "./form.stories";
 
 export type FormProps = {
-  initialValues: Record<string, string>;
+  initialValues: Record<string, unknown>;
   // validationSchema: yup.InferType<typeof testValidationSchema>;
-  validationSchema: any;
+  validationSchema?: any;
   buttonPosition?: "center" | "left" | "right";
-  onSubmit: (value: Record<string, string>) => void;
+  onSubmit: (value: Record<string, any>) => void;
   isSubmitButton?: boolean;
   isOnBlurSubmit?: boolean;
   isFullButton?: boolean;
   isCancelButton?: boolean;
   onCancel?: () => void;
+  submitBtnName?: string;
+  cancelBtnName?: string;
 };
 
 export const CustomForm: React.FC<FormProps> = ({
@@ -27,21 +29,21 @@ export const CustomForm: React.FC<FormProps> = ({
   isCancelButton,
   isFullButton,
   children,
+  submitBtnName,
+  cancelBtnName,
   ...arg
 }) => {
-  const [complete, setComplete] = useState(false);
-
   const renderSubmitButton = (isSubmitting: boolean) => (
     <>
       {buttonPosition === "right" && !isCancelButton ? <Spacer /> : null}
       <Button
-        buttonType={buttonColor.primary}
+        buttontype={buttonColor.primary}
         type="submit"
         isLoading={isSubmitting}
         isFullWidth={isFullButton}
         mt={3}
       >
-        Submit
+        {submitBtnName !== undefined ? submitBtnName : "Submit"}
       </Button>
     </>
   );
@@ -49,13 +51,13 @@ export const CustomForm: React.FC<FormProps> = ({
   const renderCancelButton = () => (
     <>
       <Button
-        buttonType={buttonColor.danger}
+        buttontype={buttonColor.danger}
         onClick={onCancel}
         isFullWidth={isFullButton}
         mr={isSubmitButton ? "3" : "0"}
         mt={3}
       >
-        Cancle
+        {cancelBtnName !== undefined ? cancelBtnName : "Cancel"}
       </Button>
     </>
   );
@@ -69,14 +71,11 @@ export const CustomForm: React.FC<FormProps> = ({
       initialValues={initialValues}
       onSubmit={(value) => {
         onSubmit(value);
-        setComplete(true);
       }}
       {...arg}
     >
       {({ isSubmitting }) => {
-        return complete ? (
-          "form submitted"
-        ) : (
+        return (
           <Form>
             {children}
             <Flex justifyContent={buttonBoxPosition}>

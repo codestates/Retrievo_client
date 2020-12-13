@@ -4,11 +4,15 @@ import "react-dates/initialize";
 import * as moment from "moment";
 import { DateRangePicker, FocusedInputShape } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
-import { Box, Grid } from "@chakra-ui/react";
-import { StyledCalendar, StyledTextContainer } from "./calendar.styled";
+import { Grid } from "@chakra-ui/react";
+import { StyledCalendar } from "./calendar.styled";
 import Text from "../Text";
 
-export type calendarProps = HTMLAttributes<HTMLElement>;
+export type calendarProps = HTMLAttributes<HTMLElement> & {
+  handleSubmit: ({ startDate, endDate }: dateIFC) => void;
+  defaultStartDate: dateType;
+  defaultEndDate: dateType;
+};
 
 export type dateType = moment.Moment | null;
 
@@ -17,16 +21,23 @@ export interface dateIFC {
   endDate: dateType;
 }
 
-const Calendar: React.FC<calendarProps> = () => {
-  const [startDate, setStartDate] = useState<dateType>(null);
-  const [endDate, setEndDate] = useState<dateType>(null);
+const Calendar: React.FC<calendarProps> = ({
+  handleSubmit,
+  defaultStartDate,
+  defaultEndDate,
+}) => {
+  const [startDate, setStartDate] = useState<dateType>(defaultStartDate);
+  const [endDate, setEndDate] = useState<dateType>(defaultEndDate);
   const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
     null
   );
+
   const handleDatesChange = ({ startDate, endDate }: dateIFC) => {
     setStartDate(startDate);
     setEndDate(endDate);
+    handleSubmit({ startDate, endDate });
   };
+
   return (
     <StyledCalendar>
       <Grid templateColumns="1fr 1fr" gap="1rem" w="full">
