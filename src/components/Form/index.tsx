@@ -6,11 +6,11 @@ import Button, { buttonColor } from "../Button";
 // import { testValidationSchema } from "./form.stories";
 
 export type FormProps = {
-  initialValues: Record<string, string>;
+  initialValues: Record<string, any>;
   // validationSchema: yup.InferType<typeof testValidationSchema>;
   validationSchema: any;
   buttonPosition?: "center" | "left" | "right";
-  onSubmit: (value: Record<string, string>) => void;
+  onSubmit: (value: Record<string, any>) => void;
   isSubmitButton?: boolean;
   isOnBlurSubmit?: boolean;
   isFullButton?: boolean;
@@ -29,8 +29,6 @@ export const CustomForm: React.FC<FormProps> = ({
   children,
   ...arg
 }) => {
-  const [complete, setComplete] = useState(false);
-
   const renderSubmitButton = (isSubmitting: boolean) => (
     <>
       {buttonPosition === "right" && !isCancelButton ? <Spacer /> : null}
@@ -69,14 +67,11 @@ export const CustomForm: React.FC<FormProps> = ({
       initialValues={initialValues}
       onSubmit={(value) => {
         onSubmit(value);
-        setComplete(true);
       }}
       {...arg}
     >
       {({ isSubmitting }) => {
-        return complete ? (
-          "form submitted"
-        ) : (
+        return (
           <Form>
             {children}
             <Flex justifyContent={buttonBoxPosition}>
