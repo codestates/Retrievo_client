@@ -7,7 +7,7 @@ const ButtonStories = {
   title: "components/Calendar",
   component: Calendar,
   // argTypes: {
-  //   buttonType: {
+  //   buttontype: {
   //     control: {
   //       type: "select",
   //       options: Object.keys(buttonColor),

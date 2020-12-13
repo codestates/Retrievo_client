@@ -43,14 +43,14 @@ enum actionTypes {
   createOption = "create-option",
 }
 
-export type OptionsType = {
+export type UserSelectPropTypes = {
   options: item[];
   defaultValue?: item[];
   deleteAssignee: (id: string) => void;
   createAssignee: (id: string) => void;
 };
 
-const UserSelect: React.FC<OptionsType> = ({
+const UserSelect: React.FC<UserSelectPropTypes> = ({
   options,
   defaultValue,
   deleteAssignee,
