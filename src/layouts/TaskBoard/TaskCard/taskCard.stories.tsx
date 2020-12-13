@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import TaskCard, { TaskCardProps } from "./index";
+import DragPositionCard, { DragPositionCardProps } from "./DragPositionCard";
 
 export const taskCard = ({ ...args }: TaskCardProps): ReactElement => (
   <TaskCard {...args} />
@@ -48,11 +49,10 @@ taskCard.args = {
   handleTaskClick: (id: string) => console.log(id),
 };
 
-export const dragPositionCard = ({ ...args }: TaskCardProps): ReactElement => (
-  <TaskCard {...args} />
-);
+export const dragPositionCard = ({
+  ...args
+}: DragPositionCardProps): ReactElement => <DragPositionCard {...args} />;
 dragPositionCard.args = {
-  isDragPositionCard: true,
   fromToBoardArr: ["In Progress", "Done"],
 };
 
