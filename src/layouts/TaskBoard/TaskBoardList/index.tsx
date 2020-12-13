@@ -5,6 +5,7 @@ import {
   DropResult,
   ResponderProvided,
   Droppable,
+  Draggable,
 } from "react-beautiful-dnd";
 import TaskBoard, { board, TaskBoardProps } from "../TaskBoard";
 import SkeletonBoard from "../TaskBoard/SkeletonBoard";
@@ -36,14 +37,33 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   };
 
   const renderBoards = (boards: board[]) => {
-    return boards.map((currentBoard) => {
-      return <TaskBoard board={currentBoard} {...boardConfig} />;
+    return boards.map((currentBoard, index) => {
+      return (
+        <Draggable
+          index={index}
+          draggableId={currentBoard.id}
+          key={currentBoard.id}
+        >
+          {(provided) => (
+            <Box
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <TaskBoard board={currentBoard} {...boardConfig} />
+            </Box>
+          )}
+        </Draggable>
+      );
     });
   };
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     // reorder
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
+
+    console.log("type:", type);
+
     if (!destination) return;
 
     if (
@@ -80,15 +100,28 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   };
 
   return (
-    <Box display="flex" flexDir="row" minH={1000}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {renderBoards(boardLists)}
-        <SkeletonBoard
-          handleBoardCreate={handleBoardCreate}
-          projectId={projectId}
-        />
-      </DragDropContext>
-    </Box>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="board" type="BOARD" direction="horizontal">
+        {(provided) => (
+          <>
+            <Box
+              display="flex"
+              flexDir="row"
+              // minH={1000}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {renderBoards(boardLists)}
+              {provided.placeholder}
+              <SkeletonBoard
+                handleBoardCreate={handleBoardCreate}
+                projectId={projectId}
+              />
+            </Box>
+          </>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 

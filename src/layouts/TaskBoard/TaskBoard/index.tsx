@@ -66,7 +66,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   // column
   return (
-    <Box w={330} mr={4}>
+    <Box w={330} mr={4} minH={1000}>
       <Box
         display="flex"
         flexDirection="row"
@@ -96,8 +96,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         display="flex"
         flexDir="column"
         alignItems="center"
+        minH={170}
       >
-        <Droppable droppableId={board.id}>
+        <Droppable droppableId={board.id} type="TASK">
           {(provided) => (
             <div
               {...provided.droppableProps}
