@@ -40,7 +40,7 @@ const Heading: React.FC<HeadingProps> = ({
     }
 
     if (headingType === headingEnum.auth) {
-      fontSize = "6xl";
+      fontSize = "5xl";
       color = "achromatic.800";
     }
 
