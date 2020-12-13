@@ -44,7 +44,7 @@ export enum ShadowType {
 }
 
 export type roundButtonProps = IconButtonProps & {
-  buttonColor: RoundButtonColor;
+  buttonColor?: RoundButtonColor;
   iconType: string | undefined;
   shadowType: ShadowType;
 };
@@ -55,7 +55,7 @@ const RoundButton: React.FC<roundButtonProps> = ({
   shadowType,
   ...props
 }) => {
-  const roundBtnConfig = { buttonColor };
+  const roundBtnConfig = { buttonColor, shadowType };
 
   const renderBgColors = (): string => {
     if (buttonColor === RoundButtonColor.yellow) return "yellow.300";
