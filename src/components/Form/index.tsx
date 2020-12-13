@@ -35,7 +35,7 @@ export const CustomForm: React.FC<FormProps> = ({
     <>
       {buttonPosition === "right" && !isCancelButton ? <Spacer /> : null}
       <Button
-        buttontype={buttonColor.primary}
+        buttonType={buttonColor.primary}
         type="submit"
         isLoading={isSubmitting}
         isFullWidth={isFullButton}
@@ -49,7 +49,7 @@ export const CustomForm: React.FC<FormProps> = ({
   const renderCancelButton = () => (
     <>
       <Button
-        buttontype={buttonColor.danger}
+        buttonType={buttonColor.danger}
         onClick={onCancel}
         isFullWidth={isFullButton}
         mr={isSubmitButton ? "3" : "0"}
