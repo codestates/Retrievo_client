@@ -5,6 +5,7 @@ export const StyledProfileWrapper = styled(Box)`
   .avatar {
     width: 500px;
   }
+
   button {
     position: absolute;
     top: 24%;
