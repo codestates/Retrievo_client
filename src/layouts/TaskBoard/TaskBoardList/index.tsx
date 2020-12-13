@@ -1,5 +1,11 @@
 import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
+import {
+  DragDropContext,
+  DropResult,
+  ResponderProvided,
+  Droppable,
+} from "react-beautiful-dnd";
 import TaskBoard, { board, TaskBoardProps } from "../TaskBoard";
 import SkeletonBoard from "../TaskBoard/SkeletonBoard";
 
@@ -32,21 +38,37 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   const renderBoards = (boards: board[]) => {
     return boards.map((currentBoard) => {
       return (
-        <TaskBoard
-          key={currentBoard.id}
-          board={currentBoard}
-          {...boardConfig}
-        />
+        <Droppable droppableId={currentBoard.id}>
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              key={currentBoard.id}
+            >
+              <TaskBoard board={currentBoard} {...boardConfig} />
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       );
     });
   };
+  //  이거 어디에 넣지?
+  const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
+    // reorder
+    console.log("----result:", result);
+    console.log("----ReponseProvided:", provided);
+  };
+
   return (
     <Box display="flex" flexDir="row" minH={1000}>
-      {renderBoards(boards)}
-      <SkeletonBoard
-        handleBoardCreate={handleBoardCreate}
-        projectId={projectId}
-      />
+      <DragDropContext onDragEnd={onDragEnd}>
+        {renderBoards(boards)}
+        <SkeletonBoard
+          handleBoardCreate={handleBoardCreate}
+          projectId={projectId}
+        />
+      </DragDropContext>
     </Box>
   );
 };

@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
+import { Draggable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import TaskCard, { task, TaskCardProps } from "../TaskCard";
@@ -16,6 +17,7 @@ export type board = {
 
 export type TaskBoardProps = TaskCardProps & {
   board: board;
+  // ref: (element: HTMLElement | null) => any;
   handleBoardCreate: () => void;
   handleBoardDelete: (id: string) => void;
   handleTaskCreate: () => void;
@@ -27,6 +29,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
   handleTaskCreate,
   board,
+  // ref,
   ...props
 }): ReactElement => {
   const { handleTaskDelete, handleTaskClick } = props;
@@ -44,13 +47,24 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const renderTasks = (tasks: task[]) => {
     return tasks.map((task) => {
       return (
-        <Box mb={4}>
-          <TaskCard key={task.id} task={task} {...taskConfig} />
-        </Box>
+        <Draggable index={task.boardRowIndex} draggableId={task.id}>
+          {(provided) => (
+            <Box mb={4}>
+              <div
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+              >
+                <TaskCard key={task.id} task={task} {...taskConfig} />
+              </div>
+            </Box>
+          )}
+        </Draggable>
       );
     });
   };
 
+  // column
   return (
     <Box w={330} mr={4}>
       <Box

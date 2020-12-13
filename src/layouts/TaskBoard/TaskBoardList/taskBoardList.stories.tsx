@@ -75,45 +75,45 @@ taskBoardList.args = {
             },
           ],
         },
-        // {
-        //   id: "task1",
-        //   title: "Reading Books",
-        //   startDate: "1584172961096",
-        //   endDate: "1611017454633",
-        //   taskIndex: 20,
-        //   userTask: [
-        //     {
-        //       user: {
-        //         id: "user1",
-        //         username: "Hailey",
-        //         avatar: null,
-        //       },
-        //     },
-        //     {
-        //       user: {
-        //         id: "user2",
-        //         username: "Dongoc",
-        //         avatar: null,
-        //       },
-        //     },
-        //   ],
-        //   taskLabel: [
-        //     {
-        //       label: {
-        //         id: "label1",
-        //         name: "books",
-        //         color: "fail",
-        //       },
-        //     },
-        //     {
-        //       label: {
-        //         id: "label2",
-        //         name: "science",
-        //         color: "violet",
-        //       },
-        //     },
-        //   ],
-        // },
+        {
+          id: "task3dk",
+          title: "Reading Books3",
+          startDate: "1584172961096",
+          endDate: "1611017454633",
+          taskIndex: 20,
+          userTask: [
+            {
+              user: {
+                id: "user1",
+                username: "Hailey",
+                avatar: null,
+              },
+            },
+            {
+              user: {
+                id: "user2",
+                username: "Dongoc",
+                avatar: null,
+              },
+            },
+          ],
+          taskLabel: [
+            {
+              label: {
+                id: "label1",
+                name: "books",
+                color: "fail",
+              },
+            },
+            {
+              label: {
+                id: "label2",
+                name: "science",
+                color: "violet",
+              },
+            },
+          ],
+        },
         // {
         //   id: "task2",
         //   title: "Washing Dishes",
