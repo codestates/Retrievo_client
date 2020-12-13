@@ -44,10 +44,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     );
   };
 
+  // FIXME : index -> boardRowIndex
   const renderTasks = (tasks: task[]) => {
-    return tasks.map((task) => {
+    return tasks.map((task, index) => {
       return (
-        <Draggable index={task.boardRowIndex} draggableId={task.id}>
+        <Draggable index={index} draggableId={task.id}>
           {(provided) => (
             <Box
               mb={4}

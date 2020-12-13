@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import {
   DragDropContext,
@@ -11,7 +11,6 @@ import SkeletonBoard from "../TaskBoard/SkeletonBoard";
 
 export type TaskBoardListProps = TaskBoardProps & {
   boards: board[];
-  didSprintStart?: boolean;
   projectId: string;
 };
 
@@ -20,6 +19,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   projectId,
   ...props
 }): ReactElement => {
+  const [boardLists, setBoardLists] = useState(boards);
   const {
     handleBoardCreate,
     handleBoardDelete,
@@ -43,14 +43,52 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     // reorder
+    const { destination, source, draggableId } = result;
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
     console.log("----result:", result);
     console.log("----ReponseProvided:", provided);
+
+    // 1. 원래 있던 배열을 찾는다
+    const sourceBoard = boardLists.find(
+      (boardList) => boardList.id === source.droppableId
+    );
+    const sourceBoardIndex = boardLists.findIndex(
+      (boardList) => boardList.id === source.droppableId
+    );
+
+    const destinationBoard = boardLists.find(
+      (boardList) => boardList.id === destination.droppableId
+    );
+
+    const destinationBoardIndex = boardLists.findIndex(
+      (boardList) => boardList.id === destination.droppableId
+    );
+
+    if (!sourceBoard || !destinationBoard) return;
+
+    const sourceTask = sourceBoard.task.splice(source.index, 1);
+
+    destinationBoard.task.splice(destination.index, 0, sourceTask[0]);
+
+    const copyBoardList = [...boardLists];
+    copyBoardList.splice(sourceBoardIndex, 1, sourceBoard);
+    copyBoardList.splice(destinationBoardIndex, 1, destinationBoard);
+
+    setBoardLists(copyBoardList);
   };
 
   return (
     <Box display="flex" flexDir="row" minH={1000}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {renderBoards(boards)}
+        {renderBoards(boardLists)}
         <SkeletonBoard
           handleBoardCreate={handleBoardCreate}
           projectId={projectId}
@@ -61,6 +99,24 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 };
 
 export default TaskBoardList;
+
+// const initialData = {
+//   tasks: {
+//     "task-1": { id: "task-1", content: "Take out the garbage" },
+//     "task-2": { id: "task-2", content: "Watch my favorite show" },
+//     "task-3": { id: "task-3", content: "Charge my phone" },
+//     "task-4": { id: "task-4", content: "Cook dinner" },
+//   },
+//   columns: {
+//     "column-1": {
+//       id: "column-1",
+//       title: "To do",
+//       taskIds: ["task-1", "task-2", "task-3", "task-4"],
+//     },
+//   },
+//   // Facilitate reordering of the columns
+//   columnOrder: ["column-1"],
+// };
 
 /*
 {
