@@ -23,7 +23,7 @@ import SprintListDropdown from "./SprintSelector";
 import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
 import Calendar from "../../components/Calendar";
-import IconButton, { IconButtonType } from "../../components/IconButton";
+import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
 
 export interface taskProps {
@@ -100,7 +100,6 @@ const labelOptions = [
   },
 ];
 
-// TODO: Task api와 연결
 const currentSprint = {
   id: "4",
   name: "sprint 4",
