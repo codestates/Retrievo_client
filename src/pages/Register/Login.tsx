@@ -1,7 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import * as yup from "yup";
-import { VscMention } from "react-icons/vsc";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";
@@ -51,24 +50,35 @@ const Login = (): ReactElement => {
             label="email"
             name="email"
             type="email"
-            LeftIcon={<VscMention />}
+            iconType="email"
+            placeholder="Email"
           />
-          <InputField label="password" name="password" type="password" />
+          <InputField
+            label="password"
+            name="password"
+            type="password"
+            iconType="password"
+            placeholder="Password"
+          />
         </Form>
-        <Box display="flex" justifyContent="center" alignItems="center">
-          {/* <RoundButton
+        <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
+          <RoundButton
             aria-label="google login button"
             iconType={IconType.google}
             shadowType={ShadowType.base}
             buttonColor={RoundButtonColor.white}
-            fontSize="md"
+            size="md"
+            variant="outline"
+            mr={2}
           />
           <RoundButton
             aria-label="google login button"
             iconType={IconType.github}
             shadowType={ShadowType.base}
             buttonColor={RoundButtonColor.white}
-          /> */}
+            size="md"
+            variant="outline"
+          />
         </Box>
       </Box>
     </Box>
