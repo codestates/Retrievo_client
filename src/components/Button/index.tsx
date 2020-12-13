@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import {
   Button as ChakraButton,
   ButtonProps as ChakraButtonProps,
@@ -13,22 +13,22 @@ export enum buttonColor {
 }
 
 export type buttonProps = ChakraButtonProps & {
-  buttonType: buttonColor;
+  buttontype: buttonColor;
   children: React.ReactNode;
 };
 
-const Button: React.FC<buttonProps> = ({ buttonType, children, ...props }) => {
-  const buttonConfig = { buttonType };
+const Button: React.FC<buttonProps> = ({ buttontype, children, ...props }) => {
+  const buttonConfig = { buttontype };
   const renderBgColors = (): string => {
-    if (buttonType === buttonColor.primary) return "primary.200";
-    if (buttonType === buttonColor.danger) return "fail";
-    if (buttonType === buttonColor.white) return "achromatic.100";
-    if (buttonType === buttonColor.gray) return "achromatic.500";
+    if (buttontype === buttonColor.primary) return "primary.200";
+    if (buttontype === buttonColor.danger) return "fail";
+    if (buttontype === buttonColor.white) return "achromatic.100";
+    if (buttontype === buttonColor.gray) return "achromatic.500";
     return "primary.200";
   };
 
   const renderColors = () => {
-    if (buttonType === buttonColor.white) return "achromatic.800";
+    if (buttontype === buttonColor.white) return "achromatic.700";
     return "achromatic.100";
   };
 

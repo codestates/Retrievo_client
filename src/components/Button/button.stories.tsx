@@ -7,7 +7,7 @@ export const BasicButton = ({
   ...args
 }: buttonProps): React.ReactElement => <Button {...args}>{children}</Button>;
 BasicButton.args = {
-  buttonType: "primary",
+  buttontype: "primary",
   isFullWidth: true,
   children: "Are You Happy?",
 };
@@ -18,7 +18,7 @@ export const IconButton = ({
 }: buttonProps): React.ReactElement => <Button {...args}>{children}</Button>;
 
 IconButton.args = {
-  buttonType: "primary",
+  buttontype: "primary",
   rightIcon: <FaBeer />,
   isFullWidth: true,
   children: "I'm happy!",
@@ -28,7 +28,7 @@ const ButtonStories = {
   title: "components/Button",
   component: Button,
   argTypes: {
-    buttonType: {
+    buttontype: {
       control: {
         type: "select",
         options: Object.keys(buttonColor),
