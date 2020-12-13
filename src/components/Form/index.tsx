@@ -79,10 +79,8 @@ export const CustomForm: React.FC<FormProps> = ({
           <Form>
             {children}
             <Flex justifyContent={buttonBoxPosition}>
-              <div>
-                {isCancelButton ? renderCancelButton() : null}
-                {isSubmitButton ? renderSubmitButton(isSubmitting) : null}
-              </div>
+              {isCancelButton ? renderCancelButton() : null}
+              {isSubmitButton ? renderSubmitButton(isSubmitting) : null}
             </Flex>
           </Form>
         );

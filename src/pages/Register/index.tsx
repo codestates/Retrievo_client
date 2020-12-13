@@ -48,6 +48,7 @@ const RegisterAndLogin: React.FC<Record<string, never>> = () => {
             overflow="hidden"
             transition="right 1s, border-radius 1s"
             boxShadow="lg"
+            zIndex="999"
           >
             {isRegister ? (
               <RegisterWelcomeCard changeCard={changeCard} />

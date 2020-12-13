@@ -46,7 +46,7 @@ export enum ShadowType {
 export type roundButtonProps = IconButtonProps & {
   buttonColor?: RoundButtonColor;
   iconType: string | undefined;
-  shadowType: ShadowType;
+  shadowType?: ShadowType;
 };
 
 const RoundButton: React.FC<roundButtonProps> = ({
