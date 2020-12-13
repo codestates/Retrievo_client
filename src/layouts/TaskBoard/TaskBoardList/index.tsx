@@ -32,18 +32,16 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   const renderBoards = (boards: board[]) => {
     return boards.map((currentBoard) => {
       return (
-        <Box mr={4}>
-          <TaskBoard
-            key={currentBoard.id}
-            board={currentBoard}
-            {...boardConfig}
-          />
-        </Box>
+        <TaskBoard
+          key={currentBoard.id}
+          board={currentBoard}
+          {...boardConfig}
+        />
       );
     });
   };
   return (
-    <Box display="flex" flexDir="row" minH={1000} h="100vh">
+    <Box display="flex" flexDir="row" minH={1000}>
       {renderBoards(boards)}
       <SkeletonBoard
         handleBoardCreate={handleBoardCreate}
