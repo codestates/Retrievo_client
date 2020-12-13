@@ -6,7 +6,9 @@ import CustomForm from "../../../components/Form"; // { FormProps }
 
 // }
 
-const validationSchema = {};
+// const validationSchema = {
+
+// };
 
 export const MyProfile: React.FC = () => {
   return (
@@ -29,7 +31,6 @@ export const MyProfile: React.FC = () => {
         onSubmit={() => {
           console.log("ojwoiehf");
         }}
-        validationSchema={validationSchema}
       >
         <InputField
           label="email"

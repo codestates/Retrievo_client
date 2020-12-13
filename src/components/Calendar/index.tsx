@@ -9,7 +9,7 @@ import { StyledCalendar } from "./calendar.styled";
 import Text from "../Text";
 
 export type calendarProps = HTMLAttributes<HTMLElement> & {
-  onSubmit: ({ startDate, endDate }: dateIFC) => void;
+  handleSubmit: ({ startDate, endDate }: dateIFC) => void;
   defaultStartDate: dateType;
   defaultEndDate: dateType;
 };
@@ -22,7 +22,7 @@ export interface dateIFC {
 }
 
 const Calendar: React.FC<calendarProps> = ({
-  onSubmit,
+  handleSubmit,
   defaultStartDate,
   defaultEndDate,
 }) => {
@@ -35,7 +35,7 @@ const Calendar: React.FC<calendarProps> = ({
   const handleDatesChange = ({ startDate, endDate }: dateIFC) => {
     setStartDate(startDate);
     setEndDate(endDate);
-    onSubmit({ startDate, endDate });
+    handleSubmit({ startDate, endDate });
   };
 
   return (

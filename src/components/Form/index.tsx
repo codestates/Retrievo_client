@@ -6,9 +6,9 @@ import Button, { buttonColor } from "../Button";
 // import { testValidationSchema } from "./form.stories";
 
 export type FormProps = {
-  initialValues: Record<string, any>;
+  initialValues: Record<string, unknown>;
   // validationSchema: yup.InferType<typeof testValidationSchema>;
-  validationSchema: any;
+  validationSchema?: any;
   buttonPosition?: "center" | "left" | "right";
   onSubmit: (value: Record<string, any>) => void;
   isSubmitButton?: boolean;
