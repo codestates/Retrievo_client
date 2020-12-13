@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import {
   DragDropContext,
   DropResult,
@@ -21,6 +21,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
+  const toast = useToast();
+
   const {
     handleBoardCreate,
     handleBoardDelete,
@@ -43,6 +45,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
           index={index}
           draggableId={currentBoard.id}
           key={currentBoard.id}
+          isDragDisabled={index === boards.length - 1}
         >
           {(provided) => (
             <Box
@@ -61,42 +64,64 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     // reorder
     const { destination, source, draggableId, type } = result;
-
     console.log("type:", type);
 
     if (!destination) return;
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
+    if (type === "TASK") {
+      if (
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index
+      ) {
+        return;
+      }
+
+      const sourceBoard = boardLists.find(
+        (boardList) => boardList.id === source.droppableId
+      );
+      const sourceBoardIndex = boardLists.findIndex(
+        (boardList) => boardList.id === source.droppableId
+      );
+
+      const destinationBoard = boardLists.find(
+        (boardList) => boardList.id === destination.droppableId
+      );
+      const destinationBoardIndex = boardLists.findIndex(
+        (boardList) => boardList.id === destination.droppableId
+      );
+
+      if (!sourceBoard || !destinationBoard) return;
+
+      const sourceTask = sourceBoard.task.splice(source.index, 1);
+      destinationBoard.task.splice(destination.index, 0, sourceTask[0]);
+
+      const copyBoardList = [...boardLists];
+      copyBoardList.splice(sourceBoardIndex, 1, sourceBoard);
+      copyBoardList.splice(destinationBoardIndex, 1, destinationBoard);
+
+      setBoardLists(copyBoardList);
     }
 
-    const sourceBoard = boardLists.find(
-      (boardList) => boardList.id === source.droppableId
-    );
-    const sourceBoardIndex = boardLists.findIndex(
-      (boardList) => boardList.id === source.droppableId
-    );
+    if (type === "BOARD") {
+      if (destination.index === boardLists.length - 1) {
+        toast({
+          title: "마지막 보드는 이동할 수 없습니다",
+          description: "Board is not draggable to the last",
+          status: "warning",
+          position: "bottom-right",
+          duration: 4000,
+          isClosable: true,
+        });
+        return;
+      }
 
-    const destinationBoard = boardLists.find(
-      (boardList) => boardList.id === destination.droppableId
-    );
-    const destinationBoardIndex = boardLists.findIndex(
-      (boardList) => boardList.id === destination.droppableId
-    );
+      const copyBoardLists = [...boardLists];
+      const temp = copyBoardLists[source.index];
+      copyBoardLists[source.index] = copyBoardLists[destination.index];
+      copyBoardLists[destination.index] = temp;
 
-    if (!sourceBoard || !destinationBoard) return;
-
-    const sourceTask = sourceBoard.task.splice(source.index, 1);
-    destinationBoard.task.splice(destination.index, 0, sourceTask[0]);
-
-    const copyBoardList = [...boardLists];
-    copyBoardList.splice(sourceBoardIndex, 1, sourceBoard);
-    copyBoardList.splice(destinationBoardIndex, 1, destinationBoard);
-
-    setBoardLists(copyBoardList);
+      setBoardLists(copyBoardLists);
+    }
   };
 
   return (
