@@ -1,4 +1,5 @@
 import React from "react";
+import { Box } from "@chakra-ui/react";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
 import RoleSelectInput from "./roleSelectInput";
@@ -24,24 +25,34 @@ export const MyProfile: React.FC = () => {
         submitBtnName="Confirm"
         cancelBtnName="Logout"
       >
-        <InputField
-          label="Full Name"
-          name="fullName"
-          placeholder="Enter Name"
-        />
-        <RoleSelectInput />
-        <InputField
-          label="Email"
-          name="email"
-          placeholder="Enter Email"
-          type="email"
-        />
-        <InputField
-          label="Password"
-          name="password"
-          placeholder="Enter Password"
-          type="password"
-        />
+        <Box lineHeight={8}>
+          <Box p={2}>
+            <InputField
+              label="Full Name"
+              name="fullName"
+              placeholder="Enter Name"
+            />
+          </Box>
+          <Box p={2}>
+            <RoleSelectInput />
+          </Box>
+          <Box p={2}>
+            <InputField
+              label="Email"
+              name="email"
+              placeholder="Enter Email"
+              type="email"
+            />
+          </Box>
+          <Box p={2} mb={6}>
+            <InputField
+              label="Password"
+              name="password"
+              placeholder="Enter Password"
+              type="password"
+            />
+          </Box>
+        </Box>
       </CustomForm>
     </>
   );

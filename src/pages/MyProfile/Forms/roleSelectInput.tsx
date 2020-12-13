@@ -25,8 +25,14 @@ const RoleSelectInput: React.FC = () => {
 
   return (
     <FormControl>
-      <FormLabel>Role</FormLabel>
-      <Select {...field} placeholder="Select a role">
+      <FormLabel fontWeight="base" m={0}>
+        Role
+      </FormLabel>
+      <Select
+        {...field}
+        placeholder="Select a role"
+        borderColor="achromatic.400"
+      >
         {renderRoleOptions()}
       </Select>
     </FormControl>
