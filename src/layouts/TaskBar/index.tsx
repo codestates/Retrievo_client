@@ -251,13 +251,13 @@ export const TaskBar: React.FC<taskProps> = () => {
                     RE-120
                   </Text>
                   <Label
-                    defaultValue={{
+                    defaultValues={{
                       color: "labelTeal",
                       id: "3",
                       name: "DONE",
                     }}
                     hasDropdown
-                    options={labelOptions}
+                    labels={labelOptions}
                   />
                 </Box>
                 <Form
