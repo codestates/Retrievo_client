@@ -6,11 +6,11 @@ import Button, { buttonColor } from "../Button";
 // import { testValidationSchema } from "./form.stories";
 
 export type FormProps = {
-  initialValues: Record<string, string>;
+  initialValues: Record<string, any>;
   // validationSchema: yup.InferType<typeof testValidationSchema>;
   validationSchema: any;
   buttonPosition?: "center" | "left" | "right";
-  onSubmit: (value: Record<string, string>) => void;
+  onSubmit: (value: Record<string, any>) => void;
   isSubmitButton?: boolean;
   isOnBlurSubmit?: boolean;
   isFullButton?: boolean;
