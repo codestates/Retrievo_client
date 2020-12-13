@@ -10,7 +10,7 @@ import Form from "../../../components/Form";
 import Input from "../../../components/Input";
 
 export type boardType = {
-  board: any;
+  [key: string]: any;
 };
 
 export type SkeletonBoardProps = {
