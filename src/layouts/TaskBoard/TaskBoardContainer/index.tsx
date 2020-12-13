@@ -1,13 +1,7 @@
 import React, { ReactElement } from "react";
-import { Box, Container } from "@chakra-ui/react";
-import { CgClose } from "react-icons/cg";
-import { RiArrowRightLine } from "react-icons/ri";
-import { format } from "date-fns";
-import Heading, { headingEnum } from "../../../components/Heading";
+import { Box } from "@chakra-ui/react";
 import Text from "../../../components/Text";
 import Button, { buttonColor } from "../../../components/Button";
-import Label from "../../../components/Label";
-import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
 
 const TaskBoardContainer = (): ReactElement => {
   return (
@@ -28,7 +22,7 @@ const TaskBoardContainer = (): ReactElement => {
           px={10}
           my={2}
           fontSize="sm"
-          buttonType={buttonColor.primary}
+          buttontype={buttonColor.primary}
           isFullWidth={false}
         >
           View Sprint

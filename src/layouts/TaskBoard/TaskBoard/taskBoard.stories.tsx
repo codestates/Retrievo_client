@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
 import TaskBoard, { TaskBoardProps } from "./index";
+import SkeletonBoard, { SkeletonBoardProps } from "./SkeletonBoard";
 
 export const taskBoard = ({ ...args }: TaskBoardProps): ReactElement => (
   <TaskBoard {...args} />
 );
 taskBoard.args = {
-  handleBoardCreate: () => console.log("create!"),
   handleBoardDelete: (id: string) => console.log(id),
   handleTaskClick: (id: string) => console.log(id),
   handleTaskCreate: () => console.log("create!"),
@@ -92,9 +92,11 @@ taskBoard.args = {
 
 export const skeletonTaskBoard = ({
   ...args
-}: TaskBoardProps): ReactElement => <TaskBoard {...args} />;
+}: SkeletonBoardProps): ReactElement => <SkeletonBoard {...args} />;
 skeletonTaskBoard.args = {
-  isSkeletonBoard: true,
+  projectId: "project1",
+  handleBoardCreate: (value: Record<string>, projectId: string) =>
+    console.log("create!", value, projectId),
 };
 
 const TaskBoardStories = {
