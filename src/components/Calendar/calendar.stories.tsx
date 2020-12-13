@@ -1,7 +1,15 @@
 import React from "react";
-import Calendar from "./index";
+import Calendar, { calendarProps, dateIFC } from "./index";
 
-export const DateRangeCalendar = (): React.ReactElement => <Calendar />;
+export const DateRangeCalendar = (arg: calendarProps): React.ReactElement => (
+  <Calendar {...arg} />
+);
+
+DateRangeCalendar.arg = {
+  onSubmit: (value: dateIFC) => console.log(value),
+  defaultStartDate: 1602948368862,
+  defaultEndDate: 1616167277590,
+};
 
 const ButtonStories = {
   title: "components/Calendar",
