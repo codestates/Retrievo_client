@@ -10,7 +10,7 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 
-interface modalIFC {
+export interface modalIFC {
   title: string;
   children: React.ReactElement;
   isOpen: boolean;
