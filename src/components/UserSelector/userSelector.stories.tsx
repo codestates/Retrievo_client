@@ -1,9 +1,9 @@
 import React from "react";
-import UserSelector, { OptionsType } from "./index";
+import UserSelector, { UserSelectPropTypes } from "./index";
 
 export const basicUserSelector = ({
   ...args
-}: OptionsType): React.ReactElement => {
+}: UserSelectPropTypes): React.ReactElement => {
   return <UserSelector {...args} />;
 };
 
