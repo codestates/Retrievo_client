@@ -49,7 +49,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         initialValues={{ board: "" }}
         validationSchema={validationSchema}
         buttonPosition="right"
-        onSubmit={handleBoardCreateSubmit}
+        onSubmit={handleBoardCreateSubmit} // TODO
         isOnBlurSubmit={false}
         // isFullButton={false}
         // isSubmitButton
@@ -74,8 +74,13 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         </Box>
       </Form>
     ) : (
-      <Heading mb={5} headingType={headingEnum.board} color="transparent">
-        SkeletonBoard
+      <Heading
+        mt={2}
+        mb={3}
+        headingType={headingEnum.board}
+        color="achromatic.500"
+      >
+        Add Board
       </Heading>
     );
   };
@@ -84,7 +89,8 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
     <Box w={330}>
       {renderHeaderOrInput()}
       <Box
-        h="100vh"
+        h="100%"
+        mb={4}
         p={4}
         borderRadius={10}
         bgColor={isCreating ? "primary.400" : "transparent"}
