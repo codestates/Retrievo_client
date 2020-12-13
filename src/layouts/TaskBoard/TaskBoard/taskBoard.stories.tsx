@@ -95,7 +95,7 @@ export const skeletonTaskBoard = ({
 }: SkeletonBoardProps): ReactElement => <SkeletonBoard {...args} />;
 skeletonTaskBoard.args = {
   projectId: "project1",
-  handleBoardCreate: (value: Record<string>, projectId: string) =>
+  handleBoardCreate: (value: Record<string, unknown>, projectId: string) =>
     console.log("create!", value, projectId),
 };
 

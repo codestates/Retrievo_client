@@ -10,7 +10,7 @@ import Form from "../../../components/Form";
 import Input from "../../../components/Input";
 
 export type boardType = {
-  board: string;
+  board: any;
 };
 
 export type SkeletonBoardProps = {
@@ -49,7 +49,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         initialValues={{ board: "" }}
         validationSchema={validationSchema}
         buttonPosition="right"
-        onSubmit={handleBoardCreateSubmit} // TODO
+        onSubmit={handleBoardCreateSubmit}
         isOnBlurSubmit={false}
         // isFullButton={false}
         // isSubmitButton

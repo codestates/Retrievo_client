@@ -400,7 +400,7 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
                       Number(task.startDate) / 1000
                     )}
                     defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
-                    onSubmit={(value) => {
+                    onSubmit={(value: any) => {
                       submitDates(value);
                     }}
                   />
