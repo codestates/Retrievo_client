@@ -11,12 +11,12 @@ export type FormProps = {
   validationSchema?: any;
   buttonPosition?: "center" | "left" | "right";
   onSubmit: (value: Record<string, any>) => void;
-  submitBtnName?: string;
   isSubmitButton?: boolean;
   isOnBlurSubmit?: boolean;
   isFullButton?: boolean;
   isCancelButton?: boolean;
   onCancel?: () => void;
+  submitBtnName?: string;
   cancelBtnName?: string;
 };
 
