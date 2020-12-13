@@ -21,6 +21,7 @@ taskBoardList.args = {
       task: [
         {
           id: "task1",
+          boardRowIndex: 0,
           title: "Reading Books",
           startDate: "1584172961096",
           endDate: "1611017454633",
@@ -62,6 +63,7 @@ taskBoardList.args = {
           id: "task2",
           title: "Washing Dishes",
           startDate: "1584172961096",
+          boardRowIndex: 1,
           endDate: null,
           taskIndex: 21,
           userTask: [],
@@ -78,6 +80,7 @@ taskBoardList.args = {
         {
           id: "task3dk",
           title: "Reading Books3",
+          boardRowIndex: 2,
           startDate: "1584172961096",
           endDate: "1611017454633",
           taskIndex: 20,
@@ -365,6 +368,7 @@ taskBoardList.args = {
         {
           id: "task3",
           title: "Retrievo Server Dev",
+          boardRowIndex: 0,
           startDate: "1584172961096",
           endDate: "1611017454633",
           taskIndex: 301,
@@ -425,6 +429,7 @@ taskBoardList.args = {
         {
           id: "task5",
           title: "What's Dat Dev",
+          boardRowIndex: 0,
           startDate: null,
           endDate: "1611017454633",
           taskIndex: 20,

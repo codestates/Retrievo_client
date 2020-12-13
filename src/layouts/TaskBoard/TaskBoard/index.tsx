@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import TaskCard, { task, TaskCardProps } from "../TaskCard";
@@ -49,14 +49,13 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       return (
         <Draggable index={task.boardRowIndex} draggableId={task.id}>
           {(provided) => (
-            <Box mb={4}>
-              <div
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                ref={provided.innerRef}
-              >
-                <TaskCard key={task.id} task={task} {...taskConfig} />
-              </div>
+            <Box
+              mb={4}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <TaskCard key={task.id} task={task} {...taskConfig} />
             </Box>
           )}
         </Draggable>
@@ -97,7 +96,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         flexDir="column"
         alignItems="center"
       >
-        {renderTasks(board.task)}
+        <Droppable droppableId={board.id}>
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              key={board.id}
+            >
+              {renderTasks(board.task)}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
         <Box onClick={handleTaskCreate} _hover={{ cursor: "pointer" }}>
           {changeIconColor(<BsPlusCircleFill />, "#828282", "25")}
         </Box>

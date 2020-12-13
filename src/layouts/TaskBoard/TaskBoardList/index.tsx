@@ -37,23 +37,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
   const renderBoards = (boards: board[]) => {
     return boards.map((currentBoard) => {
-      return (
-        <Droppable droppableId={currentBoard.id}>
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              key={currentBoard.id}
-            >
-              <TaskBoard board={currentBoard} {...boardConfig} />
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      );
+      return <TaskBoard board={currentBoard} {...boardConfig} />;
     });
   };
-  //  이거 어디에 넣지?
+
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     // reorder
     console.log("----result:", result);
