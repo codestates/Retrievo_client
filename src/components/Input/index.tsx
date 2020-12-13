@@ -15,7 +15,6 @@ export type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   fontSize?: string;
   fontWeight?: string;
   autoCompleteDisable?: boolean;
-  onBlur?: () => void;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -25,7 +24,6 @@ export const InputField: React.FC<InputFieldProps> = ({
   isLabelNonVisible,
   fontWeight = "normal",
   autoCompleteDisable,
-  onBlur,
   size: _,
   ...props
 }) => {
@@ -44,10 +42,6 @@ export const InputField: React.FC<InputFieldProps> = ({
       <Input
         {...field}
         {...props}
-        onBlur={() => {
-          if (!onBlur) return;
-          onBlur();
-        }}
         id={field.name}
         fontSize={fontSize}
         autoComplete={autoCompleteDisable ? "off" : "on"}
