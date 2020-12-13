@@ -1,11 +1,11 @@
 import React from "react";
-import Chartjs2, { chartProps } from ".";
+import Chart, { chartProps } from ".";
 
 export const incompleteTaskStatus = (args: chartProps): React.ReactElement => {
   return (
     <div style={{ maxWidth: "968px" }}>
       <h2>Container 크기에 따라 차트가 크기가 반응적으로 달라짐</h2>
-      <Chartjs2 {...args} />
+      <Chart {...args} />
     </div>
   );
 };
@@ -25,7 +25,7 @@ incompleteTaskStatus.args = {
 export const tasksByAssignee = (args: chartProps): React.ReactElement => {
   return (
     <div style={{ maxWidth: "968px" }}>
-      <Chartjs2 {...args} />
+      <Chart {...args} />
     </div>
   );
 };
@@ -73,7 +73,7 @@ tasksByAssignee.args = {
 
 const chartStories = {
   title: "components/Chart",
-  component: Chartjs2,
+  component: Chart,
   // argTypes: {
   //   size: {
   //     control: {
@@ -99,7 +99,7 @@ const chartStories = {
 export const taskCountSummary = (args: chartProps): React.ReactElement => {
   return (
     <div style={{ maxWidth: "968px" }}>
-      <Chartjs2 {...args} />
+      <Chart {...args} />
     </div>
   );
 };

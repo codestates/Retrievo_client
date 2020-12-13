@@ -10,6 +10,7 @@ import MyTasks from "./MyTasks";
 import ActivityStream from "./ActivityStream";
 import ReportHero from "./ReportHero";
 import ReportCard from "./ReportCard";
+import Charts from "./Charts";
 
 // interface indexProps {
 
@@ -83,6 +84,9 @@ export const Dashboard: React.FC = () => {
             </Box>
             <Box mt={9}>
               <ReportCard />
+            </Box>
+            <Box mt={9}>
+              <Charts />
             </Box>
           </Box>
         </Box>

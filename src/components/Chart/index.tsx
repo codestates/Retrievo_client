@@ -3,12 +3,7 @@
 import React from "react";
 import { Spinner } from "@chakra-ui/react";
 import { Doughnut, Bar } from "react-chartjs-2";
-import {
-  chartVariant,
-  taskCountSummary,
-  tasksByAssignee,
-  incompleteTaskStatus,
-} from "./types";
+import { chartVariant } from "./types";
 import dataSchemaGenerator from "./utils";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -16,7 +11,8 @@ const Chartjs2 = require("react-chartjs-2").Chart;
 
 export type chartProps = {
   variant: chartVariant;
-  data: taskCountSummary & tasksByAssignee & incompleteTaskStatus;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
 };
 
 const Chart: React.FC<chartProps> = ({ variant, data, ...props }) => {
