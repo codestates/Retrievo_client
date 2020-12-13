@@ -16,8 +16,9 @@ taskBoard.args = {
     boardColumnIndex: 0,
     task: [
       {
-        id: "alsk32kdk",
+        id: "alsk31231222212kdk",
         title: "Reading Books",
+        boardRowIndex: 0,
         startDate: "1584172961096",
         endDate: "1611017454633",
         taskIndex: 20,
@@ -55,9 +56,10 @@ taskBoard.args = {
         ],
       },
       {
-        id: "bmkadsvkn",
+        id: "bmkads44444444421232222vkn",
         title: "Washing Dishes",
         startDate: "1584172961096",
+        boardRowIndex: 1,
         endDate: null,
         taskIndex: 21,
         userTask: [

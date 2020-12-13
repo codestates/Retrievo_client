@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import TaskCard, { task, TaskCardProps } from "../TaskCard";
@@ -16,6 +17,7 @@ export type board = {
 
 export type TaskBoardProps = TaskCardProps & {
   board: board;
+  // ref: (element: HTMLElement | null) => any;
   handleBoardCreate: () => void;
   handleBoardDelete: (id: string) => void;
   handleTaskCreate: () => void;
@@ -27,6 +29,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
   handleTaskCreate,
   board,
+  // ref,
   ...props
 }): ReactElement => {
   const { handleTaskDelete, handleTaskClick } = props;
@@ -41,18 +44,29 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     );
   };
 
+  // FIXME : index -> boardRowIndex
   const renderTasks = (tasks: task[]) => {
-    return tasks.map((task) => {
+    return tasks.map((task, index) => {
       return (
-        <Box mb={4}>
-          <TaskCard key={task.id} task={task} {...taskConfig} />
-        </Box>
+        <Draggable index={index} draggableId={task.id} key={task.id}>
+          {(provided) => (
+            <Box
+              mb={4}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <TaskCard key={task.id} task={task} {...taskConfig} />
+            </Box>
+          )}
+        </Draggable>
       );
     });
   };
 
+  // column
   return (
-    <Box w={330} mr={4}>
+    <Box w={330} mr={4} minH={1000}>
       <Box
         display="flex"
         flexDirection="row"
@@ -82,9 +96,27 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         display="flex"
         flexDir="column"
         alignItems="center"
+        minH={170}
       >
-        {renderTasks(board.task)}
-        <Box onClick={handleTaskCreate} _hover={{ cursor: "pointer" }}>
+        <Droppable droppableId={board.id} type="TASK">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              key={board.id}
+            >
+              {renderTasks(board.task)}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <Box
+          display="flex"
+          justifyContent="center"
+          onClick={handleTaskCreate}
+          _hover={{ cursor: "pointer" }}
+          w={300}
+        >
           {changeIconColor(<BsPlusCircleFill />, "#828282", "25")}
         </Box>
       </Box>
