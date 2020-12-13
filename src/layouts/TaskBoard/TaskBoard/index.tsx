@@ -48,7 +48,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const renderTasks = (tasks: task[]) => {
     return tasks.map((task, index) => {
       return (
-        <Draggable index={index} draggableId={task.id}>
+        <Draggable index={index} draggableId={task.id} key={task.id}>
           {(provided) => (
             <Box
               mb={4}
@@ -109,7 +109,13 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             </div>
           )}
         </Droppable>
-        <Box onClick={handleTaskCreate} _hover={{ cursor: "pointer" }}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          onClick={handleTaskCreate}
+          _hover={{ cursor: "pointer" }}
+          w={300}
+        >
           {changeIconColor(<BsPlusCircleFill />, "#828282", "25")}
         </Box>
       </Box>

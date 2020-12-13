@@ -15,7 +15,7 @@ taskBoardList.args = {
   handleTaskDelete: (id: string) => console.log("delete", id),
   boards: [
     {
-      id: "board1",
+      id: "board22123123121",
       title: "TO DO",
       boardColumnIndex: 0,
       task: [
@@ -60,7 +60,7 @@ taskBoardList.args = {
           ],
         },
         {
-          id: "task2",
+          id: "ta4533123123sk2",
           title: "Washing Dishes",
           startDate: "1584172961096",
           boardRowIndex: 1,
@@ -78,7 +78,7 @@ taskBoardList.args = {
           ],
         },
         {
-          id: "task3dk",
+          id: "task35433412dk",
           title: "Reading Books3",
           boardRowIndex: 2,
           startDate: "1584172961096",
@@ -361,12 +361,12 @@ taskBoardList.args = {
       ],
     },
     {
-      id: "board2",
+      id: "board23123122",
       title: "IN Progress",
       boardColumnIndex: 1,
       task: [
         {
-          id: "task3",
+          id: "tagakdsk",
           title: "Retrievo Server Dev",
           boardRowIndex: 0,
           startDate: "1584172961096",
@@ -422,12 +422,12 @@ taskBoardList.args = {
       ],
     },
     {
-      id: "board3",
+      id: "bo3412312423123ard3",
       title: "DONE",
       boardColumnIndex: 0,
       task: [
         {
-          id: "task5",
+          id: "tasasdk5",
           title: "What's Dat Dev",
           boardRowIndex: 0,
           startDate: null,

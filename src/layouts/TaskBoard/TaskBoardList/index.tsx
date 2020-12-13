@@ -53,10 +53,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       return;
     }
 
-    console.log("----result:", result);
-    console.log("----ReponseProvided:", provided);
-
-    // 1. 원래 있던 배열을 찾는다
     const sourceBoard = boardLists.find(
       (boardList) => boardList.id === source.droppableId
     );
@@ -67,7 +63,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     const destinationBoard = boardLists.find(
       (boardList) => boardList.id === destination.droppableId
     );
-
     const destinationBoardIndex = boardLists.findIndex(
       (boardList) => boardList.id === destination.droppableId
     );
@@ -75,7 +70,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     if (!sourceBoard || !destinationBoard) return;
 
     const sourceTask = sourceBoard.task.splice(source.index, 1);
-
     destinationBoard.task.splice(destination.index, 0, sourceTask[0]);
 
     const copyBoardList = [...boardLists];

@@ -104,7 +104,9 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
       >
         {isCreating ? null : (
           <>
-            <Box my={2}>{changeIconColor(<GoPlus />, "#31D5BF", "25")}</Box>
+            <Box my={2} w={300} display="flex" justifyContent="center">
+              {changeIconColor(<GoPlus />, "#31D5BF", "25")}
+            </Box>
             <Text color="primary.200">Add Board...</Text>
           </>
         )}
