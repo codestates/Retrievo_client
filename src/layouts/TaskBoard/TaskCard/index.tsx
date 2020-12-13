@@ -32,21 +32,25 @@ export type task = {
   taskIndex: number;
   userTask: user[];
   taskLabel: label[];
+  boardRowIndex: number;
+  sprintRowIndex: number;
 };
 
 export type TaskCardProps = {
-  task: task;
-  handleTaskDelete: (id: string) => void;
-  isDragPositionCard: boolean;
-  fromToBoardArr: string[];
+  task?: task;
+  handleTaskDelete?: (id: string) => void;
+  handleTaskClick?: (id: string) => void;
+  isDragPositionCard?: boolean;
+  fromToBoardArr?: string[];
 };
 
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
+  handleTaskClick,
   handleTaskDelete,
   isDragPositionCard = false,
   fromToBoardArr,
-}): ReactElement => {
+}): ReactElement | null => {
   const renderLabels = () => {
     return task?.taskLabel?.map((labelObj) => {
       const { label } = labelObj;
@@ -86,63 +90,68 @@ const TaskCard: React.FC<TaskCardProps> = ({
         justifyContent="center"
         alignItems="center"
       >
-        <Text color="violet">{`${fromToBoardArr[0]}`}</Text>
+        <Text color="violet">{`${fromToBoardArr && fromToBoardArr[0]}`}</Text>
         <Box mx={2}>
           <RiArrowRightLine color="#3949AB" />
         </Box>
-        <Text color="violet">{`${fromToBoardArr[1]}`}</Text>
+        <Text color="violet">{`${fromToBoardArr && fromToBoardArr[1]}`}</Text>
       </Container>
     );
   }
 
-  return (
-    <Container
-      // bgColor="violetBg"
-      w={300}
-      h={160}
-      p={4}
-      borderRadius={10}
-      boxShadow="1px 2px 5px rgba(0,0,0,0.2)"
-      position="relative"
-    >
+  if (handleTaskClick && handleTaskDelete && task) {
+    return (
       <Box
-        position="absolute"
-        right={4}
-        top={4}
-        onClick={() => handleTaskDelete(task?.id)}
+        w={300}
+        h={160}
+        p={4}
+        bgColor="achromatic.100"
+        borderRadius={10}
+        boxShadow="1px 2px 5px rgba(0,0,0,0.2)"
+        position="relative"
+        _hover={{ cursor: "pointer" }}
+        onClick={() => handleTaskClick(task.id)}
       >
-        <CgClose />
-      </Box>
-      <Box>
+        <Box
+          position="absolute"
+          right={4}
+          top={4}
+          onClick={() => handleTaskDelete(task?.id)}
+        >
+          <CgClose />
+        </Box>
+        <Box>
+          <Box
+            display="flex"
+            flexDir="row"
+            alignItems="center"
+            mb={2}
+            _hover={{ cursor: "pointer" }}
+          >
+            <Text mr={2} color="primary.200">{`${task?.taskIndex}`}</Text>
+            <Heading headingType={headingEnum.taskCard}>{task?.title}</Heading>
+          </Box>
+          <Box display="flex" flexDir="row" alignItems="center">
+            {renderLabels()}
+          </Box>
+        </Box>
         <Box
           display="flex"
           flexDir="row"
           alignItems="center"
-          mb={2}
-          _hover={{ cursor: "pointer" }}
+          position="absolute"
+          bottom={5}
+          justifyContent="space-between"
         >
-          <Text mr={2} color="primary.200">{`${task?.taskIndex}`}</Text>
-          <Heading headingType={headingEnum.taskCard}>{task?.title}</Heading>
-        </Box>
-        <Box display="flex" flexDir="row" alignItems="center">
-          {renderLabels()}
+          <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
+          <Text ml={2} fontSize="sm" color="achromatic.600">{`${isoToDate(
+            task.startDate
+          )} ~ ${isoToDate(task.endDate)}`}</Text>
         </Box>
       </Box>
-      <Box
-        display="flex"
-        flexDir="row"
-        alignItems="center"
-        position="absolute"
-        bottom={5}
-        justifyContent="space-between"
-      >
-        <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
-        <Text ml={2} fontSize="sm" color="achromatic.600">{`${isoToDate(
-          task.startDate
-        )} ~ ${isoToDate(task.endDate)}`}</Text>
-      </Box>
-    </Container>
-  );
+    );
+  }
+  return null;
 };
 
 export default TaskCard;
