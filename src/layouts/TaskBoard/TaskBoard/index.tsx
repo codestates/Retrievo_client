@@ -52,7 +52,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   return (
-    <Box w={330}>
+    <Box w={330} mr={4}>
       <Box
         display="flex"
         flexDirection="row"
@@ -75,8 +75,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       </Box>
       <Box
         bgColor="primary.400"
-        h="100vh"
+        h="100%"
         p={4}
+        mb={4}
         borderRadius={10}
         display="flex"
         flexDir="column"
