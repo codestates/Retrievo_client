@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  ModalFooter,
 } from "@chakra-ui/react";
 
 interface modalIFC {
@@ -15,6 +16,9 @@ interface modalIFC {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  footer?: boolean;
+  secondaryAction?: () => void;
+  secondaryText?: string;
 }
 
 const ModalLayout: React.FC<modalIFC> = ({
@@ -23,6 +27,9 @@ const ModalLayout: React.FC<modalIFC> = ({
   isOpen,
   onOpen,
   onClose,
+  footer = true,
+  secondaryAction,
+  secondaryText,
 }) => {
   return (
     <>
@@ -33,6 +40,16 @@ const ModalLayout: React.FC<modalIFC> = ({
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
+          {footer ? (
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant="ghost" onClick={secondaryAction}>
+                {secondaryText}
+              </Button>
+            </ModalFooter>
+          ) : null}
         </ModalContent>
       </Modal>
     </>
