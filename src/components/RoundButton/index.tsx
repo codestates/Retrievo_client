@@ -1,5 +1,8 @@
 import React, { ButtonHTMLAttributes } from "react";
-import { IconButton as ChakraRoundButton } from "@chakra-ui/react";
+import {
+  IconButton as ChakraRoundButton,
+  IconButtonProps,
+} from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaPlus } from "react-icons/fa";
 import { FiCamera } from "react-icons/fi";
@@ -40,14 +43,16 @@ export enum ShadowType {
   xxl = "2xl",
 }
 
-export type roundButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type roundButtonProps = IconButtonProps & {
   buttonColor: RoundButtonColor;
   iconType: string | undefined;
+  shadowType: ShadowType;
 };
 
 const RoundButton: React.FC<roundButtonProps> = ({
   buttonColor,
   iconType,
+  shadowType,
   ...props
 }) => {
   const roundBtnConfig = { buttonColor };
@@ -73,7 +78,6 @@ const RoundButton: React.FC<roundButtonProps> = ({
     <>
       {iconType ? (
         <ChakraRoundButton
-          aria-label="Button with Icon"
           bgColor={renderBgColors()}
           borderRadius="full"
           icon={renderIcon()}
@@ -82,7 +86,6 @@ const RoundButton: React.FC<roundButtonProps> = ({
         />
       ) : (
         <ChakraRoundButton
-          aria-label="Button without Icon"
           bgColor={renderBgColors()}
           borderRadius="full"
           {...props}

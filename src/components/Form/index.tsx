@@ -16,6 +16,8 @@ export type FormProps = {
   isFullButton?: boolean;
   isCancelButton?: boolean;
   onCancel?: () => void;
+  submitBtnName?: string;
+  cancelBtnName?: string;
 };
 
 export const CustomForm: React.FC<FormProps> = ({
@@ -27,6 +29,8 @@ export const CustomForm: React.FC<FormProps> = ({
   isCancelButton,
   isFullButton,
   children,
+  submitBtnName,
+  cancelBtnName,
   ...arg
 }) => {
   const renderSubmitButton = (isSubmitting: boolean) => (
@@ -39,7 +43,7 @@ export const CustomForm: React.FC<FormProps> = ({
         isFullWidth={isFullButton}
         mt={3}
       >
-        Submit
+        {submitBtnName !== undefined ? submitBtnName : "Submit"}
       </Button>
     </>
   );
@@ -53,7 +57,7 @@ export const CustomForm: React.FC<FormProps> = ({
         mr={isSubmitButton ? "3" : "0"}
         mt={3}
       >
-        Cancle
+        {cancelBtnName !== undefined ? cancelBtnName : "Cancel"}
       </Button>
     </>
   );
