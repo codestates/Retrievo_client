@@ -61,6 +61,7 @@ const Heading: React.FC<HeadingProps> = ({
 
     if (headingType === headingEnum.board) {
       fontSize = "md";
+      fontWeight = "medium";
     }
 
     if (headingType === headingEnum.taskCard) {

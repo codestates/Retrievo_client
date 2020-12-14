@@ -5,12 +5,13 @@ import theme from "./styles/theme";
 // import Heading, { headingStyle } from "./components/Heading";
 // import MyProfile from "./pages/MyProfile";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <Register />
+        <Dashboard />
       </ChakraProvider>
     </>
   );
