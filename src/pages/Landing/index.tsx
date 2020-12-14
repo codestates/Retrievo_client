@@ -16,6 +16,7 @@ import {
 import Text from "../../components/Text";
 
 /* Image File */
+import Shape1 from "../../asset/img/shape1.png";
 import Shape2 from "../../asset/img/shapes2.png";
 import Shape3 from "../../asset/img/shapes3.png";
 import Shape4 from "../../asset/img/shapes4.png";
@@ -183,25 +184,16 @@ const Landing: React.FC<Record<string, never>> = () => {
         </Box>
       </Box>
       {/* taskbar section */}
-      <Box width="full" height={700}>
-        <ChakraHeading fontSize="4xl" fontWeight="bold">
-          Manage your tasks
-        </ChakraHeading>
-        <ChakraHeading fontSize="4xl" fontWeight="bold">
-          with intuitive UI
-        </ChakraHeading>
-        <Box>
+      <Box width="full" height={700} display="flex">
+        <Box mt={30}>
           <Box bgColor="rgba(49, 213, 191, 0.5)" />
           <Image
             src={TaskImage}
             alt="Task_example_image"
-            position="absolute"
-            right="14rem"
-            bottom="-4.5rem"
-            boxSize="10rem"
+            width="25rem"
             objectFit="contain"
             borderRadius="md"
-            boxShadow="xl"
+            boxShadow="2xl"
           />
           <Box>
             <Avatar />
@@ -211,6 +203,16 @@ const Landing: React.FC<Record<string, never>> = () => {
             <Avatar />
             <Text>Hailey Song</Text>
           </Box>
+        </Box>
+
+        <ChakraHeading fontSize="4xl" fontWeight="bold">
+          Manage your tasks
+        </ChakraHeading>
+        <ChakraHeading fontSize="4xl" fontWeight="bold">
+          with intuitive UI
+        </ChakraHeading>
+        <Box bgColor="primary.200" color="transparent" w={400} h={10}>
+          Dummy
         </Box>
       </Box>
     </Box>
