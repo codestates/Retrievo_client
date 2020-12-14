@@ -45,7 +45,7 @@ export enum ShadowType {
 
 export type roundButtonProps = IconButtonProps & {
   buttonColor?: RoundButtonColor;
-  iconType: string | undefined;
+  iconType?: string | undefined;
   shadowType?: ShadowType;
 };
 
