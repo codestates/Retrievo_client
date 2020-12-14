@@ -1,4 +1,5 @@
 import React from "react";
+import { Slide } from "react-awesome-reveal";
 import {
   Box,
   Button,
@@ -6,15 +7,16 @@ import {
   Flex,
   Image,
   Avatar,
+  IconButton,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
-import Heading, { headingEnum } from "../../components/Heading";
+import ReactPlayer from "react-player/lazy";
+import { chartData, chartOptions } from "./chartData";
+import Text from "../../components/Text";
 import {
   BackgroundShapePupple,
   BackgroundShapeTeal,
-  // BackgroundShape,
 } from "./background.styled";
-import Text from "../../components/Text";
 
 /* Image File */
 import Shape1 from "../../asset/img/shape1.png";
@@ -24,14 +26,15 @@ import Shape4 from "../../asset/img/shapes4.png";
 import Shape5 from "../../asset/img/shapes5.png";
 import Shape6 from "../../asset/img/shapes6.png";
 import Shape7 from "../../asset/img/shapes7.png";
-import Shape8 from "../../asset/img/shapes8.png";
 import Shape9 from "../../asset/img/shapes9.png";
 import Shape10 from "../../asset/img/shapes10.png";
 import Shape11 from "../../asset/img/shapes11.png";
 import Shape12 from "../../asset/img/shapes12.png";
 import Shape13 from "../../asset/img/shape13.png";
 import TaskImage from "../../asset/img/TaskImage.png";
-import { chartData, chartOptions } from "./chartData";
+import LandingAstro from "../../asset/img/LandingAstro";
+import TaskBoard from "../../asset/img/TaskBoard.png";
+import BoardVideo from "../../asset/movie/board.mp4";
 
 const Landing: React.FC<Record<string, never>> = () => {
   return (
@@ -134,66 +137,71 @@ const Landing: React.FC<Record<string, never>> = () => {
             top="-13rem"
             objectFit="contain"
           />
-          <Flex flexDir="row">
-            <ChakraHeading
-              fontSize="5xl"
-              color="achromatic.800"
-              fontWeigh="bold"
-              mr={3}
-              zIndex={99}
-            >
-              Powerhouse
-            </ChakraHeading>
 
-            <ChakraHeading
-              fontSize="5xl"
-              color="achromatic.800"
-              fontWeight="normal"
-              zIndex={99}
-            >
-              for
-            </ChakraHeading>
-          </Flex>
-          <ChakraHeading
-            fontSize="5xl"
-            color="achromatic.800"
-            fontWeight="normal"
-            zIndex={99}
-          >
-            your work flow
-          </ChakraHeading>
-          <ChakraHeading
-            fontSize="5xl"
-            color="achromatic.800"
-            fontWeight="normal"
-            zIndex={99}
-          >
-            management
-          </ChakraHeading>
-          <Text mt={5} mb={7}>
-            Let Retrievo handle legworks so you can focus on actual Project
-          </Text>
-          <Button
-            border="2px solid #67499E"
-            bgColor="white"
-            color="#67499E"
-            borderRadius={5}
-            w={170}
-            py={5}
-            mr={3}
-          >
-            Take tour
-          </Button>
-          <Button
-            border="2px solid #31D5BF"
-            bgColor="primary.200"
-            color="white"
-            borderRadius={5}
-            w={170}
-            py={5}
-          >
-            Register
-          </Button>
+          <Slide direction="down" duration={1000}>
+            <Box>
+              <Flex flexDir="row">
+                <ChakraHeading
+                  fontSize="5xl"
+                  color="achromatic.800"
+                  fontWeigh="bold"
+                  mr={3}
+                  zIndex={99}
+                >
+                  Powerhouse
+                </ChakraHeading>
+
+                <ChakraHeading
+                  fontSize="5xl"
+                  color="achromatic.800"
+                  fontWeight="normal"
+                  zIndex={99}
+                >
+                  for
+                </ChakraHeading>
+              </Flex>
+              <ChakraHeading
+                fontSize="5xl"
+                color="achromatic.800"
+                fontWeight="normal"
+                zIndex={99}
+              >
+                your work flow
+              </ChakraHeading>
+              <ChakraHeading
+                fontSize="5xl"
+                color="achromatic.800"
+                fontWeight="normal"
+                zIndex={99}
+              >
+                management
+              </ChakraHeading>
+              <Text mt={5} mb={7}>
+                Let Retrievo handle legworks so you can focus on actual Project
+              </Text>
+              <Button
+                border="2px solid #67499E"
+                bgColor="white"
+                color="#67499E"
+                borderRadius={5}
+                w={170}
+                py={5}
+                mr={3}
+              >
+                Take tour
+              </Button>
+              <Button
+                border="2px solid #31D5BF"
+                bgColor="primary.200"
+                color="white"
+                borderRadius={5}
+                w={170}
+                py={5}
+              >
+                Register
+              </Button>
+            </Box>
+          </Slide>
         </Box>
       </Box>
       {/* taskbar section */}
@@ -258,70 +266,79 @@ const Landing: React.FC<Record<string, never>> = () => {
               boxShadow="2xl"
             />
             <Box top="5rem" right="-3rem" position="absolute">
-              <Avatar
-                display="block"
-                marginX="auto"
-                size="xl"
-                src="https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTh8fG1hbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60"
-              />
-              <Text
-                display="inline-block"
-                px={6}
-                py=".1rem"
-                mt={2}
-                color="achromatic.100"
-                borderRadius="full"
-                bgColor="primary.200"
-              >
-                Paul Kim
-              </Text>
+              <Slide direction="down" duration={1000}>
+                <Avatar
+                  display="block"
+                  marginX="auto"
+                  size="xl"
+                  src="https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTh8fG1hbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60"
+                />
+                <Text
+                  display="inline-block"
+                  px={6}
+                  py=".1rem"
+                  mt={2}
+                  color="achromatic.100"
+                  borderRadius="full"
+                  bgColor="primary.200"
+                >
+                  Paul Kim
+                </Text>
+              </Slide>
             </Box>
+
             <Box bottom="8rem" left="-6rem" position="absolute">
-              <Avatar
-                display="block"
-                marginX="auto"
-                size="xl"
-                src="https://i.ibb.co/bKXpVR6/gnome-shell-screenshot-832-MV0.png"
-              />
-              <Text
-                display="inline-block"
-                px={6}
-                py=".1rem"
-                mt={2}
-                color="achromatic.100"
-                borderRadius="full"
-                bgColor="#67499E"
-              >
-                Hailey Song
-              </Text>
+              <Slide direction="down" duration={1000}>
+                <Avatar
+                  display="block"
+                  marginX="auto"
+                  size="xl"
+                  src="https://i.ibb.co/bKXpVR6/gnome-shell-screenshot-832-MV0.png"
+                />
+                <Text
+                  display="inline-block"
+                  px={6}
+                  py=".1rem"
+                  mt={2}
+                  color="achromatic.100"
+                  borderRadius="full"
+                  bgColor="#67499E"
+                >
+                  Hailey Song
+                </Text>
+              </Slide>
             </Box>
           </Box>
-          <Box height={40} width={500} position="relative" mt="10rem">
-            <Box
-              bgColor="primary.200"
-              w={450}
-              h={6}
-              position="absolute"
-              bottom="-.5rem"
-              left="5.3rem"
-            />
-            <Image
-              src={Shape13}
-              alt="Task_example_image"
-              width="8rem"
-              position="absolute"
-              right="-2rem"
-              bottom="-6rem"
-              objectFit="contain"
-            />
+          <Box height="6rem" width={500} position="relative" mt="10rem">
             <Box position="absolute" bottom="0" width="100%">
-              <ChakraHeading fontSize="4xl" fontWeight="bold">
-                Manage your tasks
-              </ChakraHeading>
-              <ChakraHeading fontSize="4xl" fontWeight="bold">
-                with intuitive UI
-              </ChakraHeading>
+              <Box
+                bgColor="primary.200"
+                w={450}
+                h={6}
+                position="absolute"
+                bottom="0"
+                left="3rem"
+              />
+              <Image
+                src={Shape13}
+                alt="Task_example_image"
+                width="8rem"
+                objectFit="contain"
+                right="0"
+                position="absolute"
+                top="-2rem"
+              />
             </Box>
+            <Slide direction="down" duration={1000}>
+              <Box width="100%">
+                <ChakraHeading fontSize="4xl" fontWeight="bold">
+                  Manage your tasks
+                </ChakraHeading>
+                <ChakraHeading fontSize="4xl" fontWeight="bold">
+                  with intuitive UI
+                </ChakraHeading>
+              </Box>
+            </Slide>
           </Box>
         </Box>
       </Box>
@@ -371,34 +388,38 @@ const Landing: React.FC<Record<string, never>> = () => {
             objectFit="contain"
           />
           <Box height={30} width="100%" mt={100} mr={20}>
-            <Box position="relative">
-              <Box
-                bgColor="primary.200"
-                w={450}
-                h={6}
-                position="absolute"
-                bottom="-.5rem"
-                right="0"
-              />
-              <Box
-                width="100%"
-                textAlign="right"
-                position="absolute"
-                bottom="0"
-              >
-                <ChakraHeading fontSize="4xl" fontWeight="bold">
-                  Manage your tasks
-                </ChakraHeading>
-                <ChakraHeading fontSize="4xl" fontWeight="bold">
-                  with intuitive UI
-                </ChakraHeading>
+            <Slide direction="down" duration={1000}>
+              <Box position="relative">
+                <Box
+                  bgColor="primary.200"
+                  w={450}
+                  h={6}
+                  position="absolute"
+                  bottom="-.5rem"
+                  right="0"
+                />
+                <Box
+                  width="100%"
+                  textAlign="right"
+                  position="absolute"
+                  bottom="0"
+                >
+                  <Slide direction="down" duration={1000}>
+                    <ChakraHeading fontSize="4xl" fontWeight="bold">
+                      Manage your tasks
+                    </ChakraHeading>
+                    <ChakraHeading fontSize="4xl" fontWeight="bold">
+                      with intuitive UI
+                    </ChakraHeading>
+                  </Slide>
+                </Box>
               </Box>
-            </Box>
-            <Text textAlign="right" mt={8}>
-              Data is crucial to every business’s success. Reading data,
-              however, could be a straneous task. Visualize your important data
-              with our powerful, yet human-friendly data report system.
-            </Text>
+              <Text textAlign="right" mt={8}>
+                Data is crucial to every business’s success. Reading data,
+                however, could be a straneous task. Visualize your important
+                data with our powerful, yet human-friendly data report system.
+              </Text>
+            </Slide>
           </Box>
           <Box>
             <Bar
@@ -409,6 +430,178 @@ const Landing: React.FC<Record<string, never>> = () => {
             />
           </Box>
         </Box>
+      </Box>
+
+      {/* boardList section */}
+      <Box
+        width="full"
+        height={900}
+        display="flex"
+        justifyContent="center"
+        alignItems="flex-start"
+        bg="#f7f7f7"
+        position="relative"
+        overflow="hidden"
+      >
+        <Image
+          src={Shape6}
+          alt="background_shape_image"
+          size="45rem"
+          position="absolute"
+          bottom="-5rem"
+          right="0"
+          transform="rotate(-10deg)"
+        />
+        <Flex flexDir="column" mt={180} position="relative">
+          <Flex
+            justifyContent="flex-end"
+            alignItems="center"
+            bgColor="#DCE0E0"
+            width="50rem"
+            py={2}
+            px={3}
+            borderTopRadius="xl"
+          >
+            <IconButton
+              aria-label="decoration button"
+              bgColor="yellow.300"
+              size="xs"
+              borderRadius="full"
+              mr={2}
+            />
+            <IconButton
+              aria-label="decoration button"
+              bgColor="red.500"
+              size="xs"
+              borderRadius="full"
+            />
+          </Flex>
+          <Image
+            src={Shape10}
+            alt="background_shape_image"
+            size="45rem"
+            position="absolute"
+            left="-40rem"
+            bottom="-20rem"
+          />
+          <Image
+            src={TaskBoard}
+            alt="Board_example_image"
+            width="50rem"
+            h="35rem"
+            objectFit="contain"
+            borderBottomRadius="xl"
+            boxShadow="2xl"
+            bgColor="white"
+            zIndex={999}
+          />
+          <Image
+            src={Shape5}
+            alt="background_shape_image"
+            size="45rem"
+            position="absolute"
+            right="-6rem"
+            bottom="4rem"
+            // transform="rotate(-2deg)"
+          />
+        </Flex>
+        <Flex flexDir="column" ml={20} mt={300}>
+          <Box position="relative">
+            <Image
+              src={Shape7}
+              alt="background_shape_image"
+              size="45rem"
+              position="absolute"
+              right="-6rem"
+              bottom="4rem"
+            />
+            <Box position="relative" w={500}>
+              <Box
+                w={450}
+                h={8}
+                bg="primary.200"
+                color="transparent"
+                position="absolute"
+                top={6}
+              >
+                dummy
+              </Box>
+
+              <Slide direction="down" duration={1000}>
+                <ChakraHeading fontSize="4xl" fontWeight="bold">
+                  Intuitive Task Management
+                </ChakraHeading>
+                <Text mt={10}>Manage your tasks however you want</Text>
+                <Text>with our flexible, intuitive boards.</Text>
+              </Slide>
+            </Box>
+          </Box>
+        </Flex>
+      </Box>
+      {/* last section */}
+      <Box
+        width="full"
+        height={700}
+        display="flex"
+        bg="white"
+        zIndex={999}
+        position="relative"
+      >
+        <Flex
+          flexDir="column"
+          mt="10rem"
+          position="relative"
+          width="80%"
+          maxW={1200}
+          mx="auto"
+        >
+          <Slide direction="down" duration={1000}>
+            <ChakraHeading
+              fontSize="5xl"
+              color="achromatic.800"
+              fontWeight="normal"
+              zIndex={99}
+            >
+              Don’t EVER pay upfront.
+            </ChakraHeading>
+            <Text mt={3} mb={12} fontSize="3xl">
+              Make informed decision with our product tour
+            </Text>
+            <Button
+              border="2px solid #31D5BF"
+              bgColor="white"
+              color="#31D5BF"
+              borderRadius={5}
+              w={170}
+              py={5}
+            >
+              Take tour
+            </Button>
+          </Slide>
+          <Box position="absolute" top="-2rem" left="30rem">
+            <LandingAstro />
+          </Box>
+        </Flex>
+      </Box>
+      {/* footer section */}
+      <Box
+        width="full"
+        height={150}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        bg="achromatic.300"
+        px="10rem"
+      >
+        <Text>RPQ Team</Text>
+        <ChakraHeading
+          fontFamily="title"
+          fontSize="4xl"
+          fontWeight="normal"
+          color="achromatic.700"
+        >
+          Retrievo
+        </ChakraHeading>
       </Box>
     </Box>
   );
