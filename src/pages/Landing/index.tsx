@@ -7,6 +7,7 @@ import {
   Image,
   Avatar,
 } from "@chakra-ui/react";
+import { Bar } from "react-chartjs-2";
 import Heading, { headingEnum } from "../../components/Heading";
 import {
   BackgroundShapePupple,
@@ -28,7 +29,9 @@ import Shape9 from "../../asset/img/shapes9.png";
 import Shape10 from "../../asset/img/shapes10.png";
 import Shape11 from "../../asset/img/shapes11.png";
 import Shape12 from "../../asset/img/shapes12.png";
+import Shape13 from "../../asset/img/shape13.png";
 import TaskImage from "../../asset/img/TaskImage.png";
+import { chartData, chartOptions } from "./chartData";
 
 const Landing: React.FC<Record<string, never>> = () => {
   return (
@@ -113,6 +116,16 @@ const Landing: React.FC<Record<string, never>> = () => {
         </Box>
         <Box mt={150} width="60%" marginX="auto" position="relative">
           <Image
+            src={Shape1}
+            alt="background_shape_image"
+            width="12rem"
+            position="absolute"
+            left="-16rem"
+            bottom="-7rem"
+            objectFit="contain"
+            transform="rotate(13deg)"
+          />
+          <Image
             src={Shape6}
             alt="background_shape_image"
             boxSize="18rem"
@@ -184,35 +197,185 @@ const Landing: React.FC<Record<string, never>> = () => {
         </Box>
       </Box>
       {/* taskbar section */}
-      <Box width="full" height={700} display="flex">
-        <Box mt={30}>
-          <Box bgColor="rgba(49, 213, 191, 0.5)" />
-          <Image
-            src={TaskImage}
-            alt="Task_example_image"
-            width="25rem"
-            objectFit="contain"
-            borderRadius="md"
-            boxShadow="2xl"
-          />
-          <Box>
-            <Avatar />
-            <Text>Paul Kim</Text>
+      <Box
+        backgroundImage="linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, rgba(255, 255, 255, 0) 86.41%)"
+        pt={150}
+        position="relative"
+      >
+        <Image
+          src={Shape7}
+          alt="Task_example_image"
+          width="4rem"
+          position="absolute"
+          top="4rem"
+          right="30%"
+          objectFit="contain"
+        />
+        <Box
+          maxWidth={1200}
+          width="80%"
+          height={700}
+          marginX="auto"
+          display="flex"
+          justifyContent="space-between"
+        >
+          <Box mr={50} position="relative">
+            <Box position="absolute" top="rem" left="-10rem" zIndex="-1">
+              <Image
+                src={Shape4}
+                alt="Task_example_image"
+                width="12rem"
+                transform="rotate(120deg)"
+                objectFit="contain"
+              />
+              <Image
+                src={Shape3}
+                alt="Task_example_image"
+                width="6rem"
+                position="absolute"
+                right="0"
+                top="0"
+                transform="rotate(120deg)"
+                objectFit="contain"
+              />
+            </Box>
+            <Image
+              src={Shape2}
+              alt="Task_example_image"
+              width="10rem"
+              position="absolute"
+              bottom="4rem"
+              right="-6rem"
+              zIndex="-1"
+              objectFit="contain"
+            />
+            <Image
+              src={TaskImage}
+              alt="Task_example_image"
+              width="25rem"
+              objectFit="contain"
+              borderRadius="md"
+              boxShadow="2xl"
+            />
+            <Box top="5rem" right="-3rem" position="absolute">
+              <Avatar
+                display="block"
+                marginX="auto"
+                size="xl"
+                src="https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTh8fG1hbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60"
+              />
+              <Text
+                display="inline-block"
+                px={6}
+                py=".1rem"
+                mt={2}
+                color="achromatic.100"
+                borderRadius="full"
+                bgColor="primary.200"
+              >
+                Paul Kim
+              </Text>
+            </Box>
+            <Box bottom="8rem" left="-6rem" position="absolute">
+              <Avatar
+                display="block"
+                marginX="auto"
+                size="xl"
+                src="https://i.ibb.co/bKXpVR6/gnome-shell-screenshot-832-MV0.png"
+              />
+              <Text
+                display="inline-block"
+                px={6}
+                py=".1rem"
+                mt={2}
+                color="achromatic.100"
+                borderRadius="full"
+                bgColor="#67499E"
+              >
+                Hailey Song
+              </Text>
+            </Box>
           </Box>
-          <Box>
-            <Avatar />
-            <Text>Hailey Song</Text>
+          <Box height={40} width={500} position="relative" mt="10rem">
+            <Box
+              bgColor="primary.200"
+              w={450}
+              h={6}
+              position="absolute"
+              bottom="-.5rem"
+              left="5.3rem"
+            />
+            <Image
+              src={Shape13}
+              alt="Task_example_image"
+              width="8rem"
+              position="absolute"
+              right="-2rem"
+              bottom="-6rem"
+              objectFit="contain"
+            />
+            <Box position="absolute" bottom="0" width="100%">
+              <ChakraHeading fontSize="4xl" fontWeight="bold">
+                Manage your tasks
+              </ChakraHeading>
+              <ChakraHeading fontSize="4xl" fontWeight="bold">
+                with intuitive UI
+              </ChakraHeading>
+            </Box>
           </Box>
         </Box>
-
-        <ChakraHeading fontSize="4xl" fontWeight="bold">
-          Manage your tasks
-        </ChakraHeading>
-        <ChakraHeading fontSize="4xl" fontWeight="bold">
-          with intuitive UI
-        </ChakraHeading>
-        <Box bgColor="primary.200" color="transparent" w={400} h={10}>
-          Dummy
+      </Box>
+      {/* chart section */}
+      <Box
+        backgroundImage="linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, rgba(255, 255, 255, 0) 86.41%)"
+        h={800}
+      >
+        <Box
+          maxW={1200}
+          w="80%"
+          mx="auto"
+          pt={230}
+          display="flex"
+          justifyContent="space-between"
+        >
+          <Box height={30} width="100%" mt={100} mr={20}>
+            <Box position="relative">
+              <Box
+                bgColor="primary.200"
+                w={450}
+                h={6}
+                position="absolute"
+                bottom="-.5rem"
+                right="0"
+              />
+              <Box
+                width="100%"
+                textAlign="right"
+                position="absolute"
+                bottom="0"
+              >
+                <ChakraHeading fontSize="4xl" fontWeight="bold">
+                  Manage your tasks
+                </ChakraHeading>
+                <ChakraHeading fontSize="4xl" fontWeight="bold">
+                  with intuitive UI
+                </ChakraHeading>
+              </Box>
+            </Box>
+            <Text textAlign="right" mt={8}>
+              Data is crucial to every business’s success. Reading data,
+              however, could be a straneous task. Visualize your important data
+              with our powerful, yet human-friendly data report system.
+            </Text>
+          </Box>
+          <Box>
+            <Bar
+              data={chartData}
+              options={chartOptions}
+              width={500}
+              height={400}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>
