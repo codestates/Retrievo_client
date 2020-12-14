@@ -76,7 +76,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   return (
     <Box
       w={300}
-      h={160}
+      minH={160}
       p={4}
       bgColor="achromatic.100"
       borderRadius={10}
@@ -97,14 +97,24 @@ const TaskCard: React.FC<TaskCardProps> = ({
         <Box
           display="flex"
           flexDir="row"
-          alignItems="center"
+          alignItems="flex-start"
           mb={2}
           _hover={{ cursor: "pointer" }}
         >
-          <Text mr={2} color="primary.200">{`${task?.taskIndex}`}</Text>
-          <Heading headingType={headingEnum.taskCard}>{task?.title}</Heading>
+          <Text
+            fontSize="xs"
+            mr={2}
+            color="primary.200"
+          >{`${task?.taskIndex}`}</Text>
+          <Heading
+            pr="1.5rem"
+            fontWeight="normal"
+            headingType={headingEnum.taskCard}
+          >
+            {task?.title}
+          </Heading>
         </Box>
-        <Box display="flex" flexDir="row" alignItems="center">
+        <Box display="flex" flexDir="row" alignItems="center" mb={50}>
           {renderLabels()}
         </Box>
       </Box>
@@ -117,7 +127,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         justifyContent="space-between"
       >
         <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
-        <Text ml={2} fontSize="sm" color="achromatic.600">{`${isoToDate(
+        <Text ml={2} fontSize="xs" color="achromatic.600">{`${isoToDate(
           task.startDate
         )} ~ ${isoToDate(task.endDate)}`}</Text>
       </Box>

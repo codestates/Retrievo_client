@@ -12,6 +12,7 @@ import ReportHero from "./ReportHero";
 import ReportCard from "./ReportCard";
 import Charts from "./Charts";
 
+import Text from "../../components/Text";
 // interface indexProps {
 
 // }

@@ -93,41 +93,41 @@ const labelOptions = [
 const sprints = [
   {
     id: "1",
-    title: "sprint 1",
+    title: "Server Development",
   },
   {
     id: "2",
-    title: "sprint 2",
+    title: "Client Development",
   },
   {
     id: "3",
-    title: "sprint 3",
+    title: "SR",
   },
   {
     id: "4",
-    title: "sprint 4",
+    title: "UI/UX Design",
   },
 ];
 
 const labelSearchOptions = [
-  { id: "1", value: "apple", label: "Apple", color: "labelOrange" },
-  { id: "2", value: "banana", label: "Banana", color: "labelYellow" },
-  { id: "3", value: "mango", label: "Mango", color: "warning" },
-  { id: "4", value: "kiwi", label: "Kiwi", color: "labelGreen" },
-  { id: "5", value: "치킨밸류", label: "치킨", color: "failDark" },
-  { id: "6", value: "만두", label: "만두", color: "violet" },
-  { id: "7", value: "탕수육", label: "탕수육", color: "labelPink" },
-  { id: "8", value: "초밥", label: "초밥", color: "violet" },
+  { id: "1", value: "Hotfix", label: "Hotfix", color: "labelOrange" },
+  { id: "2", value: "Marketing", label: "Marketing", color: "labelYellow" },
+  { id: "3", value: "SR", label: "SR", color: "warning" },
+  { id: "4", value: "Server", label: "Server", color: "labelGreen" },
+  { id: "5", value: "Client", label: "Client", color: "failDark" },
+  { id: "6", value: "Meeting", label: "Meeting", color: "violet" },
+  { id: "7", value: "PT", label: "PT", color: "labelPink" },
+  { id: "8", value: "Design", label: "Design", color: "violet" },
 ];
 
 const labelSearchDefaultValue = [
-  { id: "1", value: "apple", label: "Apple", color: "labelOrange" },
-  { id: "2", value: "banana", label: "Banana", color: "labelYellow" },
+  { id: "1", value: "Hotfix", label: "Hotfix", color: "labelOrange" },
+  { id: "2", value: "Server", label: "Server", color: "labelGreen" },
 ];
 
 const task = {
   id: "018da5e5-a28e-4183-bc8e-8adeac1df54d",
-  title: "payment Sleek solutions loooooooooog title ok?",
+  title: "Edit User_Task Schema",
   description:
     "At repudiandae esse doloribus.Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis quod praesentium dolores beatae ullam quae dicta eum dolor corporis harum. Omnis ut dolore saepe quae explicabo labore reprehenderit vel voluptatibus?",
   startDate: "1602948368862",
@@ -137,27 +137,26 @@ const task = {
   board: null,
   sprint: {
     id: "4b19004a-f210-4db1-80ad-1a199569a279",
-    title: "driver Plains Wyoming",
+    title: "Server Deployment",
   },
   file: [
     {
-      fileLink: "payment_israel.fgd",
+      fileLink: "database_schema.pdf",
     },
   ],
   comment: [
     {
-      content: "solid state Optimization",
+      content: "Can you fix the user table?",
       user: {
         id: "1234",
-        username: "Miss Clinton Langosh",
+        username: "pbkim",
       },
     },
     {
-      content:
-        "예시 코멘트 2번 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rem quae rerum doloremque voluptate reiciendis dolore, nobis blanditiis atque ullam, tempore dolorum explicabo expedita? Ipsam, odit ex nam temporibus minus inventore!",
+      content: "Good Job!",
       user: {
         id: "5555",
-        username: "Popping Vova",
+        username: "Si Choi",
       },
     },
   ],
@@ -173,7 +172,7 @@ const task = {
     {
       user: {
         id: "b290eacd-819a-4f2a-a486-9dd5152a619c",
-        username: "Miss Clinton Langosh",
+        username: "Dkje",
         avatar: null,
       },
     },
