@@ -85,7 +85,7 @@ const Label: React.FC<LabelProps> = ({
   }
 
   return (
-    <ChakraTag {...labelConfig} {...props}>
+    <ChakraTag fontSize="xs" py={0} {...labelConfig} {...props}>
       {children}
     </ChakraTag>
   );
