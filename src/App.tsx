@@ -1,16 +1,14 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./styles/theme";
-// import Button from "./components/Button";
-// import Heading, { headingStyle } from "./components/Heading";
-// import MyProfile from "./pages/MyProfile";
-import Register from "./pages/Register";
+
+import Landing from "./pages/Landing";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <Register />
+        <Landing />
       </ChakraProvider>
     </>
   );

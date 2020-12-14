@@ -21,10 +21,12 @@ export enum headingEnum {
 export type HeadingProps = ChakraHeadingPropsType & {
   headingType: headingEnum;
   children: string;
+  headingFontWeight?: string;
 };
 
 const Heading: React.FC<HeadingProps> = ({
   headingType,
+  headingFontWeight,
   children,
   ...props
 }) => {
@@ -42,6 +44,7 @@ const Heading: React.FC<HeadingProps> = ({
     if (headingType === headingEnum.auth) {
       fontSize = "5xl";
       color = "achromatic.800";
+      fontWeight = headingFontWeight || "normal";
     }
 
     if (headingType === headingEnum.page) {
