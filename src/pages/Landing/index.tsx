@@ -329,6 +329,7 @@ const Landing: React.FC<Record<string, never>> = () => {
       <Box
         backgroundImage="linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, rgba(255, 255, 255, 0) 86.41%)"
         h={800}
+        overflow="hidden"
       >
         <Box
           maxW={1200}
@@ -337,7 +338,38 @@ const Landing: React.FC<Record<string, never>> = () => {
           pt={230}
           display="flex"
           justifyContent="space-between"
+          position="relative"
         >
+          <Image
+            src={Shape13}
+            alt="Task_example_image"
+            width="12rem"
+            position="absolute"
+            top={120}
+            left="-10rem"
+            zIndex="-1"
+            transform="rotate(35deg)"
+            objectFit="contain"
+          />
+          <Image
+            src={Shape12}
+            alt="Task_example_image"
+            width="10rem"
+            position="absolute"
+            right="50%"
+            bottom="-6rem"
+            objectFit="contain"
+          />
+          <Image
+            src={Shape4}
+            alt="Task_example_image"
+            width="10rem"
+            position="absolute"
+            top="-2rem"
+            right="-10rem"
+            transform="rotate(20deg)"
+            objectFit="contain"
+          />
           <Box height={30} width="100%" mt={100} mr={20}>
             <Box position="relative">
               <Box
