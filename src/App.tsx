@@ -6,6 +6,7 @@ import theme from "./styles/theme";
 // import ProjectSetting from "./pages/ProjectSetting";
 // import Dashboard from "./pages/Dashboard";
 import Sprint from "./pages/Sprint";
+import Landing from "./pages/Landing";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC<Record<string, never>> = () => {
         {/* <ProjectSetting /> */}
         <Sprint />
         {/* <Dashboard /> */}
+        <Landing />
       </ChakraProvider>
     </>
   );

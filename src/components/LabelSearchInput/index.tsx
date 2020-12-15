@@ -105,7 +105,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         styles={{
           multiValue: (base) => ({
             ...base,
-            // display: "none",
+            display: "none",
             backgroundColor: "primary.100",
           }),
           clearIndicator: (base) => ({
