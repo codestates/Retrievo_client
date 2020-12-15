@@ -12,6 +12,7 @@ import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 import {
   GetBoardsDocument,
   useCreateBoardMutation,
+  useDeleteBoardMutation,
   useGetBoardsLazyQuery,
   useGetBoardsQuery,
   CreateBoardDocument,
@@ -84,6 +85,10 @@ export const Board: React.FC = () => {
     createBoard,
     { data: createdData, loading: createLoading, error: createError },
   ] = useCreateBoardMutation();
+  const [
+    deleteBoard,
+    { data: deletedData, loading: deleteLoading, error: deleteError },
+  ] = useDeleteBoardMutation();
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -96,19 +101,16 @@ export const Board: React.FC = () => {
         },
       ],
       update: (cache, { data }) => {
-        // console.log("updateData", data);
-        console.log("update start!");
         const newBoardRes = data?.createBoard.boards;
-        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
-        const existingBoards = cache.readQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-        });
-        console.log("newBoard", newBoard);
-        console.log("existingBoards", existingBoards);
+        // const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        // const existingBoards = cache.readQuery({
+        //   query: GetBoardsDocument,
+        //   variables: { projectId },
+        // });
+        // console.log("newBoard", newBoard);
+        // console.log("existingBoards", existingBoards);
         // cache.evict({ fieldName: "boards:{}" });
         if (!newBoardRes) return;
-        console.log("return하니?");
         cache.writeQuery({
           query: GetBoardsDocument,
           variables: { projectId },
@@ -118,13 +120,40 @@ export const Board: React.FC = () => {
             },
           },
         });
+        // console.log("handleCreateBoard", writeRes);
+        if (refetch) refetch();
       },
     });
-    // console.log("handleCreateBoard", res);
-    if (refetch) refetch();
   };
 
-  const handleBoardDelete = (id: string) => console.log("delete", id);
+  const handleBoardDelete = async (
+    id: string,
+    newBoardId: string,
+    projectId: string
+  ) => {
+    await deleteBoard({
+      variables: {
+        id,
+        newBoardId,
+        projectId,
+      },
+      update: (cache, { data }) => {
+        const newBoardRes = data?.deleteBoard.boards;
+        if (!newBoardRes) return;
+        cache.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: [...newBoardRes],
+            },
+          },
+        });
+        if (refetch) refetch();
+      },
+    });
+  };
+
   const handleTaskClick = (id: string) => console.log("click", id);
   const handleTaskCreate = () => console.log("create!");
   const handleTaskDelete = (id: string) => console.log("delete", id);

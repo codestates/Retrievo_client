@@ -1,0 +1,14 @@
+query GetLabels($projectId:String!){
+  getLabels(projectId:$projectId){
+    label{
+      id
+      color
+      name
+    }
+    error{
+      code
+      message
+      field
+    }
+  }
+}

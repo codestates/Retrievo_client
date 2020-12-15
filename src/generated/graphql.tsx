@@ -124,10 +124,10 @@ export type Board = {
   __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  project?: Project;
+  project: Project;
   boardColumnIndex: Scalars["Float"];
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
   task?: Maybe<Array<Task>>;
 };
 
@@ -137,19 +137,19 @@ export type Task = {
   rootTaskId?: Maybe<Scalars["String"]>;
   title: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
-  taskIndex?: Scalars["Float"];
+  taskIndex: Scalars["Float"];
   boardRowIndex?: Maybe<Scalars["Float"]>;
-  sprintRowIndex?: Scalars["Float"];
-  completed?: Scalars["Boolean"];
+  sprintRowIndex: Scalars["Float"];
+  completed: Scalars["Boolean"];
   startDate?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["String"]>;
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
   comment?: Maybe<Array<Comment>>;
   file?: Maybe<Array<File>>;
-  sprint?: Sprint;
+  sprint: Sprint;
   board?: Maybe<Board>;
-  project?: Project;
+  project: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -711,6 +711,22 @@ export type CreateCommentMutation = { __typename?: "Mutation" } & {
   };
 };
 
+export type CreateProjectMutationVariables = Exact<{
+  name: Scalars["String"];
+}>;
+
+export type CreateProjectMutation = { __typename?: "Mutation" } & {
+  createProject: { __typename?: "ProjectReturnType" } & {
+    project?: Maybe<{ __typename?: "Project" } & Pick<Project, "id" | "name">>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
+      >
+    >;
+  };
+};
+
 export type CreateSprintMutationVariables = Exact<{
   projectId: Scalars["String"];
   title: Scalars["String"];
@@ -906,6 +922,44 @@ export type DeleteBoardMutation = { __typename?: "Mutation" } & {
   };
 };
 
+export type DeleteCommentMutationVariables = Exact<{
+  projectId: Scalars["String"];
+  id: Scalars["String"];
+}>;
+
+export type DeleteCommentMutation = { __typename?: "Mutation" } & {
+  deleteComment: { __typename?: "CommentDeleteResponse" } & Pick<
+    CommentDeleteResponse,
+    "success"
+  > & {
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "code" | "field" | "message"
+        >
+      >;
+    };
+};
+
+export type DeleteLabelMutationVariables = Exact<{
+  projectId: Scalars["String"];
+  id: Scalars["String"];
+}>;
+
+export type DeleteLabelMutation = { __typename?: "Mutation" } & {
+  deleteLabel: { __typename?: "LabelDeleteResponse" } & Pick<
+    LabelDeleteResponse,
+    "success"
+  > & {
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "code" | "field" | "message"
+        >
+      >;
+    };
+};
+
 export type DeleteSprintMutationVariables = Exact<{
   id: Scalars["String"];
   projectId: Scalars["String"];
@@ -1049,6 +1103,26 @@ export type UpdateCommentMutation = { __typename?: "Mutation" } & {
             >;
           }
       >
+    >;
+  };
+};
+
+export type UpdateLabelMutationVariables = Exact<{
+  projectId: Scalars["String"];
+  options: LabelUpdateInput;
+  id: Scalars["String"];
+}>;
+
+export type UpdateLabelMutation = { __typename?: "Mutation" } & {
+  updateLabel: { __typename?: "LabelResponse" } & {
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "field" | "message"
+      >
+    >;
+    label?: Maybe<
+      Array<{ __typename?: "Label" } & Pick<Label, "id" | "name" | "color">>
     >;
   };
 };
@@ -1224,6 +1298,24 @@ export type GetBoardsQuery = { __typename?: "Query" } & {
   };
 };
 
+export type GetLabelsQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type GetLabelsQuery = { __typename?: "Query" } & {
+  getLabels: { __typename?: "LabelResponse" } & {
+    label?: Maybe<
+      Array<{ __typename?: "Label" } & Pick<Label, "id" | "color" | "name">>
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
+      >
+    >;
+  };
+};
+
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetMeQuery = { __typename?: "Query" } & {
@@ -1241,6 +1333,41 @@ export type GetMeQuery = { __typename?: "Query" } & {
       { __typename?: "FieldError" } & Pick<
         FieldError,
         "field" | "code" | "message"
+      >
+    >;
+  };
+};
+
+export type GetProjectQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type GetProjectQuery = { __typename?: "Query" } & {
+  project: { __typename?: "ProjectReturnType" } & {
+    project?: Maybe<
+      { __typename?: "Project" } & Pick<
+        Project,
+        "id" | "name" | "createdAt" | "updatedAt"
+      > & {
+          projectPermissions?: Maybe<
+            Array<
+              { __typename?: "ProjectPermission" } & Pick<
+                ProjectPermission,
+                "id" | "isAdmin"
+              > & {
+                  user: { __typename?: "User" } & Pick<
+                    User,
+                    "id" | "username" | "email" | "role" | "avatar"
+                  >;
+                }
+            >
+          >;
+        }
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
       >
     >;
   };
@@ -1504,6 +1631,71 @@ export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMut
 export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<
   CreateCommentMutation,
   CreateCommentMutationVariables
+>;
+export const CreateProjectDocument = gql`
+  mutation CreateProject($name: String!) {
+    createProject(name: "hello") {
+      project {
+        id
+        name
+      }
+      error {
+        code
+        message
+        field
+      }
+      project {
+        id
+        name
+      }
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+export type CreateProjectMutationFn = Apollo.MutationFunction<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProjectMutation,
+    CreateProjectMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateProjectMutation,
+    CreateProjectMutationVariables
+  >(CreateProjectDocument, baseOptions);
+}
+export type CreateProjectMutationHookResult = ReturnType<
+  typeof useCreateProjectMutation
+>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
 >;
 export const CreateSprintDocument = gql`
   mutation CreateSprint($projectId: String!, $title: String!) {
@@ -1888,6 +2080,114 @@ export type DeleteBoardMutationResult = Apollo.MutationResult<DeleteBoardMutatio
 export type DeleteBoardMutationOptions = Apollo.BaseMutationOptions<
   DeleteBoardMutation,
   DeleteBoardMutationVariables
+>;
+export const DeleteCommentDocument = gql`
+  mutation DeleteComment($projectId: String!, $id: String!) {
+    deleteComment(projectId: $projectId, id: $id) {
+      error {
+        code
+        field
+        message
+      }
+      success
+    }
+  }
+`;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables
+>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCommentMutation,
+    DeleteCommentMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteCommentMutation,
+    DeleteCommentMutationVariables
+  >(DeleteCommentDocument, baseOptions);
+}
+export type DeleteCommentMutationHookResult = ReturnType<
+  typeof useDeleteCommentMutation
+>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables
+>;
+export const DeleteLabelDocument = gql`
+  mutation DeleteLabel($projectId: String!, $id: String!) {
+    deleteLabel(projectId: $projectId, id: $id) {
+      error {
+        code
+        field
+        message
+      }
+      success
+    }
+  }
+`;
+export type DeleteLabelMutationFn = Apollo.MutationFunction<
+  DeleteLabelMutation,
+  DeleteLabelMutationVariables
+>;
+
+/**
+ * __useDeleteLabelMutation__
+ *
+ * To run a mutation, you first call `useDeleteLabelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLabelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLabelMutation, { data, loading, error }] = useDeleteLabelMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteLabelMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteLabelMutation,
+    DeleteLabelMutationVariables
+  >
+) {
+  return Apollo.useMutation<DeleteLabelMutation, DeleteLabelMutationVariables>(
+    DeleteLabelDocument,
+    baseOptions
+  );
+}
+export type DeleteLabelMutationHookResult = ReturnType<
+  typeof useDeleteLabelMutation
+>;
+export type DeleteLabelMutationResult = Apollo.MutationResult<DeleteLabelMutation>;
+export type DeleteLabelMutationOptions = Apollo.BaseMutationOptions<
+  DeleteLabelMutation,
+  DeleteLabelMutationVariables
 >;
 export const DeleteSprintDocument = gql`
   mutation DeleteSprint($id: String!, $projectId: String!) {
@@ -2325,6 +2625,69 @@ export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<
   UpdateCommentMutation,
   UpdateCommentMutationVariables
 >;
+export const UpdateLabelDocument = gql`
+  mutation UpdateLabel(
+    $projectId: String!
+    $options: LabelUpdateInput!
+    $id: String!
+  ) {
+    updateLabel(projectId: $projectId, options: $options, id: $id) {
+      error {
+        code
+        field
+        message
+      }
+      label {
+        id
+        name
+        color
+      }
+    }
+  }
+`;
+export type UpdateLabelMutationFn = Apollo.MutationFunction<
+  UpdateLabelMutation,
+  UpdateLabelMutationVariables
+>;
+
+/**
+ * __useUpdateLabelMutation__
+ *
+ * To run a mutation, you first call `useUpdateLabelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLabelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLabelMutation, { data, loading, error }] = useUpdateLabelMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      options: // value for 'options'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateLabelMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateLabelMutation,
+    UpdateLabelMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateLabelMutation, UpdateLabelMutationVariables>(
+    UpdateLabelDocument,
+    baseOptions
+  );
+}
+export type UpdateLabelMutationHookResult = ReturnType<
+  typeof useUpdateLabelMutation
+>;
+export type UpdateLabelMutationResult = Apollo.MutationResult<UpdateLabelMutation>;
+export type UpdateLabelMutationOptions = Apollo.BaseMutationOptions<
+  UpdateLabelMutation,
+  UpdateLabelMutationVariables
+>;
 export const UpdateSprintDocument = gql`
   mutation UpdateSprint($projectId: String!, $options: SprintOptionInput!) {
     updateSprint(projectId: $projectId, options: $options) {
@@ -2624,6 +2987,66 @@ export type GetBoardsQueryResult = Apollo.QueryResult<
   GetBoardsQuery,
   GetBoardsQueryVariables
 >;
+export const GetLabelsDocument = gql`
+  query GetLabels($projectId: String!) {
+    getLabels(projectId: $projectId) {
+      label {
+        id
+        color
+        name
+      }
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetLabelsQuery__
+ *
+ * To run a query within a React component, call `useGetLabelsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLabelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLabelsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetLabelsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetLabelsQuery, GetLabelsQueryVariables>
+) {
+  return Apollo.useQuery<GetLabelsQuery, GetLabelsQueryVariables>(
+    GetLabelsDocument,
+    baseOptions
+  );
+}
+export function useGetLabelsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetLabelsQuery,
+    GetLabelsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetLabelsQuery, GetLabelsQueryVariables>(
+    GetLabelsDocument,
+    baseOptions
+  );
+}
+export type GetLabelsQueryHookResult = ReturnType<typeof useGetLabelsQuery>;
+export type GetLabelsLazyQueryHookResult = ReturnType<
+  typeof useGetLabelsLazyQuery
+>;
+export type GetLabelsQueryResult = Apollo.QueryResult<
+  GetLabelsQuery,
+  GetLabelsQueryVariables
+>;
 export const GetMeDocument = gql`
   query GetMe {
     getMe {
@@ -2682,6 +3105,81 @@ export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
 export type GetMeQueryResult = Apollo.QueryResult<
   GetMeQuery,
   GetMeQueryVariables
+>;
+export const GetProjectDocument = gql`
+  query GetProject($projectId: String!) {
+    project(projectId: $projectId) {
+      project {
+        id
+        name
+        createdAt
+        updatedAt
+        projectPermissions {
+          id
+          isAdmin
+          user {
+            id
+            username
+            email
+            role
+            avatar
+          }
+        }
+      }
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetProjectQuery__
+ *
+ * To run a query within a React component, call `useGetProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetProjectQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectQuery,
+    GetProjectQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(
+    GetProjectDocument,
+    baseOptions
+  );
+}
+export function useGetProjectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectQuery,
+    GetProjectQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(
+    GetProjectDocument,
+    baseOptions
+  );
+}
+export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
+export type GetProjectLazyQueryHookResult = ReturnType<
+  typeof useGetProjectLazyQuery
+>;
+export type GetProjectQueryResult = Apollo.QueryResult<
+  GetProjectQuery,
+  GetProjectQueryVariables
 >;
 export const GetReportSummaryDocument = gql`
   query GetReportSummary($projectId: String!) {

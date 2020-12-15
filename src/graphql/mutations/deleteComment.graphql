@@ -1,0 +1,10 @@
+mutation DeleteComment($projectId:String!,$id:String!){
+  deleteComment(projectId:$projectId,id:$id){
+    error{
+      code
+      field
+      message
+    }
+    success
+  }
+}

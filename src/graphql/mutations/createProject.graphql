@@ -1,0 +1,22 @@
+mutation CreateProject($name: String!) {
+	createProject(name:"hello") {
+			project {
+					id
+					name
+			}
+			error {
+					code
+					message
+					field
+			}
+			project {
+					id
+					name
+			}
+			error {
+					code
+					message
+					field
+			}
+	}
+}
