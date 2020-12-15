@@ -8,13 +8,14 @@ import {
   Draggable,
 } from "react-beautiful-dnd";
 import TaskBoard, { TaskBoardProps } from "../TaskBoard";
-import SkeletonBoard from "../TaskBoard/SkeletonBoard";
+import SkeletonBoard, { SkeletonBoardProps } from "../TaskBoard/SkeletonBoard";
 import { Board as boardType } from "../../../generated/graphql";
 
-export type TaskBoardListProps = TaskBoardProps & {
-  boards: boardType[];
-  projectId: string;
-};
+export type TaskBoardListProps = TaskBoardProps &
+  SkeletonBoardProps & {
+    boards: boardType[];
+    projectId: string;
+  };
 
 const TaskBoardList: React.FC<TaskBoardListProps> = ({
   boards,

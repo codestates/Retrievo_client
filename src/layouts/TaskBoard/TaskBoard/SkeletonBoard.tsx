@@ -14,7 +14,7 @@ export type boardType = {
 };
 
 export type SkeletonBoardProps = {
-  handleBoardCreate: (board: boardType, projectId: string) => void;
+  handleBoardCreate: (title: string, projectId: string) => void;
   projectId: string;
 };
 
@@ -34,8 +34,9 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
     );
   };
 
-  const handleBoardCreateSubmit = (value: boardType) => {
-    handleBoardCreate(value, projectId);
+  const handleBoardCreateSubmit = async (value: boardType) => {
+    console.log("create!", value.board);
+    await handleBoardCreate(value.board, projectId);
     setIsCreating(false);
   };
 

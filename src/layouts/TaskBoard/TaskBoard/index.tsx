@@ -22,7 +22,6 @@ import {
 export type TaskBoardProps = TaskCardProps & {
   board: boardType;
   // ref: (element: HTMLElement | null) => any;
-  handleBoardCreate: () => void;
   handleBoardDelete: (id: string) => void;
   handleTaskCreate: () => void;
   handleTaskDelete: (id: string) => void;
