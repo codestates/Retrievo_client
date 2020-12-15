@@ -16,6 +16,7 @@ import {
   useGetBoardsQuery,
   CreateBoardDocument,
   GetBoardsQuery,
+  BoardResponse,
 } from "../../generated/graphql";
 
 // interface indexProps {
@@ -88,31 +89,39 @@ export const Board: React.FC = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     await createBoard({
       variables: { title, projectId },
-      refetchQueries: ["GetBoardsDocument"],
-      // update: (cache, { data }) => {
-      //   // console.log("updateData", data);
-      //   console.log("update start!");
-      //   const newBoardRes = data?.createBoard.boards;
-      //   // const existingBoards = cache.readQuery({
-      //   //   query: CreateBoardDocument,
-      //   // });
-      //   console.log("newBoardRes", newBoardRes);
-      //   // console.log("existingBoards", existingBoards);
-      //   // cache.evict({ fieldName: "boards:{}" });
-      //   if (!newBoardRes) return;
-      //   console.log("return하니?");
-      //   cache.writeQuery<GetBoardsQuery>({
-      //     query: GetBoardsDocument,
-      //     data: {
-      //       getBoards: {
-      //         boards: [...newBoardRes],
-      //       },
-      //     },
-      //   });
-      // },
+      refetchQueries: [
+        {
+          query: GetBoardsDocument,
+          variables: { projectId },
+        },
+      ],
+      update: (cache, { data }) => {
+        // console.log("updateData", data);
+        console.log("update start!");
+        const newBoardRes = data?.createBoard.boards;
+        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        const existingBoards = cache.readQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+        });
+        console.log("newBoard", newBoard);
+        console.log("existingBoards", existingBoards);
+        // cache.evict({ fieldName: "boards:{}" });
+        if (!newBoardRes) return;
+        console.log("return하니?");
+        cache.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: [...newBoardRes],
+            },
+          },
+        });
+      },
     });
     // console.log("handleCreateBoard", res);
-    // if (refetch) refetch();
+    if (refetch) refetch();
   };
 
   const handleBoardDelete = (id: string) => console.log("delete", id);

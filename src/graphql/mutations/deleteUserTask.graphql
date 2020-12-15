@@ -1,0 +1,10 @@
+mutation DeleteUserTask($id:String!, $projectId:String!){
+  deleteUserTask(id:$id, projectId:$projectId){
+    error {
+      message
+      code
+      field
+    }
+    success 
+  }
+}

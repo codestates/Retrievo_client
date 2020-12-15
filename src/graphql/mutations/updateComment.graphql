@@ -1,0 +1,23 @@
+mutation UpdateComment($id:String!,$content:String!,$projectId:String!){
+  updateComment(id:$id,content:$content,projectId:$projectId){
+    error{
+      field
+      message
+      code
+    }
+    comment{
+      id
+      rootCommentId
+      task {
+        id
+        title
+      }
+      user{
+        id
+        username
+      }
+      content
+      createdAt
+    }
+  }
+}

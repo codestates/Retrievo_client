@@ -1,6 +1,13 @@
-query GetTask($projectId:String!, $id:String!){
-  getTask(projectId:$projectId, id:$id){
+mutation UpdateTask($options:TaskUpdateInput!,$projectId:String!){
+  updateTask(options:$options,projectId:$projectId){
     task{
+      id
+      title
+      description
+      startDate
+      endDate
+      taskIndex
+      completed
       board{
         id
         title

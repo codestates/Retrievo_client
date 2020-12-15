@@ -1,0 +1,23 @@
+mutation CreateUserTask($userId:String!,$taskId:String!,$projectId:String!){
+  createUserTask(userId:$userId,taskId:$taskId,projectId:$projectId){
+    userTask{
+      id
+      user{
+        username
+        id
+      }
+      task{
+        id
+        title
+        project {
+          id
+        }
+      }
+    }
+    error{
+      code
+      field
+      message
+    }
+  }
+}

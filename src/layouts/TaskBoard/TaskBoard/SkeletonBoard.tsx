@@ -57,7 +57,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         // isCancelButton
         onCancel={() => setIsCreating(false)}
       >
-        <Box display="flex" flexDir="row" alignItems="center" px={2}>
+        <Box display="flex" flexDir="row" alignItems="center" px={2} w={330}>
           <Input
             isEditable={false}
             isLabelNonVisible

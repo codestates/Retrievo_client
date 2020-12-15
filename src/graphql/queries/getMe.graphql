@@ -2,6 +2,8 @@ query GetMe{
   getMe{
     user{
       username
+      email
+      email
       projectPermissions{
         project{
           id

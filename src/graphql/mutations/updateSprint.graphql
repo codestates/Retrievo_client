@@ -1,0 +1,19 @@
+mutation UpdateSprint($projectId:String!, $options:SprintOptionInput!){
+  updateSprint(projectId:$projectId, options:$options){
+    success
+    sprint {
+      title
+      description
+      didStart
+      isCompleted
+      row
+      dueDate
+      startedAt
+    }
+    error{
+      code
+      field
+      message
+    }
+  }
+}
