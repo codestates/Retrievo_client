@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import * as yup from "yup";
+import { useHistory } from "react-router-dom";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";
@@ -8,10 +9,12 @@ import RoundButton, {
   IconType,
   ShadowType,
   RoundButtonColor,
-  SizeType,
 } from "../../components/RoundButton";
+import { useLoginMutation } from "../../generated/graphql";
 
 const Login = (): ReactElement => {
+  const history = useHistory();
+
   const initialValue = {
     email: "",
     password: "",
@@ -22,8 +25,25 @@ const Login = (): ReactElement => {
     email: yup.string().email().required(),
   });
 
-  const handleLogin = (value: Record<string, any>) => {
-    // TODO
+  const [login] = useLoginMutation();
+
+  const handleLogin = async (
+    value: Record<string, any>,
+    { setFieldError }: any
+  ) => {
+    const { email, password } = value;
+    const response = await login({
+      variables: { options: { email, password, projectId: null } },
+    });
+    if (response.data?.login.error?.message) {
+      setFieldError(
+        response.data.login.error.field,
+        response.data.login.error.message
+      );
+    } else if (response.data?.login.user) {
+      history.push("/");
+    }
+    console.log(response);
   };
 
   return (
