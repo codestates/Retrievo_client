@@ -1,0 +1,17 @@
+query GetMe{
+  getMe{
+    user{
+      username
+      projectPermissions{
+        project{
+          id
+        }
+      }
+    }
+    error{
+      field
+      code
+      message
+    }
+  }
+}

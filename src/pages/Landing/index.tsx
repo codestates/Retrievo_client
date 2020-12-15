@@ -8,10 +8,13 @@ import {
   Image,
   Avatar,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
 import ReactPlayer from "react-player/lazy";
+import { useHistory } from "react-router-dom";
 import { chartData, chartOptions } from "./chartData";
+import { useCreateGuestMutation } from "../../generated/graphql";
 import Text from "../../components/Text";
 import {
   BackgroundShapePupple,
@@ -35,8 +38,29 @@ import TaskImage from "../../asset/img/TaskImage.png";
 import LandingAstro from "../../asset/img/LandingAstro";
 import TaskBoard from "../../asset/img/TaskBoard.png";
 import BoardVideo from "../../asset/movie/board.mp4";
+import useProjectRoute from "../Auth/useProjectRoute";
 
 const Landing: React.FC<Record<string, never>> = () => {
+  const [createGuest] = useCreateGuestMutation();
+  const toast = useToast();
+  const history = useHistory();
+  const { routeToProject } = useProjectRoute();
+
+  const onCreateGuest = async () => {
+    const response = await createGuest();
+    if (response.data?.createGuest.error) {
+      toast({
+        title: "Guest Creation Failed😂",
+        description: `${response.data.createGuest.error.message}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      routeToProject();
+    }
+  };
+
   return (
     <Box width="100%">
       {/* top section */}
@@ -113,6 +137,9 @@ const Landing: React.FC<Record<string, never>> = () => {
             w={170}
             py={5}
             mr={3}
+            onClick={() => {
+              history.push("/auth");
+            }}
           >
             SignIn
           </Button>
@@ -198,6 +225,7 @@ const Landing: React.FC<Record<string, never>> = () => {
                   w={170}
                   py={5}
                   mr={3}
+                  onClick={onCreateGuest}
                 >
                   Take tour
                 </Button>
@@ -208,6 +236,9 @@ const Landing: React.FC<Record<string, never>> = () => {
                   borderRadius={5}
                   w={170}
                   py={5}
+                  onClick={() => {
+                    history.push("/auth");
+                  }}
                 >
                   Register
                 </Button>
@@ -602,6 +633,7 @@ const Landing: React.FC<Record<string, never>> = () => {
               borderRadius={5}
               w={170}
               py={5}
+              onClick={onCreateGuest}
             >
               Take tour
             </Button>

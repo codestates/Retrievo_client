@@ -24,6 +24,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: "Query";
+  getMe: UserResponse;
   getUser: UserResponse;
   userSetting: UserResponse;
   projectsOfUser: ProjectListResponse;
@@ -77,15 +78,15 @@ export type UserResponse = {
 
 export type User = {
   __typename?: "User";
-  id: Scalars["String"];
-  username: Scalars["String"];
+  id?: Scalars["String"];
+  username?: Scalars["String"];
   email?: Maybe<Scalars["String"]>;
   avatar?: Maybe<Scalars["String"]>;
   role?: Maybe<RoleTypes>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-  projectPermissions: Array<ProjectPermission>;
-  comment: Array<Comment>;
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
+  projectPermissions?: Array<ProjectPermission>;
+  comment?: Array<Comment>;
   userTask?: Maybe<Array<UserTask>>;
 };
 
@@ -499,8 +500,8 @@ export type UsernamePasswordInput = {
 };
 
 export type LoginInput = {
-  email?: Maybe<Scalars["String"]>;
-  password?: Maybe<Scalars["String"]>;
+  password: Scalars["String"];
+  email: Scalars["String"];
   projectId?: Maybe<Scalars["String"]>;
 };
 
@@ -614,6 +615,22 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
+export type CreateGuestMutationVariables = Exact<{ [key: string]: never }>;
+
+export type CreateGuestMutation = { __typename?: "Mutation" } & {
+  createGuest: { __typename?: "UserResponse" } & {
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "field" | "message" | "code"
+      >
+    >;
+    user?: Maybe<
+      { __typename?: "User" } & Pick<User, "id" | "username" | "role">
+    >;
+  };
+};
+
 export type LoginMutationVariables = Exact<{
   options: LoginInput;
 }>;
@@ -621,7 +638,12 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: "Mutation" } & {
   login: { __typename?: "UserResponse" } & {
     user?: Maybe<{ __typename?: "User" } & Pick<User, "email" | "role">>;
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "field" | "message"
+      >
+    >;
   };
 };
 
@@ -631,9 +653,36 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: "Mutation" } & {
   register: { __typename?: "UserResponse" } & {
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "field" | "code"
+      >
+    >;
     user?: Maybe<
       { __typename?: "User" } & Pick<User, "username" | "email" | "id">
+    >;
+  };
+};
+
+export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMeQuery = { __typename?: "Query" } & {
+  getMe: { __typename?: "UserResponse" } & {
+    user?: Maybe<
+      { __typename?: "User" } & Pick<User, "username"> & {
+          projectPermissions: Array<
+            { __typename?: "ProjectPermission" } & {
+              project: { __typename?: "Project" } & Pick<Project, "id">;
+            }
+          >;
+        }
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "field" | "code" | "message"
+      >
     >;
   };
 };
@@ -680,10 +729,71 @@ export type GetTaskQuery = { __typename?: "Query" } & {
         }
       >
     >;
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "code" | "field"
+      >
+    >;
   };
 };
 
+export const CreateGuestDocument = gql`
+  mutation CreateGuest {
+    createGuest {
+      error {
+        field
+        message
+        code
+      }
+      user {
+        id
+        username
+        role
+      }
+    }
+  }
+`;
+export type CreateGuestMutationFn = Apollo.MutationFunction<
+  CreateGuestMutation,
+  CreateGuestMutationVariables
+>;
+
+/**
+ * __useCreateGuestMutation__
+ *
+ * To run a mutation, you first call `useCreateGuestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGuestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGuestMutation, { data, loading, error }] = useCreateGuestMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateGuestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateGuestMutation,
+    CreateGuestMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateGuestMutation, CreateGuestMutationVariables>(
+    CreateGuestDocument,
+    baseOptions
+  );
+}
+export type CreateGuestMutationHookResult = ReturnType<
+  typeof useCreateGuestMutation
+>;
+export type CreateGuestMutationResult = Apollo.MutationResult<CreateGuestMutation>;
+export type CreateGuestMutationOptions = Apollo.BaseMutationOptions<
+  CreateGuestMutation,
+  CreateGuestMutationVariables
+>;
 export const LoginDocument = gql`
   mutation Login($options: LoginInput!) {
     login(options: $options) {
@@ -792,6 +902,63 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const GetMeDocument = gql`
+  query GetMe {
+    getMe {
+      user {
+        username
+        projectPermissions {
+          project {
+            id
+          }
+        }
+      }
+      error {
+        field
+        code
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetMeQuery__
+ *
+ * To run a query within a React component, call `useGetMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMeQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMeQuery, GetMeQueryVariables>
+) {
+  return Apollo.useQuery<GetMeQuery, GetMeQueryVariables>(
+    GetMeDocument,
+    baseOptions
+  );
+}
+export function useGetMeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMeQuery, GetMeQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetMeQuery, GetMeQueryVariables>(
+    GetMeDocument,
+    baseOptions
+  );
+}
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
+export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
+export type GetMeQueryResult = Apollo.QueryResult<
+  GetMeQuery,
+  GetMeQueryVariables
 >;
 export const GetTaskDocument = gql`
   query GetTask($projectId: String!, $id: String!) {
