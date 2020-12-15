@@ -106,23 +106,11 @@ export const Board: React.FC = () => {
                 handleTaskClick={handleTaskClick}
                 handleTaskCreate={handleTaskCreate}
                 handleTaskDelete={handleTaskDelete}
-                boards={data?.getBoards.boards}
+                boards={data?.getBoards ? data?.getBoards.boards : []}
                 // boards={dummyBoardData.boards}
                 board={data?.getBoards.boards[0]}
               />
             </Box>
-            {/* <Box mt={9}>
-              <ActihandleTaskClickvityStream />
-            </Box>
-            <Box mt={9}>
-              <ReportHero />
-            </Box>
-            <Box mt={9}>
-              <ReportCard />
-            </Box>
-            <Box mt={9}>
-              <Charts />
-            </Box> */}
           </Box>
         </Box>
       </Box>

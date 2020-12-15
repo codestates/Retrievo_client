@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { BiChalkboard, BiCalendarEvent } from "react-icons/bi";
 import { CgBoard } from "react-icons/cg";
@@ -25,7 +26,7 @@ export const sideBarMenu = [
     name: "Sprint",
     icon: <FiFastForward />,
     path: "/project/sprint",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
+    description: "Manage your projects' sprints and tasks",
   },
   {
     name: "Board",
@@ -69,9 +70,12 @@ const SideNav = (): ReactElement => {
   };
 
   const renderMenu = () => {
+    // FIXME
+    const projectId = "projectId";
+
     return sideBarMenu.map((menu) => {
       return (
-        <a href={menu.path} key={menu.name}>
+        <Link to={`${menu.path}/${projectId}`} key={menu.name}>
           <Box
             bg={
               window.location.pathname.includes(menu.path)
@@ -97,7 +101,7 @@ const SideNav = (): ReactElement => {
             {changeIconColor(menu.icon)}
             {menu.name}
           </Box>
-        </a>
+        </Link>
       );
     });
   };
