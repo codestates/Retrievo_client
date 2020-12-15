@@ -5,18 +5,22 @@ import { IconContext } from "react-icons";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
-import TaskCard, { task, TaskCardProps } from "../TaskCard";
+import TaskCard, { TaskCardProps } from "../TaskCard";
 import IconButton from "../../../components/IconButton";
-
-export type board = {
-  id: string;
-  title: string;
-  boardColumnIndex: number;
-  task: task[];
-};
+import {
+  Board as boardType,
+  Task as taskType,
+} from "../../../generated/graphql";
+// export type board = {
+//   __typename?: "Board" | undefined;
+//   id: string;
+//   title: string;
+//   boardColumnIndex: number;
+//   task: task[];
+// };
 
 export type TaskBoardProps = TaskCardProps & {
-  board: board;
+  board: boardType;
   // ref: (element: HTMLElement | null) => any;
   handleBoardCreate: () => void;
   handleBoardDelete: (id: string) => void;
@@ -45,7 +49,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   // FIXME : index -> boardRowIndex
-  const renderTasks = (tasks: task[]) => {
+  const renderTasks = (tasks: taskType[]) => {
+    if (!tasks.length) return null;
     return tasks.map((task, index) => {
       return (
         <Draggable index={index} draggableId={task.id} key={task.id}>
@@ -78,7 +83,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <Heading mr={2} headingType={headingEnum.board}>
             {board.title}
           </Heading>
-          <Text color="primary.300">{`${board.task.length}`}</Text>
+          <Text color="primary.300">{`${board.task?.length}`}</Text>
         </Box>
         <IconButton
           aria-label="delete board"
@@ -105,7 +110,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               ref={provided.innerRef}
               key={board.id}
             >
-              {renderTasks(board.task)}
+              {renderTasks(board.task || [])}
               {provided.placeholder}
             </div>
           )}

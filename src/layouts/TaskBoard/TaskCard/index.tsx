@@ -2,41 +2,47 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { format } from "date-fns";
+import {
+  Task as taskType,
+  // Label as labelType,
+  // User as userType,
+} from "../../../generated/graphql";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import Label from "../../../components/Label";
 import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
 
-export type label = {
-  label: {
-    id: string;
-    name: string;
-    color?: string;
-  };
-};
+// export type label = {
+//   label: {
+//     id: string;
+//     name: string;
+//     color?: string;
+//   };
+// };
 
-export type user = {
-  user: {
-    id: string;
-    username: string;
-    avatar: string | null;
-  };
-};
+// export type user = {
+//   user: {
+//     id: string;
+//     username: string;
+//     avatar: string | null;
+//   };
+// };
 
-export type task = {
-  id: string;
-  title: string;
-  startDate: string | null;
-  endDate: string | null;
-  taskIndex: number;
-  userTask: user[];
-  taskLabel: label[];
-  boardRowIndex: number;
-  sprintRowIndex: number;
-};
+// export type task = {
+//   __typename?: "Task" | undefined;
+//   id: string;
+//   title: string;
+//   startDate: string | null;
+//   endDate: string | null;
+//   taskIndex: number;
+//   userTask: user[];
+//   taskLabel: label[];
+//   boardRowIndex: number;
+//   sprintRowIndex: number;
+// };
 
 export type TaskCardProps = {
-  task?: task;
+  task?: taskType;
   handleTaskDelete: (id: string) => void;
   handleTaskClick: (id: string) => void;
 };
@@ -57,7 +63,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     });
   };
 
-  const isoToDate = (date: string | null): string => {
+  const isoToDate = (date: string | null | undefined): string => {
     if (!date) return "";
     return format(new Date(Number(date)), "MMM d");
   };
@@ -126,7 +132,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         bottom={5}
         justifyContent="space-between"
       >
-        <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
+        {/* <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} /> */}
         <Text ml={2} fontSize="xs" color="achromatic.600">{`${isoToDate(
           task.startDate
         )} ~ ${isoToDate(task.endDate)}`}</Text>

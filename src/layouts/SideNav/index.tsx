@@ -106,6 +106,7 @@ const SideNav = (): ReactElement => {
       position="fixed"
       zIndex={999}
       top={50}
+      left={0}
       bg="achromatic.200"
       h="100vh"
       w={210}
