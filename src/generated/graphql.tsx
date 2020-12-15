@@ -123,10 +123,10 @@ export type Board = {
   __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  project: Project;
+  project?: Project;
   boardColumnIndex: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   task?: Maybe<Array<Task>>;
 };
 
@@ -136,19 +136,19 @@ export type Task = {
   rootTaskId?: Maybe<Scalars["String"]>;
   title: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
-  taskIndex: Scalars["Float"];
+  taskIndex?: Scalars["Float"];
   boardRowIndex?: Maybe<Scalars["Float"]>;
-  sprintRowIndex: Scalars["Float"];
-  completed: Scalars["Boolean"];
+  sprintRowIndex?: Scalars["Float"];
+  completed?: Scalars["Boolean"];
   startDate?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["String"]>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   comment?: Maybe<Array<Comment>>;
   file?: Maybe<Array<File>>;
-  sprint: Sprint;
+  sprint?: Sprint;
   board?: Maybe<Board>;
-  project: Project;
+  project?: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -499,8 +499,8 @@ export type UsernamePasswordInput = {
 };
 
 export type LoginInput = {
-  email?: Maybe<Scalars["String"]>;
-  password?: Maybe<Scalars["String"]>;
+  password: Scalars["String"];
+  email: Scalars["String"];
   projectId?: Maybe<Scalars["String"]>;
 };
 
@@ -621,7 +621,12 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: "Mutation" } & {
   login: { __typename?: "UserResponse" } & {
     user?: Maybe<{ __typename?: "User" } & Pick<User, "email" | "role">>;
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "field" | "message"
+      >
+    >;
   };
 };
 
@@ -631,9 +636,73 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: "Mutation" } & {
   register: { __typename?: "UserResponse" } & {
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "field" | "code"
+      >
+    >;
     user?: Maybe<
       { __typename?: "User" } & Pick<User, "username" | "email" | "id">
+    >;
+  };
+};
+
+export type GetBoardsQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type GetBoardsQuery = { __typename?: "Query" } & {
+  getBoards: { __typename?: "BoardResponse" } & {
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
+      >
+    >;
+    boards?: Maybe<
+      Array<
+        { __typename?: "Board" } & Pick<
+          Board,
+          "id" | "title" | "boardColumnIndex"
+        > & {
+            task?: Maybe<
+              Array<
+                { __typename?: "Task" } & Pick<
+                  Task,
+                  | "id"
+                  | "title"
+                  | "boardRowIndex"
+                  | "sprintRowIndex"
+                  | "taskIndex"
+                  | "startDate"
+                  | "endDate"
+                > & {
+                    userTask?: Maybe<
+                      Array<
+                        { __typename?: "UserTask" } & {
+                          user: { __typename?: "User" } & Pick<
+                            User,
+                            "id" | "username" | "avatar"
+                          >;
+                        }
+                      >
+                    >;
+                    taskLabel?: Maybe<
+                      Array<
+                        { __typename?: "TaskLabel" } & {
+                          label: { __typename?: "Label" } & Pick<
+                            Label,
+                            "id" | "name" | "color"
+                          >;
+                        }
+                      >
+                    >;
+                  }
+              >
+            >;
+          }
+      >
     >;
   };
 };
@@ -680,7 +749,12 @@ export type GetTaskQuery = { __typename?: "Query" } & {
         }
       >
     >;
-    error?: Maybe<FieldError>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "code" | "field"
+      >
+    >;
   };
 };
 
@@ -792,6 +866,89 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const GetBoardsDocument = gql`
+  query GetBoards($projectId: String!) {
+    getBoards(projectId: $projectId) {
+      error {
+        code
+        message
+        field
+      }
+      boards {
+        id
+        title
+        boardColumnIndex
+        task {
+          id
+          title
+          boardRowIndex
+          sprintRowIndex
+          taskIndex
+          startDate
+          endDate
+          userTask {
+            user {
+              id
+              username
+              avatar
+            }
+          }
+          taskLabel {
+            label {
+              id
+              name
+              color
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetBoardsQuery__
+ *
+ * To run a query within a React component, call `useGetBoardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBoardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBoardsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetBoardsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBoardsQuery, GetBoardsQueryVariables>
+) {
+  return Apollo.useQuery<GetBoardsQuery, GetBoardsQueryVariables>(
+    GetBoardsDocument,
+    baseOptions
+  );
+}
+export function useGetBoardsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetBoardsQuery,
+    GetBoardsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetBoardsQuery, GetBoardsQueryVariables>(
+    GetBoardsDocument,
+    baseOptions
+  );
+}
+export type GetBoardsQueryHookResult = ReturnType<typeof useGetBoardsQuery>;
+export type GetBoardsLazyQueryHookResult = ReturnType<
+  typeof useGetBoardsLazyQuery
+>;
+export type GetBoardsQueryResult = Apollo.QueryResult<
+  GetBoardsQuery,
+  GetBoardsQueryVariables
 >;
 export const GetTaskDocument = gql`
   query GetTask($projectId: String!, $id: String!) {

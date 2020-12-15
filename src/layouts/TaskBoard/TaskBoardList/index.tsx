@@ -7,11 +7,12 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
-import TaskBoard, { board, TaskBoardProps } from "../TaskBoard";
+import TaskBoard, { TaskBoardProps } from "../TaskBoard";
 import SkeletonBoard from "../TaskBoard/SkeletonBoard";
+import { Board as boardType } from "../../../generated/graphql";
 
 export type TaskBoardListProps = TaskBoardProps & {
-  boards: board[];
+  boards: boardType[];
   projectId: string;
 };
 
@@ -38,14 +39,14 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskDelete,
   };
 
-  const renderBoards = (boards: board[]) => {
-    return boards.map((currentBoard, index) => {
+  const renderBoards = (boards: boardType[]) => {
+    return boards.map((currentBoard) => {
       return (
         <Draggable
-          index={index}
+          index={currentBoard.boardColumnIndex}
           draggableId={currentBoard.id}
           key={currentBoard.id}
-          isDragDisabled={index === boards.length - 1}
+          isDragDisabled={currentBoard.boardColumnIndex === boards.length - 1}
         >
           {(provided) => (
             <Box
@@ -90,7 +91,13 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         (boardList) => boardList.id === destination.droppableId
       );
 
-      if (!sourceBoard || !destinationBoard) return;
+      if (
+        !sourceBoard ||
+        !destinationBoard ||
+        !sourceBoard.task ||
+        !destinationBoard.task
+      )
+        return;
 
       const sourceTask = sourceBoard.task.splice(source.index, 1);
       destinationBoard.task.splice(destination.index, 0, sourceTask[0]);

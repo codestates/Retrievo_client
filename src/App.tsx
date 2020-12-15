@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import MyProfile from "./pages/MyProfile";
 import NewProject from "./pages/NewProject";
 import ProjectSetting from "./pages/ProjectSetting";
+import Board from "./pages/Board";
 import Auth from "./pages/Auth";
 import Sprint from "./pages/Sprint";
 import Landing from "./pages/Landing";
@@ -17,8 +18,8 @@ const App: React.FC<Record<string, never>> = () => {
         <Route exact path="/" component={Landing} />
         <Route path="/auth" component={Auth} />
         <Route path="/project/dashboard/:id" component={Dashboard} />
+        <Route path="/project/board/:id" component={Board} />
         <Route path="/project/sprint/:id" component={Sprint} />
-        {/* <Route path="/project/board/:id" component={Board} /> */}
         <Route path="/project/setting/:id" component={ProjectSetting} />
         <Route path="/new-project" component={NewProject} />
         <Route path="/my-profile" component={MyProfile} />

@@ -63,8 +63,8 @@ export const Sprint: React.FC = () => {
   return (
     <>
       <TopNav {...args} />
-      <Box display="flex">
-        <SideNav />
+      <SideNav />
+      <Box display="flex" ml={210} mt={50}>
         <Box w="100%" p={9}>
           <Box>
             <PageHeading />

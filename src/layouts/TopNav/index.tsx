@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
@@ -33,6 +34,10 @@ const TopNav: React.FC<TopNavPropsType> = ({
   };
   return (
     <Box
+      position="fixed"
+      top={0}
+      left={0}
+      zIndex={999}
       bg="achromatic.200"
       w="100%"
       p={4}
@@ -53,9 +58,11 @@ const TopNav: React.FC<TopNavPropsType> = ({
         <Box display="flex" alignItems="center">
           {/* <GiSittingDog size={25} color="achromatic.700" /> */}
           {changeIconColor()}
-          <Heading ml={1} headingType={headingEnum.homepage}>
-            Retrievo
-          </Heading>
+          <Link to="/">
+            <Heading ml={1} headingType={headingEnum.homepage}>
+              Retrievo
+            </Heading>
+          </Link>
         </Box>
         <ProjectListDropdown {...projectConfig} />
       </Box>
@@ -67,22 +74,22 @@ const TopNav: React.FC<TopNavPropsType> = ({
         w={180}
       >
         <AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />
-        <a href="/notification">
+        <Link to="/notification">
           <IconButton
             fontSize="xl"
             color="achromatic.700"
             aria-label="notification"
             iconButtonType={IconButtonType.notification}
           />
-        </a>
-        <a href="/myProfile">
+        </Link>
+        <Link to="/my-profile">
           <IconButton
             fontSize="xl"
             color="achromatic.700"
             aria-label="project member list"
             iconButtonType={IconButtonType.user}
           />
-        </a>
+        </Link>
       </Box>
     </Box>
   );

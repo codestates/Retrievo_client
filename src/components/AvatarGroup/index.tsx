@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { AvatarGroup } from "@chakra-ui/react";
 import React from "react";
 import Avatar, { BetterAvatarProps } from "../Avatar";

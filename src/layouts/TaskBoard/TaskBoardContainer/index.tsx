@@ -7,7 +7,7 @@ const TaskBoardContainer = (): ReactElement => {
   return (
     <Box
       w="100%"
-      h="100vh"
+      h="80vh"
       borderRadius={10}
       border="2px dotted #31D5BF"
       display="flex"
