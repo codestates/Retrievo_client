@@ -24,6 +24,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: "Query";
+  getMe: UserResponse;
   getUser: UserResponse;
   userSetting: UserResponse;
   projectsOfUser: ProjectListResponse;
@@ -123,10 +124,10 @@ export type Board = {
   __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  project?: Project;
+  project: Project;
   boardColumnIndex: Scalars["Float"];
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
   task?: Maybe<Array<Task>>;
 };
 
@@ -136,19 +137,19 @@ export type Task = {
   rootTaskId?: Maybe<Scalars["String"]>;
   title: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
-  taskIndex?: Scalars["Float"];
+  taskIndex: Scalars["Float"];
   boardRowIndex?: Maybe<Scalars["Float"]>;
-  sprintRowIndex?: Scalars["Float"];
-  completed?: Scalars["Boolean"];
+  sprintRowIndex: Scalars["Float"];
+  completed: Scalars["Boolean"];
   startDate?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["String"]>;
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
   comment?: Maybe<Array<Comment>>;
   file?: Maybe<Array<File>>;
-  sprint?: Sprint;
+  sprint: Sprint;
   board?: Maybe<Board>;
-  project?: Project;
+  project: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -614,6 +615,30 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
+export type CreateBoardMutationVariables = Exact<{
+  title: Scalars["String"];
+  projectId: Scalars["String"];
+}>;
+
+export type CreateBoardMutation = { __typename?: "Mutation" } & {
+  createBoard: { __typename?: "BoardResponse" } & {
+    boards?: Maybe<
+      Array<
+        { __typename?: "Board" } & Pick<
+          Board,
+          "id" | "title" | "boardColumnIndex"
+        >
+      >
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "code" | "field"
+      >
+    >;
+  };
+};
+
 export type LoginMutationVariables = Exact<{
   options: LoginInput;
 }>;
@@ -707,6 +732,28 @@ export type GetBoardsQuery = { __typename?: "Query" } & {
   };
 };
 
+export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMeQuery = { __typename?: "Query" } & {
+  getMe: { __typename?: "UserResponse" } & {
+    user?: Maybe<
+      { __typename?: "User" } & Pick<User, "username"> & {
+          projectPermissions: Array<
+            { __typename?: "ProjectPermission" } & {
+              project: { __typename?: "Project" } & Pick<Project, "id">;
+            }
+          >;
+        }
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "field" | "code" | "message"
+      >
+    >;
+  };
+};
+
 export type GetTaskQueryVariables = Exact<{
   projectId: Scalars["String"];
   id: Scalars["String"];
@@ -758,6 +805,64 @@ export type GetTaskQuery = { __typename?: "Query" } & {
   };
 };
 
+export const CreateBoardDocument = gql`
+  mutation CreateBoard($title: String!, $projectId: String!) {
+    createBoard(title: $title, projectId: $projectId) {
+      boards {
+        id
+        title
+        boardColumnIndex
+      }
+      error {
+        message
+        code
+        field
+      }
+    }
+  }
+`;
+export type CreateBoardMutationFn = Apollo.MutationFunction<
+  CreateBoardMutation,
+  CreateBoardMutationVariables
+>;
+
+/**
+ * __useCreateBoardMutation__
+ *
+ * To run a mutation, you first call `useCreateBoardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBoardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBoardMutation, { data, loading, error }] = useCreateBoardMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useCreateBoardMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateBoardMutation,
+    CreateBoardMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateBoardMutation, CreateBoardMutationVariables>(
+    CreateBoardDocument,
+    baseOptions
+  );
+}
+export type CreateBoardMutationHookResult = ReturnType<
+  typeof useCreateBoardMutation
+>;
+export type CreateBoardMutationResult = Apollo.MutationResult<CreateBoardMutation>;
+export type CreateBoardMutationOptions = Apollo.BaseMutationOptions<
+  CreateBoardMutation,
+  CreateBoardMutationVariables
+>;
 export const LoginDocument = gql`
   mutation Login($options: LoginInput!) {
     login(options: $options) {
@@ -949,6 +1054,63 @@ export type GetBoardsLazyQueryHookResult = ReturnType<
 export type GetBoardsQueryResult = Apollo.QueryResult<
   GetBoardsQuery,
   GetBoardsQueryVariables
+>;
+export const GetMeDocument = gql`
+  query GetMe {
+    getMe {
+      user {
+        username
+        projectPermissions {
+          project {
+            id
+          }
+        }
+      }
+      error {
+        field
+        code
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetMeQuery__
+ *
+ * To run a query within a React component, call `useGetMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMeQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMeQuery, GetMeQueryVariables>
+) {
+  return Apollo.useQuery<GetMeQuery, GetMeQueryVariables>(
+    GetMeDocument,
+    baseOptions
+  );
+}
+export function useGetMeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMeQuery, GetMeQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetMeQuery, GetMeQueryVariables>(
+    GetMeDocument,
+    baseOptions
+  );
+}
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
+export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
+export type GetMeQueryResult = Apollo.QueryResult<
+  GetMeQuery,
+  GetMeQueryVariables
 >;
 export const GetTaskDocument = gql`
   query GetTask($projectId: String!, $id: String!) {

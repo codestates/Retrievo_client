@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
-import { Router, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import InputField from "../../components/Input";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
@@ -11,13 +11,15 @@ import RoundButton, {
   RoundButtonColor,
 } from "../../components/RoundButton";
 import { useRegisterMutation } from "../../generated/graphql";
-import toErrorMap from "../../utils/toErrorMap";
+import useProjectRoute from "./useProjectRoute";
 
 export type RegisterPropsType = {
   sample?: string;
 };
 
 const Register: React.FC<RegisterPropsType> = () => {
+  const { routeToProject } = useProjectRoute();
+
   const initialValue = {
     username: "",
     email: "",
@@ -35,7 +37,6 @@ const Register: React.FC<RegisterPropsType> = () => {
   });
 
   const [register] = useRegisterMutation();
-  const history = useHistory();
 
   const handleRegister = async (
     value: Record<string, any>,
@@ -51,7 +52,7 @@ const Register: React.FC<RegisterPropsType> = () => {
         response.data.register.error.message
       );
     } else if (response.data?.register.user) {
-      history.push("/");
+      routeToProject();
     }
     console.log(response);
   };

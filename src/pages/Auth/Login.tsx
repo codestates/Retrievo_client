@@ -11,9 +11,10 @@ import RoundButton, {
   RoundButtonColor,
 } from "../../components/RoundButton";
 import { useLoginMutation } from "../../generated/graphql";
+import useProjectRoute from "./useProjectRoute";
 
 const Login = (): ReactElement => {
-  const history = useHistory();
+  const { routeToProject } = useProjectRoute();
 
   const initialValue = {
     email: "",
@@ -41,9 +42,8 @@ const Login = (): ReactElement => {
         response.data.login.error.message
       );
     } else if (response.data?.login.user) {
-      history.push("/");
+      routeToProject();
     }
-    console.log(response);
   };
 
   return (
