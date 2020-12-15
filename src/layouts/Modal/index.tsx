@@ -8,9 +8,10 @@ import {
   ModalCloseButton,
   Button,
   ModalFooter,
+  ButtonProps,
 } from "@chakra-ui/react";
 
-export interface modalIFC {
+export interface modalIFC extends ButtonProps {
   title: string;
   children: React.ReactElement;
   isOpen: boolean;
@@ -19,6 +20,7 @@ export interface modalIFC {
   footer?: boolean;
   secondaryAction?: () => void;
   secondaryText?: string;
+  buttonText: string;
 }
 
 const ModalLayout: React.FC<modalIFC> = ({
@@ -30,10 +32,14 @@ const ModalLayout: React.FC<modalIFC> = ({
   footer = true,
   secondaryAction,
   secondaryText,
+  buttonText,
+  ...buttonConfig
 }) => {
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <Button onClick={onOpen} {...buttonConfig}>
+        {buttonText}
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
