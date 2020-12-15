@@ -4,8 +4,8 @@ import { Box } from "@chakra-ui/react";
 export const StyledBasicDetailWrapper = styled(Box)`
   form {
     display: flex;
-
     width: 100%;
+
     .css-subxaf {
       width: 360px;
       .chakra-form-control {
@@ -22,15 +22,13 @@ export const StyledBasicDetailWrapper = styled(Box)`
     }
 
     .css-1bvc4cc {
-      div {
-        margin-left: 1rem;
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-end;
+      margin-left: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
 
-        button {
-          padding: 0 2rem;
-        }
+      button {
+        padding: 0 1rem;
       }
     }
   }

@@ -2,7 +2,6 @@ import React from "react";
 import { Box } from "@chakra-ui/react";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
-import RoleSelectInput from "./roleSelectInput";
 
 export const MyProfile: React.FC = () => {
   return (
@@ -32,9 +31,6 @@ export const MyProfile: React.FC = () => {
               name="fullName"
               placeholder="Enter Name"
             />
-          </Box>
-          <Box p={2}>
-            <RoleSelectInput />
           </Box>
           <Box p={2}>
             <InputField

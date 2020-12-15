@@ -3,12 +3,10 @@ import { FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { useField } from "formik";
 
 export type role = { id: string; roleName: string };
+
 export type roleType = {
   [key: string]: string | number | readonly string[] | undefined;
 };
-// interface roleSelectInputProps {
-//   currentRole: string;
-// }
 
 const roles = [
   { key: "Admin", value: "admin" },
