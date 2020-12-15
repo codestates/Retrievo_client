@@ -70,9 +70,9 @@ export const Dashboard: React.FC = () => {
     <>
       <Box>
         <TopNav {...args} />
+        <SideNav />
         <Box display="flex">
-          <SideNav />
-          <Box w="100%" p={9}>
+          <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
               <MyTasks />

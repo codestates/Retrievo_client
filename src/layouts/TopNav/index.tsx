@@ -33,6 +33,10 @@ const TopNav: React.FC<TopNavPropsType> = ({
   };
   return (
     <Box
+      position="fixed"
+      top={0}
+      left={0}
+      zIndex={999}
       bg="achromatic.200"
       w="100%"
       p={4}
