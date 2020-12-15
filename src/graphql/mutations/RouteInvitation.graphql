@@ -1,0 +1,9 @@
+mutation RouteInvitation {
+     routeInvitation {
+    success
+    error {
+      field
+      code
+    }
+  }
+}

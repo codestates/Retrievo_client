@@ -1,0 +1,10 @@
+mutation InviteUser($projectId: String!, $emails: [String!]!) {
+    inviteUser(projectId: $projectId emails: $emails) {
+    error {
+      code
+      message
+      field
+    }
+    success
+  }
+}

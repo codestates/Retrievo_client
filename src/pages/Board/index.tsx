@@ -102,21 +102,24 @@ export const Board: React.FC = () => {
       ],
       update: (cache, { data }) => {
         const newBoardRes = data?.createBoard.boards;
-        // const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
-        // const existingBoards = cache.readQuery({
-        //   query: GetBoardsDocument,
-        //   variables: { projectId },
-        // });
+        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        const existingBoards = cache.readQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+        });
         // console.log("newBoard", newBoard);
-        // console.log("existingBoards", existingBoards);
+        if (!existingBoards) return;
+        console.log("existingBoards", existingBoards);
         // cache.evict({ fieldName: "boards:{}" });
         if (!newBoardRes) return;
+
         cache.writeQuery({
           query: GetBoardsDocument,
           variables: { projectId },
           data: {
             getBoards: {
               boards: [...newBoardRes],
+              // boards: [...newBoardRes],
             },
           },
         });

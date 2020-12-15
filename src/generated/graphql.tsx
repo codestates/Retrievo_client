@@ -124,10 +124,10 @@ export type Board = {
   __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  project: Project;
+  project?: Project;
   boardColumnIndex: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   task?: Maybe<Array<Task>>;
 };
 
@@ -137,19 +137,19 @@ export type Task = {
   rootTaskId?: Maybe<Scalars["String"]>;
   title: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
-  taskIndex: Scalars["Float"];
+  taskIndex?: Scalars["Float"];
   boardRowIndex?: Maybe<Scalars["Float"]>;
-  sprintRowIndex: Scalars["Float"];
-  completed: Scalars["Boolean"];
+  sprintRowIndex?: Scalars["Float"];
+  completed?: Scalars["Boolean"];
   startDate?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["String"]>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   comment?: Maybe<Array<Comment>>;
   file?: Maybe<Array<File>>;
-  sprint: Sprint;
+  sprint?: Sprint;
   board?: Maybe<Board>;
-  project: Project;
+  project?: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -621,6 +621,19 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
+export type RouteInvitationMutationVariables = Exact<{ [key: string]: never }>;
+
+export type RouteInvitationMutation = { __typename?: "Mutation" } & {
+  routeInvitation: { __typename?: "ProjectReturnType" } & Pick<
+    ProjectReturnType,
+    "success"
+  > & {
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<FieldError, "field" | "code">
+      >;
+    };
+};
+
 export type CreateBoardMutationVariables = Exact<{
   title: Scalars["String"];
   projectId: Scalars["String"];
@@ -707,6 +720,22 @@ export type CreateCommentMutation = { __typename?: "Mutation" } & {
             task: { __typename?: "Task" } & Pick<Task, "id" | "title">;
           }
       >
+    >;
+  };
+};
+
+export type CreateGuestMutationVariables = Exact<{ [key: string]: never }>;
+
+export type CreateGuestMutation = { __typename?: "Mutation" } & {
+  createGuest: { __typename?: "UserResponse" } & {
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "field" | "message" | "code"
+      >
+    >;
+    user?: Maybe<
+      { __typename?: "User" } & Pick<User, "id" | "username" | "role">
     >;
   };
 };
@@ -1036,6 +1065,25 @@ export type DeleteUserTaskMutation = { __typename?: "Mutation" } & {
     };
 };
 
+export type InviteUserMutationVariables = Exact<{
+  projectId: Scalars["String"];
+  emails: Array<Scalars["String"]>;
+}>;
+
+export type InviteUserMutation = { __typename?: "Mutation" } & {
+  inviteUser: { __typename?: "ProjectReturnType" } & Pick<
+    ProjectReturnType,
+    "success"
+  > & {
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "code" | "message" | "field"
+        >
+      >;
+    };
+};
+
 export type LoginMutationVariables = Exact<{
   options: LoginInput;
 }>;
@@ -1125,6 +1173,52 @@ export type UpdateLabelMutation = { __typename?: "Mutation" } & {
       Array<{ __typename?: "Label" } & Pick<Label, "id" | "name" | "color">>
     >;
   };
+};
+
+export type UpdateProjectNameMutationVariables = Exact<{
+  name: Scalars["String"];
+  projectId: Scalars["String"];
+}>;
+
+export type UpdateProjectNameMutation = { __typename?: "Mutation" } & {
+  updateProjectName: { __typename?: "ProjectReturnType" } & Pick<
+    ProjectReturnType,
+    "success"
+  > & {
+      project?: Maybe<
+        { __typename?: "Project" } & Pick<Project, "id" | "name">
+      >;
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "code" | "message" | "field"
+        >
+      >;
+    };
+};
+
+export type UpdateProjectPermissionMutationVariables = Exact<{
+  userId: Scalars["String"];
+  isAdmin: Scalars["Boolean"];
+  projectId: Scalars["String"];
+}>;
+
+export type UpdateProjectPermissionMutation = { __typename?: "Mutation" } & {
+  updateProjectPermission: {
+    __typename?: "ProjectPermissionReturnType";
+  } & Pick<ProjectPermissionReturnType, "success"> & {
+      projectPermission?: Maybe<
+        { __typename?: "ProjectPermission" } & Pick<ProjectPermission, "id"> & {
+            project: { __typename?: "Project" } & Pick<Project, "id" | "name">;
+          }
+      >;
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "code" | "message" | "field"
+        >
+      >;
+    };
 };
 
 export type UpdateSprintMutationVariables = Exact<{
@@ -1414,6 +1508,105 @@ export type GetReportSummaryQuery = { __typename?: "Query" } & {
     };
 };
 
+export type GetSprintQueryVariables = Exact<{
+  id: Scalars["String"];
+}>;
+
+export type GetSprintQuery = { __typename?: "Query" } & {
+  getSprint: { __typename?: "SprintResponse" } & {
+    sprint?: Maybe<
+      { __typename?: "Sprint" } & Pick<Sprint, "title" | "description"> & {
+          task: Array<
+            { __typename?: "Task" } & Pick<
+              Task,
+              | "id"
+              | "taskIndex"
+              | "sprintRowIndex"
+              | "title"
+              | "description"
+              | "completed"
+              | "startDate"
+              | "endDate"
+              | "createdAt"
+              | "updatedAt"
+            > & {
+                board?: Maybe<
+                  { __typename?: "Board" } & Pick<Board, "id" | "title">
+                >;
+                userTask?: Maybe<
+                  Array<
+                    { __typename?: "UserTask" } & {
+                      user: { __typename?: "User" } & Pick<
+                        User,
+                        "avatar" | "username" | "email" | "role"
+                      >;
+                    }
+                  >
+                >;
+              }
+          >;
+        }
+    >;
+  };
+};
+
+export type GetSprintsQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type GetSprintsQuery = { __typename?: "Query" } & {
+  getSprints: { __typename?: "SprintResponse" } & {
+    sprints?: Maybe<
+      Array<
+        { __typename?: "Sprint" } & Pick<
+          Sprint,
+          | "id"
+          | "title"
+          | "description"
+          | "row"
+          | "dueDate"
+          | "startedAt"
+          | "didStart"
+          | "isCompleted"
+        > & {
+            task: Array<
+              { __typename?: "Task" } & Pick<
+                Task,
+                | "id"
+                | "title"
+                | "description"
+                | "taskIndex"
+                | "sprintRowIndex"
+                | "completed"
+                | "startDate"
+                | "endDate"
+                | "createdAt"
+                | "updatedAt"
+              > & {
+                  userTask?: Maybe<
+                    Array<
+                      { __typename?: "UserTask" } & {
+                        user: { __typename?: "User" } & Pick<
+                          User,
+                          "username" | "email" | "avatar" | "role"
+                        >;
+                      }
+                    >
+                  >;
+                  board?: Maybe<
+                    { __typename?: "Board" } & Pick<
+                      Board,
+                      "id" | "title" | "createdAt" | "updatedAt"
+                    >
+                  >;
+                }
+            >;
+          }
+      >
+    >;
+  };
+};
+
 export type GetTaskQueryVariables = Exact<{
   projectId: Scalars["String"];
   id: Scalars["String"];
@@ -1478,6 +1671,57 @@ export type GetTaskQuery = { __typename?: "Query" } & {
   };
 };
 
+export const RouteInvitationDocument = gql`
+  mutation RouteInvitation {
+    routeInvitation {
+      success
+      error {
+        field
+        code
+      }
+    }
+  }
+`;
+export type RouteInvitationMutationFn = Apollo.MutationFunction<
+  RouteInvitationMutation,
+  RouteInvitationMutationVariables
+>;
+
+/**
+ * __useRouteInvitationMutation__
+ *
+ * To run a mutation, you first call `useRouteInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRouteInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [routeInvitationMutation, { data, loading, error }] = useRouteInvitationMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRouteInvitationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RouteInvitationMutation,
+    RouteInvitationMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    RouteInvitationMutation,
+    RouteInvitationMutationVariables
+  >(RouteInvitationDocument, baseOptions);
+}
+export type RouteInvitationMutationHookResult = ReturnType<
+  typeof useRouteInvitationMutation
+>;
+export type RouteInvitationMutationResult = Apollo.MutationResult<RouteInvitationMutation>;
+export type RouteInvitationMutationOptions = Apollo.BaseMutationOptions<
+  RouteInvitationMutation,
+  RouteInvitationMutationVariables
+>;
 export const CreateBoardDocument = gql`
   mutation CreateBoard($title: String!, $projectId: String!) {
     createBoard(title: $title, projectId: $projectId) {
@@ -1631,6 +1875,62 @@ export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMut
 export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<
   CreateCommentMutation,
   CreateCommentMutationVariables
+>;
+export const CreateGuestDocument = gql`
+  mutation CreateGuest {
+    createGuest {
+      error {
+        field
+        message
+        code
+      }
+      user {
+        id
+        username
+        role
+      }
+    }
+  }
+`;
+export type CreateGuestMutationFn = Apollo.MutationFunction<
+  CreateGuestMutation,
+  CreateGuestMutationVariables
+>;
+
+/**
+ * __useCreateGuestMutation__
+ *
+ * To run a mutation, you first call `useCreateGuestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGuestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGuestMutation, { data, loading, error }] = useCreateGuestMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateGuestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateGuestMutation,
+    CreateGuestMutationVariables
+  >
+) {
+  return Apollo.useMutation<CreateGuestMutation, CreateGuestMutationVariables>(
+    CreateGuestDocument,
+    baseOptions
+  );
+}
+export type CreateGuestMutationHookResult = ReturnType<
+  typeof useCreateGuestMutation
+>;
+export type CreateGuestMutationResult = Apollo.MutationResult<CreateGuestMutation>;
+export type CreateGuestMutationOptions = Apollo.BaseMutationOptions<
+  CreateGuestMutation,
+  CreateGuestMutationVariables
 >;
 export const CreateProjectDocument = gql`
   mutation CreateProject($name: String!) {
@@ -2405,6 +2705,60 @@ export type DeleteUserTaskMutationOptions = Apollo.BaseMutationOptions<
   DeleteUserTaskMutation,
   DeleteUserTaskMutationVariables
 >;
+export const InviteUserDocument = gql`
+  mutation InviteUser($projectId: String!, $emails: [String!]!) {
+    inviteUser(projectId: $projectId, emails: $emails) {
+      error {
+        code
+        message
+        field
+      }
+      success
+    }
+  }
+`;
+export type InviteUserMutationFn = Apollo.MutationFunction<
+  InviteUserMutation,
+  InviteUserMutationVariables
+>;
+
+/**
+ * __useInviteUserMutation__
+ *
+ * To run a mutation, you first call `useInviteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteUserMutation, { data, loading, error }] = useInviteUserMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      emails: // value for 'emails'
+ *   },
+ * });
+ */
+export function useInviteUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    InviteUserMutation,
+    InviteUserMutationVariables
+  >
+) {
+  return Apollo.useMutation<InviteUserMutation, InviteUserMutationVariables>(
+    InviteUserDocument,
+    baseOptions
+  );
+}
+export type InviteUserMutationHookResult = ReturnType<
+  typeof useInviteUserMutation
+>;
+export type InviteUserMutationResult = Apollo.MutationResult<InviteUserMutation>;
+export type InviteUserMutationOptions = Apollo.BaseMutationOptions<
+  InviteUserMutation,
+  InviteUserMutationVariables
+>;
 export const LoginDocument = gql`
   mutation Login($options: LoginInput!) {
     login(options: $options) {
@@ -2687,6 +3041,134 @@ export type UpdateLabelMutationResult = Apollo.MutationResult<UpdateLabelMutatio
 export type UpdateLabelMutationOptions = Apollo.BaseMutationOptions<
   UpdateLabelMutation,
   UpdateLabelMutationVariables
+>;
+export const UpdateProjectNameDocument = gql`
+  mutation UpdateProjectName($name: String!, $projectId: String!) {
+    updateProjectName(name: $name, projectId: $projectId) {
+      project {
+        id
+        name
+      }
+      success
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+export type UpdateProjectNameMutationFn = Apollo.MutationFunction<
+  UpdateProjectNameMutation,
+  UpdateProjectNameMutationVariables
+>;
+
+/**
+ * __useUpdateProjectNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectNameMutation, { data, loading, error }] = useUpdateProjectNameMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useUpdateProjectNameMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectNameMutation,
+    UpdateProjectNameMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateProjectNameMutation,
+    UpdateProjectNameMutationVariables
+  >(UpdateProjectNameDocument, baseOptions);
+}
+export type UpdateProjectNameMutationHookResult = ReturnType<
+  typeof useUpdateProjectNameMutation
+>;
+export type UpdateProjectNameMutationResult = Apollo.MutationResult<UpdateProjectNameMutation>;
+export type UpdateProjectNameMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectNameMutation,
+  UpdateProjectNameMutationVariables
+>;
+export const UpdateProjectPermissionDocument = gql`
+  mutation UpdateProjectPermission(
+    $userId: String!
+    $isAdmin: Boolean!
+    $projectId: String!
+  ) {
+    updateProjectPermission(
+      userId: $userId
+      isAdmin: $isAdmin
+      projectId: $projectId
+    ) {
+      success
+      projectPermission {
+        id
+        project {
+          id
+          name
+        }
+      }
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+export type UpdateProjectPermissionMutationFn = Apollo.MutationFunction<
+  UpdateProjectPermissionMutation,
+  UpdateProjectPermissionMutationVariables
+>;
+
+/**
+ * __useUpdateProjectPermissionMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectPermissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectPermissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectPermissionMutation, { data, loading, error }] = useUpdateProjectPermissionMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      isAdmin: // value for 'isAdmin'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useUpdateProjectPermissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectPermissionMutation,
+    UpdateProjectPermissionMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    UpdateProjectPermissionMutation,
+    UpdateProjectPermissionMutationVariables
+  >(UpdateProjectPermissionDocument, baseOptions);
+}
+export type UpdateProjectPermissionMutationHookResult = ReturnType<
+  typeof useUpdateProjectPermissionMutation
+>;
+export type UpdateProjectPermissionMutationResult = Apollo.MutationResult<UpdateProjectPermissionMutation>;
+export type UpdateProjectPermissionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectPermissionMutation,
+  UpdateProjectPermissionMutationVariables
 >;
 export const UpdateSprintDocument = gql`
   mutation UpdateSprint($projectId: String!, $options: SprintOptionInput!) {
@@ -3053,7 +3535,6 @@ export const GetMeDocument = gql`
       user {
         username
         email
-        email
         projectPermissions {
           project {
             id
@@ -3256,6 +3737,173 @@ export type GetReportSummaryLazyQueryHookResult = ReturnType<
 export type GetReportSummaryQueryResult = Apollo.QueryResult<
   GetReportSummaryQuery,
   GetReportSummaryQueryVariables
+>;
+export const GetSprintDocument = gql`
+  query GetSprint($id: String!) {
+    getSprint(id: $id) {
+      sprint {
+        title
+        description
+        task {
+          id
+          taskIndex
+          sprintRowIndex
+          title
+          description
+          completed
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          board {
+            id
+            title
+          }
+          userTask {
+            user {
+              avatar
+              username
+              email
+              role
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetSprintQuery__
+ *
+ * To run a query within a React component, call `useGetSprintQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSprintQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSprintQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetSprintQuery(
+  baseOptions: Apollo.QueryHookOptions<GetSprintQuery, GetSprintQueryVariables>
+) {
+  return Apollo.useQuery<GetSprintQuery, GetSprintQueryVariables>(
+    GetSprintDocument,
+    baseOptions
+  );
+}
+export function useGetSprintLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSprintQuery,
+    GetSprintQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetSprintQuery, GetSprintQueryVariables>(
+    GetSprintDocument,
+    baseOptions
+  );
+}
+export type GetSprintQueryHookResult = ReturnType<typeof useGetSprintQuery>;
+export type GetSprintLazyQueryHookResult = ReturnType<
+  typeof useGetSprintLazyQuery
+>;
+export type GetSprintQueryResult = Apollo.QueryResult<
+  GetSprintQuery,
+  GetSprintQueryVariables
+>;
+export const GetSprintsDocument = gql`
+  query GetSprints($projectId: String!) {
+    getSprints(projectId: $projectId) {
+      sprints {
+        id
+        title
+        description
+        row
+        dueDate
+        startedAt
+        didStart
+        isCompleted
+        task {
+          id
+          title
+          description
+          taskIndex
+          sprintRowIndex
+          completed
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userTask {
+            user {
+              username
+              email
+              avatar
+              role
+            }
+          }
+          board {
+            id
+            title
+            createdAt
+            updatedAt
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetSprintsQuery__
+ *
+ * To run a query within a React component, call `useGetSprintsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSprintsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSprintsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetSprintsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetSprintsQuery,
+    GetSprintsQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetSprintsQuery, GetSprintsQueryVariables>(
+    GetSprintsDocument,
+    baseOptions
+  );
+}
+export function useGetSprintsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSprintsQuery,
+    GetSprintsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetSprintsQuery, GetSprintsQueryVariables>(
+    GetSprintsDocument,
+    baseOptions
+  );
+}
+export type GetSprintsQueryHookResult = ReturnType<typeof useGetSprintsQuery>;
+export type GetSprintsLazyQueryHookResult = ReturnType<
+  typeof useGetSprintsLazyQuery
+>;
+export type GetSprintsQueryResult = Apollo.QueryResult<
+  GetSprintsQuery,
+  GetSprintsQueryVariables
 >;
 export const GetTaskDocument = gql`
   query GetTask($projectId: String!, $id: String!) {

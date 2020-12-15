@@ -1,0 +1,14 @@
+mutation UpdateProjectName($name: String!, $projectId: String!) {
+  updateProjectName(name: $name, projectId: $projectId) {
+    project {
+      id
+      name
+    }
+    success
+    error {
+      code
+      message
+      field
+    }
+  }
+}
