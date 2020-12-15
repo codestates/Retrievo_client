@@ -117,7 +117,16 @@ const Landing: React.FC<Record<string, never>> = () => {
             SignIn
           </Button>
         </Box>
-        <Box mt={150} width="60%" marginX="auto" position="relative">
+
+        <Box
+          mt={150}
+          width="80%"
+          maxWidth={1200}
+          display="flex"
+          justifyContent="center"
+          marginX="auto"
+          position="relative"
+        >
           <Image
             src={Shape1}
             alt="background_shape_image"
@@ -138,70 +147,89 @@ const Landing: React.FC<Record<string, never>> = () => {
             objectFit="contain"
           />
 
-          <Slide direction="down" duration={1000}>
-            <Box>
-              <Flex flexDir="row">
-                <ChakraHeading
-                  fontSize="5xl"
-                  color="achromatic.800"
-                  fontWeigh="bold"
-                  mr={3}
-                  zIndex={99}
-                >
-                  Powerhouse
-                </ChakraHeading>
+          <Box display="flex">
+            <Slide direction="down" duration={1000}>
+              <Box mr="3rem">
+                <Flex flexDir="row">
+                  <ChakraHeading
+                    fontSize="5xl"
+                    color="achromatic.800"
+                    fontWeigh="bold"
+                    mr={3}
+                    zIndex={99}
+                  >
+                    Powerhouse
+                  </ChakraHeading>
 
+                  <ChakraHeading
+                    fontSize="5xl"
+                    color="achromatic.800"
+                    fontWeight="normal"
+                    zIndex={99}
+                  >
+                    for
+                  </ChakraHeading>
+                </Flex>
                 <ChakraHeading
                   fontSize="5xl"
                   color="achromatic.800"
                   fontWeight="normal"
                   zIndex={99}
                 >
-                  for
+                  your work flow
                 </ChakraHeading>
-              </Flex>
-              <ChakraHeading
-                fontSize="5xl"
-                color="achromatic.800"
-                fontWeight="normal"
-                zIndex={99}
-              >
-                your work flow
-              </ChakraHeading>
-              <ChakraHeading
-                fontSize="5xl"
-                color="achromatic.800"
-                fontWeight="normal"
-                zIndex={99}
-              >
-                management
-              </ChakraHeading>
-              <Text mt={5} mb={7}>
-                Let Retrievo handle legworks so you can focus on actual Project
-              </Text>
-              <Button
-                border="2px solid #67499E"
-                bgColor="white"
-                color="#67499E"
-                borderRadius={5}
-                w={170}
-                py={5}
-                mr={3}
-              >
-                Take tour
-              </Button>
-              <Button
-                border="2px solid #31D5BF"
-                bgColor="primary.200"
-                color="white"
-                borderRadius={5}
-                w={170}
-                py={5}
-              >
-                Register
-              </Button>
+                <ChakraHeading
+                  fontSize="5xl"
+                  color="achromatic.800"
+                  fontWeight="normal"
+                  zIndex={99}
+                >
+                  management
+                </ChakraHeading>
+                <Text mt={5} mb={7}>
+                  Let Retrievo handle legworks so you can focus on actual
+                  Project
+                </Text>
+                <Button
+                  border="2px solid #67499E"
+                  bgColor="white"
+                  color="#67499E"
+                  borderRadius={5}
+                  w={170}
+                  py={5}
+                  mr={3}
+                >
+                  Take tour
+                </Button>
+                <Button
+                  border="2px solid #31D5BF"
+                  bgColor="primary.200"
+                  color="white"
+                  borderRadius={5}
+                  w={170}
+                  py={5}
+                >
+                  Register
+                </Button>
+              </Box>
+            </Slide>
+
+            <Box
+              zIndex="999"
+              borderRadius="1rem"
+              overflow="hidden"
+              mt="-3rem"
+              boxShadow="xl"
+            >
+              <ReactPlayer
+                url={BoardVideo}
+                playing
+                loop
+                width="630"
+                height="450"
+              />
             </Box>
-          </Slide>
+          </Box>
         </Box>
       </Box>
       {/* taskbar section */}
@@ -586,7 +614,7 @@ const Landing: React.FC<Record<string, never>> = () => {
       {/* footer section */}
       <Box
         width="full"
-        height={150}
+        height={100}
         display="flex"
         justifyContent="space-between"
         alignItems="center"
