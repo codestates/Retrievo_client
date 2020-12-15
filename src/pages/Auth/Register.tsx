@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
+import { Router, useHistory } from "react-router-dom";
 import InputField from "../../components/Input";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
@@ -8,8 +9,9 @@ import RoundButton, {
   IconType,
   ShadowType,
   RoundButtonColor,
-  SizeType,
 } from "../../components/RoundButton";
+import { useRegisterMutation } from "../../generated/graphql";
+import toErrorMap from "../../utils/toErrorMap";
 
 export type RegisterPropsType = {
   sample?: string;
@@ -32,8 +34,26 @@ const Register: React.FC<RegisterPropsType> = () => {
       .oneOf([yup.ref("password"), null], "Passwords must match"),
   });
 
-  const handleRegister = (value: Record<string, any>) => {
-    // TODO
+  const [register] = useRegisterMutation();
+  const history = useHistory();
+
+  const handleRegister = async (
+    value: Record<string, any>,
+    { setFieldError }: any
+  ) => {
+    const { username, email, password } = value;
+    const response = await register({
+      variables: { options: { username, email, password, projectId: null } },
+    });
+    if (response.data?.register.error?.message) {
+      setFieldError(
+        response.data.register.error.field,
+        response.data.register.error.message
+      );
+    } else if (response.data?.register.user) {
+      history.push("/");
+    }
+    console.log(response);
   };
 
   return (

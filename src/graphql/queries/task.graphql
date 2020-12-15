@@ -1,0 +1,42 @@
+query GetTask($projectId:String!, $id:String!){
+  getTask(projectId:$projectId, id:$id){
+    task{
+      board{
+        id
+        title
+      }
+      sprint{
+        id
+        title
+      }
+      file{
+        fileLink
+      }
+      comment{
+        content
+        user{
+          id
+          username
+        }
+      }
+      taskLabel{
+        label{
+          name
+          id
+          color
+        }
+      }
+      userTask{
+        user{
+          id
+          username
+        }
+      }
+    }
+    error{
+      message
+      code
+      field
+    }
+  }
+}

@@ -1,16 +1,17 @@
 import { Flex, Spacer } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikFormProps, FormikHelpers } from "formik";
 import React, { useState } from "react";
 // import * as yup from "yup";
 import Button, { buttonColor } from "../Button";
 // import { testValidationSchema } from "./form.stories";
 
+export type setErrors = () => void;
+
 export type FormProps = {
-  initialValues: Record<string, unknown>;
+  initialValues: Record<string, any>;
   // validationSchema: yup.InferType<typeof testValidationSchema>;
   validationSchema?: any;
   buttonPosition?: "center" | "left" | "right";
-  onSubmit: (value: Record<string, any>) => void;
   isSubmitButton?: boolean;
   isOnBlurSubmit?: boolean;
   isFullButton?: boolean;
@@ -18,11 +19,14 @@ export type FormProps = {
   onCancel?: () => void;
   submitBtnName?: string;
   cancelBtnName?: string;
-};
+  onSubmit: (
+    values: Record<string, any>,
+    actions: FormikHelpers<Record<string, any>>
+  ) => void;
+} & FormikFormProps;
 
 export const CustomForm: React.FC<FormProps> = ({
   initialValues,
-  onSubmit,
   onCancel,
   buttonPosition,
   isSubmitButton,
@@ -67,13 +71,7 @@ export const CustomForm: React.FC<FormProps> = ({
   if (buttonPosition === "center") buttonBoxPosition = "center";
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(value) => {
-        onSubmit(value);
-      }}
-      {...arg}
-    >
+    <Formik initialValues={initialValues} {...arg}>
       {({ isSubmitting }) => {
         return (
           <Form>

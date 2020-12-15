@@ -1,0 +1,13 @@
+# mutation CreateBoard($title:String!, $projectId:String!){
+#   createBoard(title:$title, projectId:$projectId){
+#     boards{
+#       id
+#       boardColumnIndex
+#     }
+#     error{
+#       message
+#       code
+#       field
+#     }
+#   }
+# }

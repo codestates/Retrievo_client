@@ -16,6 +16,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
 };
@@ -26,19 +28,45 @@ export type Query = {
   userSetting: UserResponse;
   projectsOfUser: ProjectListResponse;
   project: ProjectReturnType;
+  reportSummary: ReportSummaryType;
   getBoards: BoardResponse;
   getSprint: SprintResponse;
   getSprints: SprintResponse;
   getTask: TaskResponse;
-  getlabels: LabelResponse;
+  getLabels: LabelResponse;
+};
+
+export type QueryGetUserArgs = {
+  id: Scalars["String"];
+};
+
+export type QueryProjectArgs = {
+  projectId: Scalars["String"];
+};
+
+export type QueryReportSummaryArgs = {
+  projectId: Scalars["String"];
+};
+
+export type QueryGetBoardsArgs = {
+  projectId: Scalars["String"];
 };
 
 export type QueryGetSprintArgs = {
   id: Scalars["String"];
 };
 
+export type QueryGetSprintsArgs = {
+  projectId: Scalars["String"];
+};
+
 export type QueryGetTaskArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
+};
+
+export type QueryGetLabelsArgs = {
+  projectId: Scalars["String"];
 };
 
 export type UserResponse = {
@@ -58,6 +86,7 @@ export type User = {
   updatedAt: Scalars["String"];
   projectPermissions: Array<ProjectPermission>;
   comment: Array<Comment>;
+  userTask?: Maybe<Array<UserTask>>;
 };
 
 export enum RoleTypes {
@@ -119,7 +148,7 @@ export type Task = {
   file?: Maybe<Array<File>>;
   sprint: Sprint;
   board?: Maybe<Board>;
-  project?: Maybe<Project>;
+  project: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -224,6 +253,39 @@ export type ProjectReturnType = {
   success?: Maybe<Scalars["Boolean"]>;
 };
 
+export type ReportSummaryType = {
+  __typename?: "ReportSummaryType";
+  taskCountSummary?: Maybe<TaskSummary>;
+  tasksByAssignee?: Maybe<Array<TasksByAssignee>>;
+  incompleteTaskStatus: Scalars["JSONObject"];
+  error?: Maybe<FieldError>;
+};
+
+export type TaskSummary = {
+  __typename?: "TaskSummary";
+  totalTasksCount?: Maybe<Scalars["Int"]>;
+  completedTasksCount?: Maybe<Scalars["Int"]>;
+  incompleteTasksCount?: Maybe<Scalars["Int"]>;
+  overdueTasksCount?: Maybe<Scalars["Int"]>;
+  completedTasks?: Maybe<UserTask>;
+  incompletedTasks?: Maybe<UserTask>;
+  overdueTasks?: Maybe<UserTask>;
+};
+
+export type TasksByAssignee = {
+  __typename?: "TasksByAssignee";
+  totalTasksCount?: Maybe<Scalars["Int"]>;
+  completedTasksCount?: Maybe<Scalars["Int"]>;
+  incompleteTasksCount?: Maybe<Scalars["Int"]>;
+  overdueTasksCount?: Maybe<Scalars["Int"]>;
+  completedTasks?: Maybe<UserTask>;
+  incompletedTasks?: Maybe<UserTask>;
+  overdueTasks?: Maybe<UserTask>;
+  userId?: Maybe<Scalars["String"]>;
+  username?: Maybe<Scalars["String"]>;
+  avatar?: Maybe<Scalars["String"]>;
+};
+
 export type BoardResponse = {
   __typename?: "BoardResponse";
   boards?: Maybe<Array<Board>>;
@@ -291,8 +353,7 @@ export type MutationRegisterArgs = {
 };
 
 export type MutationLoginArgs = {
-  password: Scalars["String"];
-  email: Scalars["String"];
+  options: LoginInput;
 };
 
 export type MutationUpdateUserSettingArgs = {
@@ -304,102 +365,129 @@ export type MutationCreateProjectArgs = {
 };
 
 export type MutationUpdateProjectNameArgs = {
+  projectId: Scalars["String"];
   name: Scalars["String"];
 };
 
 export type MutationUpdateProjectPermissionArgs = {
+  projectId: Scalars["String"];
   isAdmin: Scalars["Boolean"];
   userId: Scalars["String"];
 };
 
+export type MutationDeleteProjectArgs = {
+  projectId: Scalars["String"];
+};
+
 export type MutationInviteUserArgs = {
+  projectId: Scalars["String"];
   emails: Array<Scalars["String"]>;
 };
 
 export type MutationDeleteMemberArgs = {
+  projectId: Scalars["String"];
   userId: Scalars["String"];
 };
 
 export type MutationCreateBoardArgs = {
+  projectId: Scalars["String"];
   title: Scalars["String"];
 };
 
 export type MutationUpdateBoardArgs = {
+  projectId: Scalars["String"];
   options: BoardUpdateInput;
 };
 
 export type MutationDeleteBoardArgs = {
+  projectId: Scalars["String"];
   newBoardId: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationCreateSprintArgs = {
+  projectId: Scalars["String"];
   title: Scalars["String"];
 };
 
 export type MutationUpdateSprintArgs = {
+  projectId: Scalars["String"];
   options: SprintOptionInput;
 };
 
 export type MutationDeleteSprintArgs = {
   id: Scalars["String"];
+  projectId: Scalars["String"];
 };
 
 export type MutationReadSprintNotificationArgs = {
   id: Scalars["String"];
+  projectId: Scalars["String"];
 };
 
 export type MutationCreateTaskArgs = {
+  projectId: Scalars["String"];
   options: TaskCreateInput;
 };
 
 export type MutationUpdateTaskArgs = {
+  projectId: Scalars["String"];
   options: TaskUpdateInput;
 };
 
 export type MutationDeleteTaskArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationCreateTaskLabelArgs = {
+  projectId: Scalars["String"];
   color: Scalars["String"];
   name: Scalars["String"];
   taskId: Scalars["String"];
 };
 
 export type MutationDeleteTaskLabelArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationUpdateLabelArgs = {
+  projectId: Scalars["String"];
   options: LabelUpdateInput;
   id: Scalars["String"];
 };
 
 export type MutationDeleteLabelArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationCreateUserTaskArgs = {
+  projectId: Scalars["String"];
   taskId: Scalars["String"];
   userId: Scalars["String"];
 };
 
 export type MutationDeleteUserTaskArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationCreateCommentArgs = {
+  projectId: Scalars["String"];
   options: CommentCreateInput;
   taskId: Scalars["String"];
 };
 
 export type MutationUpdateCommentArgs = {
+  projectId: Scalars["String"];
   content: Scalars["String"];
   id: Scalars["String"];
 };
 
 export type MutationDeleteCommentArgs = {
+  projectId: Scalars["String"];
   id: Scalars["String"];
 };
 
@@ -407,6 +495,13 @@ export type UsernamePasswordInput = {
   username: Scalars["String"];
   password: Scalars["String"];
   email: Scalars["String"];
+  projectId?: Maybe<Scalars["String"]>;
+};
+
+export type LoginInput = {
+  email?: Maybe<Scalars["String"]>;
+  password?: Maybe<Scalars["String"]>;
+  projectId?: Maybe<Scalars["String"]>;
 };
 
 export type DeleteResponse = {
@@ -519,90 +614,266 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
-export type RegularErrorFragment = { __typename?: "FieldError" } & Pick<
-  FieldError,
-  "field" | "message"
->;
+export type LoginMutationVariables = Exact<{
+  options: LoginInput;
+}>;
 
-export type GetBoardsQueryVariables = Exact<{ [key: string]: never }>;
+export type LoginMutation = { __typename?: "Mutation" } & {
+  login: { __typename?: "UserResponse" } & {
+    user?: Maybe<{ __typename?: "User" } & Pick<User, "email" | "role">>;
+    error?: Maybe<FieldError>;
+  };
+};
 
-export type GetBoardsQuery = { __typename?: "Query" } & {
-  getBoards: { __typename?: "BoardResponse" } & {
-    error?: Maybe<
-      { __typename?: "FieldError" } & Pick<
-        FieldError,
-        "code" | "message" | "field"
-      >
-    >;
-    boards?: Maybe<
-      Array<
-        { __typename?: "Board" } & Pick<Board, "boardColumnIndex" | "title">
-      >
+export type RegisterMutationVariables = Exact<{
+  options: UsernamePasswordInput;
+}>;
+
+export type RegisterMutation = { __typename?: "Mutation" } & {
+  register: { __typename?: "UserResponse" } & {
+    error?: Maybe<FieldError>;
+    user?: Maybe<
+      { __typename?: "User" } & Pick<User, "username" | "email" | "id">
     >;
   };
 };
 
-export const RegularErrorFragmentDoc = gql`
-  fragment RegularError on FieldError {
-    field
-    message
-  }
-`;
-export const GetBoardsDocument = gql`
-  query GetBoards {
-    getBoards {
+export type GetTaskQueryVariables = Exact<{
+  projectId: Scalars["String"];
+  id: Scalars["String"];
+}>;
+
+export type GetTaskQuery = { __typename?: "Query" } & {
+  getTask: { __typename?: "TaskResponse" } & {
+    task?: Maybe<
+      Array<
+        { __typename?: "Task" } & {
+          board?: Maybe<{ __typename?: "Board" } & Pick<Board, "id" | "title">>;
+          sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
+          file?: Maybe<Array<{ __typename?: "File" } & Pick<File, "fileLink">>>;
+          comment?: Maybe<
+            Array<
+              { __typename?: "Comment" } & Pick<Comment, "content"> & {
+                  user?: Maybe<
+                    { __typename?: "User" } & Pick<User, "id" | "username">
+                  >;
+                }
+            >
+          >;
+          taskLabel?: Maybe<
+            Array<
+              { __typename?: "TaskLabel" } & {
+                label: { __typename?: "Label" } & Pick<
+                  Label,
+                  "name" | "id" | "color"
+                >;
+              }
+            >
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & {
+                user: { __typename?: "User" } & Pick<User, "id" | "username">;
+              }
+            >
+          >;
+        }
+      >
+    >;
+    error?: Maybe<FieldError>;
+  };
+};
+
+export const LoginDocument = gql`
+  mutation Login($options: LoginInput!) {
+    login(options: $options) {
+      user {
+        email
+        role
+      }
       error {
         code
+        field
+        message
+      }
+    }
+  }
+`;
+export type LoginMutationFn = Apollo.MutationFunction<
+  LoginMutation,
+  LoginMutationVariables
+>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    LoginMutation,
+    LoginMutationVariables
+  >
+) {
+  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
+    LoginDocument,
+    baseOptions
+  );
+}
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<
+  LoginMutation,
+  LoginMutationVariables
+>;
+export const RegisterDocument = gql`
+  mutation Register($options: UsernamePasswordInput!) {
+    register(options: $options) {
+      error {
         message
         field
+        code
       }
-      boards {
-        boardColumnIndex
-        title
+      user {
+        username
+        email
+        id
+      }
+    }
+  }
+`;
+export type RegisterMutationFn = Apollo.MutationFunction<
+  RegisterMutation,
+  RegisterMutationVariables
+>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useRegisterMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RegisterMutation,
+    RegisterMutationVariables
+  >
+) {
+  return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
+    RegisterDocument,
+    baseOptions
+  );
+}
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<
+  RegisterMutation,
+  RegisterMutationVariables
+>;
+export const GetTaskDocument = gql`
+  query GetTask($projectId: String!, $id: String!) {
+    getTask(projectId: $projectId, id: $id) {
+      task {
+        board {
+          id
+          title
+        }
+        sprint {
+          id
+          title
+        }
+        file {
+          fileLink
+        }
+        comment {
+          content
+          user {
+            id
+            username
+          }
+        }
+        taskLabel {
+          label {
+            name
+            id
+            color
+          }
+        }
+        userTask {
+          user {
+            id
+            username
+          }
+        }
+      }
+      error {
+        message
+        code
+        field
       }
     }
   }
 `;
 
 /**
- * __useGetBoardsQuery__
+ * __useGetTaskQuery__
  *
- * To run a query within a React component, call `useGetBoardsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBoardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTaskQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTaskQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBoardsQuery({
+ * const { data, loading, error } = useGetTaskQuery({
  *   variables: {
+ *      projectId: // value for 'projectId'
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetBoardsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetBoardsQuery, GetBoardsQueryVariables>
+export function useGetTaskQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTaskQuery, GetTaskQueryVariables>
 ) {
-  return Apollo.useQuery<GetBoardsQuery, GetBoardsQueryVariables>(
-    GetBoardsDocument,
+  return Apollo.useQuery<GetTaskQuery, GetTaskQueryVariables>(
+    GetTaskDocument,
     baseOptions
   );
 }
-export function useGetBoardsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetBoardsQuery,
-    GetBoardsQueryVariables
-  >
+export function useGetTaskLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTaskQuery, GetTaskQueryVariables>
 ) {
-  return Apollo.useLazyQuery<GetBoardsQuery, GetBoardsQueryVariables>(
-    GetBoardsDocument,
+  return Apollo.useLazyQuery<GetTaskQuery, GetTaskQueryVariables>(
+    GetTaskDocument,
     baseOptions
   );
 }
-export type GetBoardsQueryHookResult = ReturnType<typeof useGetBoardsQuery>;
-export type GetBoardsLazyQueryHookResult = ReturnType<
-  typeof useGetBoardsLazyQuery
->;
-export type GetBoardsQueryResult = Apollo.QueryResult<
-  GetBoardsQuery,
-  GetBoardsQueryVariables
+export type GetTaskQueryHookResult = ReturnType<typeof useGetTaskQuery>;
+export type GetTaskLazyQueryHookResult = ReturnType<typeof useGetTaskLazyQuery>;
+export type GetTaskQueryResult = Apollo.QueryResult<
+  GetTaskQuery,
+  GetTaskQueryVariables
 >;
