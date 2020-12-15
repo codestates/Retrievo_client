@@ -238,8 +238,11 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
   const onSprintSelect = (value: string) => console.log(value);
 
   // TODO: getTask API 연결
-  // const task = getTask({id:taskId}); 이런 느낌으로
+  // const task = getTask({id:taskId});q1 <- 이런 느낌으로
+  // const sprint = getSprint(id)q2
+  // const project = getProject(id)q3
 
+  // task => mutation
   // TODO: api와 연결
   const sprintArg = { currentSprint: task.sprint, sprints, onSprintSelect };
   const userSelectArg: UserSelectPropTypes = {

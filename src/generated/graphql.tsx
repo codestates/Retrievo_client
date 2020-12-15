@@ -78,15 +78,15 @@ export type UserResponse = {
 
 export type User = {
   __typename?: "User";
-  id?: Scalars["String"];
-  username?: Scalars["String"];
+  id: Scalars["String"];
+  username: Scalars["String"];
   email?: Maybe<Scalars["String"]>;
   avatar?: Maybe<Scalars["String"]>;
   role?: Maybe<RoleTypes>;
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
-  projectPermissions?: Array<ProjectPermission>;
-  comment?: Array<Comment>;
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
+  projectPermissions: Array<ProjectPermission>;
+  comment: Array<Comment>;
   userTask?: Maybe<Array<UserTask>>;
 };
 
@@ -615,18 +615,26 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
-export type CreateGuestMutationVariables = Exact<{ [key: string]: never }>;
+export type CreateBoardMutationVariables = Exact<{
+  title: Scalars["String"];
+  projectId: Scalars["String"];
+}>;
 
-export type CreateGuestMutation = { __typename?: "Mutation" } & {
-  createGuest: { __typename?: "UserResponse" } & {
+export type CreateBoardMutation = { __typename?: "Mutation" } & {
+  createBoard: { __typename?: "BoardResponse" } & {
+    boards?: Maybe<
+      Array<
+        { __typename?: "Board" } & Pick<
+          Board,
+          "id" | "title" | "boardColumnIndex"
+        >
+      >
+    >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
-        "field" | "message" | "code"
+        "message" | "code" | "field"
       >
-    >;
-    user?: Maybe<
-      { __typename?: "User" } & Pick<User, "id" | "username" | "role">
     >;
   };
 };
@@ -661,6 +669,65 @@ export type RegisterMutation = { __typename?: "Mutation" } & {
     >;
     user?: Maybe<
       { __typename?: "User" } & Pick<User, "username" | "email" | "id">
+    >;
+  };
+};
+
+export type GetBoardsQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type GetBoardsQuery = { __typename?: "Query" } & {
+  getBoards: { __typename?: "BoardResponse" } & {
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
+      >
+    >;
+    boards?: Maybe<
+      Array<
+        { __typename?: "Board" } & Pick<
+          Board,
+          "id" | "title" | "boardColumnIndex"
+        > & {
+            task?: Maybe<
+              Array<
+                { __typename?: "Task" } & Pick<
+                  Task,
+                  | "id"
+                  | "title"
+                  | "boardRowIndex"
+                  | "sprintRowIndex"
+                  | "taskIndex"
+                  | "startDate"
+                  | "endDate"
+                > & {
+                    userTask?: Maybe<
+                      Array<
+                        { __typename?: "UserTask" } & {
+                          user: { __typename?: "User" } & Pick<
+                            User,
+                            "id" | "username" | "avatar"
+                          >;
+                        }
+                      >
+                    >;
+                    taskLabel?: Maybe<
+                      Array<
+                        { __typename?: "TaskLabel" } & {
+                          label: { __typename?: "Label" } & Pick<
+                            Label,
+                            "id" | "name" | "color"
+                          >;
+                        }
+                      >
+                    >;
+                  }
+              >
+            >;
+          }
+      >
     >;
   };
 };
@@ -738,61 +805,63 @@ export type GetTaskQuery = { __typename?: "Query" } & {
   };
 };
 
-export const CreateGuestDocument = gql`
-  mutation CreateGuest {
-    createGuest {
+export const CreateBoardDocument = gql`
+  mutation CreateBoard($title: String!, $projectId: String!) {
+    createBoard(title: $title, projectId: $projectId) {
+      boards {
+        id
+        title
+        boardColumnIndex
+      }
       error {
-        field
         message
         code
-      }
-      user {
-        id
-        username
-        role
+        field
       }
     }
   }
 `;
-export type CreateGuestMutationFn = Apollo.MutationFunction<
-  CreateGuestMutation,
-  CreateGuestMutationVariables
+export type CreateBoardMutationFn = Apollo.MutationFunction<
+  CreateBoardMutation,
+  CreateBoardMutationVariables
 >;
 
 /**
- * __useCreateGuestMutation__
+ * __useCreateBoardMutation__
  *
- * To run a mutation, you first call `useCreateGuestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGuestMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateBoardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBoardMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createGuestMutation, { data, loading, error }] = useCreateGuestMutation({
+ * const [createBoardMutation, { data, loading, error }] = useCreateBoardMutation({
  *   variables: {
+ *      title: // value for 'title'
+ *      projectId: // value for 'projectId'
  *   },
  * });
  */
-export function useCreateGuestMutation(
+export function useCreateBoardMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateGuestMutation,
-    CreateGuestMutationVariables
+    CreateBoardMutation,
+    CreateBoardMutationVariables
   >
 ) {
-  return Apollo.useMutation<CreateGuestMutation, CreateGuestMutationVariables>(
-    CreateGuestDocument,
+  return Apollo.useMutation<CreateBoardMutation, CreateBoardMutationVariables>(
+    CreateBoardDocument,
     baseOptions
   );
 }
-export type CreateGuestMutationHookResult = ReturnType<
-  typeof useCreateGuestMutation
+export type CreateBoardMutationHookResult = ReturnType<
+  typeof useCreateBoardMutation
 >;
-export type CreateGuestMutationResult = Apollo.MutationResult<CreateGuestMutation>;
-export type CreateGuestMutationOptions = Apollo.BaseMutationOptions<
-  CreateGuestMutation,
-  CreateGuestMutationVariables
+export type CreateBoardMutationResult = Apollo.MutationResult<CreateBoardMutation>;
+export type CreateBoardMutationOptions = Apollo.BaseMutationOptions<
+  CreateBoardMutation,
+  CreateBoardMutationVariables
 >;
 export const LoginDocument = gql`
   mutation Login($options: LoginInput!) {
@@ -902,6 +971,89 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const GetBoardsDocument = gql`
+  query GetBoards($projectId: String!) {
+    getBoards(projectId: $projectId) {
+      error {
+        code
+        message
+        field
+      }
+      boards {
+        id
+        title
+        boardColumnIndex
+        task {
+          id
+          title
+          boardRowIndex
+          sprintRowIndex
+          taskIndex
+          startDate
+          endDate
+          userTask {
+            user {
+              id
+              username
+              avatar
+            }
+          }
+          taskLabel {
+            label {
+              id
+              name
+              color
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetBoardsQuery__
+ *
+ * To run a query within a React component, call `useGetBoardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBoardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBoardsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetBoardsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBoardsQuery, GetBoardsQueryVariables>
+) {
+  return Apollo.useQuery<GetBoardsQuery, GetBoardsQueryVariables>(
+    GetBoardsDocument,
+    baseOptions
+  );
+}
+export function useGetBoardsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetBoardsQuery,
+    GetBoardsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetBoardsQuery, GetBoardsQueryVariables>(
+    GetBoardsDocument,
+    baseOptions
+  );
+}
+export type GetBoardsQueryHookResult = ReturnType<typeof useGetBoardsQuery>;
+export type GetBoardsLazyQueryHookResult = ReturnType<
+  typeof useGetBoardsLazyQuery
+>;
+export type GetBoardsQueryResult = Apollo.QueryResult<
+  GetBoardsQuery,
+  GetBoardsQueryVariables
 >;
 export const GetMeDocument = gql`
   query GetMe {

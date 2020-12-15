@@ -17,6 +17,7 @@ import Text from "../../components/Text";
 
 // }
 
+// liveserver data 로 만들어줘야함.
 const args = {
   projects: [
     {
@@ -70,9 +71,9 @@ export const Dashboard: React.FC = () => {
     <>
       <Box>
         <TopNav {...args} />
+        <SideNav />
         <Box display="flex">
-          <SideNav />
-          <Box w="100%" p={9}>
+          <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
               <MyTasks />
@@ -86,7 +87,7 @@ export const Dashboard: React.FC = () => {
             <Box mt={9}>
               <ReportCard />
             </Box>
-            <Box mt={9}>
+            <Box mt={9} mb={20}>
               <Charts />
             </Box>
           </Box>
