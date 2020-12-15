@@ -1,26 +1,18 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
-import { addDecorator } from "@storybook/react";
-import { ChakraProvider, ThemeProvider } from "@chakra-ui/react";
+import { ChakraProvider, CSSReset } from "@chakra-ui/react";
 import theme from "../src/styles/theme";
 
+console.log(theme);
 export const decorators = [
   (Story) => (
     <ChakraProvider theme={theme}>
+      <CSSReset />
       <Story />
     </ChakraProvider>
   ),
   withKnobs,
 ];
-
-// addDecorator((storyFn) => (
-//   <ChakraProvider>
-//     <ThemeProvider theme={theme}>
-//       {console.log(theme)}
-//       {storyFn()}
-//     </ThemeProvider>
-//   </ChakraProvider>
-// ));
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -30,4 +22,5 @@ export const parameters = {
         ? 0
         : a[1].id.localeCompare(b[1].id, undefined, { numeric: true }),
   },
+  controls: { expanded: true },
 };
