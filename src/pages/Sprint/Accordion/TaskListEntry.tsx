@@ -1,15 +1,32 @@
-import { Flex, Box, Text, Divider, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Box, Text, Divider } from "@chakra-ui/react";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import Avatar, { AvatarSize } from "../../../components/Avatar";
 import AvatarGroup from "../../../components/AvatarGroup";
 import Label from "../../../components/Label";
-import TaskBar from "../../../layouts/TaskBar";
+// import TaskBar from "../../../layouts/TaskBar";
+
+type userTaskUserType = {
+  src?: string;
+  name?: string;
+};
+
+type userTaskType = {
+  user: userTaskUserType;
+};
+
+type taskDataType = {
+  id: string;
+  taskIndex: number;
+  sprintRowIndex: number;
+  title: string;
+  board: Record<string, string>;
+  userTask: userTaskType[];
+};
 
 type taskListEntryProps = {
-  taskData: any;
-  mappedIndex: any;
+  taskData: taskDataType;
+  mappedIndex: number;
 };
 
 export const TaskListEntry: React.FC<taskListEntryProps> = ({
@@ -43,7 +60,9 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                 <AvatarGroup
                   max={3}
                   size={AvatarSize.sm}
-                  avatars={taskData.userTask.map((user: any) => user.user)}
+                  avatars={taskData.userTask.map(
+                    (user: userTaskType) => user.user
+                  )}
                 />
               ) : (
                 <Avatar

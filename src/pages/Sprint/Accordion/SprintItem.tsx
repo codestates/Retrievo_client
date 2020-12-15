@@ -17,11 +17,12 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import TaskList from "./TaskList";
+import { sprintType } from "./index";
 
 type sprintItemProps = {
-  sprintData: any;
-  ref?: any;
-  mappedIndex?: any;
+  sprintData: sprintType;
+  ref?: HTMLElement;
+  mappedIndex: number;
 };
 
 export const SprintItem: React.FC<sprintItemProps> = ({
@@ -34,7 +35,7 @@ export const SprintItem: React.FC<sprintItemProps> = ({
     <Draggable
       key={sprintData.id}
       draggableId={sprintData.id}
-      index={mappedIndex} // 0 1 2 3 ,4 5sprintData.row
+      index={mappedIndex}
     >
       {(provided) => {
         return (

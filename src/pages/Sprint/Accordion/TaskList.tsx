@@ -15,13 +15,13 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Stephan Shields",
         },
       },
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Stephan Greider",
         },
       },
@@ -38,7 +38,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Caden Gorczany",
         },
       },
@@ -55,7 +55,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Vincenzo Quitzon",
         },
       },
@@ -72,7 +72,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Lionel Mueller",
         },
       },
@@ -89,7 +89,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Laurel Denesik",
         },
       },
@@ -106,7 +106,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Mr. Rafaela Welch",
         },
       },
@@ -123,7 +123,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Kaitlyn Mante",
         },
       },
@@ -140,7 +140,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Katlynn Hirthe",
         },
       },
@@ -157,7 +157,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Justina Parisian",
         },
       },
@@ -174,7 +174,7 @@ const taskData = [
     userTask: [
       {
         user: {
-          src: null,
+          src: undefined,
           name: "Isobel Willms",
         },
       },
@@ -184,7 +184,7 @@ const taskData = [
 
 export const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState(taskData);
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
     const items = Array.from(tasks);
     const [reorderedItem] = items.splice(result.source.index, 1);

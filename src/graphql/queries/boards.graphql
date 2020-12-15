@@ -1,0 +1,25 @@
+# query GetBoards($projectId:String!){
+#   getBoards(projectId:$projectId){
+#     error{
+#       code
+#       message
+#       field
+#     }
+#     boards{
+#       id
+#       boardColumnIndex
+#       project{
+#         id
+#       }
+#       task{
+#         boardRowIndex
+#         title
+#         userTask{
+#           user{
+#             username
+#           }
+#         }
+#       }
+#     }
+#   }
+# }

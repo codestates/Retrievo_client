@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import SprintItem from "./SprintItem";
 
@@ -66,13 +66,20 @@ const sprintData = [
   },
 ];
 
-// type sprintsInputType = {
-//   // projectId: string;
-// }
+export type sprintType = {
+  id: string;
+  title: string;
+  description: string;
+  row: number;
+  dueDate: string;
+  startedAt: string;
+  didStart: boolean;
+  isCompleted: boolean;
+};
 
 export const Sprints: React.FC = () => {
-  const [sprints, setSprints] = useState<any[]>(sprintData);
-  const onDragEnd = (result: any) => {
+  const [sprints, setSprints] = useState<sprintType[]>(sprintData);
+  const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
     const items = Array.from(sprints);
     const [reorderedItem] = items.splice(result.source.index, 1);
