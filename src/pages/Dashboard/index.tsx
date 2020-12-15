@@ -17,6 +17,7 @@ import Text from "../../components/Text";
 
 // }
 
+// liveserver data 로 만들어줘야함.
 const args = {
   projects: [
     {
