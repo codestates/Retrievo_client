@@ -1,5 +1,5 @@
-mutation CreateBoard($title:String!, $projectId:String!){
-  createBoard(title:$title, projectId:$projectId){
+mutation DeleteBoard($id:String!, $newBoardId:String!, $projectId:String!){
+  deleteBoard(id: $id, newBoardId:$newBoardId, projectId: $projectId) {
     boards{
       id
       title

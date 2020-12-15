@@ -11,8 +11,13 @@ import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 /* GraphQL */
 import {
   GetBoardsDocument,
+  useCreateBoardMutation,
+  useDeleteBoardMutation,
   useGetBoardsLazyQuery,
   useGetBoardsQuery,
+  CreateBoardDocument,
+  GetBoardsQuery,
+  BoardResponse,
 } from "../../generated/graphql";
 
 // interface indexProps {
@@ -69,9 +74,89 @@ const args = {
 };
 
 export const Board: React.FC = () => {
+  // FIXME
   const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
-  const handleBoardCreate = () => console.log("create!");
-  const handleBoardDelete = (id: string) => console.log("delete", id);
+
+  /* Mutation, Query */
+  const { loading, data, refetch } = useGetBoardsQuery({
+    variables: { projectId },
+  });
+  const [
+    createBoard,
+    { data: createdData, loading: createLoading, error: createError },
+  ] = useCreateBoardMutation();
+  const [
+    deleteBoard,
+    { data: deletedData, loading: deleteLoading, error: deleteError },
+  ] = useDeleteBoardMutation();
+
+  /* Function Props */
+  const handleBoardCreate = async (title: string, projectId: string) => {
+    await createBoard({
+      variables: { title, projectId },
+      refetchQueries: [
+        {
+          query: GetBoardsDocument,
+          variables: { projectId },
+        },
+      ],
+      update: (cache, { data }) => {
+        const newBoardRes = data?.createBoard.boards;
+        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        const existingBoards = cache.readQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+        });
+        // console.log("newBoard", newBoard);
+        if (!existingBoards) return;
+        console.log("existingBoards", existingBoards);
+        // cache.evict({ fieldName: "boards:{}" });
+        if (!newBoardRes) return;
+
+        cache.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: [...newBoardRes],
+              // boards: [...newBoardRes],
+            },
+          },
+        });
+        // console.log("handleCreateBoard", writeRes);
+        if (refetch) refetch();
+      },
+    });
+  };
+
+  const handleBoardDelete = async (
+    id: string,
+    newBoardId: string,
+    projectId: string
+  ) => {
+    await deleteBoard({
+      variables: {
+        id,
+        newBoardId,
+        projectId,
+      },
+      update: (cache, { data }) => {
+        const newBoardRes = data?.deleteBoard.boards;
+        if (!newBoardRes) return;
+        cache.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: [...newBoardRes],
+            },
+          },
+        });
+        if (refetch) refetch();
+      },
+    });
+  };
+
   const handleTaskClick = (id: string) => console.log("click", id);
   const handleTaskCreate = () => console.log("create!");
   const handleTaskDelete = (id: string) => console.log("delete", id);
@@ -80,13 +165,9 @@ export const Board: React.FC = () => {
   //     projectId: "04f025f8-234c-49b7-b9bf-7b7f94415569",
   //   },
   // });
-  const { loading, data } = useGetBoardsQuery({
-    variables: { projectId },
-  });
-  if (loading || !data?.getBoards.boards) return <p>Loading</p>;
 
-  // const boards = data?.getBoards.boards.map((board) => {});
-  console.log("data", data?.getBoards.boards);
+  // console.log("data", data?.getBoards);
+
   // FIXME : board가 왜 들어가는고얌..
   return (
     <>
@@ -97,19 +178,21 @@ export const Board: React.FC = () => {
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
-              {/* TODO: getBoards에서 특정 에러가 난다면 -> 스프린트가 없는 것 */}
-              {/* <TaskBoardContainer /> */}
-              <TaskBoardList
-                projectId={projectId}
-                handleBoardCreate={handleBoardCreate}
-                handleBoardDelete={handleBoardDelete}
-                handleTaskClick={handleTaskClick}
-                handleTaskCreate={handleTaskCreate}
-                handleTaskDelete={handleTaskDelete}
-                boards={data?.getBoards ? data?.getBoards.boards : []}
-                // boards={dummyBoardData.boards}
-                board={data?.getBoards.boards[0]}
-              />
+              {loading || !data?.getBoards.boards ? (
+                <TaskBoardContainer />
+              ) : (
+                <TaskBoardList
+                  projectId={projectId}
+                  handleBoardCreate={handleBoardCreate}
+                  handleBoardDelete={handleBoardDelete}
+                  handleTaskClick={handleTaskClick}
+                  handleTaskCreate={handleTaskCreate}
+                  handleTaskDelete={handleTaskDelete}
+                  boards={data?.getBoards ? data?.getBoards.boards : []}
+                  // boards={dummyBoardData.boards}
+                  board={data?.getBoards.boards[0]}
+                />
+              )}
             </Box>
           </Box>
         </Box>

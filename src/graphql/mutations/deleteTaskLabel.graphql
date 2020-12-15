@@ -1,0 +1,10 @@
+mutation DeleteTaskLabel($id:String!, $projectId:String!){
+  deleteTaskLabel(id:$id,projectId:$projectId){
+    success
+    error{
+      code
+      field
+      message
+    }
+  }
+}

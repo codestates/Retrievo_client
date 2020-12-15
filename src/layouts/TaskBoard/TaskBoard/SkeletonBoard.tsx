@@ -14,7 +14,7 @@ export type boardType = {
 };
 
 export type SkeletonBoardProps = {
-  handleBoardCreate: (board: boardType, projectId: string) => void;
+  handleBoardCreate: (title: string, projectId: string) => Promise<any>;
   projectId: string;
 };
 
@@ -34,9 +34,22 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
     );
   };
 
-  const handleBoardCreateSubmit = (value: boardType) => {
-    handleBoardCreate(value, projectId);
+  const handleBoardCreateSubmit = async (
+    value: boardType,
+    { setFieldError }: any
+  ) => {
+    await handleBoardCreate(value.board, projectId);
+    // console.log(res);
+    // if (res.data?.createBoard.error) {
+    //   console.log("error");
+    //   setFieldError(
+    //     res.data.createBoard.error.field,
+    //     res.data.createBoard.error.message
+    //   );
+    // } else {
+    //   console.log("success");
     setIsCreating(false);
+    // }
   };
 
   const validationSchema = yup.object({
@@ -56,7 +69,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         // isCancelButton
         onCancel={() => setIsCreating(false)}
       >
-        <Box display="flex" flexDir="row" alignItems="center" px={2}>
+        <Box display="flex" flexDir="row" alignItems="center" px={2} w={330}>
           <Input
             isEditable={false}
             isLabelNonVisible

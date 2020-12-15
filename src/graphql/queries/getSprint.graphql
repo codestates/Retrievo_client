@@ -1,0 +1,33 @@
+query GetSprint($id: String!) {
+ 	getSprint(id: $id) {
+    sprint {
+        title
+        description
+      	
+      task {
+        id
+        taskIndex
+        sprintRowIndex
+        title
+        description
+        completed
+        startDate
+        endDate
+        createdAt
+        updatedAt
+        board {
+          id
+         	title
+        }
+        userTask {
+          user {
+            avatar
+            username
+            email
+            role
+          }
+        }
+      }
+    }
+  }
+}

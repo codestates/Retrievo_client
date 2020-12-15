@@ -1,0 +1,26 @@
+query GetProject($projectId: String!){
+	project(projectId:$projectId) {
+        project {
+            id
+            name
+            createdAt
+            updatedAt
+            projectPermissions {
+                id
+                isAdmin
+                user {
+                    id
+                    username
+                    email
+                    role
+                    avatar
+                }
+            }
+        }
+        error {
+            code
+            message
+            field
+        }
+    }
+}

@@ -1,0 +1,14 @@
+mutation UpdateLabel($projectId:String!,$options:LabelUpdateInput!,$id:String!){
+  updateLabel(projectId:$projectId,options:$options,id:$id){
+    error{
+      code
+      field
+      message
+    }
+    label{
+      id
+      name
+      color
+    }
+  }
+}

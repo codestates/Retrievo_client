@@ -1,0 +1,10 @@
+mutation DeleteSprint($id:String!, $projectId:String!){
+  deleteSprint(id: $id, projectId: $projectId) {
+    success
+    error {
+      code
+      field
+    	message
+    }
+  }
+}

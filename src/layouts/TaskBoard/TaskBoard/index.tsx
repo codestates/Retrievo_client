@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
@@ -7,6 +7,7 @@ import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import TaskCard, { TaskCardProps } from "../TaskCard";
 import IconButton from "../../../components/IconButton";
+import Modal from "../../Modal/index";
 import {
   Board as boardType,
   Task as taskType,
@@ -22,8 +23,11 @@ import {
 export type TaskBoardProps = TaskCardProps & {
   board: boardType;
   // ref: (element: HTMLElement | null) => any;
-  handleBoardCreate: () => void;
-  handleBoardDelete: (id: string) => void;
+  handleBoardDelete: (
+    id: string,
+    newBoardId: string,
+    projectId: string
+  ) => void;
   handleTaskCreate: () => void;
   handleTaskDelete: (id: string) => void;
   handleTaskClick: (id: string) => void;
@@ -37,6 +41,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   ...props
 }): ReactElement => {
   const { handleTaskDelete, handleTaskClick } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const taskConfig = { handleTaskDelete, handleTaskClick };
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
     return (
@@ -93,7 +98,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           aria-label="delete board"
           iconButtonType="deleteBin"
           color="achromatic.600"
-          onClick={() => handleBoardDelete(board.id)}
+          onClick={() => setIsModalOpen(true)}
         />
       </Box>
       <Box
@@ -129,132 +134,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           {changeIconColor(<BsPlusCircleFill />, "#828282", "25")}
         </Box>
       </Box>
+      {/* <Modal title="Which Board you want to move the tasks?"
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        secondaryAction={}
+      >
+        <Dropdown />
+      </Modal> */}
     </Box>
   );
 };
 
 export default TaskBoard;
 
-/*
-{
-  "data": {
-    "getBoards": {
-      "boards": [
-        {
-          "title": "Hat Rustic Frozen Hat",
-          "boardColumnIndex": 0,
-          "task": [
-            {
-              "title": "Liberian Dollar Ball Director",
-              "boardRowIndex": null,
-              "sprintRowIndex": 1,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Katlynn Smitham DDS"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "Borders",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "payment Cliffs indigo",
-              "boardRowIndex": null,
-              "sprintRowIndex": 3,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Vickie Beer"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "California",
-                    "color": "RED"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Keys Borders Berkshire",
-              "boardRowIndex": null,
-              "sprintRowIndex": 5,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Camille Morissette"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "backing up",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "matrices payment asymmetric",
-              "boardRowIndex": null,
-              "sprintRowIndex": 6,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Bill Witting III"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "sky blue",
-                    "color": "RED"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Michigan payment Graphic Interface",
-              "boardRowIndex": null,
-              "sprintRowIndex": 8,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Gina Emmerich"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "Clothing",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "error": null
-    }
-  }
-}
-
-*/
+// TODO : delete Modal dropdown -> id 연결
+// TODO : rerender 문제 해결

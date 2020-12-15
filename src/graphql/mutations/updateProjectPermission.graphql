@@ -1,0 +1,18 @@
+mutation UpdateProjectPermission($userId: String!, $isAdmin: Boolean!, $projectId: String!) {
+  updateProjectPermission(userId: $userId, isAdmin:$isAdmin, projectId:$projectId) {
+  	success
+    projectPermission{
+      id
+      project {
+        id
+        name
+      }
+    }
+    error{
+      code
+      message
+      field
+    }
+  }
+
+}

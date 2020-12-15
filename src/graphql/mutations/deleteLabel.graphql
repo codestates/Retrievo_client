@@ -1,0 +1,10 @@
+mutation DeleteLabel($projectId:String!,$id:String!){
+  deleteLabel(projectId:$projectId,id:$id){
+    error{
+      code
+      field
+      message
+    }
+    success
+  }
+}
