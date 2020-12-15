@@ -53,7 +53,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     if (!tasks.length) return null;
     return tasks.map((task, index) => {
       return (
-        <Draggable index={index} draggableId={task.id} key={task.id}>
+        <Draggable
+          index={task.boardRowIndex || index}
+          draggableId={task.id}
+          key={task.id}
+        >
           {(provided) => (
             <Box
               mb={4}

@@ -19,8 +19,7 @@ export const sideBarMenu = [
     name: "Dashboard",
     icon: <BiChalkboard />,
     path: "/project/dashboard",
-    description:
-      "Dashboard enables you to monitor the status of individual task",
+    description: "Monitor status of individual tasks",
   },
   {
     name: "Sprint",
@@ -32,8 +31,7 @@ export const sideBarMenu = [
     name: "Board",
     icon: <CgBoard />,
     path: "/project/board",
-    description:
-      "Dashboard enables you to monitor the status of individual task",
+    description: "Manage your tasks by task status on kanban board",
   },
   {
     name: "Timeline",
@@ -53,8 +51,7 @@ export const sideBarMenu = [
     name: "Setting",
     icon: <FiSettings />,
     path: "/project/setting",
-    description:
-      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    description: "Manage team members' access permission ",
   },
 ];
 

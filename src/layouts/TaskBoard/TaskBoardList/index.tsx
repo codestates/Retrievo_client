@@ -40,13 +40,13 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   };
 
   const renderBoards = (boards: boardType[]) => {
-    return boards.map((currentBoard, index) => {
+    return boards.map((currentBoard) => {
       return (
         <Draggable
-          index={index}
+          index={currentBoard.boardColumnIndex}
           draggableId={currentBoard.id}
           key={currentBoard.id}
-          isDragDisabled={index === boards.length - 1}
+          isDragDisabled={currentBoard.boardColumnIndex === boards.length - 1}
         >
           {(provided) => (
             <Box
