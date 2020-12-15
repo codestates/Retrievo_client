@@ -106,9 +106,9 @@ export const Board: React.FC = () => {
                 handleTaskClick={handleTaskClick}
                 handleTaskCreate={handleTaskCreate}
                 handleTaskDelete={handleTaskDelete}
-                // boards={data?.getBoards.boards}
-                boards={dummyBoardData.boards}
-                board={dummyBoardData.boards[0]}
+                boards={data?.getBoards.boards}
+                // boards={dummyBoardData.boards}
+                board={data?.getBoards.boards[0]}
               />
             </Box>
             {/* <Box mt={9}>

@@ -123,10 +123,10 @@ export type Board = {
   __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  project: Project;
+  project?: Project;
   boardColumnIndex: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   task?: Maybe<Array<Task>>;
 };
 
@@ -136,19 +136,19 @@ export type Task = {
   rootTaskId?: Maybe<Scalars["String"]>;
   title: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
-  taskIndex: Scalars["Float"];
+  taskIndex?: Scalars["Float"];
   boardRowIndex?: Maybe<Scalars["Float"]>;
-  sprintRowIndex: Scalars["Float"];
-  completed: Scalars["Boolean"];
+  sprintRowIndex?: Scalars["Float"];
+  completed?: Scalars["Boolean"];
   startDate?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["String"]>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   comment?: Maybe<Array<Comment>>;
   file?: Maybe<Array<File>>;
-  sprint: Sprint;
+  sprint?: Sprint;
   board?: Maybe<Board>;
-  project: Project;
+  project?: Project;
   userTask?: Maybe<Array<UserTask>>;
   taskLabel?: Maybe<Array<TaskLabel>>;
 };
@@ -674,6 +674,7 @@ export type GetBoardsQuery = { __typename?: "Query" } & {
                   | "title"
                   | "boardRowIndex"
                   | "sprintRowIndex"
+                  | "taskIndex"
                   | "startDate"
                   | "endDate"
                 > & {
@@ -883,6 +884,7 @@ export const GetBoardsDocument = gql`
           title
           boardRowIndex
           sprintRowIndex
+          taskIndex
           startDate
           endDate
           userTask {
