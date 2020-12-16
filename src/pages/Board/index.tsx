@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { RouteComponentProps } from "react-router-dom";
 /* Layouts */
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Box, useDisclosure, Text } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -88,7 +88,6 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 }) => {
   // FIXME
   const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
-  const [isTaskbarOpen, setIsTaskbarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // text "04f025f8-234c-49b7-b9bf-7b7f94415569";
@@ -116,7 +115,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     createBoard,
     { data: createdData, loading: createLoading, error: createError },
   ] = useCreateBoardMutation();
-  console.log("i dont know", data);
+  // console.log("i dont know", data);
 
   const [
     deleteBoard,
@@ -252,10 +251,13 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 
   const handleTaskClick = (id: string) => {
     console.log("click!", id);
-    onOpen();
     // setIsTaskbarOpen(true);
     setSelectedTask(id);
   };
+
+  useEffect(() => {
+    if (selectedTask) onOpen();
+  }, [selectedTask, onOpen]);
   // const [getBoards, { loading, data, refetch }] = useGetBoardsLazyQuery({
   //   variables:
   //     projectId: "04f025f8-234c-49b7-b9bf-7b7f94415569",
@@ -264,10 +266,10 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 
   // console.log("data", data?.getBoards);
 
-  const render = () => {
-    console.log("render again");
-    return null;
-  };
+  // const render = () => {
+  //   console.log("render again");
+  //   return null;
+  // };
 
   // if (loading || !data?.getBoards.boards) {
   //   return <TaskBoardContainer />;
@@ -283,7 +285,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
-              {render()}
+              {/* {render()} */}
               {loading || !data?.getBoards.boards ? (
                 <TaskBoardContainer />
               ) : (
@@ -312,7 +314,9 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
             isOpen={isOpen}
             onClose={onClose}
           />
-        ) : null}
+        ) : (
+          <Text>oh?</Text>
+        )}
       </Box>
     </>
   );

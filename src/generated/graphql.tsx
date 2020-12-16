@@ -1476,18 +1476,30 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 export type GetMeQuery = { __typename?: "Query" } & {
   getMe: { __typename?: "UserResponse" } & {
     user?: Maybe<
-      { __typename?: "User" } & Pick<User, "username" | "email"> & {
+      { __typename?: "User" } & Pick<User, "id" | "username" | "email"> & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
               project: { __typename?: "Project" } & Pick<Project, "id">;
             }
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & {
+                task: { __typename?: "Task" } & Pick<Task, "id" | "title"> & {
+                    board?: Maybe<
+                      { __typename?: "Board" } & Pick<Board, "title">
+                    >;
+                    project: { __typename?: "Project" } & Pick<Project, "id">;
+                  };
+              }
+            >
           >;
         }
     >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
-        "field" | "code" | "message"
+        "code" | "message" | "field"
       >
     >;
   };
@@ -3689,6 +3701,7 @@ export const GetMeDocument = gql`
   query GetMe {
     getMe {
       user {
+        id
         username
         email
         projectPermissions {
@@ -3696,11 +3709,23 @@ export const GetMeDocument = gql`
             id
           }
         }
+        userTask {
+          task {
+            id
+            title
+            board {
+              title
+            }
+            project {
+              id
+            }
+          }
+        }
       }
       error {
-        field
         code
         message
+        field
       }
     }
   }
