@@ -8,13 +8,18 @@ import { Box } from "@chakra-ui/react";
 import _ from "lodash";
 import Label from "../Label";
 
-type item = { id: string; value: string; label: string; color: string };
+export type labelItem = {
+  id: string;
+  value: string;
+  label: string;
+  color: string;
+};
 
 export type OptionsType = {
-  options: item[];
-  defaultValue?: item[];
-  createTaskLabel: (item: item) => void;
-  deleteTaskLabel: (item: item) => void;
+  options: labelItem[] | null | undefined;
+  defaultValue?: labelItem[] | null | undefined;
+  createTaskLabel: (item: labelItem) => void;
+  deleteTaskLabel: (item: labelItem) => void;
 };
 
 enum actionTypes {
@@ -33,25 +38,25 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   createTaskLabel,
   deleteTaskLabel,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<item[]>(
+  const [currentOptions, setCurrentOptions] = useState<labelItem[]>(
     defaultValue || []
   );
 
-  const getCreatedValue = (newValue: item[]): item[] => {
+  const getCreatedValue = (newValue: labelItem[]): labelItem[] => {
     return _.difference(newValue, currentOptions);
   };
 
-  const deleteValueFromValues = (deletedValue: item): item[] => {
+  const deleteValueFromValues = (deletedValue: labelItem): labelItem[] => {
     return _.without(currentOptions, deletedValue);
   };
 
-  const handleCreateChange = (newValue: item[]) => {
+  const handleCreateChange = (newValue: labelItem[]) => {
     const created = getCreatedValue(newValue);
     createTaskLabel(created[0]);
     setCurrentOptions(newValue);
   };
 
-  const handleDeleteChange = (deletedValue: item) => {
+  const handleDeleteChange = (deletedValue: labelItem) => {
     const newValue = deleteValueFromValues(deletedValue);
     deleteTaskLabel(deletedValue);
     setCurrentOptions(newValue);
@@ -99,7 +104,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
       <CreatableSelect
         isMulti
         onChange={handleChange}
-        options={options}
+        options={options || undefined}
         defaultValue={defaultValue}
         placeholder="Select Task's Label"
         styles={{

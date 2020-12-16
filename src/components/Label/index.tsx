@@ -8,9 +8,9 @@ import {
 } from "@chakra-ui/react";
 
 export type label = {
-  id: string;
-  name: string;
-  color: string;
+  id: string | undefined;
+  name: string | undefined;
+  color: string | undefined;
 };
 
 export type LabelProps = ChakraLabelPropsType & {
@@ -46,6 +46,7 @@ const Label: React.FC<LabelProps> = ({
     bgColor: backgroundColor,
     _hover: hover,
   };
+
   const renderOptions = () => {
     return labels?.map((label: label) => {
       return (

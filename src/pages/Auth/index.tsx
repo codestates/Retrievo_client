@@ -71,7 +71,7 @@ const RegisterAndLogin: React.FC<RouteComponentProps<MatchParams>> = ({
       <Button onClick={onOpen}>열려라 태스크</Button>
       <TaskBar
         {...arg}
-        taskId="018da5e5-a28e-4183-bc8e-8adeac1df54d"
+        taskId="0d71f3a1-3c47-4ef4-904c-970dcf64f69d"
         isOpen={isOpen}
         onClose={onClose}
       />

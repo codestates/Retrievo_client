@@ -21,166 +21,26 @@ import { BiPlus } from "react-icons/bi";
 /* custom components */
 import moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { IndexInfo } from "typescript";
 import Form from "../../components/Form";
 import Button, { buttonColor } from "../../components/Button";
 import Textarea from "../../components/TextArea";
-import Label from "../../components/Label";
+import Label, { label as BoardLabelType } from "../../components/Label";
 import SprintListDropdown from "./SprintSelector";
 import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
 import Calendar, { dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
-import LabelSearchInput from "../../components/LabelSearchInput";
-import { useGetTaskQuery } from "../../generated/graphql";
+import LabelSearchInput, {
+  labelItem as labelItemType,
+} from "../../components/LabelSearchInput";
+import {
+  TaskLabel,
+  useGetProjectQuery,
+  useGetTaskQuery,
+} from "../../generated/graphql";
 
 // DUMMY DATA
-
-const users = [
-  {
-    user: {
-      id: "stupy",
-      username: "stupy",
-      avatar:
-        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-  },
-  {
-    user: {
-      id: "prettie",
-      username: "prettie",
-      avatar:
-        "https://images.unsplash.com/photo-1592159371936-61a70cbeb5f7?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGhhbXN0ZXJ8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-  },
-  {
-    user: {
-      id: "bunny",
-      username: "bunny",
-      avatar:
-        "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-  },
-  {
-    user: {
-      id: "cuttie pie",
-      username: "cuttie pie",
-      avatar:
-        "https://images.unsplash.com/photo-1561948955-570b270e7c36?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-  },
-];
-
-const labelDefaultValue = {
-  color: "labelTeal",
-  id: "3",
-  name: "DONE",
-};
-const labelOptions = [
-  {
-    color: "labelOrange",
-    id: "1",
-    name: "TO DO",
-  },
-  {
-    color: "labelYellow",
-    id: "2",
-    name: "IN PROGRESS",
-  },
-  {
-    color: "labelTeal",
-    id: "3",
-    name: "DONE",
-  },
-];
-
-const sprints = [
-  {
-    id: "1",
-    title: "Server Development",
-  },
-  {
-    id: "2",
-    title: "Client Development",
-  },
-  {
-    id: "3",
-    title: "SR",
-  },
-  {
-    id: "4",
-    title: "UI/UX Design",
-  },
-];
-
-const labelSearchOptions = [
-  { id: "1", value: "Hotfix", label: "Hotfix", color: "labelOrange" },
-  { id: "2", value: "Marketing", label: "Marketing", color: "labelYellow" },
-  { id: "3", value: "SR", label: "SR", color: "warning" },
-  { id: "4", value: "Server", label: "Server", color: "labelGreen" },
-  { id: "5", value: "Client", label: "Client", color: "failDark" },
-  { id: "6", value: "Meeting", label: "Meeting", color: "violet" },
-  { id: "7", value: "PT", label: "PT", color: "labelPink" },
-  { id: "8", value: "Design", label: "Design", color: "violet" },
-];
-
-const labelSearchDefaultValue = [
-  { id: "1", value: "Hotfix", label: "Hotfix", color: "labelOrange" },
-  { id: "2", value: "Server", label: "Server", color: "labelGreen" },
-];
-
-const task = {
-  id: "018da5e5-a28e-4183-bc8e-8adeac1df54d",
-  title: "Edit User_Task Schema",
-  description:
-    "At repudiandae esse doloribus.Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis quod praesentium dolores beatae ullam quae dicta eum dolor corporis harum. Omnis ut dolore saepe quae explicabo labore reprehenderit vel voluptatibus?",
-  startDate: "1602948368862",
-  endDate: "1616167277590",
-  taskIndex: 50,
-  completed: false,
-  board: null,
-  sprint: {
-    id: "4b19004a-f210-4db1-80ad-1a199569a279",
-    title: "Server Deployment",
-  },
-  file: [
-    {
-      fileLink: "database_schema.pdf",
-    },
-  ],
-  comment: [
-    {
-      content: "Can you fix the user table?",
-      user: {
-        id: "1234",
-        username: "pbkim",
-      },
-    },
-    {
-      content: "Good Job!",
-      user: {
-        id: "5555",
-        username: "Si Choi",
-      },
-    },
-  ],
-  taskLabel: [
-    {
-      label: {
-        name: "B2C",
-        id: "aee2822a-7055-42a2-a12a-fc9ccf793efc",
-      },
-    },
-  ],
-  userTask: [
-    {
-      user: {
-        id: "b290eacd-819a-4f2a-a486-9dd5152a619c",
-        username: "Dkje",
-        avatar: null,
-      },
-    },
-  ],
-};
 
 const mappingUserOption = (
   userArr:
@@ -196,8 +56,37 @@ const mappingUserOption = (
 ) => {
   if (!userArr) return undefined;
   return userArr.map(({ user }) => {
-    return { ...user, label: user.id, value: user.username };
+    return { ...user, label: user.username, value: user.id };
   });
+};
+
+const mappingLabelOptions = (
+  taskLabel:
+    | { label: { id: string; name: string; color: string } }[]
+    | undefined
+    | null
+): labelItemType[] | undefined => {
+  if (!taskLabel) return undefined;
+
+  return taskLabel.map(({ label }) => ({
+    id: label.id,
+    value: label.name,
+    label: label.name,
+    color: label.color,
+  }));
+};
+
+const mappingProjectLabelOptions = (
+  taskLabel: { id: string; name: string; color: string }[] | undefined | null
+): labelItemType[] | undefined => {
+  if (!taskLabel) return undefined;
+
+  return taskLabel.map(({ id, name, color }) => ({
+    id,
+    value: name,
+    label: name,
+    color,
+  }));
 };
 
 type labelItem = { id: string; value: string; label: string; color: string };
@@ -207,40 +96,6 @@ const titleValidation = yup.object({
 const commentValidation = yup.object({
   email: yup.string().max(5).required(),
 });
-
-type taskType = {
-  task?: {
-    id: string;
-    title: string | null;
-    description: string | null;
-    startDate: number | null;
-    endDate: number | null;
-    taskIndex: number;
-    completed: boolean;
-    board: { title: string; id: string } | null;
-    sprint: {
-      id: string;
-      title: string;
-    } | null;
-    file: { fileLink: string }[] | null;
-    comment:
-      | { content: string; user: { username: string; id: string } }[]
-      | null;
-    userTask:
-      | {
-          user: {
-            id: string;
-            username: string;
-          };
-        }[]
-      | null;
-    taskLabel:
-      | {
-          label: { name: string; id: string };
-        }[]
-      | null;
-  };
-};
 
 interface MatchParams {
   projectId: string;
@@ -254,41 +109,62 @@ export interface taskProps {
 export const TaskBar: React.FC<
   taskProps & RouteComponentProps<MatchParams>
 > = ({ taskId, match, isOpen, onClose }) => {
-  // TODO: Context로 분리해야함
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const onSprintSelect = (value: string) => console.log(value);
+  const projectId = match?.params.projectId;
 
-  console.log("projectId:", match?.params.projectId);
-
-  const { loading, error, data } = useGetTaskQuery({
+  const {
+    loading: getTaskLoading,
+    error: getTaskError,
+    data: getTaskData,
+  } = useGetTaskQuery({
     variables: {
-      projectId: match?.params.projectId,
+      projectId,
       id: taskId,
     },
   });
 
-  const taskArr = data?.getTask.task;
+  const {
+    loading: projectInfoLoading,
+    error: projectInfoError,
+    data: projectInfoData,
+  } = useGetProjectQuery({
+    variables: { projectId },
+  });
+
+  const taskArr = getTaskData?.getTask.task;
   if (!taskArr) {
     return <Text>no task</Text>;
   }
 
   const task = taskArr[0];
 
-  console.log("data:", data);
-  console.log("loading:", loading);
+  console.log("data:", getTaskData);
+  console.log("loading:", getTaskLoading);
 
   // task => mutation
   // TODO: api와 연결
-  const sprintArg = { currentSprint: task.sprint, sprints, onSprintSelect };
+  const sprintArg = {
+    currentSprint: task.sprint,
+    sprints: projectInfoData?.project.project?.sprint,
+    onSprintSelect,
+  };
   const userSelectArg: UserSelectPropTypes = {
-    options: mappingUserOption(users),
+    options: mappingUserOption(
+      projectInfoData
+        ? projectInfoData.project.project?.projectPermissions
+        : null
+    ),
     defaultValue: mappingUserOption(task.userTask),
     deleteAssignee: (id) => console.log(id), // TODO
     createAssignee: (id) => console.log(id), // TODO
   };
-  const labelSelectArgs = {
-    options: labelSearchOptions,
-    defaultValue: labelSearchDefaultValue,
+  const taskLabelSelectArgs = {
+    options: mappingProjectLabelOptions(
+      projectInfoData?.project.project?.label
+    ),
+    defaultValue: mappingLabelOptions(
+      task.taskLabel ? task.taskLabel : undefined
+    ),
     createTaskLabel: (item: labelItem) => console.log(item),
     deleteTaskLabel: (item: labelItem) => console.log(item),
   };
@@ -301,9 +177,23 @@ export const TaskBar: React.FC<
   const createComment = (value: formValue) =>
     console.log("create Comment", value);
 
-  // TODO: project의 모든 user 불러오기
-  // TODO: project의 모든 board 목록 불러오기
-  // TODO: project의 모든 sprint 목록 불러오기
+  const mappingBoardLabel = (
+    board: { id: string; title: string }[] | null | undefined
+  ): BoardLabelType[] | undefined => {
+    if (!board) return undefined;
+    return board.map((el) => {
+      return { color: undefined, name: el.title, id: el.id };
+    });
+  };
+
+  const boardLabelArgs = {
+    defaultValues: task
+      ? { color: undefined, name: task.board?.title, id: task.board?.id }
+      : undefined,
+    labels: projectInfoData?.project.project?.board
+      ? mappingBoardLabel(projectInfoData?.project.project?.board)
+      : undefined,
+  };
 
   const renderComments = () => {
     if (!task.comment) return null;
@@ -364,7 +254,7 @@ export const TaskBar: React.FC<
     <div>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
         <DrawerOverlay>
-          {!loading ? (
+          {!getTaskLoading ? (
             <DrawerContent bgColor="primary.400" padding="3">
               <Box>
                 <Button
@@ -394,15 +284,7 @@ export const TaskBar: React.FC<
                     <Text mr="2" fontSize="sm" color="primary.200">
                       Task - {task.taskIndex}
                     </Text>
-                    <Label
-                      defaultValues={{
-                        color: "labelTeal",
-                        id: "3",
-                        name: "DONE",
-                      }}
-                      hasDropdown
-                      labels={labelOptions}
-                    />
+                    <Label {...boardLabelArgs} hasDropdown />
                   </Box>
                   <Form
                     validationSchema={titleValidation}
@@ -445,7 +327,7 @@ export const TaskBar: React.FC<
                   </Box>
                   <Box mt={2}>
                     <TextLabel>Label</TextLabel>
-                    <LabelSearchInput {...labelSelectArgs} />
+                    <LabelSearchInput {...taskLabelSelectArgs} />
                   </Box>
                   <Box mt={2}>
                     <TextLabel>Description</TextLabel>
