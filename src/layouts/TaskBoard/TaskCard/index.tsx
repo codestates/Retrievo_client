@@ -11,46 +11,21 @@ import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import Label from "../../../components/Label";
 import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
-
-// export type label = {
-//   label: {
-//     id: string;
-//     name: string;
-//     color?: string;
-//   };
-// };
-
-// export type user = {
-//   user: {
-//     id: string;
-//     username: string;
-//     avatar: string | null;
-//   };
-// };
-
-// export type task = {
-//   __typename?: "Task" | undefined;
-//   id: string;
-//   title: string;
-//   startDate: string | null;
-//   endDate: string | null;
-//   taskIndex: number;
-//   userTask: user[];
-//   taskLabel: label[];
-//   boardRowIndex: number;
-//   sprintRowIndex: number;
-// };
+import IconButton, { IconButtonType } from "../../../components/IconButton";
 
 export type TaskCardProps = {
   task?: taskType;
-  handleTaskDelete: (id: string) => void;
+  projectId: string;
   handleTaskClick: (id: string) => void;
+  setIsDeleteTaskModalOpen?: (isOpen: boolean) => void;
+  setDeletedTaskId?: (taskId: string) => void;
 };
 
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
   handleTaskClick,
-  handleTaskDelete,
+  setDeletedTaskId,
+  setIsDeleteTaskModalOpen,
 }): ReactElement | null => {
   const renderLabels = () => {
     return task?.taskLabel?.map((labelObj) => {
@@ -68,6 +43,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     return format(new Date(Number(date)), "MMM d");
   };
 
+  // FIXME
   const renderUsers = () => {
     if (!task) return [];
     const { userTask } = task;
@@ -78,6 +54,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
   };
 
   if (!task) return null;
+  if (!setIsDeleteTaskModalOpen) return null;
+  if (!setDeletedTaskId) return null;
 
   return (
     <Box
@@ -95,9 +73,17 @@ const TaskCard: React.FC<TaskCardProps> = ({
         position="absolute"
         right={4}
         top={4}
-        onClick={() => handleTaskDelete(task?.id)}
+        onClick={() => {
+          setIsDeleteTaskModalOpen(true);
+          setDeletedTaskId(task.id);
+        }}
       >
         <CgClose />
+        {/* <IconButton
+          aria-label="delete task button"
+          iconButtonType={IconButtonType.delete}
+          color="achromatic.600"
+        /> */}
       </Box>
       <Box>
         <Box

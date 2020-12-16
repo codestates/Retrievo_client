@@ -23,6 +23,7 @@ import {
   useUpdateBoardMutation,
   Task as taskType,
   useCreateTaskMutation,
+  useDeleteTaskMutation,
 } from "../../generated/graphql";
 
 import { client } from "../../index";
@@ -146,6 +147,15 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
       error: createTaskError,
     },
   ] = useCreateTaskMutation();
+
+  const [
+    deleteTask,
+    {
+      data: deletedTaskData,
+      loading: deleteTaskLoading,
+      error: deleteTaskError,
+    },
+  ] = useDeleteTaskMutation();
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -277,7 +287,16 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
       },
     });
   };
-  const handleTaskDelete = (id: string) => console.log("delete", id);
+
+  const handleTaskDelete = async (id: string, projectId: string) => {
+    console.log(id, projectId);
+    await deleteTask({
+      variables: {
+        id,
+        projectId,
+      },
+    });
+  };
 
   const handleTaskClick = (id: string) => {
     setSelectedTask(id);

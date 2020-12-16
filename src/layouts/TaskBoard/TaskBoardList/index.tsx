@@ -123,7 +123,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     if (type === "BOARD") {
       if (destination.index === boardLists.length - 1) {
         toast({
-          title: "마지막 보드는 이동할 수 없습니다",
+          title: "Not Available",
           description: "Board is not draggable to the last",
           status: "warning",
           position: "bottom-right",

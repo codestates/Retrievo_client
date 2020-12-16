@@ -50,7 +50,7 @@ export type TaskBoardProps = TaskCardProps & {
   ) => void;
   handleTaskCreate: (options: TaskOptions, projectId: string) => void;
   handleBoardUpdate: (options: Boardoptions, projectId: string) => void;
-  handleTaskDelete: (id: string) => void;
+  handleTaskDelete: (id: string, projectId: string) => void;
   handleTaskClick: (id: string) => void;
 };
 
@@ -70,15 +70,22 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+  const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
   const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
     boards[0]
   );
   const [inputValue, setInputValue] = useState(board?.title);
   const [taskTitle, setTestTitle] = useState("");
+  const [deletedTaskId, setDeletedTaskId] = useState("");
 
   if (!board) return null;
 
-  const taskConfig = { handleTaskDelete, handleTaskClick };
+  const taskConfig = {
+    handleTaskClick,
+    projectId,
+    setIsDeleteTaskModalOpen,
+    setDeletedTaskId,
+  };
 
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
     return (
@@ -124,6 +131,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     }
 
     setIsCreateTaskModalOpen(false);
+  };
+
+  const handleDeleteTaskSubmit = async () => {
+    await handleTaskDelete(deletedTaskId, projectId);
   };
 
   const renderTasks = (tasks: taskType[]) => {
@@ -284,6 +295,20 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           onChange={(e) => setTestTitle(e.target.value)}
           placeholder="Write Task Name"
         />
+      </Modal>
+      <Modal
+        title="Delete Task"
+        isOpen={isDeleteTaskModalOpen}
+        onClose={() => setIsDeleteTaskModalOpen(false)}
+        secondaryText="Confirm"
+        secondaryAction={handleDeleteTaskSubmit}
+        buttonColor="fail"
+        buttonFontColor="white"
+      >
+        <>
+          <Text>You are permanently deleting this issue.</Text>
+          <Text>Are you absolutely sure 😱?</Text>
+        </>
       </Modal>
     </Box>
   );
