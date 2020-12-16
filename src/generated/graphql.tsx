@@ -1720,7 +1720,7 @@ export type SetStartedSprintQueryVariables = Exact<{
 
 export type SetStartedSprintQuery = { __typename?: "Query" } & {
   getStartedSprint: { __typename?: "SprintResponse" } & {
-    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id">>;
+    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id" | "title">>;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
@@ -4196,6 +4196,7 @@ export const SetStartedSprintDocument = gql`
     getStartedSprint(projectId: $projectId) {
       sprint {
         id
+        title
       }
       error {
         code
