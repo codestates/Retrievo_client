@@ -59,9 +59,9 @@ const ModalLayout: React.FC<modalIFC> = ({
               </Button>
               <Button
                 variant={buttonColor ? "solid" : "ghost"}
-                bgColor={buttonColor || "transparent"}
+                bgColor={buttonColor}
                 onClick={secondaryAction}
-                color={buttonFontColor || "transparent"}
+                color={buttonFontColor}
               >
                 {secondaryText}
               </Button>
