@@ -414,6 +414,7 @@ export type MutationDeleteBoardArgs = {
 
 export type MutationCreateSprintArgs = {
   projectId: Scalars["String"];
+  description: Scalars["String"];
   title: Scalars["String"];
 };
 
@@ -765,11 +766,17 @@ export type CreateProjectMutation = { __typename?: "Mutation" } & {
 export type CreateSprintMutationVariables = Exact<{
   projectId: Scalars["String"];
   title: Scalars["String"];
+  description: Scalars["String"];
 }>;
 
 export type CreateSprintMutation = { __typename?: "Mutation" } & {
   createSprint: { __typename?: "SprintResponse" } & {
-    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id" | "title">>;
+    sprint?: Maybe<
+      { __typename?: "Sprint" } & Pick<
+        Sprint,
+        "id" | "title" | "description" | "row"
+      >
+    >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
@@ -1720,7 +1727,7 @@ export type SetStartedSprintQueryVariables = Exact<{
 
 export type SetStartedSprintQuery = { __typename?: "Query" } & {
   getStartedSprint: { __typename?: "SprintResponse" } & {
-    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id">>;
+    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id" | "title">>;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
@@ -1763,7 +1770,10 @@ export type GetTaskQuery = { __typename?: "Query" } & {
               Array<
                 { __typename?: "Comment" } & Pick<Comment, "content"> & {
                     user?: Maybe<
-                      { __typename?: "User" } & Pick<User, "id" | "username">
+                      { __typename?: "User" } & Pick<
+                        User,
+                        "id" | "username" | "email"
+                      >
                     >;
                   }
               >
@@ -2124,11 +2134,21 @@ export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
   CreateProjectMutationVariables
 >;
 export const CreateSprintDocument = gql`
-  mutation CreateSprint($projectId: String!, $title: String!) {
-    createSprint(projectId: $projectId, title: $title) {
+  mutation CreateSprint(
+    $projectId: String!
+    $title: String!
+    $description: String!
+  ) {
+    createSprint(
+      projectId: $projectId
+      title: $title
+      description: $description
+    ) {
       sprint {
         id
         title
+        description
+        row
       }
       error {
         message
@@ -2158,6 +2178,7 @@ export type CreateSprintMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      projectId: // value for 'projectId'
  *      title: // value for 'title'
+ *      description: // value for 'description'
  *   },
  * });
  */
@@ -4196,6 +4217,7 @@ export const SetStartedSprintDocument = gql`
     getStartedSprint(projectId: $projectId) {
       sprint {
         id
+        title
       }
       error {
         code
@@ -4282,6 +4304,7 @@ export const GetTaskDocument = gql`
           user {
             id
             username
+            email
           }
         }
         taskLabel {
