@@ -2,6 +2,7 @@ import { labelItem as labelItemType } from "../../components/LabelSearchInput";
 
 import { label as BoardLabelType } from "../../components/Label";
 import { labelSelectorItemType } from "../../components/LabelSelector";
+import { userItem } from "../../components/UserSelector";
 
 export const mappingUserOption = (
   userArr:
@@ -14,9 +15,10 @@ export const mappingUserOption = (
       }[]
     | null
     | undefined
-) => {
+): userItem[] | undefined => {
   if (!userArr) return undefined;
   return userArr.map(({ user }) => {
+    // TODO: id를 taskUser의 ID로 변경하기
     return { ...user, label: user.username, value: user.id };
   });
 };

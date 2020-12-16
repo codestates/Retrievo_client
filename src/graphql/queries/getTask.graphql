@@ -18,16 +18,20 @@ query GetTask($projectId:String!,$id:String!){
         didStart
       }
       file{
+        id
         fileLink
       }
       comment{
+        id
         content
         user{
           id
           username
+          email
         }
       }
       taskLabel{
+        id
         label{
           name
           id
@@ -35,7 +39,9 @@ query GetTask($projectId:String!,$id:String!){
         }
       }
       userTask{
+        id
         user{
+          email
           id
           username
         }

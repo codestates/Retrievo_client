@@ -13,18 +13,25 @@ import {
   Spinner,
   Center,
   useToast,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as yup from "yup";
 import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 /* utils */
 import moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { Formik, Form } from "formik";
 import {
   useGetProjectLazyQuery,
   useUpdateTaskMutation,
   useGetTaskLazyQuery,
+  useDeleteUserTaskMutation,
+  GetTaskDocument,
+  GetTaskQuery,
+  useCreateCommentMutation,
 } from "../../generated/graphql";
 import {
   mappingUserOption,
@@ -34,7 +41,7 @@ import {
 } from "./utils";
 
 /* custom components */
-import Form from "../../components/Form";
+import CustomForm from "../../components/Form";
 import Textarea from "../../components/TextArea";
 import LabelSelector, {
   labelSelectorProps,
@@ -45,13 +52,14 @@ import TextLabel from "./TextLabel";
 import Calendar, { dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
+import { buttonColor } from "../../components/Button";
 
 type labelItem = { id: string; value: string; label: string; color: string };
 const titleValidation = yup.object({
   email: yup.string().max(5).required(),
 });
 const commentValidation = yup.object({
-  email: yup.string().max(5).required(),
+  content: yup.string().min(5).required(),
 });
 
 interface MatchParams {
@@ -66,15 +74,21 @@ export interface taskProps {
 export const TaskBar: React.FC<
   taskProps & RouteComponentProps<MatchParams>
 > = ({ taskId, match, isOpen, onClose }) => {
-  const onSprintSelect = (value: string) => console.log(value);
   const projectId = match?.params.projectId;
 
   const toast = useToast();
+
+  const commentRef = useRef<HTMLTextAreaElement>(null);
 
   const [
     updateTaskMutation,
     { data: updateTaskdata },
   ] = useUpdateTaskMutation();
+
+  const [
+    deleteUserTask,
+    { data: deleteUserTaskData },
+  ] = useDeleteUserTaskMutation();
 
   const [
     getTask,
@@ -96,11 +110,13 @@ export const TaskBar: React.FC<
     },
   ] = useGetProjectLazyQuery();
 
+  const [createComment, { data }] = useCreateCommentMutation();
+
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
-      console.log(isOpen);
-      console.log(taskId);
-      console.log(projectId);
+      console.log("isOpen:", isOpen);
+      console.log("taskId:", taskId);
+      console.log("projectId", projectId);
       if (!getTaskData) {
         getTask({
           variables: {
@@ -132,9 +148,31 @@ export const TaskBar: React.FC<
 
   const task = taskArr[0];
 
+  const createErrorToast = () => {
+    toast({
+      position: "bottom-right",
+      title: "Update Task Fail...",
+      description: "Please try again in a moment.",
+      status: "error",
+      isClosable: true,
+      duration: 4000,
+    });
+  };
+
+  const createSuccessToast = () => {
+    toast({
+      position: "bottom-right",
+      title: "Task Updated!",
+      status: "success",
+      isClosable: true,
+      duration: 4000,
+    });
+  };
+
   /* mutation trigger */
   type formValue = Record<string, any>;
-  const updateTask = async (value: Record<string, any>) => {
+  const updateTask = async (value: formValue) => {
+    console.log("start update:", value);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     try {
       const res = await updateTaskMutation({
@@ -148,18 +186,9 @@ export const TaskBar: React.FC<
         throw new Error(res.data?.updateTask.error.message);
       }
 
-      toast({
-        position: "bottom-right",
-        title: "Task Updated!",
-        status: "success",
-      });
+      createSuccessToast();
     } catch (err) {
-      toast({
-        position: "bottom-right",
-        title: "Update Task Fail...",
-        description: "Please try again in a moment.",
-        status: "error",
-      });
+      createErrorToast();
       console.log("updateTask error:", err);
     }
   };
@@ -167,22 +196,61 @@ export const TaskBar: React.FC<
   const createLabel = (value: formValue) => console.log("create label", value);
 
   const createFile = (value: formValue) => console.log("create file", value);
-  const createComment = (value: formValue) =>
-    console.log("create Comment", value);
+
+  const handleCreateComment = async (
+    value: formValue,
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      const res = await createComment({
+        variables: {
+          taskId,
+          projectId,
+          options: { ...(value as { content: string }) },
+        },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+      });
+
+      if (res.data?.createComment.error) {
+        throw new Error(res.data.createComment.error.message);
+      }
+
+      resetForm();
+
+      createSuccessToast();
+    } catch (error) {
+      console.log("create comment error:", error);
+      createErrorToast();
+    }
+  };
+
+  const updateTaskBasicOption = (value: formValue) => {
+    updateTask({ basicOptions: { ...value } });
+  };
+
+  const handleBoardSelect = (newBoardRecord: formValue) => {
+    updateTask(newBoardRecord);
+  };
+
+  const onSprintSelect = (sprintId: string) => {
+    updateTask({ sprintId });
+  };
 
   const updateDates = ({ startDate, endDate }: dateIFC) => {
     const unixStartDate = moment(startDate).unix();
     const unixEndDate = moment(endDate).unix();
-    console.log("unixStartDate:", unixStartDate);
-    console.log("unixEndDate:", unixEndDate);
-  };
-
-  const updateTaskBasicOption = (value: Record<string, any>) => {
-    updateTask({ basicOptions: { ...value } });
-  };
-
-  const handleBoardSelect = (newBoardRecord: Record<string, any>) => {
-    updateTask(newBoardRecord);
+    updateTaskBasicOption({
+      startDate: Number.isNaN(unixStartDate) ? null : unixStartDate.toString,
+      endDate: Number.isNaN(unixEndDate) ? null : unixEndDate.toString,
+    });
   };
 
   /* component args */
@@ -192,6 +260,39 @@ export const TaskBar: React.FC<
     onSprintSelect,
   };
 
+  const handleDeleteAssignee = async (id: string) => {
+    try {
+      const res = await deleteUserTask({
+        variables: { id, projectId },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+        // update:(store,{data})=>{
+        //   const task = store.readQuery<GetTaskQuery>({
+        //     query:GetTaskDocument,
+        //     data:{
+        //     }
+        //   })
+        // }
+      });
+
+      if (res.data?.deleteUserTask.error) {
+        throw new Error(res.data.deleteUserTask.error.message);
+      }
+
+      createSuccessToast();
+    } catch (err) {
+      createErrorToast();
+      console.log("delete assignee error:", err);
+    }
+  };
+
   const userSelectArg: UserSelectPropTypes = {
     options: mappingUserOption(
       projectInfoData
@@ -199,7 +300,7 @@ export const TaskBar: React.FC<
         : null
     ),
     defaultValue: mappingUserOption(task.userTask),
-    deleteAssignee: (id) => console.log(id), // TODO
+    deleteAssignee: handleDeleteAssignee, // TODO
     createAssignee: (id) => console.log(id), // TODO
   };
 
@@ -298,12 +399,11 @@ export const TaskBar: React.FC<
                     <Text mr="2" fontSize="sm" color="primary.200">
                       Task - {task.taskIndex}
                     </Text>
-                    {/* {task.sprint.didStart ? (
-                      <Label {...boardLabelArgs} hasDropdown />
-                    ) : null} TODO: test후 복구 */}
-                    <LabelSelector {...labelSelectorArg} />
+                    {task.sprint.didStart ? (
+                      <LabelSelector {...labelSelectorArg} />
+                    ) : null}
                   </Box>
-                  <Form
+                  <CustomForm
                     validationSchema={titleValidation}
                     onSubmit={(value) => updateTask(value)}
                     initialValues={{ title: task.title }}
@@ -320,7 +420,7 @@ export const TaskBar: React.FC<
                       autoHeight
                       paddingNone
                     />
-                  </Form>
+                  </CustomForm>
                   <Box>
                     <TextLabel>Sprint</TextLabel>
                     <SprintListDropdown {...sprintArg} />
@@ -347,7 +447,7 @@ export const TaskBar: React.FC<
                   <Box mt={2}>
                     <TextLabel>Description</TextLabel>
 
-                    <Form
+                    <CustomForm
                       validationSchema={titleValidation}
                       onSubmit={(value) => updateTaskBasicOption(value)}
                       initialValues={{ description: task.description }}
@@ -360,7 +460,7 @@ export const TaskBar: React.FC<
                         placeholder="description here"
                         autoHeight
                       />
-                    </Form>
+                    </CustomForm>
                   </Box>
                   <Box>{renderFileList()}</Box>
                   <Box
@@ -401,19 +501,19 @@ export const TaskBar: React.FC<
                   <Box display="flex" mt={5}>
                     <Avatar name="myName" size="sm" mr={2} />
                     <Box width="full">
-                      <Form
+                      <CustomForm
                         validationSchema={commentValidation}
-                        onSubmit={(value) => createComment(value)}
-                        initialValues={{ comment: "" }}
+                        onSubmit={handleCreateComment}
+                        initialValues={{ content: "" }}
                         isSubmitButton
                       >
                         <Textarea
-                          label="comment"
-                          name="comment"
+                          label="content"
+                          name="content"
                           isLabelNonVisible
                           placeholder="new comment here"
                         />
-                      </Form>
+                      </CustomForm>
                     </Box>
                   </Box>
                 </Box>

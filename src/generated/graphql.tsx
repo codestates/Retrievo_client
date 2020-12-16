@@ -33,6 +33,7 @@ export type Query = {
   getBoards: BoardResponse;
   getSprint: SprintResponse;
   getSprints: SprintResponse;
+  getStartedSprint: SprintResponse;
   getTask: TaskResponse;
   getLabels: LabelResponse;
 };
@@ -58,6 +59,10 @@ export type QueryGetSprintArgs = {
 };
 
 export type QueryGetSprintsArgs = {
+  projectId: Scalars["String"];
+};
+
+export type QueryGetStartedSprintArgs = {
   projectId: Scalars["String"];
 };
 
@@ -409,6 +414,7 @@ export type MutationDeleteBoardArgs = {
 
 export type MutationCreateSprintArgs = {
   projectId: Scalars["String"];
+  description: Scalars["String"];
   title: Scalars["String"];
 };
 
@@ -760,11 +766,17 @@ export type CreateProjectMutation = { __typename?: "Mutation" } & {
 export type CreateSprintMutationVariables = Exact<{
   projectId: Scalars["String"];
   title: Scalars["String"];
+  description: Scalars["String"];
 }>;
 
 export type CreateSprintMutation = { __typename?: "Mutation" } & {
   createSprint: { __typename?: "SprintResponse" } & {
-    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id" | "title">>;
+    sprint?: Maybe<
+      { __typename?: "Sprint" } & Pick<
+        Sprint,
+        "id" | "title" | "description" | "row"
+      >
+    >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
@@ -985,6 +997,24 @@ export type DeleteLabelMutation = { __typename?: "Mutation" } & {
         { __typename?: "FieldError" } & Pick<
           FieldError,
           "code" | "field" | "message"
+        >
+      >;
+    };
+};
+
+export type DeleteProjectMutationVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type DeleteProjectMutation = { __typename?: "Mutation" } & {
+  deleteProject: { __typename?: "ProjectReturnType" } & Pick<
+    ProjectReturnType,
+    "success"
+  > & {
+      error?: Maybe<
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "message" | "code" | "field"
         >
       >;
     };
@@ -1476,18 +1506,30 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 export type GetMeQuery = { __typename?: "Query" } & {
   getMe: { __typename?: "UserResponse" } & {
     user?: Maybe<
-      { __typename?: "User" } & Pick<User, "username" | "email"> & {
+      { __typename?: "User" } & Pick<User, "id" | "username" | "email"> & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
               project: { __typename?: "Project" } & Pick<Project, "id">;
             }
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & {
+                task: { __typename?: "Task" } & Pick<Task, "id" | "title"> & {
+                    board?: Maybe<
+                      { __typename?: "Board" } & Pick<Board, "title">
+                    >;
+                    project: { __typename?: "Project" } & Pick<Project, "id">;
+                  };
+              }
+            >
           >;
         }
     >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
         FieldError,
-        "field" | "code" | "message"
+        "code" | "message" | "field"
       >
     >;
   };
@@ -1679,6 +1721,22 @@ export type GetSprintsQuery = { __typename?: "Query" } & {
   };
 };
 
+export type SetStartedSprintQueryVariables = Exact<{
+  projectId: Scalars["String"];
+}>;
+
+export type SetStartedSprintQuery = { __typename?: "Query" } & {
+  getStartedSprint: { __typename?: "SprintResponse" } & {
+    sprint?: Maybe<{ __typename?: "Sprint" } & Pick<Sprint, "id" | "title">>;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "code" | "message" | "field"
+      >
+    >;
+  };
+};
+
 export type GetTaskQueryVariables = Exact<{
   projectId: Scalars["String"];
   id: Scalars["String"];
@@ -1712,7 +1770,10 @@ export type GetTaskQuery = { __typename?: "Query" } & {
               Array<
                 { __typename?: "Comment" } & Pick<Comment, "content"> & {
                     user?: Maybe<
-                      { __typename?: "User" } & Pick<User, "id" | "username">
+                      { __typename?: "User" } & Pick<
+                        User,
+                        "id" | "username" | "email"
+                      >
                     >;
                   }
               >
@@ -2073,11 +2134,21 @@ export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
   CreateProjectMutationVariables
 >;
 export const CreateSprintDocument = gql`
-  mutation CreateSprint($projectId: String!, $title: String!) {
-    createSprint(projectId: $projectId, title: $title) {
+  mutation CreateSprint(
+    $projectId: String!
+    $title: String!
+    $description: String!
+  ) {
+    createSprint(
+      projectId: $projectId
+      title: $title
+      description: $description
+    ) {
       sprint {
         id
         title
+        description
+        row
       }
       error {
         message
@@ -2107,6 +2178,7 @@ export type CreateSprintMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      projectId: // value for 'projectId'
  *      title: // value for 'title'
+ *      description: // value for 'description'
  *   },
  * });
  */
@@ -2563,6 +2635,59 @@ export type DeleteLabelMutationResult = Apollo.MutationResult<DeleteLabelMutatio
 export type DeleteLabelMutationOptions = Apollo.BaseMutationOptions<
   DeleteLabelMutation,
   DeleteLabelMutationVariables
+>;
+export const DeleteProjectDocument = gql`
+  mutation DeleteProject($projectId: String!) {
+    deleteProject(projectId: $projectId) {
+      success
+      error {
+        message
+        code
+        field
+      }
+    }
+  }
+`;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables
+>;
+
+/**
+ * __useDeleteProjectMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useDeleteProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+  >(DeleteProjectDocument, baseOptions);
+}
+export type DeleteProjectMutationHookResult = ReturnType<
+  typeof useDeleteProjectMutation
+>;
+export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables
 >;
 export const DeleteSprintDocument = gql`
   mutation DeleteSprint($id: String!, $projectId: String!) {
@@ -3689,6 +3814,7 @@ export const GetMeDocument = gql`
   query GetMe {
     getMe {
       user {
+        id
         username
         email
         projectPermissions {
@@ -3696,11 +3822,23 @@ export const GetMeDocument = gql`
             id
           }
         }
+        userTask {
+          task {
+            id
+            title
+            board {
+              title
+            }
+            project {
+              id
+            }
+          }
+        }
       }
       error {
-        field
         code
         message
+        field
       }
     }
   }
@@ -4074,6 +4212,70 @@ export type GetSprintsQueryResult = Apollo.QueryResult<
   GetSprintsQuery,
   GetSprintsQueryVariables
 >;
+export const SetStartedSprintDocument = gql`
+  query SetStartedSprint($projectId: String!) {
+    getStartedSprint(projectId: $projectId) {
+      sprint {
+        id
+        title
+      }
+      error {
+        code
+        message
+        field
+      }
+    }
+  }
+`;
+
+/**
+ * __useSetStartedSprintQuery__
+ *
+ * To run a query within a React component, call `useSetStartedSprintQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSetStartedSprintQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSetStartedSprintQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useSetStartedSprintQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SetStartedSprintQuery,
+    SetStartedSprintQueryVariables
+  >
+) {
+  return Apollo.useQuery<SetStartedSprintQuery, SetStartedSprintQueryVariables>(
+    SetStartedSprintDocument,
+    baseOptions
+  );
+}
+export function useSetStartedSprintLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SetStartedSprintQuery,
+    SetStartedSprintQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    SetStartedSprintQuery,
+    SetStartedSprintQueryVariables
+  >(SetStartedSprintDocument, baseOptions);
+}
+export type SetStartedSprintQueryHookResult = ReturnType<
+  typeof useSetStartedSprintQuery
+>;
+export type SetStartedSprintLazyQueryHookResult = ReturnType<
+  typeof useSetStartedSprintLazyQuery
+>;
+export type SetStartedSprintQueryResult = Apollo.QueryResult<
+  SetStartedSprintQuery,
+  SetStartedSprintQueryVariables
+>;
 export const GetTaskDocument = gql`
   query GetTask($projectId: String!, $id: String!) {
     getTask(projectId: $projectId, id: $id) {
@@ -4102,6 +4304,7 @@ export const GetTaskDocument = gql`
           user {
             id
             username
+            email
           }
         }
         taskLabel {

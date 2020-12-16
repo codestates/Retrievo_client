@@ -25,7 +25,7 @@ const ClearIndicator = (props: any) => {
   );
 };
 
-type item = {
+export type userItem = {
   id: string;
   value?: string;
   label?: string;
@@ -44,8 +44,8 @@ enum actionTypes {
 }
 
 export type UserSelectPropTypes = {
-  options: item[] | undefined;
-  defaultValue?: item[] | undefined | null;
+  options: userItem[] | undefined;
+  defaultValue?: userItem[] | undefined | null;
   deleteAssignee: (id: string) => void;
   createAssignee: (id: string) => void;
 };
@@ -56,26 +56,26 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
   deleteAssignee,
   createAssignee,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<item[]>(
+  const [currentOptions, setCurrentOptions] = useState<userItem[]>(
     defaultValue || []
   );
 
-  const getCreatedValue = (newValue: item[]): item => {
+  const getCreatedValue = (newValue: userItem[]): userItem => {
     return _.difference(newValue, currentOptions)[0];
   };
 
-  const getDeletedValue = (newValue: item[]): item => {
+  const getDeletedValue = (newValue: userItem[]): userItem => {
     return _.difference(currentOptions, newValue)[0];
   };
 
-  const handleCreateChange = (newValue: item[]) => {
+  const handleCreateChange = (newValue: userItem[]) => {
     const newUser = getCreatedValue(newValue);
     // TODO: create api 실행
     createAssignee(newUser.id);
     setCurrentOptions(newValue);
   };
 
-  const handleDeleteChange = (newValue: item[]) => {
+  const handleDeleteChange = (newValue: userItem[]) => {
     getDeletedValue(newValue);
     // TODO: delete Mutation
     setCurrentOptions(newValue);
