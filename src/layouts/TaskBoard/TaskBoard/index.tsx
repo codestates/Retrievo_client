@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 import React, { ReactElement, useState } from "react";
+// import { RouteComponentProps } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -29,16 +31,24 @@ export type Boardoptions = {
   boardColumnIndex?: number;
 };
 
+export type TaskOptions = {
+  title: string;
+  boardId: string;
+  sprintId: string;
+};
+
 export type TaskBoardProps = TaskCardProps & {
   board?: boardType;
   boards: boardType[];
+  projectId: string;
+  sprintId: string;
   // ref: (element: HTMLElement | null) => any;
   handleBoardDelete: (
     id: string,
     newBoardId: string,
     projectId: string
   ) => void;
-  handleTaskCreate: () => void;
+  handleTaskCreate: (options: TaskOptions, projectId: string) => void;
   handleBoardUpdate: (options: Boardoptions, projectId: string) => void;
   handleTaskDelete: (id: string) => void;
   handleTaskClick: (id: string) => void;
@@ -46,25 +56,30 @@ export type TaskBoardProps = TaskCardProps & {
 
 const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
-  handleTaskCreate,
   handleBoardUpdate,
+  handleTaskCreate,
   board,
   boards,
+  projectId,
+  sprintId,
   // ref,
   ...props
 }): ReactElement | null => {
-  const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
+  // const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
   const { handleTaskDelete, handleTaskClick } = props;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
     boards[0]
   );
   const [inputValue, setInputValue] = useState(board?.title);
+  const [taskTitle, setTestTitle] = useState("");
 
   if (!board) return null;
 
   const taskConfig = { handleTaskDelete, handleTaskClick };
+
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
     return (
       <Box mx={3}>
@@ -81,6 +96,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     setIsDeleteModalOpen(false);
   };
 
+  // TODO : try catch
   const handleEditSubmit = async () => {
     await handleBoardUpdate(
       {
@@ -92,7 +108,24 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     setIsEditModalOpen(false);
   };
 
-  // FIXME : index -> boardRowIndex
+  // TODO : try catch
+  const handleCreateTaskSubmit = async () => {
+    try {
+      await handleTaskCreate(
+        {
+          title: taskTitle,
+          boardId: board.id,
+          sprintId,
+        },
+        projectId
+      );
+    } catch (err) {
+      console.log(err);
+    }
+
+    setIsCreateTaskModalOpen(false);
+  };
+
   const renderTasks = (tasks: taskType[]) => {
     if (!tasks.length) return null;
     return tasks.map((task, index) => {
@@ -198,7 +231,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         <Box
           display="flex"
           justifyContent="center"
-          onClick={handleTaskCreate}
+          onClick={() => setIsCreateTaskModalOpen(true)}
           _hover={{ cursor: "pointer" }}
           w={300}
         >
@@ -236,6 +269,20 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         <Input
           onChange={(e) => setInputValue(e.target.value)}
           defaultValue={board.title}
+        />
+      </Modal>
+      <Modal
+        title="Create Task"
+        isOpen={isCreateTaskModalOpen}
+        onClose={() => setIsCreateTaskModalOpen(false)}
+        secondaryText="Submit"
+        secondaryAction={handleCreateTaskSubmit}
+        buttonColor="primary.200"
+        buttonFontColor="white"
+      >
+        <Input
+          onChange={(e) => setTestTitle(e.target.value)}
+          placeholder="Write Task Name"
         />
       </Modal>
     </Box>

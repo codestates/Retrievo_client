@@ -20,6 +20,7 @@ export type TaskBoardListProps = TaskBoardProps &
 const TaskBoardList: React.FC<TaskBoardListProps> = ({
   boards,
   projectId,
+  sprintId,
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
@@ -41,6 +42,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskDelete,
     handleBoardUpdate,
     boards,
+    projectId,
+    sprintId,
   };
 
   const renderBoards = (boards: boardType[]) => {

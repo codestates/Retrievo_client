@@ -140,7 +140,6 @@ export const TaskBar: React.FC<
   if (!taskId) return null;
 
   const taskArr = getTaskData?.getTask.task;
-  console.log("taskArr", taskArr);
   if (!taskArr) {
     return <Text>no task</Text>;
   }

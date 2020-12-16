@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { RouteComponentProps } from "react-router-dom";
@@ -13,6 +14,7 @@ import {
   GetBoardsDocument,
   useCreateBoardMutation,
   useDeleteBoardMutation,
+  useSetStartedSprintQuery,
   // useGetBoardsLazyQuery,
   useGetBoardsQuery,
   // CreateBoardDocument,
@@ -20,10 +22,11 @@ import {
   // BoardResponse,
   useUpdateBoardMutation,
   Task as taskType,
+  useCreateTaskMutation,
 } from "../../generated/graphql";
 
 import { client } from "../../index";
-import { Boardoptions } from "../../layouts/TaskBoard/TaskBoard";
+import { Boardoptions, TaskOptions } from "../../layouts/TaskBoard/TaskBoard";
 
 interface BoardProps {
   projectId: string;
@@ -98,6 +101,14 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     variables: { projectId },
   });
 
+  const { loading: sprintLoading, data: sprintData } = useSetStartedSprintQuery(
+    {
+      variables: { projectId },
+    }
+  );
+
+  // const [getProject, ]
+
   // const [
   //   getBoards,
   //   { loading: lazyLoading, data: lazyData, refetch: lazyRefetch },
@@ -126,6 +137,15 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     updateBoard,
     { data: updatedData, loading: updateLoading, error: updateError },
   ] = useUpdateBoardMutation();
+
+  const [
+    createTask,
+    {
+      data: createdTaskData,
+      loading: createTaskLoading,
+      error: createTaskError,
+    },
+  ] = useCreateTaskMutation();
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -246,12 +266,20 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
-  const handleTaskCreate = () => console.log("create!");
+  const handleTaskCreate = async (options: TaskOptions, projectId: string) => {
+    console.log("create!");
+    console.log("options", options);
+    console.log("projectId", projectId);
+    await createTask({
+      variables: {
+        options,
+        projectId,
+      },
+    });
+  };
   const handleTaskDelete = (id: string) => console.log("delete", id);
 
   const handleTaskClick = (id: string) => {
-    console.log("click!", id);
-    // setIsTaskbarOpen(true);
     setSelectedTask(id);
   };
 
@@ -286,11 +314,14 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
             <PageHeading />
             <Box mt={9}>
               {/* {render()} */}
-              {loading || !data?.getBoards.boards ? (
+              {loading ||
+              !data?.getBoards.boards ||
+              !sprintData?.getStartedSprint.sprint?.id ? (
                 <TaskBoardContainer />
               ) : (
                 <TaskBoardList
                   projectId={projectId}
+                  sprintId={sprintData?.getStartedSprint.sprint?.id}
                   handleBoardCreate={handleBoardCreate}
                   handleBoardDelete={handleBoardDelete}
                   handleBoardUpdate={handleBoardUpdate}
@@ -325,4 +356,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 export default Board;
 
 // TODO : task dnd
-// TODO : taskbar open
+// TODO : board dnd
+// TODO : rerendering
+// TODO : taskbar create
+// TODO : taskbar update
