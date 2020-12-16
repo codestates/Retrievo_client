@@ -1,7 +1,6 @@
 import {
   DrawerContent,
   DrawerOverlay,
-  useDisclosure,
   DrawerCloseButton,
   DrawerBody,
   Drawer,
@@ -11,6 +10,8 @@ import {
   Button as ChakraButton,
   ListItem,
   List,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
@@ -19,6 +20,7 @@ import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 /* custom components */
 import moment from "moment";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import Form from "../../components/Form";
 import Button, { buttonColor } from "../../components/Button";
 import Textarea from "../../components/TextArea";
@@ -29,6 +31,7 @@ import TextLabel from "./TextLabel";
 import Calendar, { dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
+import { useGetTaskQuery } from "../../generated/graphql";
 
 // DUMMY DATA
 
@@ -180,10 +183,18 @@ const task = {
 };
 
 const mappingUserOption = (
-  userArr: {
-    user: { id: string; username: string; avatar: string | null };
-  }[]
+  userArr:
+    | {
+        user: {
+          id: string;
+          username: string;
+          avatar?: string | undefined | null;
+        };
+      }[]
+    | null
+    | undefined
 ) => {
+  if (!userArr) return undefined;
   return userArr.map(({ user }) => {
     return { ...user, label: user.id, value: user.username };
   });
@@ -197,8 +208,7 @@ const commentValidation = yup.object({
   email: yup.string().max(5).required(),
 });
 
-export interface taskProps {
-  taskId?: string;
+type taskType = {
   task?: {
     id: string;
     title: string | null;
@@ -230,17 +240,42 @@ export interface taskProps {
         }[]
       | null;
   };
+};
+
+interface MatchParams {
+  projectId: string;
+}
+export interface taskProps {
+  taskId: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const TaskBar: React.FC<taskProps> = (taskId) => {
+export const TaskBar: React.FC<
+  taskProps & RouteComponentProps<MatchParams>
+> = ({ taskId, match, isOpen, onClose }) => {
   // TODO: Context로 분리해야함
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const onSprintSelect = (value: string) => console.log(value);
 
-  // TODO: getTask API 연결
-  // const task = getTask({id:taskId});q1 <- 이런 느낌으로
-  // const sprint = getSprint(id)q2
-  // const project = getProject(id)q3
+  console.log("projectId:", match?.params.projectId);
+
+  const { loading, error, data } = useGetTaskQuery({
+    variables: {
+      projectId: match?.params.projectId,
+      id: taskId,
+    },
+  });
+
+  const taskArr = data?.getTask.task;
+  if (!taskArr) {
+    return <Text>no task</Text>;
+  }
+
+  const task = taskArr[0];
+
+  console.log("data:", data);
+  console.log("loading:", loading);
 
   // task => mutation
   // TODO: api와 연결
@@ -271,16 +306,18 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
   // TODO: project의 모든 sprint 목록 불러오기
 
   const renderComments = () => {
+    if (!task.comment) return null;
+
     return task.comment.map((comment) => {
       return (
         <Box display="flex" mb="2">
-          <Avatar size="sm" name={comment.user.username} />
+          <Avatar size="sm" name={comment.user?.username} />
           <Box ml="2">
             <Box display="flex" alignItems="center">
               <Text fontSize="sm" fontWeight="bold">
-                {comment.user.username}
+                {comment.user?.username}
               </Text>
-              {comment.user.id === "1234" ? (
+              {comment.user?.id === "1234" ? (
                 <IconButton
                   aria-label="delete task"
                   iconButtonType="close"
@@ -299,6 +336,7 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
   };
 
   const renderFileList = () => {
+    if (!task.file) return null;
     return (
       <List color="achromatic.600" fontSize="sm">
         {task.file.map((el) => {
@@ -324,174 +362,177 @@ export const TaskBar: React.FC<taskProps> = (taskId) => {
 
   return (
     <div>
-      <Button buttontype={buttonColor.primary} onClick={onOpen}>
-        열려라 태스크!
-      </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
         <DrawerOverlay>
-          <DrawerContent bgColor="primary.400" padding="3">
-            <Box>
-              <Button
-                buttontype={buttonColor.white}
-                onClick={() => {
-                  updateTask({ completed: !task.completed });
-                  // TODO : task complete update api
-                }}
-                rightIcon={task.completed ? <FcCheckmark /> : <></>}
-                size="sm"
-                boxShadow="sm"
-              >
-                Mark Complete
-              </Button>
-            </Box>
-            <DrawerCloseButton color="achromatic.700" mr="3" />
-            <DrawerBody padding="0">
-              <Box
-                bgColor="achromatic.100"
-                mt={2}
-                py="4"
-                px="10"
-                borderTopRadius="md"
-                boxShadow="sm"
-              >
-                <Box display="flex" alignItems="center" mb={2}>
-                  <Text mr="2" fontSize="sm" color="primary.200">
-                    Task - {task.taskIndex}
-                  </Text>
-                  <Label
-                    defaultValues={{
-                      color: "labelTeal",
-                      id: "3",
-                      name: "DONE",
-                    }}
-                    hasDropdown
-                    labels={labelOptions}
-                  />
-                </Box>
-                <Form
-                  validationSchema={titleValidation}
-                  onSubmit={(value) => updateTask(value)}
-                  initialValues={{ title: task.title }}
+          {!loading ? (
+            <DrawerContent bgColor="primary.400" padding="3">
+              <Box>
+                <Button
+                  buttontype={buttonColor.white}
+                  onClick={() => {
+                    updateTask({ completed: !task.completed });
+                    // TODO : task complete update api
+                  }}
+                  rightIcon={task.completed ? <FcCheckmark /> : <></>}
+                  size="sm"
+                  boxShadow="sm"
                 >
-                  <Textarea
-                    label="title"
-                    name="title"
-                    isEditable
-                    isLabelNonVisible
-                    fontSize="2xl"
-                    fontWeight="bold"
-                    onBlur={(e) => {
-                      console.log(e);
-                    }}
-                    placeholder="Task Title Here"
-                    autoHeight
-                    paddingNone
-                  />
-                </Form>
-                <Box>
-                  <TextLabel>Sprint</TextLabel>
-                  <SprintListDropdown {...sprintArg} />
-                </Box>
-                <Box mt={2}>
-                  <TextLabel>Assignee Users</TextLabel>
-                  <UserSelect {...userSelectArg} />
-                </Box>
-                <Box mt={2}>
-                  <Calendar
-                    defaultStartDate={moment.unix(
-                      Number(task.startDate) / 1000
-                    )}
-                    defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
-                    handleSubmit={(value: dateIFC) => {
-                      submitDates(value);
-                    }}
-                  />
-                </Box>
-                <Box mt={2}>
-                  <TextLabel>Label</TextLabel>
-                  <LabelSearchInput {...labelSelectArgs} />
-                </Box>
-                <Box mt={2}>
-                  <TextLabel>Description</TextLabel>
-
+                  Mark Complete
+                </Button>
+              </Box>
+              <DrawerCloseButton color="achromatic.700" mr="3" />
+              <DrawerBody padding="0">
+                <Box
+                  bgColor="achromatic.100"
+                  mt={2}
+                  py="4"
+                  px="10"
+                  borderTopRadius="md"
+                  boxShadow="sm"
+                >
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <Text mr="2" fontSize="sm" color="primary.200">
+                      Task - {task.taskIndex}
+                    </Text>
+                    <Label
+                      defaultValues={{
+                        color: "labelTeal",
+                        id: "3",
+                        name: "DONE",
+                      }}
+                      hasDropdown
+                      labels={labelOptions}
+                    />
+                  </Box>
                   <Form
                     validationSchema={titleValidation}
-                    onSubmit={(value) => console.log(value)}
-                    initialValues={{ description: task.description }}
+                    onSubmit={(value) => updateTask(value)}
+                    initialValues={{ title: task.title }}
                   >
                     <Textarea
-                      label="description"
-                      name="description"
+                      label="title"
+                      name="title"
+                      isEditable
                       isLabelNonVisible
+                      fontSize="2xl"
+                      fontWeight="bold"
                       onBlur={(e) => {
                         console.log(e);
                       }}
-                      placeholder="description here"
+                      placeholder="Task Title Here"
                       autoHeight
+                      paddingNone
                     />
                   </Form>
-                </Box>
-                <Box>{renderFileList()}</Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  color="achromatic.600"
-                >
-                  <ChakraButton
-                    leftIcon={<BiPlus />}
-                    size="sm"
-                    bgColor="transparent"
-                    padding="0"
-                    _hover={{ backgroundColor: "transparent" }}
-                    fontWeight="normal"
-                  >
-                    Add a file
-                  </ChakraButton>
-                  <IconButton
-                    aria-label="delete task"
-                    iconButtonType="deleteBin"
-                    padding="0"
-                    h="1rem"
-                    w="0"
-                  />
-                </Box>
-              </Box>
+                  <Box>
+                    <TextLabel>Sprint</TextLabel>
+                    <SprintListDropdown {...sprintArg} />
+                  </Box>
+                  <Box mt={2}>
+                    <TextLabel>Assignee Users</TextLabel>
+                    <UserSelect {...userSelectArg} />
+                  </Box>
+                  <Box mt={2}>
+                    <Calendar
+                      defaultStartDate={moment.unix(
+                        Number(task.startDate) / 1000
+                      )}
+                      defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
+                      handleSubmit={(value: dateIFC) => {
+                        submitDates(value);
+                      }}
+                    />
+                  </Box>
+                  <Box mt={2}>
+                    <TextLabel>Label</TextLabel>
+                    <LabelSearchInput {...labelSelectArgs} />
+                  </Box>
+                  <Box mt={2}>
+                    <TextLabel>Description</TextLabel>
 
-              <Box
-                bgColor="achromatic.200"
-                borderBottomRadius="md"
-                py="4"
-                px="10"
-                boxShadow="sm"
-              >
-                {renderComments()}
-
-                <Box display="flex" mt={5}>
-                  <Avatar name="myName" size="sm" mr={2} />
-                  <Box width="full">
                     <Form
-                      validationSchema={commentValidation}
-                      onSubmit={(value) => createComment(value)}
-                      initialValues={{ comment: "" }}
-                      isSubmitButton
+                      validationSchema={titleValidation}
+                      onSubmit={(value) => console.log(value)}
+                      initialValues={{ description: task.description }}
                     >
                       <Textarea
-                        label="comment"
-                        name="comment"
+                        label="description"
+                        name="description"
                         isLabelNonVisible
-                        placeholder="new comment here"
+                        onBlur={(e) => {
+                          console.log(e);
+                        }}
+                        placeholder="description here"
+                        autoHeight
                       />
                     </Form>
                   </Box>
+                  <Box>{renderFileList()}</Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    color="achromatic.600"
+                  >
+                    <ChakraButton
+                      leftIcon={<BiPlus />}
+                      size="sm"
+                      bgColor="transparent"
+                      padding="0"
+                      _hover={{ backgroundColor: "transparent" }}
+                      fontWeight="normal"
+                    >
+                      Add a file
+                    </ChakraButton>
+                    <IconButton
+                      aria-label="delete task"
+                      iconButtonType="deleteBin"
+                      padding="0"
+                      h="1rem"
+                      w="0"
+                    />
+                  </Box>
                 </Box>
-              </Box>
-            </DrawerBody>
-          </DrawerContent>
+
+                <Box
+                  bgColor="achromatic.200"
+                  borderBottomRadius="md"
+                  py="4"
+                  px="10"
+                  boxShadow="sm"
+                >
+                  {renderComments()}
+
+                  <Box display="flex" mt={5}>
+                    <Avatar name="myName" size="sm" mr={2} />
+                    <Box width="full">
+                      <Form
+                        validationSchema={commentValidation}
+                        onSubmit={(value) => createComment(value)}
+                        initialValues={{ comment: "" }}
+                        isSubmitButton
+                      >
+                        <Textarea
+                          label="comment"
+                          name="comment"
+                          isLabelNonVisible
+                          placeholder="new comment here"
+                        />
+                      </Form>
+                    </Box>
+                  </Box>
+                </Box>
+              </DrawerBody>
+            </DrawerContent>
+          ) : (
+            <Center>
+              <Spinner size="lg" />
+            </Center>
+          )}
         </DrawerOverlay>
       </Drawer>
     </div>
   );
 };
 
-export default TaskBar;
+export default withRouter(TaskBar);

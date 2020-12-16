@@ -44,8 +44,8 @@ enum actionTypes {
 }
 
 export type UserSelectPropTypes = {
-  options: item[];
-  defaultValue?: item[];
+  options: item[] | undefined;
+  defaultValue?: item[] | undefined | null;
   deleteAssignee: (id: string) => void;
   createAssignee: (id: string) => void;
 };
