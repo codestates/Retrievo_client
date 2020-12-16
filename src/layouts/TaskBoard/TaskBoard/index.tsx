@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import React, { ReactElement, useState } from "react";
-// import { RouteComponentProps } from "react-router-dom";
-
+import { FetchResult } from "@apollo/client";
 import {
   Box,
   Button,
@@ -11,11 +10,14 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+
+/* Components & Type */
 import Heading, { headingEnum } from "../../../components/Heading";
 import TaskCard, { TaskCardProps } from "../TaskCard";
 import IconButton from "../../../components/IconButton";
@@ -23,6 +25,10 @@ import Modal from "../../Modal/index";
 import {
   Board as boardType,
   Task as taskType,
+  DeleteBoardMutation,
+  UpdateBoardMutation,
+  CreateTaskMutation,
+  DeleteTaskMutation,
 } from "../../../generated/graphql";
 
 export type Boardoptions = {
@@ -47,10 +53,27 @@ export type TaskBoardProps = TaskCardProps & {
     id: string,
     newBoardId: string,
     projectId: string
-  ) => void;
-  handleTaskCreate: (options: TaskOptions, projectId: string) => void;
-  handleBoardUpdate: (options: Boardoptions, projectId: string) => void;
-  handleTaskDelete: (id: string, projectId: string) => void;
+  ) => Promise<
+    FetchResult<DeleteBoardMutation, Record<string, any>, Record<string, any>>
+  >;
+  handleTaskCreate: (
+    options: TaskOptions,
+    projectId: string
+  ) => Promise<
+    FetchResult<CreateTaskMutation, Record<string, any>, Record<string, any>>
+  >;
+  handleBoardUpdate: (
+    options: Boardoptions,
+    projectId: string
+  ) => Promise<
+    FetchResult<UpdateBoardMutation, Record<string, any>, Record<string, any>>
+  >;
+  handleTaskDelete: (
+    id: string,
+    projectId: string
+  ) => Promise<
+    FetchResult<DeleteTaskMutation, Record<string, any>, Record<string, any>>
+  >;
   handleTaskClick: (id: string) => void;
 };
 
@@ -65,7 +88,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   // ref,
   ...props
 }): ReactElement | null => {
-  // const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
+  /* State */
   const { handleTaskDelete, handleTaskClick } = props;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -77,6 +100,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const [inputValue, setInputValue] = useState(board?.title);
   const [taskTitle, setTestTitle] = useState("");
   const [deletedTaskId, setDeletedTaskId] = useState("");
+
+  const toast = useToast();
 
   if (!board) return null;
 
@@ -99,42 +124,100 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   const handleDeleteSubmit = async () => {
     if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
-    await handleBoardDelete(board.id, selectedNewBoard.id, projectId);
-    setIsDeleteModalOpen(false);
+    const res = await handleBoardDelete(
+      board.id,
+      selectedNewBoard.id,
+      projectId
+    );
+    if (res.errors) {
+      toast({
+        title: "Board Deletion Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Board Deletion Succeed🥳",
+        description: "Board is deleted",
+        duration: 5000,
+        status: "success",
+      });
+      setIsDeleteModalOpen(false);
+    }
   };
 
-  // TODO : try catch
   const handleEditSubmit = async () => {
-    await handleBoardUpdate(
+    const res = await handleBoardUpdate(
       {
         id: board.id,
         title: inputValue,
       },
       projectId
     );
+    if (res.errors) {
+      toast({
+        title: "Board Update Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Board Update Succeed🥳",
+        description: "Board is updated",
+        duration: 5000,
+        status: "success",
+      });
+    }
     setIsEditModalOpen(false);
   };
 
-  // TODO : try catch
   const handleCreateTaskSubmit = async () => {
-    try {
-      await handleTaskCreate(
-        {
-          title: taskTitle,
-          boardId: board.id,
-          sprintId,
-        },
-        projectId
-      );
-    } catch (err) {
-      console.log(err);
+    const res = await handleTaskCreate(
+      {
+        title: taskTitle,
+        boardId: board.id,
+        sprintId,
+      },
+      projectId
+    );
+    if (res.errors) {
+      toast({
+        title: "Task Creation Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Task Creation Succeed🥳",
+        description: "Task is created",
+        duration: 5000,
+        status: "success",
+      });
     }
-
     setIsCreateTaskModalOpen(false);
   };
 
   const handleDeleteTaskSubmit = async () => {
-    await handleTaskDelete(deletedTaskId, projectId);
+    const res = await handleTaskDelete(deletedTaskId, projectId);
+    if (res.errors) {
+      toast({
+        title: "Task Creation Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Task Creation Succeed🥳",
+        description: "Task is created",
+        duration: 5000,
+        status: "success",
+      });
+    }
+    setIsDeleteTaskModalOpen(false);
   };
 
   const renderTasks = (tasks: taskType[]) => {
@@ -187,7 +270,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             {board.title}
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
-          {/* <Text color="fail">{`${board.boardColumnIndex}`}</Text> */}
+          <Text color="fail">{`${board.boardColumnIndex}`}</Text>
         </Box>
         <Box>
           <IconButton
@@ -306,7 +389,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         buttonFontColor="white"
       >
         <>
-          <Text>You are permanently deleting this issue.</Text>
+          <Text>You are permanently deleting this task.</Text>
           <Text>Are you absolutely sure 😱?</Text>
         </>
       </Modal>

@@ -6,7 +6,6 @@ mutation CreateSprint($projectId: String!, $title: String!, $description: String
       description
       row
     }
-
     error {
       message
       code

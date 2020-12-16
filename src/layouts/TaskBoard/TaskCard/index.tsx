@@ -2,16 +2,11 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { format } from "date-fns";
-import {
-  Task as taskType,
-  // Label as labelType,
-  // User as userType,
-} from "../../../generated/graphql";
+import { Task as taskType } from "../../../generated/graphql";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import Label from "../../../components/Label";
-import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
-import IconButton, { IconButtonType } from "../../../components/IconButton";
+// import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
 
 export type TaskCardProps = {
   task?: taskType;
@@ -79,11 +74,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
         }}
       >
         <CgClose />
-        {/* <IconButton
-          aria-label="delete task button"
-          iconButtonType={IconButtonType.delete}
-          color="achromatic.600"
-        /> */}
       </Box>
       <Box>
         <Box
@@ -124,9 +114,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
         justifyContent="space-between"
       >
         {/* <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} /> */}
-        <Text ml={2} fontSize="xs" color="achromatic.600">{`${isoToDate(
-          task.startDate
-        )} ~ ${isoToDate(task.endDate)}`}</Text>
+        <Text ml={2} fontSize="xs" color="achromatic.600">
+          {!task.startDate && !task.endDate
+            ? ""
+            : `${isoToDate(task.startDate)} ~ ${isoToDate(task.endDate)}`}
+        </Text>
       </Box>
     </Box>
   );

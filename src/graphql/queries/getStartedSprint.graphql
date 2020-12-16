@@ -2,6 +2,7 @@ query SetStartedSprint($projectId: String!) {
   getStartedSprint(projectId: $projectId) {
     sprint {
       id
+      title
     }
     error {
       code
