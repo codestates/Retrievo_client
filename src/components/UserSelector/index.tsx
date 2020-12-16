@@ -120,6 +120,7 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
       ? currentOptions.map((user) => {
           return (
             <DeleteableAvatar
+              key={user.id}
               src={user.avatar || ""}
               name={user.username}
               userId={user.id}
