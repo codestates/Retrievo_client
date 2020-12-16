@@ -16,7 +16,7 @@ const App: React.FC<Record<string, never>> = () => {
     <>
       <ChakraProvider theme={theme}>
         <Route exact path="/" component={Landing} />
-        <Route path="/auth" component={Auth} />
+        <Route path="/auth/:projectId" component={Auth} />
         <Route path="/project/dashboard/:id" component={Dashboard} />
         <Route path="/project/board/:id" component={Board} />
         <Route path="/project/sprint/:id" component={Sprint} />
