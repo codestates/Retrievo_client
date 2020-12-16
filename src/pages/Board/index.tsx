@@ -88,12 +88,12 @@ export const Board: React.FC = () => {
     variables: { projectId },
   });
 
-  const [
-    getBoards,
-    { loading: lazyLoading, data: lazyData, refetch: lazyRefetch },
-  ] = useGetBoardsLazyQuery({
-    variables: { projectId },
-  });
+  // const [
+  //   getBoards,
+  //   { loading: lazyLoading, data: lazyData, refetch: lazyRefetch },
+  // ] = useGetBoardsLazyQuery({
+  //   variables: { projectId },
+  // });
   // const [flag, setFlag] = useState<boolean>(false);
 
   // useEffect(() => {
@@ -121,52 +121,52 @@ export const Board: React.FC = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     await createBoard({
       variables: { title, projectId },
-      refetchQueries: [
-        {
-          query: GetBoardsDocument,
-          variables: { projectId },
-        },
-      ],
-      update: (cache, { data }) => {
-        try {
-          const newBoardRes = data?.createBoard.boards;
-          // const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
-          const existingBoards = client.readQuery({
-            query: GetBoardsDocument,
-            variables: { projectId },
-          });
-          // console.log("newBoard", newBoard);
-          if (!existingBoards) return;
-          console.log("existingBoards", existingBoards);
-          console.log("newBoardRes", newBoardRes);
-          // cache.evict({ fieldName: "boards:{}" });
+      // refetchQueries: [
+      //   {
+      //     query: GetBoardsDocument,
+      //     variables: { projectId },
+      //   },
+      // ],
+      // update: (cache, { data }) => {
+      //   try {
+      //     const newBoardRes = data?.createBoard.boards;
+      //     // const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+      //     const existingBoards = client.readQuery({
+      //       query: GetBoardsDocument,
+      //       variables: { projectId },
+      //     });
+      //     // console.log("newBoard", newBoard);
+      //     if (!existingBoards) return;
+      //     console.log("existingBoards", existingBoards);
+      //     console.log("newBoardRes", newBoardRes);
+      //     // cache.evict({ fieldName: "boards:{}" });
 
-          const newBoard = _.cloneDeep(newBoardRes);
+      //     const newBoard = _.cloneDeep(newBoardRes);
 
-          if (!newBoardRes) return;
-          client.writeQuery({
-            query: GetBoardsDocument,
-            variables: { projectId }, // 쿼리가 바뀌었다는 것을 인지하지 못해서
-            data: {
-              getBoards: {
-                boards: newBoard,
-              },
-            },
-          });
-          // 0. writeQuery에서 variables 지워보기 -> 실패
-          // 0-1. try catch로 감고 error 메세지 확인해보기 -> 에러 없음
-          // 0-2. writeQuery에 data?.createBoard.boards 바로 꽂기 -> 안됨..
-          // 2. client.writeQuery (https://github.com/apollographql/apollo-client/issues/3909#issuecomment-568558285) -> getBoard에 넣는 건 성공! 리랜더는 아직
-          // 9. modify
-          // console.log("handleCreateBoard", cache);
-          // setTimeout(() => {
-          //   setFlag(!flag);
-          if (lazyRefetch) lazyRefetch();
-          // }, 800);
-        } catch (error) {
-          console.log("error!!!!!!:", error);
-        }
-      },
+      //     if (!newBoardRes) return;
+      //     client.writeQuery({
+      //       query: GetBoardsDocument,
+      //       variables: { projectId }, // 쿼리가 바뀌었다는 것을 인지하지 못해서
+      //       data: {
+      //         getBoards: {
+      //           boards: newBoard,
+      //         },
+      //       },
+      //     });
+      //     // 0. writeQuery에서 variables 지워보기 -> 실패
+      //     // 0-1. try catch로 감고 error 메세지 확인해보기 -> 에러 없음
+      //     // 0-2. writeQuery에 data?.createBoard.boards 바로 꽂기 -> 안됨..
+      //     // 2. client.writeQuery (https://github.com/apollographql/apollo-client/issues/3909#issuecomment-568558285) -> getBoard에 넣는 건 성공! 리랜더는 아직
+      //     // 9. modify
+      //     // console.log("handleCreateBoard", cache);
+      //     // setTimeout(() => {
+      //     //   setFlag(!flag);
+      //     if (lazyRefetch) lazyRefetch();
+      //     // }, 800);
+      //   } catch (error) {
+      //     console.log("error!!!!!!:", error);
+      //   }
+      // },
     });
   };
 
@@ -199,7 +199,7 @@ export const Board: React.FC = () => {
     });
   };
 
-  const handleUpdateBoard = async (
+  const handleBoardUpdate = async (
     options: Boardoptions,
     projectId: string
   ) => {
@@ -274,10 +274,10 @@ export const Board: React.FC = () => {
                   projectId={projectId}
                   handleBoardCreate={handleBoardCreate}
                   handleBoardDelete={handleBoardDelete}
+                  handleBoardUpdate={handleBoardUpdate}
                   handleTaskClick={handleTaskClick}
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
-                  handleUpdateBoard={handleUpdateBoard}
                   boards={data !== null ? data?.getBoards.boards : []}
                   // boards={data?.getBoards ? data?.getBoards.boards : []}
                   // boards={dummyBoardData.boards}
@@ -294,3 +294,6 @@ export const Board: React.FC = () => {
 };
 
 export default Board;
+
+// TODO : task dnd
+// TODO : taskbar open

@@ -26,7 +26,7 @@ import {
 export type Boardoptions = {
   id: string;
   title?: string;
-  boardRowIndex?: number;
+  boardColumnIndex?: number;
 };
 
 export type TaskBoardProps = TaskCardProps & {
@@ -39,7 +39,7 @@ export type TaskBoardProps = TaskCardProps & {
     projectId: string
   ) => void;
   handleTaskCreate: () => void;
-  handleUpdateBoard: (options: Boardoptions, projectId: string) => void;
+  handleBoardUpdate: (options: Boardoptions, projectId: string) => void;
   handleTaskDelete: (id: string) => void;
   handleTaskClick: (id: string) => void;
 };
@@ -47,7 +47,7 @@ export type TaskBoardProps = TaskCardProps & {
 const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
   handleTaskCreate,
-  handleUpdateBoard,
+  handleBoardUpdate,
   board,
   boards,
   // ref,
@@ -82,7 +82,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleEditSubmit = async () => {
-    await handleUpdateBoard(
+    await handleBoardUpdate(
       {
         id: board.id,
         title: inputValue,
@@ -143,40 +143,33 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             {board.title}
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
+          {/* <Text color="fail">{`${board.boardColumnIndex}`}</Text> */}
         </Box>
         <Box>
           <IconButton
             aria-label="delete board"
             iconButtonType="pencil"
-            color={
-              board.boardColumnIndex === boards.length - 1
-                ? "transparent"
-                : "achromatic.600"
-            }
-            onClick={
-              board.boardColumnIndex === boards.length - 1
-                ? () => {
-                    return null;
-                  }
-                : () => setIsEditModalOpen(true)
-            }
+            color="achromatic.600"
+            onClick={() => setIsEditModalOpen(true)}
           />
-          <IconButton
-            aria-label="delete board"
-            iconButtonType="deleteBin"
-            color={
-              board.boardColumnIndex === boards.length - 1
-                ? "transparent"
-                : "achromatic.600"
-            }
-            onClick={
-              board.boardColumnIndex === boards.length - 1
-                ? () => {
-                    return null;
-                  }
-                : () => setIsDeleteModalOpen(true)
-            }
-          />
+          {board.boardColumnIndex >= boards.length - 1 ? null : (
+            <IconButton
+              aria-label="delete board"
+              iconButtonType="deleteBin"
+              color={
+                board.boardColumnIndex >= boards.length - 1
+                  ? "transparent"
+                  : "achromatic.600"
+              }
+              onClick={
+                board.boardColumnIndex === boards.length - 1
+                  ? () => {
+                      return null;
+                    }
+                  : () => setIsDeleteModalOpen(true)
+              }
+            />
+          )}
         </Box>
       </Box>
       <Box

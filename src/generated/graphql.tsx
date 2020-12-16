@@ -115,21 +115,47 @@ export type Project = {
   createdAt: Scalars["String"];
   updatedAt: Scalars["String"];
   projectPermissions?: Maybe<Array<ProjectPermission>>;
-  board: Array<Board>;
-  label: Array<Label>;
+  sprint?: Maybe<Array<Sprint>>;
+  board?: Maybe<Array<Board>>;
+  label?: Maybe<Array<Label>>;
+  task?: Maybe<Array<Task>>;
+};
+
+export type Sprint = {
+  __typename?: "Sprint";
+  id: Scalars["String"];
+  title: Scalars["String"];
+  description?: Maybe<Scalars["String"]>;
+  didStart?: Maybe<Scalars["Boolean"]>;
+  isCompleted?: Maybe<Scalars["Boolean"]>;
+  row: Scalars["Float"];
+  dueDate?: Maybe<Scalars["String"]>;
+  startedAt?: Maybe<Scalars["String"]>;
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
+  project: Project;
+  sprintNotification: Array<SprintNotification>;
   task: Array<Task>;
 };
 
-export type Board = {
-  __typename?: "Board";
+export type SprintNotification = {
+  __typename?: "SprintNotification";
   id: Scalars["String"];
-  title: Scalars["String"];
-  project?: Project;
-  boardColumnIndex: Scalars["Float"];
-  createdAt?: Scalars["String"];
-  updatedAt?: Scalars["String"];
-  task?: Maybe<Array<Task>>;
+  type: Description;
+  isRead: Scalars["Boolean"];
+  target?: Maybe<User>;
+  project?: Maybe<Project>;
+  sprint?: Maybe<Sprint>;
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
 };
+
+export enum Description {
+  /** notification for sprint START */
+  SprintStart = "SPRINT_START",
+  /** notification for sprint END */
+  SprintEnd = "SPRINT_END",
+}
 
 export type Task = {
   __typename?: "Task";
@@ -174,41 +200,16 @@ export type File = {
   updatedAt: Scalars["String"];
 };
 
-export type Sprint = {
-  __typename?: "Sprint";
+export type Board = {
+  __typename?: "Board";
   id: Scalars["String"];
   title: Scalars["String"];
-  description?: Maybe<Scalars["String"]>;
-  didStart?: Maybe<Scalars["Boolean"]>;
-  isCompleted?: Maybe<Scalars["Boolean"]>;
-  row: Scalars["Float"];
-  dueDate?: Maybe<Scalars["String"]>;
-  startedAt?: Maybe<Scalars["String"]>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-  project: Project;
-  sprintNotification: Array<SprintNotification>;
-  task: Array<Task>;
+  project?: Project;
+  boardColumnIndex: Scalars["Float"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
+  task?: Maybe<Array<Task>>;
 };
-
-export type SprintNotification = {
-  __typename?: "SprintNotification";
-  id: Scalars["String"];
-  type: Description;
-  isRead: Scalars["Boolean"];
-  target?: Maybe<User>;
-  project?: Maybe<Project>;
-  sprint?: Maybe<Sprint>;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-};
-
-export enum Description {
-  /** notification for sprint START */
-  SprintStart = "SPRINT_START",
-  /** notification for sprint END */
-  SprintEnd = "SPRINT_END",
-}
 
 export type UserTask = {
   __typename?: "UserTask";
@@ -1514,6 +1515,17 @@ export type GetProjectQuery = { __typename?: "Query" } & {
                     "id" | "username" | "email" | "role" | "avatar"
                   >;
                 }
+            >
+          >;
+          sprint?: Maybe<
+            Array<{ __typename?: "Sprint" } & Pick<Sprint, "title" | "id">>
+          >;
+          board?: Maybe<
+            Array<{ __typename?: "Board" } & Pick<Board, "id" | "title">>
+          >;
+          label?: Maybe<
+            Array<
+              { __typename?: "Label" } & Pick<Label, "id" | "name" | "color">
             >
           >;
         }
@@ -3746,6 +3758,19 @@ export const GetProjectDocument = gql`
             role
             avatar
           }
+        }
+        sprint {
+          title
+          id
+        }
+        board {
+          id
+          title
+        }
+        label {
+          id
+          name
+          color
         }
       }
       error {

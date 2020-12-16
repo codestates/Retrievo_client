@@ -31,7 +31,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskClick,
     handleTaskCreate,
     handleTaskDelete,
-    handleUpdateBoard,
+    handleBoardUpdate,
   } = props;
   const boardConfig = {
     handleBoardCreate,
@@ -39,7 +39,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskClick,
     handleTaskCreate,
     handleTaskDelete,
-    handleUpdateBoard,
+    handleBoardUpdate,
     boards,
   };
 
@@ -66,12 +66,14 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     });
   };
 
-  const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
+  const onDragEnd = async (result: DropResult, provided: ResponderProvided) => {
     // reorder
     const { destination, source, draggableId, type } = result;
     console.log("type:", type);
 
     if (!destination) return;
+    console.log("destination", destination);
+    console.log("source", source);
 
     if (type === "TASK") {
       if (
@@ -103,6 +105,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       )
         return;
 
+      console.log("sourceBoard", sourceBoard.task);
+      console.log("sourceIndex", source.index);
       const sourceTask = sourceBoard.task.splice(source.index, 1);
       destinationBoard.task.splice(destination.index, 0, sourceTask[0]);
 
@@ -130,6 +134,13 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       const temp = copyBoardLists[source.index];
       copyBoardLists[source.index] = copyBoardLists[destination.index];
       copyBoardLists[destination.index] = temp;
+      await handleBoardUpdate(
+        {
+          id: temp.id,
+          boardColumnIndex: destination.index,
+        },
+        projectId
+      );
 
       setBoardLists(copyBoardLists);
     }
@@ -162,145 +173,3 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 };
 
 export default TaskBoardList;
-
-// const initialData = {
-//   tasks: {
-//     "task-1": { id: "task-1", content: "Take out the garbage" },
-//     "task-2": { id: "task-2", content: "Watch my favorite show" },
-//     "task-3": { id: "task-3", content: "Charge my phone" },
-//     "task-4": { id: "task-4", content: "Cook dinner" },
-//   },
-//   columns: {
-//     "column-1": {
-//       id: "column-1",
-//       title: "To do",
-//       taskIds: ["task-1", "task-2", "task-3", "task-4"],
-//     },
-//   },
-//   // Facilitate reordering of the columns
-//   columnOrder: ["column-1"],
-// };
-
-/*
-{
-  "data": {
-    "getBoards": {
-      "boards": [
-        {
-          "title": "Hat Rustic Frozen Hat",
-          "boardColumnIndex": 0,
-          "task": [
-            {
-              "title": "Liberian Dollar Ball Director",
-              "boardRowIndex": null,
-              "sprintRowIndex": 1,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Katlynn Smitham DDS"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "Borders",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "payment Cliffs indigo",
-              "boardRowIndex": null,
-              "sprintRowIndex": 3,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Vickie Beer"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "California",
-                    "color": "RED"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Keys Borders Berkshire",
-              "boardRowIndex": null,
-              "sprintRowIndex": 5,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Camille Morissette"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "backing up",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "matrices payment asymmetric",
-              "boardRowIndex": null,
-              "sprintRowIndex": 6,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Bill Witting III"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "sky blue",
-                    "color": "RED"
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Michigan payment Graphic Interface",
-              "boardRowIndex": null,
-              "sprintRowIndex": 8,
-              "userTask": [
-                {
-                  "user": {
-                    "avatar": null,
-                    "username": "Gina Emmerich"
-                  }
-                }
-              ],
-              "taskLabel": [
-                {
-                  "label": {
-                    "name": "Clothing",
-                    "color": "PINK"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "error": null
-    }
-  }
-}
-
-*/

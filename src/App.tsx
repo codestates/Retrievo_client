@@ -1,6 +1,6 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import theme from "./styles/theme";
 import Dashboard from "./pages/Dashboard";
 import MyProfile from "./pages/MyProfile";
@@ -23,6 +23,7 @@ const App: React.FC<Record<string, never>> = () => {
         <Route path="/project/setting/:id" component={ProjectSetting} />
         <Route path="/new-project" component={NewProject} />
         <Route path="/my-profile" component={MyProfile} />
+        {/* <Redirect path="*" to="/" /> */}
       </ChakraProvider>
     </>
   );

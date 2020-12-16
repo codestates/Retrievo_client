@@ -112,6 +112,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
             mr={2}
             color="primary.200"
           >{`${task?.taskIndex}`}</Text>
+          <Text
+            fontSize="xs"
+            mr={2}
+            color="fail"
+          >{`${task?.boardRowIndex}`}</Text>
           <Heading
             pr="1.5rem"
             fontWeight="normal"

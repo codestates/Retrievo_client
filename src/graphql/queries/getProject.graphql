@@ -16,6 +16,19 @@ query GetProject($projectId: String!){
                     avatar
                 }
             }
+            sprint{
+                title
+                id
+            }
+            board{
+                id
+                title
+            }
+            label{
+                id
+                name
+                color
+            }
         }
         error {
             code
