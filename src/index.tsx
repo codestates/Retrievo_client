@@ -4,7 +4,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 
-const client = new ApolloClient({
+// eslint-disable-next-line import/prefer-default-export
+export const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
   credentials: "include",

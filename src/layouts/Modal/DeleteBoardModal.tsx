@@ -15,37 +15,27 @@ export interface modalIFC extends ButtonProps {
   title: string;
   children: React.ReactElement;
   isOpen: boolean;
-  onOpen?: () => void;
+  onOpen: () => void;
   onClose: () => void;
   footer?: boolean;
   secondaryAction?: () => void;
   secondaryText?: string;
-  buttonText?: string;
-  buttonColor?: string;
-  buttonFontColor?: string;
+  buttonText: string;
 }
 
-const ModalLayout: React.FC<modalIFC> = ({
+const DeleteBoardModal: React.FC<modalIFC> = ({
   title,
   children,
   isOpen,
-  onOpen,
   onClose,
   footer = true,
   secondaryAction,
   secondaryText,
   buttonText,
-  buttonColor,
-  buttonFontColor,
   ...buttonConfig
 }) => {
   return (
     <>
-      {onOpen ? (
-        <Button onClick={onOpen} {...buttonConfig}>
-          {buttonText}
-        </Button>
-      ) : null}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -57,12 +47,7 @@ const ModalLayout: React.FC<modalIFC> = ({
               <Button colorScheme="blue" mr={3} onClick={onClose}>
                 Close
               </Button>
-              <Button
-                variant={buttonColor ? "solid" : "ghost"}
-                bgColor={buttonColor || "transparent"}
-                onClick={secondaryAction}
-                color={buttonFontColor || "transparent"}
-              >
+              <Button variant="ghost" onClick={secondaryAction}>
                 {secondaryText}
               </Button>
             </ModalFooter>
@@ -73,4 +58,4 @@ const ModalLayout: React.FC<modalIFC> = ({
   );
 };
 
-export default ModalLayout;
+export default DeleteBoardModal;

@@ -1,10 +1,21 @@
+/* eslint-disable indent */
 import React, { ReactElement, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  // ChevronDownIcon,
+} from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { BiChevronDown } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
-import Text from "../../../components/Text";
+// import Text from "../../../components/Text";
 import TaskCard, { TaskCardProps } from "../TaskCard";
 import IconButton from "../../../components/IconButton";
 import Modal from "../../Modal/index";
@@ -12,6 +23,7 @@ import {
   Board as boardType,
   Task as taskType,
 } from "../../../generated/graphql";
+// import { boardHeading } from "../../../components/Heading/heading.stories";
 // export type board = {
 //   __typename?: "Board" | undefined;
 //   id: string;
@@ -21,7 +33,8 @@ import {
 // };
 
 export type TaskBoardProps = TaskCardProps & {
-  board: boardType;
+  board?: boardType;
+  boards: boardType[];
   // ref: (element: HTMLElement | null) => any;
   handleBoardDelete: (
     id: string,
@@ -37,11 +50,19 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
   handleTaskCreate,
   board,
+  boards,
   // ref,
   ...props
-}): ReactElement => {
+}): ReactElement | null => {
+  const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
   const { handleTaskDelete, handleTaskClick } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
+    boards[0]
+  );
+
+  if (!board) return null;
+
   const taskConfig = { handleTaskDelete, handleTaskClick };
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
     return (
@@ -51,6 +72,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         </IconContext.Provider>
       </Box>
     );
+  };
+
+  const handleDeleteSubmit = async () => {
+    console.log("submit");
+    if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
+    console.log("selected", selectedNewBoard.id, selectedNewBoard.title);
+    console.log("deleted", board.id, board.title);
+    await handleBoardDelete(board.id, selectedNewBoard.id, projectId);
+    setIsModalOpen(false);
   };
 
   // FIXME : index -> boardRowIndex
@@ -78,6 +108,17 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     });
   };
 
+  const renderModalMenu = () => {
+    const otherBoards = boards.filter((currentBoard) => {
+      return board.id !== currentBoard.id;
+    });
+    return otherBoards.map((currentBoard) => (
+      <MenuItem onClick={() => setSelectedNewBoard(currentBoard)}>
+        {currentBoard.title}
+      </MenuItem>
+    ));
+  };
+
   // column
   return (
     <Box w={330} mr={4} minH={1000}>
@@ -97,8 +138,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         <IconButton
           aria-label="delete board"
           iconButtonType="deleteBin"
-          color="achromatic.600"
-          onClick={() => setIsModalOpen(true)}
+          color={
+            board.boardColumnIndex === boards.length - 1
+              ? "transparent"
+              : "achromatic.600"
+          }
+          onClick={
+            board.boardColumnIndex === boards.length - 1
+              ? () => {
+                  return null;
+                }
+              : () => setIsModalOpen(true)
+          }
         />
       </Box>
       <Box
@@ -134,13 +185,25 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           {changeIconColor(<BsPlusCircleFill />, "#828282", "25")}
         </Box>
       </Box>
-      {/* <Modal title="Which Board you want to move the tasks?"
+      <Modal
+        title="Delete Board"
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        secondaryAction={}
+        secondaryText="Submit"
+        secondaryAction={handleDeleteSubmit}
+        buttonColor="fail"
+        buttonFontColor="white"
       >
-        <Dropdown />
-      </Modal> */}
+        <>
+          <Text mb={3}>Which Board you want to move the tasks to?</Text>
+          <Menu>
+            <MenuButton as={Button} rightIcon={<BiChevronDown />}>
+              {selectedNewBoard.title}
+            </MenuButton>
+            <MenuList>{renderModalMenu()}</MenuList>
+          </Menu>
+        </>
+      </Modal>
     </Box>
   );
 };
