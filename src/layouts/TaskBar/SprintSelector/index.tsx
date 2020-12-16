@@ -5,7 +5,7 @@ import { HiChevronDown } from "react-icons/hi";
 type sprint = { id: string; title: string };
 
 export type SprintListDropdownPropsType = {
-  sprints: sprint[];
+  sprints: sprint[] | undefined | null;
   currentSprint?: sprint;
   onSprintSelect: (projectId: string) => void;
 };
