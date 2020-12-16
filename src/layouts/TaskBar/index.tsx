@@ -117,9 +117,9 @@ export const TaskBar: React.FC<
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
-      console.log(isOpen);
-      console.log(taskId);
-      console.log(projectId);
+      console.log("isOpen:", isOpen);
+      console.log("taskId:", taskId);
+      console.log("projectId:", projectId);
       getTask({
         variables: {
           projectId,
