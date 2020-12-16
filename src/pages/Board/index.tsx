@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 /* Layouts & types */
-import { Box, useDisclosure, Text } from "@chakra-ui/react";
+import { Box, useDisclosure, Text, Flex } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -24,6 +24,8 @@ import {
   useDeleteTaskMutation,
 } from "../../generated/graphql";
 import { client } from "../../index";
+import Heading, { headingEnum } from "../../components/Heading";
+import Button, { buttonColor } from "../../components/Button";
 
 interface BoardProps {
   projectId: string;
@@ -80,8 +82,7 @@ const projectArgs = {
 export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   ...args
 }) => {
-  // FIXME
-  const projectId = "14ab38e8-91a0-4644-ad05-ca476387e678";
+  const { projectId } = args.match.params;
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // no sprint "14ab38e8-91a0-4644-ad05-ca476387e678";
@@ -198,6 +199,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
 
+  if (!sprintData || !sprintData) return null;
+
   return (
     <>
       <Box>
@@ -206,6 +209,16 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
+            <Flex alignItems="flex-end" mt={7} mb={5} ml={5}>
+              <Heading mr={3} headingType={headingEnum.sprint}>
+                {!sprintData?.getStartedSprint.sprint?.title
+                  ? ""
+                  : sprintData?.getStartedSprint.sprint?.title}
+              </Heading>
+              <Button size="sm" buttontype={buttonColor.primary}>
+                Sprint complete
+              </Button>
+            </Flex>
             <Box mt={9}>
               {loading ||
               !data?.getBoards.boards ||

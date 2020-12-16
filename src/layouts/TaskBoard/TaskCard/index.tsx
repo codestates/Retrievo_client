@@ -114,9 +114,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
         justifyContent="space-between"
       >
         {/* <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} /> */}
-        <Text ml={2} fontSize="xs" color="achromatic.600">{`${isoToDate(
-          task.startDate
-        )} ~ ${isoToDate(task.endDate)}`}</Text>
+        <Text ml={2} fontSize="xs" color="achromatic.600">
+          {!task.startDate && !task.endDate
+            ? ""
+            : `${isoToDate(task.startDate)} ~ ${isoToDate(task.endDate)}`}
+        </Text>
       </Box>
     </Box>
   );

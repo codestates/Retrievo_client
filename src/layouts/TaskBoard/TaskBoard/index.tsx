@@ -25,9 +25,10 @@ import Modal from "../../Modal/index";
 import {
   Board as boardType,
   Task as taskType,
-  BoardResponse,
   DeleteBoardMutation,
   UpdateBoardMutation,
+  CreateTaskMutation,
+  DeleteTaskMutation,
 } from "../../../generated/graphql";
 
 export type Boardoptions = {
@@ -55,14 +56,24 @@ export type TaskBoardProps = TaskCardProps & {
   ) => Promise<
     FetchResult<DeleteBoardMutation, Record<string, any>, Record<string, any>>
   >;
-  handleTaskCreate: (options: TaskOptions, projectId: string) => void;
+  handleTaskCreate: (
+    options: TaskOptions,
+    projectId: string
+  ) => Promise<
+    FetchResult<CreateTaskMutation, Record<string, any>, Record<string, any>>
+  >;
   handleBoardUpdate: (
     options: Boardoptions,
     projectId: string
   ) => Promise<
     FetchResult<UpdateBoardMutation, Record<string, any>, Record<string, any>>
   >;
-  handleTaskDelete: (id: string, projectId: string) => void;
+  handleTaskDelete: (
+    id: string,
+    projectId: string
+  ) => Promise<
+    FetchResult<DeleteTaskMutation, Record<string, any>, Record<string, any>>
+  >;
   handleTaskClick: (id: string) => void;
 };
 
@@ -136,38 +147,77 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     }
   };
 
-  // TODO : try catch
   const handleEditSubmit = async () => {
-    await handleBoardUpdate(
+    const res = await handleBoardUpdate(
       {
         id: board.id,
         title: inputValue,
       },
       projectId
     );
+    if (res.errors) {
+      toast({
+        title: "Board Update Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Board Update Succeed🥳",
+        description: "Board is updated",
+        duration: 5000,
+        status: "success",
+      });
+    }
     setIsEditModalOpen(false);
   };
 
-  // TODO : try catch
   const handleCreateTaskSubmit = async () => {
-    try {
-      await handleTaskCreate(
-        {
-          title: taskTitle,
-          boardId: board.id,
-          sprintId,
-        },
-        projectId
-      );
-    } catch (err) {
-      console.log(err);
+    const res = await handleTaskCreate(
+      {
+        title: taskTitle,
+        boardId: board.id,
+        sprintId,
+      },
+      projectId
+    );
+    if (res.errors) {
+      toast({
+        title: "Task Creation Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Task Creation Succeed🥳",
+        description: "Task is created",
+        duration: 5000,
+        status: "success",
+      });
     }
-
     setIsCreateTaskModalOpen(false);
   };
 
   const handleDeleteTaskSubmit = async () => {
-    await handleTaskDelete(deletedTaskId, projectId);
+    const res = await handleTaskDelete(deletedTaskId, projectId);
+    if (res.errors) {
+      toast({
+        title: "Task Creation Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Task Creation Succeed🥳",
+        description: "Task is created",
+        duration: 5000,
+        status: "success",
+      });
+    }
+    setIsDeleteTaskModalOpen(false);
   };
 
   const renderTasks = (tasks: taskType[]) => {
@@ -220,7 +270,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             {board.title}
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
-          {/* <Text color="fail">{`${board.boardColumnIndex}`}</Text> */}
+          <Text color="fail">{`${board.boardColumnIndex}`}</Text>
         </Box>
         <Box>
           <IconButton
@@ -339,7 +389,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         buttonFontColor="white"
       >
         <>
-          <Text>You are permanently deleting this issue.</Text>
+          <Text>You are permanently deleting this task.</Text>
           <Text>Are you absolutely sure 😱?</Text>
         </>
       </Modal>

@@ -25,6 +25,7 @@ query GetTask($projectId:String!,$id:String!){
         user{
           id
           username
+          email
         }
       }
       taskLabel{
