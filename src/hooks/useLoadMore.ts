@@ -5,7 +5,7 @@ interface dataProps {
 }
 
 interface dataObject {
-  [key: string]: string | dataProps;
+  [key: string]: string | dataProps | any;
 }
 
 // eslint-disable-next-line no-unused-vars

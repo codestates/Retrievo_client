@@ -1,19 +1,26 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import Chart from "../../../components/Chart";
 import { chartVariant } from "../../../components/Chart/types";
-
-const data = {
-  Todo: 7,
-  Doing: 19,
-  Review: 12,
-  Testing: 5,
-  Done: 6,
-};
+import Spinner from "../../../components/Spinner";
+import { useGetReportSummaryQuery } from "../../../generated/graphql";
 
 export const IncompleteTasks: React.FC = () => {
+  const location = useLocation();
+  const projectId = location.pathname.split("/").pop() || "";
+
+  const { data, loading } = useGetReportSummaryQuery({
+    variables: { projectId },
+  });
+
+  if (loading) return <Spinner />;
+
   return (
     <>
-      <Chart variant={chartVariant.incompleteTaskStatus} data={data} />
+      <Chart
+        variant={chartVariant.incompleteTaskStatus}
+        data={data?.reportSummary.incompleteTaskStatus}
+      />
     </>
   );
 };
