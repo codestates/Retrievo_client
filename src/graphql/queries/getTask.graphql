@@ -15,6 +15,7 @@ query GetTask($projectId:String!,$id:String!){
       sprint{
         id
         title
+        didStart
       }
       file{
         fileLink

@@ -69,7 +69,7 @@ export const MyProfile: React.FC = () => {
     <>
       <TopNav {...args} />
       <Container maxW={maxW} mt={16}>
-        <Center>
+        <Center mt={40}>
           <Heading headingType={headingEnum.page} fontSize="2.5rem">
             My Profile
           </Heading>

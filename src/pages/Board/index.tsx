@@ -1,35 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import _ from "lodash";
-
+import { RouteComponentProps } from "react-router-dom";
 /* Layouts */
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
 import TaskBoardList from "../../layouts/TaskBoard/TaskBoardList";
 import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
-
-import { client } from "../../index";
-import { Boardoptions } from "../../layouts/TaskBoard/TaskBoard";
-
-/* GraphQL */
+import { TaskBar } from "../../layouts/TaskBar";
 import {
   GetBoardsDocument,
   useCreateBoardMutation,
   useDeleteBoardMutation,
-  useGetBoardsLazyQuery,
+  // useGetBoardsLazyQuery,
   useGetBoardsQuery,
-  CreateBoardDocument,
-  GetBoardsQuery,
-  BoardResponse,
+  // CreateBoardDocument,
+  // GetBoardsQuery,
+  // BoardResponse,
   useUpdateBoardMutation,
+  Task as taskType,
 } from "../../generated/graphql";
 
+import { client } from "../../index";
+import { Boardoptions } from "../../layouts/TaskBoard/TaskBoard";
+
+interface BoardProps {
+  projectId: string;
+}
+
+/* GraphQL */
+// 타입스크립트 타이프그래프큐엘 그래프큐엘 아폴로 CICD 배포....
 // interface indexProps {
 //
 // }
 
-const args = {
+const projectArgs = {
   projects: [
     {
       id: "1",
@@ -77,9 +83,14 @@ const args = {
   ],
 };
 
-export const Board: React.FC = () => {
+export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
+  ...args
+}) => {
   // FIXME
   const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
+  const [isTaskbarOpen, setIsTaskbarOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<string | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   // text "04f025f8-234c-49b7-b9bf-7b7f94415569";
   // no sprint "14ab38e8-91a0-4644-ad05-ca476387e678";
 
@@ -238,7 +249,13 @@ export const Board: React.FC = () => {
 
   const handleTaskCreate = () => console.log("create!");
   const handleTaskDelete = (id: string) => console.log("delete", id);
-  const handleTaskClick = (id: string) => console.log("click", id);
+
+  const handleTaskClick = (id: string) => {
+    console.log("click!", id);
+    onOpen();
+    // setIsTaskbarOpen(true);
+    setSelectedTask(id);
+  };
   // const [getBoards, { loading, data, refetch }] = useGetBoardsLazyQuery({
   //   variables:
   //     projectId: "04f025f8-234c-49b7-b9bf-7b7f94415569",
@@ -260,7 +277,7 @@ export const Board: React.FC = () => {
   return (
     <>
       <Box>
-        <TopNav {...args} />
+        <TopNav {...projectArgs} />
         <SideNav />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
@@ -288,6 +305,14 @@ export const Board: React.FC = () => {
             </Box>
           </Box>
         </Box>
+        {selectedTask ? (
+          <TaskBar
+            taskId={selectedTask}
+            {...args}
+            isOpen={isOpen}
+            onClose={onClose}
+          />
+        ) : null}
       </Box>
     </>
   );

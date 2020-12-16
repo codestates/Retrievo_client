@@ -1701,7 +1701,10 @@ export type GetTaskQuery = { __typename?: "Query" } & {
             board?: Maybe<
               { __typename?: "Board" } & Pick<Board, "id" | "title">
             >;
-            sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
+            sprint: { __typename?: "Sprint" } & Pick<
+              Sprint,
+              "id" | "title" | "didStart"
+            >;
             file?: Maybe<
               Array<{ __typename?: "File" } & Pick<File, "fileLink">>
             >;
@@ -4089,6 +4092,7 @@ export const GetTaskDocument = gql`
         sprint {
           id
           title
+          didStart
         }
         file {
           fileLink

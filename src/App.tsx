@@ -16,11 +16,11 @@ const App: React.FC<Record<string, never>> = () => {
     <>
       <ChakraProvider theme={theme}>
         <Route exact path="/" component={Landing} />
-        <Route path="/auth" component={Auth} />
-        <Route path="/project/dashboard/:id" component={Dashboard} />
-        <Route path="/project/board/:id" component={Board} />
-        <Route path="/project/sprint/:id" component={Sprint} />
-        <Route path="/project/setting/:id" component={ProjectSetting} />
+        <Route path="/auth/:projectId" component={Auth} />
+        <Route path="/project/dashboard/:projectId" component={Dashboard} />
+        <Route path="/project/board/:projectId" component={Board} />
+        <Route path="/project/sprint/:projectId" component={Sprint} />
+        <Route path="/project/setting/:projectId" component={ProjectSetting} />
         <Route path="/new-project" component={NewProject} />
         <Route path="/my-profile" component={MyProfile} />
         {/* <Redirect path="*" to="/" /> */}
