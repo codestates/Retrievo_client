@@ -31,6 +31,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskClick,
     handleTaskCreate,
     handleTaskDelete,
+    handleUpdateBoard,
   } = props;
   const boardConfig = {
     handleBoardCreate,
@@ -38,6 +39,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskClick,
     handleTaskCreate,
     handleTaskDelete,
+    handleUpdateBoard,
     boards,
   };
 

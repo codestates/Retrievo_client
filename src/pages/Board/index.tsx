@@ -10,6 +10,7 @@ import TaskBoardList from "../../layouts/TaskBoard/TaskBoardList";
 import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 
 import { client } from "../../index";
+import { Boardoptions } from "../../layouts/TaskBoard/TaskBoard";
 
 /* GraphQL */
 import {
@@ -21,13 +22,12 @@ import {
   CreateBoardDocument,
   GetBoardsQuery,
   BoardResponse,
+  useUpdateBoardMutation,
 } from "../../generated/graphql";
 
 // interface indexProps {
 //
 // }
-import dummyBoardData from "./dummyData";
-import { boardType } from "../../layouts/TaskBoard/TaskBoard/SkeletonBoard";
 
 const args = {
   projects: [
@@ -80,18 +80,26 @@ const args = {
 export const Board: React.FC = () => {
   // FIXME
   const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
+  // text "04f025f8-234c-49b7-b9bf-7b7f94415569";
+  // no sprint "14ab38e8-91a0-4644-ad05-ca476387e678";
 
   /* Mutation, Query */
   const { loading, data, refetch } = useGetBoardsQuery({
     variables: { projectId },
   });
 
-  const [flag, setFlag] = useState<boolean>(false);
+  const [
+    getBoards,
+    { loading: lazyLoading, data: lazyData, refetch: lazyRefetch },
+  ] = useGetBoardsLazyQuery({
+    variables: { projectId },
+  });
+  // const [flag, setFlag] = useState<boolean>(false);
 
-  useEffect(() => {
-    // TODO
-    console.log("use Effect:", data);
-  }, [flag, data]);
+  // useEffect(() => {
+  //   // TODO
+  //   console.log("use Effect:", data);
+  // }, [flag, data]);
 
   const [
     createBoard,
@@ -103,6 +111,11 @@ export const Board: React.FC = () => {
     deleteBoard,
     { data: deletedData, loading: deleteLoading, error: deleteError },
   ] = useDeleteBoardMutation();
+
+  const [
+    updateBoard,
+    { data: updatedData, loading: updateLoading, error: updateError },
+  ] = useUpdateBoardMutation();
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -146,22 +159,16 @@ export const Board: React.FC = () => {
           // 2. client.writeQuery (https://github.com/apollographql/apollo-client/issues/3909#issuecomment-568558285) -> getBoard에 넣는 건 성공! 리랜더는 아직
           // 9. modify
           // console.log("handleCreateBoard", cache);
-          setTimeout(() => {
-            setFlag(!flag);
-            if (refetch) refetch();
-          }, 800);
+          // setTimeout(() => {
+          //   setFlag(!flag);
+          if (lazyRefetch) lazyRefetch();
+          // }, 800);
         } catch (error) {
           console.log("error!!!!!!:", error);
         }
       },
     });
   };
-
-  /*
-  ANCHOR
-  1. 딥클론을 해보기
-
-  */
 
   const handleBoardDelete = async (
     id: string,
@@ -192,9 +199,46 @@ export const Board: React.FC = () => {
     });
   };
 
-  const handleTaskClick = (id: string) => console.log("click", id);
+  const handleUpdateBoard = async (
+    options: Boardoptions,
+    projectId: string
+  ) => {
+    await updateBoard({
+      variables: {
+        options,
+        projectId,
+      },
+      update: (cache, { data }) => {
+        const newBoardRes = data?.updateBoard.boards;
+        const existingBoards = client.readQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+        });
+        if (!newBoardRes) return;
+        // console.log(existingBoards);
+        const copyExistingBoards = existingBoards.getBoards.boards.slice();
+        copyExistingBoards.splice(
+          newBoardRes[0].boardColumnIndex,
+          1,
+          newBoardRes
+        );
+        client.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: copyExistingBoards,
+            },
+          },
+        });
+        console.log("updatedboard", newBoardRes);
+      },
+    });
+  };
+
   const handleTaskCreate = () => console.log("create!");
   const handleTaskDelete = (id: string) => console.log("delete", id);
+  const handleTaskClick = (id: string) => console.log("click", id);
   // const [getBoards, { loading, data, refetch }] = useGetBoardsLazyQuery({
   //   variables:
   //     projectId: "04f025f8-234c-49b7-b9bf-7b7f94415569",
@@ -208,9 +252,9 @@ export const Board: React.FC = () => {
     return null;
   };
 
-  if (loading || !data?.getBoards.boards) {
-    return <TaskBoardContainer />;
-  }
+  // if (loading || !data?.getBoards.boards) {
+  //   return <TaskBoardContainer />;
+  // }
 
   // FIXME : board가 왜 들어가는고얌..
   return (
@@ -223,23 +267,24 @@ export const Board: React.FC = () => {
             <PageHeading />
             <Box mt={9}>
               {render()}
-              {/* {loading || !data?.getBoards.boards ? (
+              {loading || !data?.getBoards.boards ? (
                 <TaskBoardContainer />
-              ) : ( */}
-              <TaskBoardList
-                projectId={projectId}
-                handleBoardCreate={handleBoardCreate}
-                handleBoardDelete={handleBoardDelete}
-                handleTaskClick={handleTaskClick}
-                handleTaskCreate={handleTaskCreate}
-                handleTaskDelete={handleTaskDelete}
-                boards={data !== null ? data?.getBoards.boards : []}
-                // boards={data?.getBoards ? data?.getBoards.boards : []}
-                // boards={dummyBoardData.boards}
-                // board={dummyBoardData.boards}
-                board={data?.getBoards.boards[0]}
-              />
-              {/* )} */}
+              ) : (
+                <TaskBoardList
+                  projectId={projectId}
+                  handleBoardCreate={handleBoardCreate}
+                  handleBoardDelete={handleBoardDelete}
+                  handleTaskClick={handleTaskClick}
+                  handleTaskCreate={handleTaskCreate}
+                  handleTaskDelete={handleTaskDelete}
+                  handleUpdateBoard={handleUpdateBoard}
+                  boards={data !== null ? data?.getBoards.boards : []}
+                  // boards={data?.getBoards ? data?.getBoards.boards : []}
+                  // boards={dummyBoardData.boards}
+                  // board={dummyBoardData.boards}
+                  board={data?.getBoards.boards[0]}
+                />
+              )}
             </Box>
           </Box>
         </Box>

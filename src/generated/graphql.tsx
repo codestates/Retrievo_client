@@ -1125,6 +1125,66 @@ export type RegisterMutation = { __typename?: "Mutation" } & {
   };
 };
 
+export type UpdateBoardMutationVariables = Exact<{
+  options: BoardUpdateInput;
+  projectId: Scalars["String"];
+}>;
+
+export type UpdateBoardMutation = { __typename?: "Mutation" } & {
+  updateBoard: { __typename?: "BoardResponse" } & {
+    boards?: Maybe<
+      Array<
+        { __typename?: "Board" } & Pick<
+          Board,
+          "id" | "title" | "boardColumnIndex"
+        > & {
+            task?: Maybe<
+              Array<
+                { __typename?: "Task" } & Pick<
+                  Task,
+                  | "id"
+                  | "title"
+                  | "boardRowIndex"
+                  | "sprintRowIndex"
+                  | "taskIndex"
+                  | "startDate"
+                  | "endDate"
+                > & {
+                    userTask?: Maybe<
+                      Array<
+                        { __typename?: "UserTask" } & {
+                          user: { __typename?: "User" } & Pick<
+                            User,
+                            "id" | "username" | "avatar"
+                          >;
+                        }
+                      >
+                    >;
+                    taskLabel?: Maybe<
+                      Array<
+                        { __typename?: "TaskLabel" } & {
+                          label: { __typename?: "Label" } & Pick<
+                            Label,
+                            "id" | "name" | "color"
+                          >;
+                        }
+                      >
+                    >;
+                  }
+              >
+            >;
+          }
+      >
+    >;
+    error?: Maybe<
+      { __typename?: "FieldError" } & Pick<
+        FieldError,
+        "message" | "code" | "field"
+      >
+    >;
+  };
+};
+
 export type UpdateCommentMutationVariables = Exact<{
   id: Scalars["String"];
   content: Scalars["String"];
@@ -2910,6 +2970,87 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const UpdateBoardDocument = gql`
+  mutation UpdateBoard($options: BoardUpdateInput!, $projectId: String!) {
+    updateBoard(options: $options, projectId: $projectId) {
+      boards {
+        id
+        title
+        boardColumnIndex
+        task {
+          id
+          title
+          boardRowIndex
+          sprintRowIndex
+          taskIndex
+          startDate
+          endDate
+          userTask {
+            user {
+              id
+              username
+              avatar
+            }
+          }
+          taskLabel {
+            label {
+              id
+              name
+              color
+            }
+          }
+        }
+      }
+      error {
+        message
+        code
+        field
+      }
+    }
+  }
+`;
+export type UpdateBoardMutationFn = Apollo.MutationFunction<
+  UpdateBoardMutation,
+  UpdateBoardMutationVariables
+>;
+
+/**
+ * __useUpdateBoardMutation__
+ *
+ * To run a mutation, you first call `useUpdateBoardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBoardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBoardMutation, { data, loading, error }] = useUpdateBoardMutation({
+ *   variables: {
+ *      options: // value for 'options'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useUpdateBoardMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateBoardMutation,
+    UpdateBoardMutationVariables
+  >
+) {
+  return Apollo.useMutation<UpdateBoardMutation, UpdateBoardMutationVariables>(
+    UpdateBoardDocument,
+    baseOptions
+  );
+}
+export type UpdateBoardMutationHookResult = ReturnType<
+  typeof useUpdateBoardMutation
+>;
+export type UpdateBoardMutationResult = Apollo.MutationResult<UpdateBoardMutation>;
+export type UpdateBoardMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBoardMutation,
+  UpdateBoardMutationVariables
 >;
 export const UpdateCommentDocument = gql`
   mutation UpdateComment($id: String!, $content: String!, $projectId: String!) {

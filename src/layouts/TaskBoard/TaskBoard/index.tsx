@@ -3,19 +3,18 @@ import React, { ReactElement, useState } from "react";
 import {
   Box,
   Button,
+  Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Text,
-  // ChevronDownIcon,
 } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import Heading, { headingEnum } from "../../../components/Heading";
-// import Text from "../../../components/Text";
 import TaskCard, { TaskCardProps } from "../TaskCard";
 import IconButton from "../../../components/IconButton";
 import Modal from "../../Modal/index";
@@ -23,14 +22,12 @@ import {
   Board as boardType,
   Task as taskType,
 } from "../../../generated/graphql";
-// import { boardHeading } from "../../../components/Heading/heading.stories";
-// export type board = {
-//   __typename?: "Board" | undefined;
-//   id: string;
-//   title: string;
-//   boardColumnIndex: number;
-//   task: task[];
-// };
+
+export type Boardoptions = {
+  id: string;
+  title?: string;
+  boardRowIndex?: number;
+};
 
 export type TaskBoardProps = TaskCardProps & {
   board?: boardType;
@@ -42,6 +39,7 @@ export type TaskBoardProps = TaskCardProps & {
     projectId: string
   ) => void;
   handleTaskCreate: () => void;
+  handleUpdateBoard: (options: Boardoptions, projectId: string) => void;
   handleTaskDelete: (id: string) => void;
   handleTaskClick: (id: string) => void;
 };
@@ -49,6 +47,7 @@ export type TaskBoardProps = TaskCardProps & {
 const TaskBoard: React.FC<TaskBoardProps> = ({
   handleBoardDelete,
   handleTaskCreate,
+  handleUpdateBoard,
   board,
   boards,
   // ref,
@@ -56,10 +55,12 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 }): ReactElement | null => {
   const projectId = "04f025f8-234c-49b7-b9bf-7b7f94415569";
   const { handleTaskDelete, handleTaskClick } = props;
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
     boards[0]
   );
+  const [inputValue, setInputValue] = useState(board?.title);
 
   if (!board) return null;
 
@@ -75,12 +76,20 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleDeleteSubmit = async () => {
-    console.log("submit");
     if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
-    console.log("selected", selectedNewBoard.id, selectedNewBoard.title);
-    console.log("deleted", board.id, board.title);
     await handleBoardDelete(board.id, selectedNewBoard.id, projectId);
-    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleEditSubmit = async () => {
+    await handleUpdateBoard(
+      {
+        id: board.id,
+        title: inputValue,
+      },
+      projectId
+    );
+    setIsEditModalOpen(false);
   };
 
   // FIXME : index -> boardRowIndex
@@ -135,22 +144,40 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
         </Box>
-        <IconButton
-          aria-label="delete board"
-          iconButtonType="deleteBin"
-          color={
-            board.boardColumnIndex === boards.length - 1
-              ? "transparent"
-              : "achromatic.600"
-          }
-          onClick={
-            board.boardColumnIndex === boards.length - 1
-              ? () => {
-                  return null;
-                }
-              : () => setIsModalOpen(true)
-          }
-        />
+        <Box>
+          <IconButton
+            aria-label="delete board"
+            iconButtonType="pencil"
+            color={
+              board.boardColumnIndex === boards.length - 1
+                ? "transparent"
+                : "achromatic.600"
+            }
+            onClick={
+              board.boardColumnIndex === boards.length - 1
+                ? () => {
+                    return null;
+                  }
+                : () => setIsEditModalOpen(true)
+            }
+          />
+          <IconButton
+            aria-label="delete board"
+            iconButtonType="deleteBin"
+            color={
+              board.boardColumnIndex === boards.length - 1
+                ? "transparent"
+                : "achromatic.600"
+            }
+            onClick={
+              board.boardColumnIndex === boards.length - 1
+                ? () => {
+                    return null;
+                  }
+                : () => setIsDeleteModalOpen(true)
+            }
+          />
+        </Box>
       </Box>
       <Box
         bgColor="primary.400"
@@ -187,8 +214,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       </Box>
       <Modal
         title="Delete Board"
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
         secondaryText="Submit"
         secondaryAction={handleDeleteSubmit}
         buttonColor="fail"
@@ -204,11 +231,22 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           </Menu>
         </>
       </Modal>
+      <Modal
+        title="Edit Board"
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        secondaryText="Submit"
+        secondaryAction={handleEditSubmit}
+        buttonColor="primary.200"
+        buttonFontColor="white"
+      >
+        <Input
+          onChange={(e) => setInputValue(e.target.value)}
+          defaultValue={board.title}
+        />
+      </Modal>
     </Box>
   );
 };
 
 export default TaskBoard;
-
-// TODO : delete Modal dropdown -> id 연결
-// TODO : rerender 문제 해결
