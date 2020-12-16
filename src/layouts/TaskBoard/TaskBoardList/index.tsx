@@ -38,6 +38,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskClick,
     handleTaskCreate,
     handleTaskDelete,
+    boards,
   };
 
   const renderBoards = (boards: boardType[]) => {

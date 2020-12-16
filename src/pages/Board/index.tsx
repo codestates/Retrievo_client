@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import _ from "lodash";
 
 /* Layouts */
 import { Box } from "@chakra-ui/react";
@@ -7,6 +8,8 @@ import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
 import TaskBoardList from "../../layouts/TaskBoard/TaskBoardList";
 import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
+
+import { client } from "../../index";
 
 /* GraphQL */
 import {
@@ -21,9 +24,10 @@ import {
 } from "../../generated/graphql";
 
 // interface indexProps {
-
+//
 // }
 import dummyBoardData from "./dummyData";
+import { boardType } from "../../layouts/TaskBoard/TaskBoard/SkeletonBoard";
 
 const args = {
   projects: [
@@ -81,10 +85,20 @@ export const Board: React.FC = () => {
   const { loading, data, refetch } = useGetBoardsQuery({
     variables: { projectId },
   });
+
+  const [flag, setFlag] = useState<boolean>(false);
+
+  useEffect(() => {
+    // TODO
+    console.log("use Effect:", data);
+  }, [flag, data]);
+
   const [
     createBoard,
     { data: createdData, loading: createLoading, error: createError },
   ] = useCreateBoardMutation();
+  console.log("i dont know", data);
+
   const [
     deleteBoard,
     { data: deletedData, loading: deleteLoading, error: deleteError },
@@ -101,33 +115,53 @@ export const Board: React.FC = () => {
         },
       ],
       update: (cache, { data }) => {
-        const newBoardRes = data?.createBoard.boards;
-        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
-        const existingBoards = cache.readQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-        });
-        // console.log("newBoard", newBoard);
-        if (!existingBoards) return;
-        console.log("existingBoards", existingBoards);
-        // cache.evict({ fieldName: "boards:{}" });
-        if (!newBoardRes) return;
+        try {
+          const newBoardRes = data?.createBoard.boards;
+          // const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+          const existingBoards = client.readQuery({
+            query: GetBoardsDocument,
+            variables: { projectId },
+          });
+          // console.log("newBoard", newBoard);
+          if (!existingBoards) return;
+          console.log("existingBoards", existingBoards);
+          console.log("newBoardRes", newBoardRes);
+          // cache.evict({ fieldName: "boards:{}" });
 
-        cache.writeQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-          data: {
-            getBoards: {
-              boards: [...newBoardRes],
-              // boards: [...newBoardRes],
+          const newBoard = _.cloneDeep(newBoardRes);
+
+          if (!newBoardRes) return;
+          client.writeQuery({
+            query: GetBoardsDocument,
+            variables: { projectId }, // 쿼리가 바뀌었다는 것을 인지하지 못해서
+            data: {
+              getBoards: {
+                boards: newBoard,
+              },
             },
-          },
-        });
-        // console.log("handleCreateBoard", writeRes);
-        if (refetch) refetch();
+          });
+          // 0. writeQuery에서 variables 지워보기 -> 실패
+          // 0-1. try catch로 감고 error 메세지 확인해보기 -> 에러 없음
+          // 0-2. writeQuery에 data?.createBoard.boards 바로 꽂기 -> 안됨..
+          // 2. client.writeQuery (https://github.com/apollographql/apollo-client/issues/3909#issuecomment-568558285) -> getBoard에 넣는 건 성공! 리랜더는 아직
+          // 9. modify
+          // console.log("handleCreateBoard", cache);
+          setTimeout(() => {
+            setFlag(!flag);
+            if (refetch) refetch();
+          }, 800);
+        } catch (error) {
+          console.log("error!!!!!!:", error);
+        }
       },
     });
   };
+
+  /*
+  ANCHOR
+  1. 딥클론을 해보기
+
+  */
 
   const handleBoardDelete = async (
     id: string,
@@ -143,7 +177,7 @@ export const Board: React.FC = () => {
       update: (cache, { data }) => {
         const newBoardRes = data?.deleteBoard.boards;
         if (!newBoardRes) return;
-        cache.writeQuery({
+        client.writeQuery({
           query: GetBoardsDocument,
           variables: { projectId },
           data: {
@@ -152,7 +186,8 @@ export const Board: React.FC = () => {
             },
           },
         });
-        if (refetch) refetch();
+        console.log("deleteboard", newBoardRes);
+        // if (refetch) refetch();
       },
     });
   };
@@ -168,6 +203,15 @@ export const Board: React.FC = () => {
 
   // console.log("data", data?.getBoards);
 
+  const render = () => {
+    console.log("render again");
+    return null;
+  };
+
+  if (loading || !data?.getBoards.boards) {
+    return <TaskBoardContainer />;
+  }
+
   // FIXME : board가 왜 들어가는고얌..
   return (
     <>
@@ -178,21 +222,24 @@ export const Board: React.FC = () => {
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
-              {loading || !data?.getBoards.boards ? (
+              {render()}
+              {/* {loading || !data?.getBoards.boards ? (
                 <TaskBoardContainer />
-              ) : (
-                <TaskBoardList
-                  projectId={projectId}
-                  handleBoardCreate={handleBoardCreate}
-                  handleBoardDelete={handleBoardDelete}
-                  handleTaskClick={handleTaskClick}
-                  handleTaskCreate={handleTaskCreate}
-                  handleTaskDelete={handleTaskDelete}
-                  boards={data?.getBoards ? data?.getBoards.boards : []}
-                  // boards={dummyBoardData.boards}
-                  board={data?.getBoards.boards[0]}
-                />
-              )}
+              ) : ( */}
+              <TaskBoardList
+                projectId={projectId}
+                handleBoardCreate={handleBoardCreate}
+                handleBoardDelete={handleBoardDelete}
+                handleTaskClick={handleTaskClick}
+                handleTaskCreate={handleTaskCreate}
+                handleTaskDelete={handleTaskDelete}
+                boards={data !== null ? data?.getBoards.boards : []}
+                // boards={data?.getBoards ? data?.getBoards.boards : []}
+                // boards={dummyBoardData.boards}
+                // board={dummyBoardData.boards}
+                board={data?.getBoards.boards[0]}
+              />
+              {/* )} */}
             </Box>
           </Box>
         </Box>

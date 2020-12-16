@@ -80,7 +80,7 @@ const SideNav = (): ReactElement => {
                 : "transparent"
             }
             h={55}
-            fontWight="medium"
+            fontWeight="medium"
             color={
               window.location.pathname.includes(menu.path)
                 ? "achromatic.800"
