@@ -1,87 +1,43 @@
 import React from "react";
-import { Divider, Container, Box, Flex } from "@chakra-ui/react";
+import { Divider, Box, Flex } from "@chakra-ui/react";
 import { FiActivity } from "react-icons/fi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { formatDistanceStrict } from "date-fns";
+// import { formatDistanceStrict } from "date-fns";
+import { useLocation } from "react-router-dom";
 import useLoadMore from "../../../hooks/useLoadMore";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import StyledActivityStream from "./ActivityStream.styled";
 import CustomAvatar from "../../../components/Avatar";
-// data.filter((task) => task.project.id === "182254ec-c66c-4935-85fd-a1796f009a0")
-const data = [
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Si Choi",
-    notification: {
-      type: "CREATED",
-      createdAt: "1607697173849",
-    },
-  },
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Paul Kim",
-    notification: {
-      type: "STATUS_CHANGED",
-      createdAt: "1507697173866",
-    },
-  },
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Hajeong Song",
-    notification: {
-      type: "CREATED",
-      createdAt: "1407697173849",
-    },
-  },
+import { useGetProjectQuery } from "../../../generated/graphql";
+import Spinner from "../../../components/Spinner";
 
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "JungEun Kim",
-    notification: {
-      type: "CREATED",
-      createdAt: "1607697173884",
-    },
-  },
-
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Chank Knight",
-    notification: {
-      type: "STATUS_CHANGED",
-      createdAt: "1607697173849",
-    },
-  },
-];
-
-/*
-display 되야 하는 저옵(task Notification)
-Avatar
-Username
-Notification : {
-
-  created
-}
-
-type: status_changed, created
-*/
-
-// formatDistance(subDays(new Date(), 3), 현재)
-// //=> "3 days ago"
 export const ActivityStream: React.FC = () => {
-  // const [data, loading, error] = useSprintsQuery()
-  // if(!loading) return spinner
-  const [items, setItems, visible, loadMore, reset] = useLoadMore(data, 2);
+  const location = useLocation();
+  const projectId = location.pathname.split("/").pop() || "";
+
+  const { data, loading } = useGetProjectQuery({
+    variables: {
+      projectId,
+    },
+  });
+
+  const [items, setItems, visible, loadMore, reset] = useLoadMore([], 2);
+
+  if (loading) return <Spinner />;
+
+  if (data?.project.project?.projectPermissions && items.length === 0) {
+    const userData = data.project.project.projectPermissions.map(
+      (projectPermission) => {
+        const storage = {};
+        Object.assign(storage, { username: projectPermission.user.username });
+        Object.assign(storage, { avatar: projectPermission.user.avatar });
+
+        return storage;
+      }
+    );
+    setItems(userData);
+  }
 
   const renderVisible = () => {
     return items.slice(0, visible).map((item) => {
@@ -106,11 +62,11 @@ export const ActivityStream: React.FC = () => {
                 color="achromatic.600"
                 pr={4}
               >
-                {`${formatDistanceStrict(
+                {/* {`${formatDistanceStrict(
                   new Date(Number(item.notification.createdAt)),
                   new Date(),
                   { addSuffix: true }
-                )}`}
+                )}`} */}
               </Flex>
             </StyledActivityStream>
             <Divider orientation="horizontal" />
