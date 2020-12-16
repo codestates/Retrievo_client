@@ -1,16 +1,41 @@
-import { Box, useDisclosure, Container, Flex } from "@chakra-ui/react";
+import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import React from "react";
+import { useLocation } from "react-router-dom";
+import CustomForm from "../../components/Form";
 import ModalLayout from "../../layouts/Modal";
 import PageHeading from "../../layouts/PageHeader";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import Sprints from "./Accordion";
+import InputField from "../../components/Input";
+import TextAreaField from "../../components/TextArea";
+import { useCreateSprintMutation } from "../../generated/graphql";
 
 export const Sprint: React.FC = () => {
+  const location = useLocation();
+  const toast = useToast();
+  const projectId = location.pathname.split("/").pop() || "";
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const handleCreateSprint() => {
+  const [createSprintMutation] = useCreateSprintMutation();
 
-  // }
+  const handleCreateSprint = async (values: Record<string, string>) => {
+    await createSprintMutation({
+      variables: {
+        projectId,
+        title: values.sprintName,
+        description: values.description,
+      },
+    });
+    onClose();
+    toast({
+      position: "bottom-right",
+      title: "Sprint Created!",
+      description: "Sprint has been successfully created",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
 
   const args = {
     projects: [
@@ -77,13 +102,39 @@ export const Sprint: React.FC = () => {
               isOpen={isOpen}
               onOpen={onOpen}
               onClose={onClose}
-              title="Basic Modal"
+              footer={false}
+              title="CreateSprint"
               buttonText="Create Sprint"
               bgColor="primary.400"
               color="achromatic.600"
               borderRadius="9999px"
             >
-              <p>CreateButotn</p>
+              <>
+                <CustomForm
+                  initialValues={{ sprintName: "", description: "" }}
+                  buttonPosition="right"
+                  isSubmitButton
+                  submitBtnName="Create Sprint"
+                  onSubmit={handleCreateSprint}
+                >
+                  <Box lineHeight={8}>
+                    <Box p={2}>
+                      <InputField
+                        label="Sprint Name"
+                        name="sprintName"
+                        placeholder="Enter Name"
+                      />
+                    </Box>
+                    <Box p={2} mb={6}>
+                      <TextAreaField
+                        label="Sprint Description"
+                        name="description"
+                        placeholder="Enter Description"
+                      />
+                    </Box>
+                  </Box>
+                </CustomForm>
+              </>
             </ModalLayout>
           </Flex>
         </Box>
