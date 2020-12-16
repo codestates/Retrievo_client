@@ -13,7 +13,7 @@ import {
   Spinner,
   Center,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import { FcCheckmark } from "react-icons/fc";
 import { BsPaperclip } from "react-icons/bs";
@@ -21,7 +21,6 @@ import { BiPlus } from "react-icons/bi";
 /* custom components */
 import moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { IndexInfo } from "typescript";
 import Form from "../../components/Form";
 import Button, { buttonColor } from "../../components/Button";
 import Textarea from "../../components/TextArea";
@@ -35,9 +34,8 @@ import LabelSearchInput, {
   labelItem as labelItemType,
 } from "../../components/LabelSearchInput";
 import {
-  TaskLabel,
   useGetProjectQuery,
-  useGetTaskQuery,
+  useGetTaskLazyQuery,
 } from "../../generated/graphql";
 
 // DUMMY DATA
@@ -101,7 +99,7 @@ interface MatchParams {
   projectId: string;
 }
 export interface taskProps {
-  taskId: string;
+  taskId?: string;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -112,16 +110,24 @@ export const TaskBar: React.FC<
   const onSprintSelect = (value: string) => console.log(value);
   const projectId = match?.params.projectId;
 
-  const {
-    loading: getTaskLoading,
-    error: getTaskError,
-    data: getTaskData,
-  } = useGetTaskQuery({
-    variables: {
-      projectId,
-      id: taskId,
-    },
-  });
+  const [
+    getTask,
+    { loading: getTaskLoading, error: getTaskError, data: getTaskData },
+  ] = useGetTaskLazyQuery();
+
+  useEffect(() => {
+    if (!!isOpen && !!taskId && !!projectId) {
+      console.log(isOpen);
+      console.log(taskId);
+      console.log(projectId);
+      getTask({
+        variables: {
+          projectId,
+          id: taskId,
+        },
+      });
+    }
+  }, [taskId, isOpen, getTask, projectId]);
 
   const {
     loading: projectInfoLoading,
@@ -130,6 +136,8 @@ export const TaskBar: React.FC<
   } = useGetProjectQuery({
     variables: { projectId },
   });
+
+  if (!taskId) return null;
 
   const taskArr = getTaskData?.getTask.task;
   if (!taskArr) {
@@ -252,7 +260,12 @@ export const TaskBar: React.FC<
 
   return (
     <div>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
+      <Drawer
+        isOpen={!!isOpen && !!taskId && !!projectId}
+        placement="right"
+        onClose={onClose}
+        size="md"
+      >
         <DrawerOverlay>
           {!getTaskLoading ? (
             <DrawerContent bgColor="primary.400" padding="3">
