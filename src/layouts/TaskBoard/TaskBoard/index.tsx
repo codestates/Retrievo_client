@@ -63,7 +63,7 @@ export type TaskBoardProps = TaskCardProps & {
   ) => Promise<
     FetchResult<CreateTaskMutation, Record<string, any>, Record<string, any>>
   >;
-  handleBoardUpdate?: (
+  handleBoardUpdate: (
     options: Boardoptions,
     projectId: string
   ) => Promise<

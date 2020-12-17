@@ -14,8 +14,8 @@ import {
   Board as boardType,
   // GetBoardsDocument,
   UpdateTaskMutation,
-  useUpdateBoardMutation,
-  useUpdateTaskMutation,
+  // useUpdateBoardMutation,
+  // useUpdateTaskMutation,
 } from "../../../generated/graphql";
 import { TaskUpdateOptions } from "../../../pages/Board";
 
@@ -23,29 +23,34 @@ export type TaskBoardListProps = TaskBoardProps &
   SkeletonBoardProps & {
     boards: boardType[];
     projectId: string;
-    // handleTaskUpdate: (
-    //   options: TaskUpdateOptions,
-    //   projectId: string
-    // ) => Promise<
-    //   FetchResult<UpdateTaskMutation, Record<string, any>, Record<string, any>>
-    // >;
+    handleTaskUpdate: (
+      options: TaskUpdateOptions,
+      projectId: string
+    ) => Promise<
+      FetchResult<UpdateTaskMutation, Record<string, any>, Record<string, any>>
+    >;
+    boardLoading: boolean;
+    taskLoading: boolean;
   };
 
 const TaskBoardList: React.FC<TaskBoardListProps> = ({
   boards,
   projectId,
   sprintId,
-  // handleTaskUpdate,
+  handleTaskUpdate,
+  handleBoardUpdate,
+  boardLoading,
+  taskLoading,
   ...props
 }): ReactElement => {
-  const [
-    updateTask,
-    { data: taskData, loading: taskLoading },
-  ] = useUpdateTaskMutation();
-  const [
-    updateBoard,
-    { data: boardData, loading: boardLoading },
-  ] = useUpdateBoardMutation();
+  // const [
+  //   updateTask,
+  //   { data: taskData, loading: taskLoading },
+  // ] = useUpdateTaskMutation();
+  // const [
+  //   updateBoard,
+  //   { data: boardData, loading: boardLoading },
+  // ] = useUpdateBoardMutation();
   const [boardLists, setBoardLists] = useState(boards);
   const toast = useToast();
 
@@ -57,25 +62,12 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     handleTaskDelete,
   } = props;
 
-  const handleTaskUpdate = async (options: TaskUpdateOptions) => {
-    await updateTask({
-      variables: { projectId, options },
-    });
+  const handleTaskUpdateToServer = async (options: TaskUpdateOptions) => {
+    await handleTaskUpdate(options, projectId);
   };
 
-  const handleBoardUpdate = async (
-    options: Boardoptions,
-    projectId: string
-  ) => {
-    return await updateBoard({
-      variables: { options, projectId },
-      // update: (cache, { data }) => {
-      //   const existingBoards = cache.readQuery({
-      //     query: GetBoardsDocument,
-      //     variables: { projectId },
-      //   });
-      // },
-    });
+  const handleBoardUpdateToServer = async (options: Boardoptions) => {
+    await handleBoardUpdate(options, projectId);
   };
 
   const boardConfig = {
@@ -162,6 +154,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       const newSourceTask = sourceBoard.task.slice();
       const sourceTask = newSourceTask.splice(source.index, 1);
       // 1. 기존 보드에서 sourceTask 삭제
+      console.log("sourceTask: 삭제된 index", source.index);
+      console.log("sourceTask: 삭제된 것", sourceTask);
       let changedSourceBoard = {
         ...sourceBoard,
         task: newSourceTask,
@@ -172,6 +166,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         if (task.boardRowIndex === undefined) return task;
         if (task.boardRowIndex === null) return task;
         if (task.boardRowIndex > source.index) {
+          console.log("before:", task.boardRowIndex);
+          console.log("after:", task.boardRowIndex - 1);
           return { ...task, boardRowIndex: task.boardRowIndex - 1 };
         }
         return task;
@@ -190,11 +186,13 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         });
 
         // 2. destination index로 task의 index 수정
+
         const changedTask = {
           ...sourceTask[0],
           boardId: source.droppableId,
           boardRowIndex: destination.index,
         };
+        console.log("changedTask1", changedTask);
 
         doubleChangedSourceTask.splice(destination.index, 0, changedTask);
         // 3. changedSourceBoard에 task 다시 추가
@@ -210,9 +208,9 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         console.log("copyBoardList", copyBoardList);
 
         // 5. server update
-        console.log("changedTask1: ", changedTask.id);
+        console.log("changedTask1.id: ", changedTask.id);
 
-        handleTaskUpdate({
+        handleTaskUpdateToServer({
           id: changedTask.id,
           newBoardRowIndex: destination.index,
         });
@@ -254,7 +252,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       // 5. server update
       console.log("changedTask2: ", changedTask.id);
 
-      handleTaskUpdate({
+      handleTaskUpdateToServer({
         id: changedTask.id,
         boardId: destination.droppableId,
         newBoardRowIndex: destination.index,
@@ -281,13 +279,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       copyBoardLists[destination.index] = temp;
 
       console.log("boardId(aka temp.id): ", temp.id);
-      handleBoardUpdate(
-        {
-          id: temp.id,
-          boardColumnIndex: destination.index,
-        },
-        projectId
-      );
+      handleBoardUpdateToServer({
+        id: temp.id,
+        boardColumnIndex: destination.index,
+      });
 
       setBoardLists(copyBoardLists);
     }

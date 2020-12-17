@@ -61,6 +61,14 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   const [deleteBoard] = useDeleteBoardMutation();
   const [createTask] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
+  const [
+    updateTask,
+    { data: taskData, loading: taskLoading },
+  ] = useUpdateTaskMutation();
+  const [
+    updateBoard,
+    { data: boardData, loading: boardLoading },
+  ] = useUpdateBoardMutation();
 
   useEffect(() => {
     if (data?.getBoards && data?.getBoards?.boards) {
@@ -170,6 +178,30 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     setSelectedTask(id);
   };
 
+  const handleTaskUpdate = async (
+    options: TaskUpdateOptions,
+    projectId: string
+  ) => {
+    return await updateTask({
+      variables: { projectId, options },
+    });
+  };
+
+  const handleBoardUpdate = async (
+    options: Boardoptions,
+    projectId: string
+  ) => {
+    return await updateBoard({
+      variables: { options, projectId },
+      // update: (cache, { data }) => {
+      //   const existingBoards = cache.readQuery({
+      //     query: GetBoardsDocument,
+      //     variables: { projectId },
+      //   });
+      // },
+    });
+  };
+
   useEffect(() => {
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
@@ -207,11 +239,15 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   sprintId={sprintData?.getStartedSprint.sprint?.id}
                   handleBoardCreate={handleBoardCreate}
                   handleBoardDelete={handleBoardDelete}
+                  handleBoardUpdate={handleBoardUpdate}
                   handleTaskClick={handleTaskClick}
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
+                  handleTaskUpdate={handleTaskUpdate}
                   // boards={data !== null ? data?.getBoards.boards : []}
                   boards={curBoards}
+                  boardLoading={boardLoading}
+                  taskLoading={taskLoading}
                 />
               )}
             </Box>
