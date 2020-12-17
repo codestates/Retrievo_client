@@ -106,19 +106,18 @@ export enum RoleTypes {
 
 export type ProjectPermission = {
   __typename?: "ProjectPermission";
-  id: Scalars["String"];
+  id?: Scalars["String"];
   isAdmin?: Maybe<Scalars["Boolean"]>;
-  project: Project;
-  user: User;
+  project?: Project;
+  user?: User;
 };
-
 export type Project = {
   __typename?: "Project";
-  id: Scalars["String"];
-  name: Scalars["String"];
-  logo: Scalars["String"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  id?: Scalars["String"];
+  name?: Scalars["String"];
+  logo?: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   projectPermissions?: Maybe<Array<ProjectPermission>>;
   sprint?: Maybe<Array<Sprint>>;
   board?: Maybe<Array<Board>>;

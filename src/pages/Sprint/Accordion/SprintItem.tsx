@@ -12,12 +12,23 @@ import {
   MenuList,
   MenuItem,
   Button,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useLocation } from "react-router-dom";
 import TaskList from "./TaskList";
 import { sprintType } from "./index";
+import CustomForm from "../../../components/Form";
+import InputField from "../../../components/Input";
+import TextAreaField from "../../../components/TextArea";
+import ModalLayout from "../../../layouts/Modal";
+import {
+  useUpdateSprintMutation,
+  useDeleteSprintMutation,
+} from "../../../generated/graphql";
 
 type sprintItemProps = {
   sprintData: sprintType;
@@ -29,7 +40,55 @@ export const SprintItem: React.FC<sprintItemProps> = ({
   sprintData,
   mappedIndex,
 }) => {
+  const location = useLocation();
+  const toast = useToast();
+  const projectId = location.pathname.split("/").pop() || "";
   const [selected, setSelected] = useState<boolean>(mappedIndex === 0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [
+    updateSprintMutation,
+    { loading: updateSprintLoading },
+  ] = useUpdateSprintMutation();
+
+  const [
+    deleteSprintMutation,
+    { loading: deleteSprintLoading },
+  ] = useDeleteSprintMutation();
+
+  const handleUpdateSprint = async (values: Record<string, any>) => {
+    await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: sprintData.id,
+          title: values.sprintName,
+          description: values.description,
+        },
+      },
+    });
+    onClose();
+    toast({
+      position: "bottom-right",
+      title: "Sprint Updated!",
+      description: "Sprint has been successfully updated",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
+  const handleDeleteSprint = () => {
+    deleteSprintMutation({ variables: { id: sprintData.id, projectId } });
+    onClose();
+    toast({
+      position: "bottom-right",
+      title: "Sprint Deleted!",
+      description: "Sprint has been successfully deleted",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
 
   return (
     <Draggable
@@ -99,8 +158,52 @@ export const SprintItem: React.FC<sprintItemProps> = ({
                       <BsThreeDotsVertical />
                     </MenuButton>
                     <MenuList>
-                      <MenuItem>Update Sprint</MenuItem>
-                      <MenuItem>Delete Sprint</MenuItem>
+                      <MenuItem onClick={onOpen}>Update Sprint</MenuItem>
+                      <ModalLayout
+                        isOpen={isOpen}
+                        onOpen={onOpen}
+                        onClose={onClose}
+                        footer={false}
+                        title="Update Sprint"
+                        buttonText="Update Sprint"
+                        bgColor="primary.400"
+                        color="achromatic.600"
+                        borderRadius="9999px"
+                        display="none"
+                      >
+                        <Box mb={3}>
+                          <CustomForm
+                            initialValues={{
+                              sprintName: sprintData.title,
+                              description: sprintData.description,
+                            }}
+                            buttonPosition="right"
+                            isSubmitButton
+                            submitBtnName="Update Sprint"
+                            onSubmit={handleUpdateSprint}
+                          >
+                            <Box lineHeight={8}>
+                              <Box p={2}>
+                                <InputField
+                                  label="Sprint Name"
+                                  name="sprintName"
+                                  placeholder="Enter Name"
+                                />
+                              </Box>
+                              <Box p={2} mb={6}>
+                                <TextAreaField
+                                  label="Sprint Description"
+                                  name="description"
+                                  placeholder="Enter Description"
+                                />
+                              </Box>
+                            </Box>
+                          </CustomForm>
+                        </Box>
+                      </ModalLayout>
+                      <MenuItem onClick={handleDeleteSprint}>
+                        Delete Sprint
+                      </MenuItem>
                     </MenuList>
                   </Menu>
                 </Flex>
