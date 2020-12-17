@@ -4,6 +4,7 @@ import { FetchResult } from "@apollo/client";
 import {
   Box,
   Button,
+  Flex,
   Input,
   Menu,
   MenuButton,
@@ -272,7 +273,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <Text color="primary.300">{`${board.task?.length}`}</Text>
           <Text color="fail">{`${board.boardColumnIndex}`}</Text>
         </Box>
-        <Box>
+        <Flex flexDir="row">
           <IconButton
             aria-label="delete board"
             iconButtonType="pencil"
@@ -297,7 +298,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               }
             />
           )}
-        </Box>
+        </Flex>
       </Box>
       <Box
         bgColor="primary.400"

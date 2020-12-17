@@ -9,17 +9,11 @@ import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
 import { useGetMeQuery, useGetProjectQuery } from "../../generated/graphql";
 
-type avatar = { name: string; src: string };
-
 export type TopNavPropsType = {
-  // avatars: avatar[];
   projectId: string;
 };
 
 const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
-  // avatars,
-  // currentProject,
-  // onProjectSelect,
   ...args
 }) => {
   /* Project Query & Props */

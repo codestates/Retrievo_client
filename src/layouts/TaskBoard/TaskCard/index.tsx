@@ -6,7 +6,7 @@ import { Task as taskType } from "../../../generated/graphql";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import Label from "../../../components/Label";
-// import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
+import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
 
 export type TaskCardProps = {
   task?: taskType;
@@ -42,9 +42,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const renderUsers = () => {
     if (!task) return [];
     const { userTask } = task;
-    return userTask?.map((userTaskObj) => {
+    if (!userTask) return null;
+    return userTask.map((userTaskObj) => {
       const { user } = userTaskObj;
-      return { name: user.username, src: user.avatar || "" };
+      return { name: user.username, src: user.avatar || undefined };
     });
   };
 
@@ -113,7 +114,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
         bottom={5}
         justifyContent="space-between"
       >
-        {/* <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} /> */}
+        {renderUsers() ? (
+          <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
+        ) : null}
         <Text ml={2} fontSize="xs" color="achromatic.600">
           {!task.startDate && !task.endDate
             ? ""
