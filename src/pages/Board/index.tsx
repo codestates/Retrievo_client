@@ -31,61 +31,12 @@ interface BoardProps {
   projectId: string;
 }
 
-const projectArgs = {
-  projects: [
-    {
-      id: "1",
-      name: "Rock Paper Queens",
-    },
-    {
-      id: "2",
-      name: "My Blueberry",
-    },
-    {
-      id: "3",
-      name: "Current Project",
-    },
-    {
-      id: "4",
-      name: "Retrievo",
-    },
-  ],
-  currentProject: {
-    id: "4",
-    name: "Retrievo",
-  },
-  onProjectSelect: (id: string) => console.log(id),
-  avatars: [
-    {
-      name: "stupy",
-      src:
-        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-    {
-      name: "prettie",
-      src:
-        "https://images.unsplash.com/photo-1592159371936-61a70cbeb5f7?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGhhbXN0ZXJ8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-    {
-      name: "bunny",
-      src:
-        "https://images.unsplash.com/photo-1573316364756-33b34fad4fcb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJhYmJpdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-    {
-      name: "cuttie pie",
-      src:
-        "https://images.unsplash.com/photo-1561948955-570b270e7c36?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    },
-  ],
-};
-
 export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   ...args
 }) => {
   const { projectId } = args.match.params;
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // no sprint "14ab38e8-91a0-4644-ad05-ca476387e678";
 
   /* Mutation, Query */
   const { loading, data } = useGetBoardsQuery({
@@ -204,8 +155,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   return (
     <>
       <Box>
-        <TopNav {...projectArgs} />
-        <SideNav />
+        <TopNav {...args} />
+        <SideNav {...args} />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
@@ -215,9 +166,11 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   ? ""
                   : sprintData?.getStartedSprint.sprint?.title}
               </Heading>
-              <Button size="sm" buttontype={buttonColor.primary}>
-                Sprint complete
-              </Button>
+              {sprintData?.getStartedSprint.sprint ? (
+                <Button size="sm" buttontype={buttonColor.primary}>
+                  Sprint complete
+                </Button>
+              ) : null}
             </Flex>
             <Box mt={9}>
               {loading ||
@@ -256,7 +209,3 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 };
 
 export default Board;
-
-// TODO : task dnd
-// TODO : board dnd
-// TODO : rerendering

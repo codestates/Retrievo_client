@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { FetchResult } from "@apollo/client";
 import * as yup from "yup";
-import { Box, toast, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { GoPlus } from "react-icons/go";
 import { IconContext } from "react-icons";
