@@ -1764,11 +1764,11 @@ export type GetTaskQuery = { __typename?: "Query" } & {
               "id" | "title" | "didStart"
             >;
             file?: Maybe<
-              Array<{ __typename?: "File" } & Pick<File, "fileLink">>
+              Array<{ __typename?: "File" } & Pick<File, "id" | "fileLink">>
             >;
             comment?: Maybe<
               Array<
-                { __typename?: "Comment" } & Pick<Comment, "content"> & {
+                { __typename?: "Comment" } & Pick<Comment, "id" | "content"> & {
                     user?: Maybe<
                       { __typename?: "User" } & Pick<
                         User,
@@ -1780,19 +1780,22 @@ export type GetTaskQuery = { __typename?: "Query" } & {
             >;
             taskLabel?: Maybe<
               Array<
-                { __typename?: "TaskLabel" } & {
-                  label: { __typename?: "Label" } & Pick<
-                    Label,
-                    "name" | "id" | "color"
-                  >;
-                }
+                { __typename?: "TaskLabel" } & Pick<TaskLabel, "id"> & {
+                    label: { __typename?: "Label" } & Pick<
+                      Label,
+                      "name" | "id" | "color"
+                    >;
+                  }
               >
             >;
             userTask?: Maybe<
               Array<
-                { __typename?: "UserTask" } & {
-                  user: { __typename?: "User" } & Pick<User, "id" | "username">;
-                }
+                { __typename?: "UserTask" } & Pick<UserTask, "id"> & {
+                    user: { __typename?: "User" } & Pick<
+                      User,
+                      "email" | "id" | "username"
+                    >;
+                  }
               >
             >;
           }
@@ -4297,9 +4300,11 @@ export const GetTaskDocument = gql`
           didStart
         }
         file {
+          id
           fileLink
         }
         comment {
+          id
           content
           user {
             id
@@ -4308,6 +4313,7 @@ export const GetTaskDocument = gql`
           }
         }
         taskLabel {
+          id
           label {
             name
             id
@@ -4315,7 +4321,9 @@ export const GetTaskDocument = gql`
           }
         }
         userTask {
+          id
           user {
+            email
             id
             username
           }

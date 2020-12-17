@@ -6,6 +6,7 @@ query GetMe{
       projectPermissions{
         project{
           id
+          name
         }
       }
     }
