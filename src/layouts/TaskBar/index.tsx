@@ -211,6 +211,7 @@ export const TaskBar: React.FC<
   };
 
   const handleLabelDelete = async ({ id }: { id: string }) => {
+    console.log("labelId:", id);
     try {
       const res = await deleteTaskLabel({
         variables: { projectId, taskId, labelId: id },
@@ -258,14 +259,19 @@ export const TaskBar: React.FC<
             },
           },
         ],
-        // update: (store, { data }) => {
-        // if (!data) return undefined;
-        // const cacheId = store.identify(data?.createTaskLabel);
-        // store.modify({
-        //   fields: {
-        //     getTask: (existingFieldData, { toReference }) => {},
-        //   },
-        // });
+        // update: (cache, { data }) => {
+        //   if (!data) return undefined;
+        //   const cacheId = cache.identify(data?.createTaskLabel);
+        //   console.log("----------------");
+        //   console.log("cacheId");
+        //   console.log("data:");
+        //   console.log("cache");
+        //   // store.modify({
+        //   //   fields: {
+        //   //     getTask: (existingFieldData, { toReference }) => {},
+        //   //   },
+        //   // });
+        //   return false;
         // },
       });
       if (res.data?.createTaskLabel.error) {
