@@ -55,6 +55,27 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
+      update: (cache, { data }) => {
+        const newBoardRes = data?.createBoard.boards;
+        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        console.log("data", newBoardRes);
+        if (!data?.createBoard) return null;
+        // eslint-disable-next-line no-underscore-dangle
+        if (!newBoard || !newBoard.__typename) return null;
+        const cacheId = cache.identify(data.createBoard);
+        console.log("cacheId", cacheId);
+        cache.modify({
+          fields: {
+            getBoards: (existingFieldData, { toReference }) => {
+              console.log("existing", existingFieldData);
+              return Object.assign(existingFieldData, {
+                id: `Board:${newBoard.id}`,
+              });
+            },
+          },
+        });
+        return "hello";
+      },
     });
   };
 

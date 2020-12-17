@@ -30,7 +30,6 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
     variables: { projectId },
   });
   const usersInProject = userData?.project?.project?.projectPermissions;
-  console.log("usersInProject", usersInProject);
   const mapUserToAvatar = () => {
     if (!usersInProject) return null;
     return usersInProject.map(({ user }) => {
