@@ -138,6 +138,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       copyBoardLists[source.index] = copyBoardLists[destination.index];
       copyBoardLists[destination.index] = temp;
       // TODO : 프론트엔드 상으로도 index를 바꿔주기
+      // TODO: Board의 index는 front상으로 변경
+      // TODO: Task의 index는 front상 + updateTask 해야함
 
       await handleBoardUpdate(
         {
