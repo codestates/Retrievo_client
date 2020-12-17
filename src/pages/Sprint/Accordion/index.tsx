@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import SprintItem from "./SprintItem";
-import { useGetSprintsQuery } from "../../../generated/graphql";
+import {
+  useGetSprintsQuery,
+  useUpdateSprintMutation,
+} from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 
 // const sprintData = [
@@ -85,21 +88,42 @@ export const Sprints: React.FC = () => {
   const location = useLocation();
   const projectId = location.pathname.split("/").pop() || "";
   const [sprints, setSprints] = useState<Record<string, any>[]>([]);
-  const { data, loading, error, refetch } = useGetSprintsQuery({
+  const { data, loading, error } = useGetSprintsQuery({
     variables: { projectId },
+    fetchPolicy: "cache-and-network",
   });
+  const [updateSprintMutation] = useUpdateSprintMutation();
+
+  useEffect(() => {
+    if (data?.getSprints.sprints) {
+      setSprints(data?.getSprints.sprints);
+    }
+    console.log("howmany times am i rendering?");
+  }, [data]);
 
   if (loading) return <Spinner />;
 
-  if (data?.getSprints.sprints && !sprints.length) {
-    setSprints(data?.getSprints.sprints);
-  }
-
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-    const items = Array.from(sprints);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    console.log("result", result);
+
+    updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: result.draggableId,
+          row: result.destination.index,
+        },
+      },
+      update: (cache, { data }) => {
+        console.log(data);
+        // const cacheId = cache.identify(data.sprint);
+        // cache.modify();
+      },
+    });
+    const items = Array.from(sprints); // items = sprints
+    // const [reorderedItem] = items.splice(result.source.index, 1);
+    // items.splice(result.destination.index, 0, reorderedItem);
     setSprints(items);
   };
 
@@ -110,15 +134,16 @@ export const Sprints: React.FC = () => {
         <Droppable droppableId="droppableSprint">
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
-              {sprints.map((sprint, idx) => (
-                <SprintItem
-                  key={sprint.id}
-                  sprintData={sprint}
-                  mappedIndex={idx}
-                  tasks={sprint.task}
-                  refetch={refetch}
-                />
-              ))}
+              {sprints.map((sprint: any) => {
+                return (
+                  <SprintItem
+                    key={sprint.id}
+                    sprintData={sprint}
+                    row={sprint.row}
+                    tasks={sprint.task}
+                  />
+                );
+              })}
               {provided.placeholder}
             </Box>
           )}

@@ -144,7 +144,7 @@ export const TaskBar: React.FC<
     return <Text>no task</Text>;
   }
 
-  const task = taskArr[0];
+  const task: any = taskArr[0];
 
   console.log("data:", getTaskData);
   console.log("loading:", getTaskLoading);

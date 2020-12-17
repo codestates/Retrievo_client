@@ -20,6 +20,8 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
+import { cachedDataVersionTag } from "v8";
+import { setNestedObjectValues } from "formik";
 import TaskList from "./TaskList";
 import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
@@ -31,7 +33,6 @@ import {
   Sprint,
   Task,
   GetSprintsDocument,
-  GetSprintDocument,
 } from "../../../generated/graphql";
 
 type sprintItemProps = {
@@ -44,14 +45,13 @@ type sprintItemProps = {
 
 export const SprintItem: React.FC<Record<string, any>> = ({
   sprintData,
-  mappedIndex,
+  row,
   tasks,
-  refetch,
 }) => {
   const location = useLocation();
   const toast = useToast();
   const projectId = location.pathname.split("/").pop() || "";
-  const [selected, setSelected] = useState<boolean>(mappedIndex === 0);
+  const [selected, setSelected] = useState<boolean>(row === 0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [
     updateSprintMutation,
@@ -73,6 +73,34 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           description: values.description,
         },
       },
+      update: async (cache) => {
+        try {
+          const existingSprints: any = await cache.readQuery({
+            query: GetSprintsDocument,
+            variables: { projectId },
+          });
+
+          const newSprints = existingSprints.getSprints.sprints.map(
+            (sprint: any) => {
+              if (sprint.id === sprintData.id) {
+                return {
+                  ...sprint,
+                  title: values.sprintName,
+                  description: values.description,
+                };
+              }
+              return sprint;
+            }
+          );
+
+          cache.writeQuery({
+            query: GetSprintsDocument,
+            data: { getSprints: { sprints: newSprints } },
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      },
     });
     onClose();
     toast({
@@ -88,34 +116,60 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   const handleDeleteSprint = async () => {
     await deleteSprintMutation({
       variables: { id: sprintData.id, projectId },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
-      update: (cache, { data }) => {
-        console.log(cache);
-        cache.evict({ id: `Sprint:${sprintData.id}` });
-        // cache.modify({
-        //   fields: {
-        //     getSprints: (existingFieldData) => {
-        //       console.log(existingFieldData);
-        //       return existingFieldData.pop();
-        //     },
-        //   },
-        // });
+      update: async (cache) => {
+        try {
+          const existingSprints: any = await cache.readQuery({
+            query: GetSprintsDocument,
+            variables: { projectId },
+          });
+
+          const newSprints = existingSprints.getSprints.sprints.filter(
+            (sprint: any) => sprint.id !== sprintData.id
+          );
+
+          cache.writeQuery({
+            query: GetSprintsDocument,
+            data: { getSprints: { sprints: newSprints } },
+          });
+        } catch (err) {
+          console.log(err);
+        }
       },
     });
   };
 
+  /*
+ (cache, { data }) => {
+        console.log(data);
+        if (!data) return;
+        const cacheId = cache.identify(data);
+        console.log(cacheId);
+        cache.modify({
+          id: cache.identify(data.deleteSprint),
+          fields: {
+            getSprints: (existingSprintRefs, { readField }) => {
+              console.log(cache.identify(data.deleteSprint));
+              console.log(existingSprintRefs);
+              const hello = existingSprintRefs.sprints.filter(
+                (sprintRef: any) => {
+                  return sprintData.id !== readField("id", sprintRef);
+                }
+              );
+
+              return { ...existingSprintRefs, sprints: hello };
+            },
+          },
+        });
+  */
+
   return (
-    <Draggable
-      key={sprintData.id}
-      draggableId={sprintData.id}
-      index={mappedIndex}
-    >
+    <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
       {(provided) => {
         return (
           <Accordion
             allowToggle
             onChange={() => setSelected(!selected)}
-            defaultIndex={mappedIndex === 0 ? 0 : 1}
+            defaultIndex={row === 0 ? 0 : 1}
           >
             <AccordionItem>
               <Flex
@@ -188,8 +242,8 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                         <Box mb={3}>
                           <CustomForm
                             initialValues={{
-                              sprintName: sprintData.title,
-                              description: sprintData.description,
+                              sprintName: "",
+                              description: "",
                             }}
                             buttonPosition="right"
                             isSubmitButton
@@ -201,14 +255,14 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                                 <InputField
                                   label="Sprint Name"
                                   name="sprintName"
-                                  placeholder="Enter Name"
+                                  placeholder={sprintData.title}
                                 />
                               </Box>
                               <Box p={2} mb={6}>
                                 <TextAreaField
                                   label="Sprint Description"
                                   name="description"
-                                  placeholder="Enter Description"
+                                  placeholder={sprintData.description}
                                 />
                               </Box>
                             </Box>
