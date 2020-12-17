@@ -128,8 +128,6 @@ export const TaskBar: React.FC<
     return <Text>no task</Text>;
   }
 
-  const task = taskArr[0];
-
   const createErrorToast = () => {
     toast({
       position: "bottom-right",
@@ -215,7 +213,7 @@ export const TaskBar: React.FC<
   const handleLabelDelete = async ({ id }: { id: string }) => {
     try {
       const res = await deleteTaskLabel({
-        variables: { projectId, id },
+        variables: { projectId, taskId, labelId: id },
         refetchQueries: [
           {
             query: GetTaskDocument,
@@ -236,30 +234,48 @@ export const TaskBar: React.FC<
     }
   };
 
-  const handleCreateLabel = async (item: labelItem) => {
-    await createTaskLabel({
-      variables: {
-        projectId,
-        taskId,
-        name: item.value,
-        color: colorArr[_.random(0, colorArr.length - 1)],
-      },
-      refetchQueries: [
-        {
-          query: GetTaskDocument,
-          variables: {
-            projectId,
-            id: taskId,
-          },
+  const handleCreateLabel = async (name: string) => {
+    try {
+      const res = await createTaskLabel({
+        variables: {
+          projectId,
+          taskId,
+          name,
+          color: colorArr[_.random(0, colorArr.length - 1)],
         },
-        {
-          query: GetProjectDocument,
-          variables: {
-            projectId,
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
           },
-        },
-      ],
-    });
+          {
+            query: GetProjectDocument,
+            variables: {
+              projectId,
+            },
+          },
+        ],
+        // update: (store, { data }) => {
+        // if (!data) return undefined;
+        // const cacheId = store.identify(data?.createTaskLabel);
+        // store.modify({
+        //   fields: {
+        //     getTask: (existingFieldData, { toReference }) => {},
+        //   },
+        // });
+        // },
+      });
+      if (res.data?.createTaskLabel.error) {
+        throw new Error(res.data?.createTaskLabel.error.message);
+      }
+      createSuccessToast();
+    } catch (error) {
+      console.log("create label Error", error);
+      createErrorToast();
+    }
   };
 
   const handleUpdateTask = (value: formValue) => {
@@ -367,7 +383,7 @@ export const TaskBar: React.FC<
 
   /* component args */
   const sprintArg = {
-    currentSprint: task.sprint,
+    currentSprint: getTaskData?.getTask.task?.sprint,
     sprints: projectInfoData?.project.project?.sprint,
     onSprintSelect,
   };
@@ -378,25 +394,29 @@ export const TaskBar: React.FC<
         ? projectInfoData.project.project?.projectPermissions
         : null
     ),
-    defaultValue: mappingUserOption(task.userTask),
+    defaultValue: mappingUserOption(getTaskData?.getTask.task?.userTask),
     deleteAssignee: handleDeleteAssignee,
     createAssignee: handleCreateAssignee,
   };
+
+  console.log("getTaskData", getTaskData);
 
   const taskLabelSelectArgs = {
     options: mappingProjectLabelOptions(
       projectInfoData?.project.project?.label
     ),
     defaultValue: mappingLabelOptions(
-      task.taskLabel ? task.taskLabel : undefined
+      getTaskData?.getTask.task
+        ? getTaskData?.getTask.task.taskLabel
+        : undefined
     ),
     createTaskLabel: handleCreateLabel,
     deleteTaskLabel: handleLabelDelete,
   };
 
   const labelSelectorArg: labelSelectorProps = {
-    defaultOption: task.sprint
-      ? mappingLabelSelectorOptions([task.sprint])[0]
+    defaultOption: getTaskData?.getTask.task?.sprint
+      ? mappingLabelSelectorOptions([getTaskData.getTask.task.sprint])[0]
       : undefined,
     options: projectInfoData?.project.project?.board
       ? mappingLabelSelectorOptions(projectInfoData?.project.project?.board)
@@ -405,8 +425,8 @@ export const TaskBar: React.FC<
   };
 
   const calendarArg: calendarProps = {
-    defaultStartDate: converToUnix(task.startDate),
-    defaultEndDate: converToUnix(task.endDate),
+    defaultStartDate: converToUnix(getTaskData?.getTask.task?.startDate),
+    defaultEndDate: converToUnix(getTaskData?.getTask.task?.endDate),
     handleSubmit: (value: dateIFC) => {
       handleUpdateTask(value);
     },
@@ -414,9 +434,9 @@ export const TaskBar: React.FC<
 
   /* Render method */
   const renderComments = () => {
-    if (!task.comment) return null;
+    if (!getTaskData?.getTask.task?.comment) return null;
 
-    return task.comment.map((comment) => {
+    return getTaskData.getTask.task.comment.map((comment) => {
       return (
         <Box display="flex" mb="2">
           <Avatar size="sm" name={comment.user?.username} />
@@ -449,10 +469,10 @@ export const TaskBar: React.FC<
   };
 
   const renderFileList = () => {
-    if (!task.file) return null;
+    if (!getTaskData?.getTask.task?.file) return null;
     return (
       <List color="achromatic.600" fontSize="sm">
-        {task.file.map((el) => {
+        {getTaskData?.getTask.task?.file.map((el) => {
           return (
             <ListItem key={el.fileLink} display="flex" alignItems="flex-end">
               <BsPaperclip />
@@ -489,16 +509,16 @@ export const TaskBar: React.FC<
                 >
                   <Box display="flex" alignItems="center" mb={2}>
                     <Text mr="2" fontSize="sm" color="primary.200">
-                      Task - {task.taskIndex}
+                      Task - {getTaskData?.getTask.task?.taskIndex}
                     </Text>
-                    {task.sprint.didStart ? (
+                    {getTaskData?.getTask.task?.sprint.didStart ? (
                       <BoardLabelSelector {...labelSelectorArg} />
                     ) : null}
                   </Box>
                   <CustomForm
                     validationSchema={titleValidation}
                     onSubmit={(value) => updateTask(value)}
-                    initialValues={{ title: task.title }}
+                    initialValues={{ title: getTaskData?.getTask.task?.title }}
                   >
                     <Textarea
                       label="title"
@@ -534,7 +554,9 @@ export const TaskBar: React.FC<
                     <CustomForm
                       validationSchema={titleValidation}
                       onSubmit={(value) => handleUpdateTask(value)}
-                      initialValues={{ description: task.description }}
+                      initialValues={{
+                        description: getTaskData?.getTask.task?.description,
+                      }}
                     >
                       <Textarea
                         label="description"
@@ -585,7 +607,7 @@ export const TaskBar: React.FC<
                   <Box display="flex" mt={5}>
                     <Avatar
                       name={meData?.getMe.user?.username}
-                      src={meData?.getMe.user?.avatar || undefined}
+                      // src={meData?.getMe.user?.avatar || undefined} //TODO avatar 쿼리 업데이트 후
                       size="sm"
                       mr={2}
                     />

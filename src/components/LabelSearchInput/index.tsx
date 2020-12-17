@@ -2,10 +2,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
-import React, { useState } from "react";
+import React from "react";
 import CreatableSelect from "react-select/creatable";
 import { Box } from "@chakra-ui/react";
 import _ from "lodash";
+import { createLabel } from "typescript";
 import Label from "../Label";
 
 export type labelItem = {
@@ -18,7 +19,7 @@ export type labelItem = {
 export type OptionsType = {
   options: labelItem[] | null | undefined;
   defaultValue?: labelItem[] | null | undefined;
-  createTaskLabel: (item: labelItem) => void;
+  createTaskLabel: (name: string) => void;
   deleteTaskLabel: (item: labelItem) => void;
 };
 
@@ -38,28 +39,24 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   createTaskLabel,
   deleteTaskLabel,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<labelItem[]>(
-    defaultValue || []
-  );
+  // const getCreatedValue = (newValue: labelItem[]): labelItem[] => {
+  //   return _.difference(newValue, currentOptions);
+  // };
 
-  const getCreatedValue = (newValue: labelItem[]): labelItem[] => {
-    return _.difference(newValue, currentOptions);
-  };
-
-  const deleteValueFromValues = (deletedValue: labelItem): labelItem[] => {
-    return _.without(currentOptions, deletedValue);
-  };
+  // const deleteValueFromValues = (deletedValue: labelItem): labelItem[] => {
+  //   return _.without(currentOptions, deletedValue);
+  // };
 
   const handleCreateChange = (newValue: labelItem[]) => {
-    const created = getCreatedValue(newValue);
-    createTaskLabel(created[0]);
-    setCurrentOptions(newValue);
+    console.log("handleCreateChange", newValue);
+    // const created = getCreatedValue(newValue);
+    // createTaskLabel(created[0]);
   };
 
   const handleDeleteChange = (deletedValue: labelItem) => {
-    const newValue = deleteValueFromValues(deletedValue);
-    deleteTaskLabel(deletedValue);
-    setCurrentOptions(newValue);
+    console.log("handleDeleteChange", deletedValue);
+    // const newValue = deleteValueFromValues(deletedValue);
+    // deleteTaskLabel(deletedValue);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,8 +78,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   };
 
   const renderLabels = () => {
-    return currentOptions?.map((label) => {
-      console.log("label.color:", label.color);
+    return defaultValue?.map((label) => {
       return (
         <Label
           key={label.id}
@@ -97,6 +93,10 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     });
   };
 
+  const onCreate = (input: string) => {
+    createTaskLabel(input);
+  };
+
   return (
     <React.Fragment>
       <Box spacing="5px" marginBottom="0.5rem">
@@ -106,6 +106,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         isMulti
         onChange={handleChange}
         options={options || undefined}
+        onCreateOption={onCreate}
         defaultValue={defaultValue}
         placeholder="Select Task's Label"
         styles={{

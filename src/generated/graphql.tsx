@@ -34,7 +34,7 @@ export type Query = {
   getSprint: SprintResponse;
   getSprints: SprintResponse;
   getStartedSprint: SprintResponse;
-  getTask: TaskResponse;
+  getTask: SingleTaskResponse;
   getLabels: LabelResponse;
 };
 
@@ -307,9 +307,9 @@ export type SprintResponse = {
   success?: Maybe<Scalars["Boolean"]>;
 };
 
-export type TaskResponse = {
-  __typename?: "TaskResponse";
-  task?: Maybe<Array<Task>>;
+export type SingleTaskResponse = {
+  __typename?: "SingleTaskResponse";
+  task?: Maybe<Task>;
   error?: Maybe<FieldError>;
 };
 
@@ -341,8 +341,8 @@ export type Mutation = {
   updateSprint: SprintResponse;
   deleteSprint: SprintResponse;
   readSprintNotification: SprintResponse;
-  createTask: TaskResponse;
-  updateTask: TaskResponse;
+  createTask: SingleTaskResponse;
+  updateTask: SingleTaskResponse;
   deleteTask: TaskDeleteResponse;
   createTaskLabel: TaskLabelResponse;
   deleteTaskLabel: DeleteResponse;
@@ -794,54 +794,48 @@ export type CreateTaskMutationVariables = Exact<{
 }>;
 
 export type CreateTaskMutation = { __typename?: "Mutation" } & {
-  createTask: { __typename?: "TaskResponse" } & {
+  createTask: { __typename?: "SingleTaskResponse" } & {
     task?: Maybe<
-      Array<
-        { __typename?: "Task" } & Pick<
-          Task,
-          | "id"
-          | "title"
-          | "description"
-          | "startDate"
-          | "endDate"
-          | "taskIndex"
-          | "completed"
-        > & {
-            board?: Maybe<
-              { __typename?: "Board" } & Pick<Board, "id" | "title">
-            >;
-            sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
-            file?: Maybe<
-              Array<{ __typename?: "File" } & Pick<File, "fileLink">>
-            >;
-            comment?: Maybe<
-              Array<
-                { __typename?: "Comment" } & Pick<Comment, "content"> & {
-                    user?: Maybe<
-                      { __typename?: "User" } & Pick<User, "id" | "username">
-                    >;
-                  }
-              >
-            >;
-            taskLabel?: Maybe<
-              Array<
-                { __typename?: "TaskLabel" } & {
-                  label: { __typename?: "Label" } & Pick<
-                    Label,
-                    "name" | "id" | "color"
+      { __typename?: "Task" } & Pick<
+        Task,
+        | "id"
+        | "title"
+        | "description"
+        | "startDate"
+        | "endDate"
+        | "taskIndex"
+        | "completed"
+      > & {
+          board?: Maybe<{ __typename?: "Board" } & Pick<Board, "id" | "title">>;
+          sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
+          file?: Maybe<Array<{ __typename?: "File" } & Pick<File, "fileLink">>>;
+          comment?: Maybe<
+            Array<
+              { __typename?: "Comment" } & Pick<Comment, "content"> & {
+                  user?: Maybe<
+                    { __typename?: "User" } & Pick<User, "id" | "username">
                   >;
                 }
-              >
-            >;
-            userTask?: Maybe<
-              Array<
-                { __typename?: "UserTask" } & {
-                  user: { __typename?: "User" } & Pick<User, "id" | "username">;
-                }
-              >
-            >;
-          }
-      >
+            >
+          >;
+          taskLabel?: Maybe<
+            Array<
+              { __typename?: "TaskLabel" } & {
+                label: { __typename?: "Label" } & Pick<
+                  Label,
+                  "name" | "id" | "color"
+                >;
+              }
+            >
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & {
+                user: { __typename?: "User" } & Pick<User, "id" | "username">;
+              }
+            >
+          >;
+        }
     >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
@@ -1354,54 +1348,48 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 export type UpdateTaskMutation = { __typename?: "Mutation" } & {
-  updateTask: { __typename?: "TaskResponse" } & {
+  updateTask: { __typename?: "SingleTaskResponse" } & {
     task?: Maybe<
-      Array<
-        { __typename?: "Task" } & Pick<
-          Task,
-          | "id"
-          | "title"
-          | "description"
-          | "startDate"
-          | "endDate"
-          | "taskIndex"
-          | "completed"
-        > & {
-            board?: Maybe<
-              { __typename?: "Board" } & Pick<Board, "id" | "title">
-            >;
-            sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
-            file?: Maybe<
-              Array<{ __typename?: "File" } & Pick<File, "fileLink">>
-            >;
-            comment?: Maybe<
-              Array<
-                { __typename?: "Comment" } & Pick<Comment, "content"> & {
-                    user?: Maybe<
-                      { __typename?: "User" } & Pick<User, "id" | "username">
-                    >;
-                  }
-              >
-            >;
-            taskLabel?: Maybe<
-              Array<
-                { __typename?: "TaskLabel" } & {
-                  label: { __typename?: "Label" } & Pick<
-                    Label,
-                    "name" | "id" | "color"
+      { __typename?: "Task" } & Pick<
+        Task,
+        | "id"
+        | "title"
+        | "description"
+        | "startDate"
+        | "endDate"
+        | "taskIndex"
+        | "completed"
+      > & {
+          board?: Maybe<{ __typename?: "Board" } & Pick<Board, "id" | "title">>;
+          sprint: { __typename?: "Sprint" } & Pick<Sprint, "id" | "title">;
+          file?: Maybe<Array<{ __typename?: "File" } & Pick<File, "fileLink">>>;
+          comment?: Maybe<
+            Array<
+              { __typename?: "Comment" } & Pick<Comment, "content"> & {
+                  user?: Maybe<
+                    { __typename?: "User" } & Pick<User, "id" | "username">
                   >;
                 }
-              >
-            >;
-            userTask?: Maybe<
-              Array<
-                { __typename?: "UserTask" } & {
-                  user: { __typename?: "User" } & Pick<User, "id" | "username">;
-                }
-              >
-            >;
-          }
-      >
+            >
+          >;
+          taskLabel?: Maybe<
+            Array<
+              { __typename?: "TaskLabel" } & {
+                label: { __typename?: "Label" } & Pick<
+                  Label,
+                  "name" | "id" | "color"
+                >;
+              }
+            >
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & {
+                user: { __typename?: "User" } & Pick<User, "id" | "username">;
+              }
+            >
+          >;
+        }
     >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
@@ -1511,7 +1499,10 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 export type GetMeQuery = { __typename?: "Query" } & {
   getMe: { __typename?: "UserResponse" } & {
     user?: Maybe<
-      { __typename?: "User" } & Pick<User, "id" | "username" | "email"> & {
+      { __typename?: "User" } & Pick<
+        User,
+        "id" | "username" | "email" | "avatar"
+      > & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
               project: { __typename?: "Project" } & Pick<
@@ -1751,66 +1742,62 @@ export type GetTaskQueryVariables = Exact<{
 }>;
 
 export type GetTaskQuery = { __typename?: "Query" } & {
-  getTask: { __typename?: "TaskResponse" } & {
+  getTask: { __typename?: "SingleTaskResponse" } & {
     task?: Maybe<
-      Array<
-        { __typename?: "Task" } & Pick<
-          Task,
-          | "id"
-          | "title"
-          | "description"
-          | "startDate"
-          | "endDate"
-          | "taskIndex"
-          | "completed"
-        > & {
-            board?: Maybe<
-              { __typename?: "Board" } & Pick<Board, "id" | "title">
-            >;
-            sprint: { __typename?: "Sprint" } & Pick<
-              Sprint,
-              "id" | "title" | "didStart"
-            >;
-            file?: Maybe<
-              Array<{ __typename?: "File" } & Pick<File, "id" | "fileLink">>
-            >;
-            comment?: Maybe<
-              Array<
-                { __typename?: "Comment" } & Pick<
-                  Comment,
-                  "id" | "content" | "createdAt"
-                > & {
-                    user?: Maybe<
-                      { __typename?: "User" } & Pick<
-                        User,
-                        "id" | "username" | "email"
-                      >
-                    >;
-                  }
-              >
-            >;
-            taskLabel?: Maybe<
-              Array<
-                { __typename?: "TaskLabel" } & Pick<TaskLabel, "id"> & {
-                    label: { __typename?: "Label" } & Pick<
-                      Label,
-                      "name" | "id" | "color"
-                    >;
-                  }
-              >
-            >;
-            userTask?: Maybe<
-              Array<
-                { __typename?: "UserTask" } & Pick<UserTask, "id"> & {
-                    user: { __typename?: "User" } & Pick<
+      { __typename?: "Task" } & Pick<
+        Task,
+        | "id"
+        | "title"
+        | "description"
+        | "startDate"
+        | "endDate"
+        | "taskIndex"
+        | "completed"
+      > & {
+          board?: Maybe<{ __typename?: "Board" } & Pick<Board, "id" | "title">>;
+          sprint: { __typename?: "Sprint" } & Pick<
+            Sprint,
+            "id" | "title" | "didStart"
+          >;
+          file?: Maybe<
+            Array<{ __typename?: "File" } & Pick<File, "id" | "fileLink">>
+          >;
+          comment?: Maybe<
+            Array<
+              { __typename?: "Comment" } & Pick<
+                Comment,
+                "id" | "content" | "createdAt"
+              > & {
+                  user?: Maybe<
+                    { __typename?: "User" } & Pick<
                       User,
-                      "email" | "id" | "username"
-                    >;
-                  }
-              >
-            >;
-          }
-      >
+                      "id" | "username" | "email"
+                    >
+                  >;
+                }
+            >
+          >;
+          taskLabel?: Maybe<
+            Array<
+              { __typename?: "TaskLabel" } & Pick<TaskLabel, "id"> & {
+                  label: { __typename?: "Label" } & Pick<
+                    Label,
+                    "name" | "id" | "color"
+                  >;
+                }
+            >
+          >;
+          userTask?: Maybe<
+            Array<
+              { __typename?: "UserTask" } & Pick<UserTask, "id"> & {
+                  user: { __typename?: "User" } & Pick<
+                    User,
+                    "email" | "id" | "username"
+                  >;
+                }
+            >
+          >;
+        }
     >;
     error?: Maybe<
       { __typename?: "FieldError" } & Pick<
@@ -3839,6 +3826,7 @@ export const GetMeDocument = gql`
         id
         username
         email
+        avatar
         projectPermissions {
           project {
             id
