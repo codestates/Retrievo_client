@@ -5,8 +5,8 @@ import Avatar, { BetterAvatarProps } from "../Avatar";
 import { AvatarBox } from "./DeleteableAvatar.styled";
 
 type indexProps = BetterAvatarProps & {
-  userId: string;
-  handleDelete: (id: string) => void;
+  userId?: string;
+  handleDelete: (id: string | undefined) => void;
 };
 
 const DeleteableAvatar: React.FC<indexProps> = ({

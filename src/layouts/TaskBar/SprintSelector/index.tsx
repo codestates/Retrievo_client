@@ -13,7 +13,7 @@ export type SprintListDropdownPropsType = {
 const SprintListDropdown: React.FC<SprintListDropdownPropsType> = ({
   sprints,
   currentSprint,
-  onSprintSelect: onProjectSelect,
+  onSprintSelect,
 }) => {
   const [selectedProject, setSelectedProject] = useState(currentSprint || null);
   const renderSprints = () => {
@@ -27,7 +27,7 @@ const SprintListDropdown: React.FC<SprintListDropdownPropsType> = ({
           }
           onClick={() => {
             setSelectedProject(sprint);
-            onProjectSelect(sprint.id);
+            onSprintSelect(sprint.id);
           }}
         >
           {sprint.title}
