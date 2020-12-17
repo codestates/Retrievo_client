@@ -1491,10 +1491,7 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 export type GetMeQuery = { __typename?: "Query" } & {
   getMe: { __typename?: "UserResponse" } & {
     user?: Maybe<
-      { __typename?: "User" } & Pick<
-        User,
-        "id" | "username" | "email" | "avatar"
-      > & {
+      { __typename?: "User" } & Pick<User, "id" | "username" | "email"> & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
               project: { __typename?: "Project" } & Pick<
