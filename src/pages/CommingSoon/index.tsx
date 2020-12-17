@@ -1,13 +1,11 @@
 import React, { ReactElement } from "react";
-import { Link } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import Dog from "../Auth/Image/Dog";
 import Heading, { headingEnum } from "../../components/Heading";
 import Text from "../../components/Text";
 import RoundButton, { RoundButtonColor } from "../../components/RoundButton";
-import Button, { buttonColor } from "../../components/Button";
 
-const NotFound = (): ReactElement => {
+const CommingSoon = (): ReactElement => {
   return (
     <Flex
       w="100%"
@@ -49,17 +47,12 @@ const NotFound = (): ReactElement => {
           borderBottomRadius={20}
         >
           <Text>Woof Woof!</Text>
-          <Heading headingType={headingEnum.auth}>Page Not Found</Heading>
+          <Heading headingType={headingEnum.auth}>Comming Soon</Heading>
           <Dog />
-          <Link to="/">
-            <Button px={20} buttontype={buttonColor.primary}>
-              Back to Home
-            </Button>
-          </Link>
         </Flex>
       </Box>
     </Flex>
   );
 };
 
-export default NotFound;
+export default CommingSoon;
