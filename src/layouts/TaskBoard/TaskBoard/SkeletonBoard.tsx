@@ -1,14 +1,15 @@
 import React, { ReactElement, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { FetchResult } from "@apollo/client";
 import * as yup from "yup";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, useToast, Input } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { GoPlus } from "react-icons/go";
 import { IconContext } from "react-icons";
 import Text from "../../../components/Text";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Form from "../../../components/Form";
-import Input from "../../../components/Input";
+import Modal from "../../Modal/index";
 import { CreateBoardMutation } from "../../../generated/graphql";
 
 export type boardType = {
@@ -30,6 +31,8 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   projectId,
 }): ReactElement => {
   const [isCreating, setIsCreating] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const history = useHistory();
   const toast = useToast();
 
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
@@ -42,25 +45,34 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
     );
   };
 
-  const handleBoardCreateSubmit = async (value: boardType) => {
-    const res = await handleBoardCreate(value.board, projectId);
-    if (res.errors) {
-      toast({
-        title: "Board Creation Failed😂",
-        description: `${res.errors}`,
-        duration: 5000,
-        status: "error",
-      });
-    } else {
-      toast({
-        title: "Board Creation Succeed🥳",
-        description: "Board is created",
-        duration: 5000,
-        status: "success",
-      });
+  const handleBoardCreateSubmit = async () => {
+    try {
+      const res = await handleBoardCreate(inputValue, projectId);
+      console.log("create", res.data);
+      if (res.errors) {
+        toast({
+          title: "Board Creation Failed😂",
+          description: `${res.errors}`,
+          duration: 5000,
+          status: "error",
+          position: "bottom-right",
+        });
+      } else {
+        toast({
+          title: "Board Creation Succeed🥳",
+          description: "Board is created",
+          duration: 5000,
+          status: "success",
+          position: "bottom-right",
+        });
+      }
+      // history.push(`/project/board/${projectId}`);
+    } catch (err) {
+      console.log(err);
+      // setIsCreating(false);
     }
     setIsCreating(false);
-    // }
+    // history.push(`/project/board/${projectId}`);
   };
 
   const validationSchema = yup.object({
@@ -97,21 +109,20 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
           </Box>
         </Box>
       </Form>
-    ) : (
-      <Heading
-        mt={2}
-        mb={3}
-        headingType={headingEnum.board}
-        color="achromatic.500"
-      >
-        Add Board
-      </Heading>
-    );
+    ) : null;
   };
 
   return (
     <Box w={330}>
-      {renderHeaderOrInput()}
+      <Heading
+        mt={2}
+        mb={3}
+        w={330}
+        headingType={headingEnum.board}
+        color="achromatic.500"
+      >
+        Add New Board
+      </Heading>
       <Box
         h="100%"
         mb={4}
@@ -135,6 +146,20 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
           </>
         )}
       </Box>
+      <Modal
+        title="Create New Board"
+        isOpen={isCreating}
+        onClose={() => setIsCreating(false)}
+        secondaryText="Submit"
+        secondaryAction={handleBoardCreateSubmit}
+        buttonColor="primary.200"
+        buttonFontColor="white"
+      >
+        <Input
+          onChange={(e) => setInputValue(e.target.value)}
+          // defaultValue={board.title}
+        />
+      </Modal>
     </Box>
   );
 };

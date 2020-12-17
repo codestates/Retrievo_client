@@ -2,11 +2,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
-import React from "react";
+import React, { useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { Box } from "@chakra-ui/react";
 import _ from "lodash";
-import { createLabel } from "typescript";
 import Label from "../Label";
 
 export type labelItem = {
@@ -39,32 +38,32 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   createTaskLabel,
   deleteTaskLabel,
 }) => {
-  // const getCreatedValue = (newValue: labelItem[]): labelItem[] => {
-  //   return _.difference(newValue, currentOptions);
-  // };
-
-  // const deleteValueFromValues = (deletedValue: labelItem): labelItem[] => {
-  //   return _.without(currentOptions, deletedValue);
-  // };
-
-  const handleCreateChange = (newValue: labelItem[]) => {
-    console.log("handleCreateChange", newValue);
-    // const created = getCreatedValue(newValue);
-    // createTaskLabel(created[0]);
+  const handleCreatedValue = (values: labelItem[]): void => {
+    if (!defaultValue || defaultValue.length < 1) {
+      createTaskLabel(values[0].label);
+      return;
+    }
+    console.log("-------delete start");
+    console.log("values:", values);
+    console.log("defaultValue:", defaultValue);
+    const newValue = values.filter(
+      (el) => !defaultValue.find((oldValue) => oldValue.id === el.id)
+    );
+    console.log("-------newValue:", newValue);
+    console.log("-------delete end:");
+    createTaskLabel(newValue[0].label);
   };
 
-  const handleDeleteChange = (deletedValue: labelItem) => {
-    console.log("handleDeleteChange", deletedValue);
-    // const newValue = deleteValueFromValues(deletedValue);
-    // deleteTaskLabel(deletedValue);
+  const handleDeleteChange = (selectedValue: labelItem) => {
+    deleteTaskLabel(selectedValue);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
+      // case actionTypes.createOption:
       case actionTypes.selectOption:
-      case actionTypes.createOption:
-        handleCreateChange(newValue);
+        handleCreatedValue(newValue);
         break;
 
       case actionTypes.removeValue:
@@ -78,6 +77,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   };
 
   const renderLabels = () => {
+    console.log("defaultValue:", defaultValue);
     return defaultValue?.map((label) => {
       return (
         <Label
