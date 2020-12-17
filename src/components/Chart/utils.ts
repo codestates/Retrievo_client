@@ -1,3 +1,4 @@
+import Spinner from "../Spinner";
 import {
   taskCountSummary,
   tasksByAssignee,
@@ -7,8 +8,9 @@ import {
 export const dataSchemaGenerator = (
   variant: string,
   data: taskCountSummary & tasksByAssignee & incompleteTaskStatus
-): Record<string, unknown> => {
+): Record<string, unknown> | null => {
   if (variant === "incompleteTaskStatus") {
+    if (!data) return null;
     const labels = Object.keys(data);
     const numbers = Object.values(data);
     const schema = {
@@ -101,6 +103,7 @@ export const dataSchemaGenerator = (
   }
 
   if (variant === "taskCountSummary") {
+    if (!data) return null;
     const mappedData = [
       data.incompleteTasksCount,
       data.completedTasksCount,

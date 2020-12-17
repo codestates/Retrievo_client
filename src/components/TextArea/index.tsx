@@ -6,7 +6,6 @@ import {
   FormErrorMessage,
   Textarea,
 } from "@chakra-ui/react";
-
 import ResizeTextarea from "react-textarea-autosize";
 
 export type InputFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -21,7 +20,6 @@ export type InputFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   paddingNone?: boolean;
   onBlurSubmit?: (value: Record<string, any>) => void;
 };
-
 export const TextAreaField: React.FC<InputFieldProps> = ({
   label,
   fontSize = "md",
@@ -36,7 +34,6 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
 }) => {
   const [field, { error }] = useField(props);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel
@@ -89,5 +86,4 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
     </FormControl>
   );
 };
-
 export default TextAreaField;
