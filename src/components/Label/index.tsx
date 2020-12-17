@@ -22,6 +22,7 @@ export type LabelProps = ChakraLabelPropsType & {
   children?: string | ReactElement;
   labels?: label[];
   defaultValues?: label;
+  onOptionClick?: (labelId: string) => void;
 };
 
 const Label: React.FC<LabelProps> = ({
@@ -33,6 +34,7 @@ const Label: React.FC<LabelProps> = ({
   onClose,
   labels,
   defaultValues,
+  onOptionClick,
   ...props
 }) => {
   const [selectedColor, setSelectedColor] = useState(
@@ -64,8 +66,11 @@ const Label: React.FC<LabelProps> = ({
   if (hasDropdown) {
     return (
       <Select
-        onChange={(e) => setSelectedColor(e.target.value)}
-        bg={selectedColor}
+        onChange={(e) => {
+          setSelectedColor(e.target.value);
+          console.log(e.target);
+        }}
+        bg="primary.300"
         color="white"
         fontSize="sm"
         height={6}

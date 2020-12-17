@@ -12,87 +12,57 @@ import {
   List,
   Spinner,
   Center,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import * as yup from "yup";
-import { FcCheckmark } from "react-icons/fc";
 import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
-/* custom components */
-import moment from "moment";
+/* utils */
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import Form from "../../components/Form";
-import Button, { buttonColor } from "../../components/Button";
+import _ from "lodash";
+import moment from "moment";
+import {
+  useGetProjectLazyQuery,
+  useUpdateTaskMutation,
+  useGetTaskLazyQuery,
+  useDeleteUserTaskMutation,
+  GetTaskDocument,
+  useCreateCommentMutation,
+  useDeleteTaskLabelMutation,
+  useCreateTaskLabelMutation,
+  GetProjectDocument,
+  useCreateUserTaskMutation,
+  useGetMeQuery,
+  useDeleteCommentMutation,
+} from "../../generated/graphql";
+import {
+  mappingUserOption,
+  mappingLabelOptions,
+  mappingProjectLabelOptions,
+  mappingLabelSelectorOptions,
+  converToUnix,
+  colorArr,
+} from "./utils";
+
+/* custom components */
+import CustomForm from "../../components/Form";
 import Textarea from "../../components/TextArea";
-import Label, { label as BoardLabelType } from "../../components/Label";
+import BoardLabelSelector, {
+  labelSelectorProps,
+} from "../../components/LabelSelector";
 import SprintListDropdown from "./SprintSelector";
 import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
-import Calendar, { dateIFC } from "../../components/Calendar";
+import Calendar, { calendarProps, dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
-import LabelSearchInput, {
-  labelItem as labelItemType,
-} from "../../components/LabelSearchInput";
-import {
-  useGetProjectQuery,
-  useGetTaskLazyQuery,
-} from "../../generated/graphql";
+import LabelSearchInput, { labelItem } from "../../components/LabelSearchInput";
 
-// DUMMY DATA
-
-const mappingUserOption = (
-  userArr:
-    | {
-        user: {
-          id: string;
-          username: string;
-          avatar?: string | undefined | null;
-        };
-      }[]
-    | null
-    | undefined
-) => {
-  if (!userArr) return undefined;
-  return userArr.map(({ user }) => {
-    return { ...user, label: user.username, value: user.id };
-  });
-};
-
-const mappingLabelOptions = (
-  taskLabel:
-    | { label: { id: string; name: string; color: string } }[]
-    | undefined
-    | null
-): labelItemType[] | undefined => {
-  if (!taskLabel) return undefined;
-
-  return taskLabel.map(({ label }) => ({
-    id: label.id,
-    value: label.name,
-    label: label.name,
-    color: label.color,
-  }));
-};
-
-const mappingProjectLabelOptions = (
-  taskLabel: { id: string; name: string; color: string }[] | undefined | null
-): labelItemType[] | undefined => {
-  if (!taskLabel) return undefined;
-
-  return taskLabel.map(({ id, name, color }) => ({
-    id,
-    value: name,
-    label: name,
-    color,
-  }));
-};
-
-type labelItem = { id: string; value: string; label: string; color: string };
 const titleValidation = yup.object({
   email: yup.string().max(5).required(),
 });
 const commentValidation = yup.object({
-  email: yup.string().max(5).required(),
+  content: yup.string().min(5).required(),
 });
 
 interface MatchParams {
@@ -107,35 +77,49 @@ export interface taskProps {
 export const TaskBar: React.FC<
   taskProps & RouteComponentProps<MatchParams>
 > = ({ taskId, match, isOpen, onClose }) => {
-  const onSprintSelect = (value: string) => console.log(value);
   const projectId = match?.params.projectId;
+  const toast = useToast();
 
   const [
     getTask,
-    { loading: getTaskLoading, error: getTaskError, data: getTaskData },
+    { loading: getTaskLoading, data: getTaskData, refetch: refetchTask },
   ] = useGetTaskLazyQuery();
+  const [updateTaskMutation] = useUpdateTaskMutation();
+  const [deleteUserTask] = useDeleteUserTaskMutation();
+  const [createUserTask] = useCreateUserTaskMutation();
+  const [deleteTaskLabel] = useDeleteTaskLabelMutation();
+  const [createTaskLabel] = useCreateTaskLabelMutation();
+  const [getProject, { data: projectInfoData }] = useGetProjectLazyQuery();
+  const [createComment] = useCreateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const { data: meData } = useGetMeQuery();
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
       console.log("isOpen:", isOpen);
       console.log("taskId:", taskId);
-      console.log("projectId:", projectId);
-      getTask({
-        variables: {
-          projectId,
-          id: taskId,
-        },
-      });
+      console.log("projectId", projectId);
+      if (!getTaskData) {
+        getTask({
+          variables: {
+            projectId,
+            id: taskId,
+          },
+        });
+      } else if (refetchTask) {
+        refetchTask({ projectId, id: taskId });
+      }
+      getProject({ variables: { projectId } });
     }
-  }, [taskId, isOpen, getTask, projectId]);
-
-  const {
-    loading: projectInfoLoading,
-    error: projectInfoError,
-    data: projectInfoData,
-  } = useGetProjectQuery({
-    variables: { projectId },
-  });
+  }, [
+    taskId,
+    isOpen,
+    getTask,
+    projectId,
+    getProject,
+    refetchTask,
+    getTaskData,
+  ]);
 
   if (!taskId) return null;
 
@@ -144,69 +128,315 @@ export const TaskBar: React.FC<
     return <Text>no task</Text>;
   }
 
-  const task = taskArr[0];
+  const createErrorToast = () => {
+    toast({
+      position: "bottom-right",
+      title: "Update Task Fail...",
+      description: "Please try again in a moment.",
+      status: "error",
+      isClosable: true,
+      duration: 4000,
+    });
+  };
 
-  console.log("data:", getTaskData);
-  console.log("loading:", getTaskLoading);
+  const createSuccessToast = () => {
+    toast({
+      position: "bottom-right",
+      title: "Task Updated!",
+      status: "success",
+      isClosable: true,
+      duration: 4000,
+    });
+  };
 
-  // task => mutation
-  // TODO: api와 연결
+  /* mutation trigger */
+  type formValue = Record<string, any>;
+  const updateTask = async (value: formValue) => {
+    console.log("start update:", value);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    try {
+      const res = await updateTaskMutation({
+        variables: {
+          projectId,
+          options: { ...value, id: taskId },
+        },
+      });
+
+      if (res.data?.updateTask.error) {
+        throw new Error(res.data?.updateTask.error.message);
+      }
+
+      createSuccessToast();
+    } catch (err) {
+      createErrorToast();
+      console.log("updateTask error:", err);
+    }
+  };
+
+  const createFile = (value: formValue) => console.log("create file", value);
+
+  const handleCreateComment = async (
+    value: formValue,
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      const res = await createComment({
+        variables: {
+          taskId,
+          projectId,
+          options: { ...(value as { content: string }) },
+        },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+      });
+
+      if (res.data?.createComment.error) {
+        throw new Error(res.data.createComment.error.message);
+      }
+
+      resetForm();
+
+      createSuccessToast();
+    } catch (error) {
+      console.log("create comment error:", error);
+      createErrorToast();
+    }
+  };
+
+  const handleLabelDelete = async ({ id }: { id: string }) => {
+    try {
+      const res = await deleteTaskLabel({
+        variables: { projectId, taskId, labelId: id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+      });
+      if (res.data?.deleteTaskLabel.error) {
+        throw new Error(res.data?.deleteTaskLabel.error.message);
+      }
+      createSuccessToast();
+    } catch (error) {
+      console.log("delete label Error", error);
+      createErrorToast();
+    }
+  };
+
+  const handleCreateLabel = async (name: string) => {
+    try {
+      const res = await createTaskLabel({
+        variables: {
+          projectId,
+          taskId,
+          name,
+          color: colorArr[_.random(0, colorArr.length - 1)],
+        },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+          {
+            query: GetProjectDocument,
+            variables: {
+              projectId,
+            },
+          },
+        ],
+        // update: (store, { data }) => {
+        // if (!data) return undefined;
+        // const cacheId = store.identify(data?.createTaskLabel);
+        // store.modify({
+        //   fields: {
+        //     getTask: (existingFieldData, { toReference }) => {},
+        //   },
+        // });
+        // },
+      });
+      if (res.data?.createTaskLabel.error) {
+        throw new Error(res.data?.createTaskLabel.error.message);
+      }
+      createSuccessToast();
+    } catch (error) {
+      console.log("create label Error", error);
+      createErrorToast();
+    }
+  };
+
+  const handleUpdateTask = (value: formValue) => {
+    console.log("formValue:", value);
+    updateTask({ basicOptions: { ...value } });
+  };
+
+  const handleBoardSelect = (newBoardRecord: formValue) => {
+    updateTask(newBoardRecord);
+  };
+
+  const onSprintSelect = (sprintId: string) => {
+    updateTask({ sprintId });
+  };
+
+  const handleDeleteAssignee = async (id: string) => {
+    try {
+      const res = await deleteUserTask({
+        variables: { taskId, projectId, userId: id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+        // update:(store,{data})=>{
+        //   const task = store.readQuery<GetTaskQuery>({
+        //     query:GetTaskDocument,
+        //     data:{
+        //     }
+        //   })
+        // }
+      });
+
+      if (res.data?.deleteUserTask.error) {
+        throw new Error(res.data.deleteUserTask.error.message);
+      }
+
+      createSuccessToast();
+    } catch (err) {
+      createErrorToast();
+      console.log("delete assignee error:", err);
+    }
+  };
+
+  const handleCreateAssignee = async (id: string) => {
+    try {
+      const res = await createUserTask({
+        variables: { taskId, projectId, userId: id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+        // update:(store,{data})=>{
+        //   const task = store.readQuery<GetTaskQuery>({
+        //     query:GetTaskDocument,
+        //     data:{
+        //     }
+        //   })
+        // }
+      });
+
+      if (res.data?.createUserTask.error) {
+        throw new Error(res.data.createUserTask.error.message);
+      }
+
+      createSuccessToast();
+    } catch (err) {
+      createErrorToast();
+      console.log("delete assignee error:", err);
+    }
+  };
+
+  const handleDeleteComment = async (id: string) => {
+    try {
+      const res = await deleteComment({
+        variables: { projectId, id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+      });
+      if (res.data?.deleteComment.error) {
+        throw new Error(res.data?.deleteComment.error.message);
+      }
+      createSuccessToast();
+    } catch (error) {
+      console.log("delete label Error", error);
+      createErrorToast();
+    }
+  };
+
+  /* component args */
   const sprintArg = {
-    currentSprint: task.sprint,
+    currentSprint: getTaskData?.getTask.task?.sprint,
     sprints: projectInfoData?.project.project?.sprint,
     onSprintSelect,
   };
+
   const userSelectArg: UserSelectPropTypes = {
     options: mappingUserOption(
       projectInfoData
         ? projectInfoData.project.project?.projectPermissions
         : null
     ),
-    defaultValue: mappingUserOption(task.userTask),
-    deleteAssignee: (id) => console.log(id), // TODO
-    createAssignee: (id) => console.log(id), // TODO
+    defaultValue: mappingUserOption(getTaskData?.getTask.task?.userTask),
+    deleteAssignee: handleDeleteAssignee,
+    createAssignee: handleCreateAssignee,
   };
+
+  console.log("getTaskData", getTaskData);
+
   const taskLabelSelectArgs = {
     options: mappingProjectLabelOptions(
       projectInfoData?.project.project?.label
     ),
     defaultValue: mappingLabelOptions(
-      task.taskLabel ? task.taskLabel : undefined
+      getTaskData?.getTask.task
+        ? getTaskData?.getTask.task.taskLabel
+        : undefined
     ),
-    createTaskLabel: (item: labelItem) => console.log(item),
-    deleteTaskLabel: (item: labelItem) => console.log(item),
+    createTaskLabel: handleCreateLabel,
+    deleteTaskLabel: handleLabelDelete,
   };
 
-  // TODO: api 작성
-  type formValue = Record<string, any>;
-  const updateTask = (value: formValue) => console.log("task update", value);
-  const createLabel = (value: formValue) => console.log("create label", value);
-  const createFile = (value: formValue) => console.log("create file", value);
-  const createComment = (value: formValue) =>
-    console.log("create Comment", value);
-
-  const mappingBoardLabel = (
-    board: { id: string; title: string }[] | null | undefined
-  ): BoardLabelType[] | undefined => {
-    if (!board) return undefined;
-    return board.map((el) => {
-      return { color: undefined, name: el.title, id: el.id };
-    });
-  };
-
-  const boardLabelArgs = {
-    defaultValues: task
-      ? { color: undefined, name: task.board?.title, id: task.board?.id }
+  const labelSelectorArg: labelSelectorProps = {
+    defaultOption: getTaskData?.getTask.task?.sprint
+      ? mappingLabelSelectorOptions([getTaskData.getTask.task.sprint])[0]
       : undefined,
-    labels: projectInfoData?.project.project?.board
-      ? mappingBoardLabel(projectInfoData?.project.project?.board)
+    options: projectInfoData?.project.project?.board
+      ? mappingLabelSelectorOptions(projectInfoData?.project.project?.board)
       : undefined,
+    onChange: handleBoardSelect,
   };
 
+  const calendarArg: calendarProps = {
+    defaultStartDate: converToUnix(getTaskData?.getTask.task?.startDate),
+    defaultEndDate: converToUnix(getTaskData?.getTask.task?.endDate),
+    handleSubmit: (value: dateIFC) => {
+      handleUpdateTask(value);
+    },
+  };
+
+  /* Render method */
   const renderComments = () => {
-    if (!task.comment) return null;
+    if (!getTaskData?.getTask.task?.comment) return null;
 
-    return task.comment.map((comment) => {
+    return getTaskData.getTask.task.comment.map((comment) => {
       return (
         <Box display="flex" mb="2">
           <Avatar size="sm" name={comment.user?.username} />
@@ -215,14 +445,19 @@ export const TaskBar: React.FC<
               <Text fontSize="sm" fontWeight="bold">
                 {comment.user?.username}
               </Text>
-              {comment.user?.id === "1234" ? (
+              <Text fontSize="xs" fontWeight="light" ml={3}>
+                {moment(Number(comment.createdAt)).fromNow().toString()}
+              </Text>
+              {comment.user?.email === meData?.getMe.user?.email ? (
                 <IconButton
                   aria-label="delete task"
                   iconButtonType="close"
                   padding="0"
                   h="1rem"
                   w="1rem"
-                  onClick={() => console.log("delete comment clicked")}
+                  onClick={() => {
+                    handleDeleteComment(comment.id);
+                  }}
                 />
               ) : null}
             </Box>
@@ -234,10 +469,10 @@ export const TaskBar: React.FC<
   };
 
   const renderFileList = () => {
-    if (!task.file) return null;
+    if (!getTaskData?.getTask.task?.file) return null;
     return (
       <List color="achromatic.600" fontSize="sm">
-        {task.file.map((el) => {
+        {getTaskData?.getTask.task?.file.map((el) => {
           return (
             <ListItem key={el.fileLink} display="flex" alignItems="flex-end">
               <BsPaperclip />
@@ -251,13 +486,6 @@ export const TaskBar: React.FC<
     );
   };
 
-  const submitDates = ({ startDate, endDate }: dateIFC) => {
-    const unixStartDate = moment(startDate).unix();
-    const unixEndDate = moment(endDate).unix();
-    console.log("unixStartDate:", unixStartDate);
-    console.log("unixEndDate:", unixEndDate);
-  };
-
   return (
     <div>
       <Drawer
@@ -269,22 +497,8 @@ export const TaskBar: React.FC<
         <DrawerOverlay>
           {!getTaskLoading ? (
             <DrawerContent bgColor="primary.400" padding="3">
-              <Box>
-                <Button
-                  buttontype={buttonColor.white}
-                  onClick={() => {
-                    updateTask({ completed: !task.completed });
-                    // TODO : task complete update api
-                  }}
-                  rightIcon={task.completed ? <FcCheckmark /> : <></>}
-                  size="sm"
-                  boxShadow="sm"
-                >
-                  Mark Complete
-                </Button>
-              </Box>
-              <DrawerCloseButton color="achromatic.700" mr="3" />
               <DrawerBody padding="0">
+                <DrawerCloseButton color="achromatic.700" mr="3" mt="6" />
                 <Box
                   bgColor="achromatic.100"
                   mt={2}
@@ -295,14 +509,16 @@ export const TaskBar: React.FC<
                 >
                   <Box display="flex" alignItems="center" mb={2}>
                     <Text mr="2" fontSize="sm" color="primary.200">
-                      Task - {task.taskIndex}
+                      Task - {getTaskData?.getTask.task?.taskIndex}
                     </Text>
-                    <Label {...boardLabelArgs} hasDropdown />
+                    {getTaskData?.getTask.task?.sprint.didStart ? (
+                      <BoardLabelSelector {...labelSelectorArg} />
+                    ) : null}
                   </Box>
-                  <Form
+                  <CustomForm
                     validationSchema={titleValidation}
                     onSubmit={(value) => updateTask(value)}
-                    initialValues={{ title: task.title }}
+                    initialValues={{ title: getTaskData?.getTask.task?.title }}
                   >
                     <Textarea
                       label="title"
@@ -311,14 +527,12 @@ export const TaskBar: React.FC<
                       isLabelNonVisible
                       fontSize="2xl"
                       fontWeight="bold"
-                      onBlur={(e) => {
-                        console.log(e);
-                      }}
+                      onBlurSubmit={handleUpdateTask}
                       placeholder="Task Title Here"
                       autoHeight
                       paddingNone
                     />
-                  </Form>
+                  </CustomForm>
                   <Box>
                     <TextLabel>Sprint</TextLabel>
                     <SprintListDropdown {...sprintArg} />
@@ -328,15 +542,7 @@ export const TaskBar: React.FC<
                     <UserSelect {...userSelectArg} />
                   </Box>
                   <Box mt={2}>
-                    <Calendar
-                      defaultStartDate={moment.unix(
-                        Number(task.startDate) / 1000
-                      )}
-                      defaultEndDate={moment.unix(Number(task.endDate) / 1000)}
-                      handleSubmit={(value: dateIFC) => {
-                        submitDates(value);
-                      }}
-                    />
+                    <Calendar {...calendarArg} />
                   </Box>
                   <Box mt={2}>
                     <TextLabel>Label</TextLabel>
@@ -345,22 +551,22 @@ export const TaskBar: React.FC<
                   <Box mt={2}>
                     <TextLabel>Description</TextLabel>
 
-                    <Form
+                    <CustomForm
                       validationSchema={titleValidation}
-                      onSubmit={(value) => console.log(value)}
-                      initialValues={{ description: task.description }}
+                      onSubmit={(value) => handleUpdateTask(value)}
+                      initialValues={{
+                        description: getTaskData?.getTask.task?.description,
+                      }}
                     >
                       <Textarea
                         label="description"
                         name="description"
                         isLabelNonVisible
-                        onBlur={(e) => {
-                          console.log(e);
-                        }}
+                        onBlurSubmit={handleUpdateTask}
                         placeholder="description here"
                         autoHeight
                       />
-                    </Form>
+                    </CustomForm>
                   </Box>
                   <Box>{renderFileList()}</Box>
                   <Box
@@ -399,21 +605,26 @@ export const TaskBar: React.FC<
                   {renderComments()}
 
                   <Box display="flex" mt={5}>
-                    <Avatar name="myName" size="sm" mr={2} />
+                    <Avatar
+                      name={meData?.getMe.user?.username}
+                      // src={meData?.getMe.user?.avatar || undefined} //TODO avatar 쿼리 업데이트 후
+                      size="sm"
+                      mr={2}
+                    />
                     <Box width="full">
-                      <Form
+                      <CustomForm
                         validationSchema={commentValidation}
-                        onSubmit={(value) => createComment(value)}
-                        initialValues={{ comment: "" }}
+                        onSubmit={handleCreateComment}
+                        initialValues={{ content: "" }}
                         isSubmitButton
                       >
                         <Textarea
-                          label="comment"
-                          name="comment"
+                          label="content"
+                          name="content"
                           isLabelNonVisible
                           placeholder="new comment here"
                         />
-                      </Form>
+                      </CustomForm>
                     </Box>
                   </Box>
                 </Box>

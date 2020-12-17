@@ -72,7 +72,7 @@ export const CustomForm: React.FC<FormProps> = ({
 
   return (
     <Formik initialValues={initialValues} {...arg}>
-      {({ isSubmitting }) => {
+      {({ isSubmitting, resetForm }) => {
         return (
           <Form>
             {children}
