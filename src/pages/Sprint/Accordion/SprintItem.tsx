@@ -51,7 +51,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   const location = useLocation();
   const toast = useToast();
   const projectId = location.pathname.split("/").pop() || "";
-  const [selected, setSelected] = useState<boolean>(row === 0);
+  const [selected] = useState<boolean>(row === 0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [
     updateSprintMutation,
@@ -168,8 +168,8 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         return (
           <Accordion
             allowToggle
-            onChange={() => setSelected(!selected)}
-            defaultIndex={row === 0 ? 0 : 1}
+            // onChange={() => setSelected(!selected)}
+            // defaultIndex={row}
           >
             <AccordionItem>
               <Flex
@@ -177,7 +177,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 {...provided.dragHandleProps}
                 {...provided.draggableProps}
                 alignItems="center"
-                bgColor={selected ? "primary.400" : "achromatic.100"}
+                // bgColor={row === 0 ? "primary.400" : "achromatic.100"}
                 p={2}
               >
                 <Center w="40px" h="40px" overflow="hidden">

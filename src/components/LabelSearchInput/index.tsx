@@ -14,14 +14,12 @@ export type labelItem = {
   label: string;
   color: string;
 };
-
 export type OptionsType = {
   options: labelItem[] | null | undefined;
   defaultValue?: labelItem[] | null | undefined;
-  createTaskLabel: (item: labelItem) => void;
+  createTaskLabel: (name: string) => void;
   deleteTaskLabel: (item: labelItem) => void;
 };
-
 enum actionTypes {
   selectOption = "select-option",
   deselectOption = "deselect-option",
@@ -31,57 +29,48 @@ enum actionTypes {
   clear = "clear",
   createOption = "create-option",
 }
-
 const LabelSearchInput: React.FC<OptionsType> = ({
   options,
   defaultValue,
   createTaskLabel,
   deleteTaskLabel,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<labelItem[]>(
-    defaultValue || []
-  );
-
-  const getCreatedValue = (newValue: labelItem[]): labelItem[] => {
-    return _.difference(newValue, currentOptions);
+  const handleCreatedValue = (values: labelItem[]): void => {
+    if (!defaultValue || defaultValue.length < 1) {
+      createTaskLabel(values[0].label);
+      return;
+    }
+    console.log("-------delete start");
+    console.log("values:", values);
+    console.log("defaultValue:", defaultValue);
+    const newValue = values.filter(
+      (el) => !defaultValue.find((oldValue) => oldValue.id === el.id)
+    );
+    console.log("-------newValue:", newValue);
+    console.log("-------delete end:");
+    createTaskLabel(newValue[0].label);
   };
-
-  const deleteValueFromValues = (deletedValue: labelItem): labelItem[] => {
-    return _.without(currentOptions, deletedValue);
+  const handleDeleteChange = (selectedValue: labelItem) => {
+    deleteTaskLabel(selectedValue);
   };
-
-  const handleCreateChange = (newValue: labelItem[]) => {
-    const created = getCreatedValue(newValue);
-    createTaskLabel(created[0]);
-    setCurrentOptions(newValue);
-  };
-
-  const handleDeleteChange = (deletedValue: labelItem) => {
-    const newValue = deleteValueFromValues(deletedValue);
-    deleteTaskLabel(deletedValue);
-    setCurrentOptions(newValue);
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
+      // case actionTypes.createOption:
       case actionTypes.selectOption:
-      case actionTypes.createOption:
-        handleCreateChange(newValue);
+        handleCreatedValue(newValue);
         break;
-
       case actionTypes.removeValue:
       case actionTypes.popValue:
         handleDeleteChange(newValue);
         break;
-
       default:
         break;
     }
   };
-
   const renderLabels = () => {
-    return currentOptions?.map((label) => {
+    console.log("defaultValue:", defaultValue);
+    return defaultValue?.map((label) => {
       return (
         <Label
           key={label.id}
@@ -95,7 +84,9 @@ const LabelSearchInput: React.FC<OptionsType> = ({
       );
     });
   };
-
+  const onCreate = (input: string) => {
+    createTaskLabel(input);
+  };
   return (
     <React.Fragment>
       <Box spacing="5px" marginBottom="0.5rem">
@@ -105,6 +96,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         isMulti
         onChange={handleChange}
         options={options || undefined}
+        onCreateOption={onCreate}
         defaultValue={defaultValue}
         placeholder="Select Task's Label"
         styles={{
@@ -122,5 +114,4 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     </React.Fragment>
   );
 };
-
 export default LabelSearchInput;

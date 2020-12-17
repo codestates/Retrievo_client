@@ -1,5 +1,4 @@
 query GetReportSummary($projectId:String!) {
-
 	reportSummary(projectId:$projectId) {
 	    taskCountSummary {
             overdueTasksCount

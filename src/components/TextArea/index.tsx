@@ -1,4 +1,4 @@
-import React, { TextareaHTMLAttributes, useRef, useEffect } from "react";
+import React, { RefObject, TextareaHTMLAttributes, useRef } from "react";
 import { useField } from "formik";
 import {
   FormControl,
@@ -6,7 +6,6 @@ import {
   FormErrorMessage,
   Textarea,
 } from "@chakra-ui/react";
-
 import ResizeTextarea from "react-textarea-autosize";
 
 export type InputFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -19,8 +18,8 @@ export type InputFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   autoCompleteDisable?: boolean;
   autoHeight?: boolean;
   paddingNone?: boolean;
+  onBlurSubmit?: (value: Record<string, any>) => void;
 };
-
 export const TextAreaField: React.FC<InputFieldProps> = ({
   label,
   fontSize = "md",
@@ -30,10 +29,11 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
   autoCompleteDisable,
   autoHeight,
   paddingNone,
+  onBlurSubmit,
   ...props
 }) => {
   const [field, { error }] = useField(props);
-
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel
@@ -52,7 +52,15 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
           id={field.name}
           fontSize={fontSize}
           fontWeight={fontWeight}
+          ref={inputRef}
           w="100%"
+          onBlur={() => {
+            if (onBlurSubmit && inputRef.current?.value) {
+              onBlurSubmit({ [field.name]: inputRef.current.value });
+            }
+          }}
+          minRows={1}
+          minH="unset"
           padding={paddingNone ? "0" : [1, 2]}
           borderColor={isEditable ? "transparent" : "achromatic.400"}
           resize="none"
@@ -78,5 +86,4 @@ export const TextAreaField: React.FC<InputFieldProps> = ({
     </FormControl>
   );
 };
-
 export default TextAreaField;
