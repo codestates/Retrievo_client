@@ -14,6 +14,7 @@ import { Boardoptions, TaskOptions } from "../../layouts/TaskBoard/TaskBoard";
 
 /* GraphQL & Apollo */
 import {
+  Board as BoardType,
   GetBoardsDocument,
   useCreateBoardMutation,
   useDeleteBoardMutation,
@@ -22,6 +23,7 @@ import {
   useUpdateBoardMutation,
   useCreateTaskMutation,
   useDeleteTaskMutation,
+  useUpdateTaskMutation,
 } from "../../generated/graphql";
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
@@ -31,30 +33,97 @@ interface BoardProps {
   projectId: string;
 }
 
+export interface TaskUpdateOptions {
+  id: string;
+  boardRowIndex?: number;
+  boardId?: string;
+  newBoardRowIndex?: number;
+}
+
 export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   ...args
 }) => {
   const { projectId } = args.match.params;
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
+  const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   /* Mutation, Query */
   const { loading, data } = useGetBoardsQuery({
     variables: { projectId },
+    fetchPolicy: "cache-and-network",
   });
   const { data: sprintData } = useSetStartedSprintQuery({
     variables: { projectId },
+    fetchPolicy: "cache-and-network",
   });
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
-  const [updateBoard] = useUpdateBoardMutation();
   const [createTask] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
+  const [
+    updateTask,
+    { data: taskData, loading: taskLoading },
+  ] = useUpdateTaskMutation();
+  const [
+    updateBoard,
+    { data: boardData, loading: boardLoading },
+  ] = useUpdateBoardMutation();
+
+  useEffect(() => {
+    if (data?.getBoards && data?.getBoards?.boards) {
+      setCurBoard(data.getBoards.boards);
+    }
+  }, [data]);
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
+      update: (cache, { data }) => {
+        const newBoardRes = data?.createBoard.boards;
+        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
+        const existingBoards: any = cache.readQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+        });
+        console.log("existingBoards", existingBoards);
+        console.log("newBoard", newBoard);
+        // console.log("data", newBoardRes);
+        // if (!data?.createBoard) return null;
+        // eslint-disable-next-line no-underscore-dangle
+        // if (!newBoard || !newBoard.__typename) return null;
+        // const cacheId = cache.identify(data.createBoard);
+        // console.log("cacheId", cacheId);
+        // cache.modify({
+        //   fields: {
+        //     getBoards: (existingFieldData, { toReference }) => {
+        //       console.log("existing", existingFieldData);
+        //       return Object.assign(existingFieldData, {
+        //         id: `Board:${newBoard.id}`,
+        //       });
+        //     },
+        //   },
+        // });
+        const newFormat = {
+          getBoards: {
+            boards: [...existingBoards?.getBoards.boards, newBoard],
+            error: null,
+            __typename: "BoardResponse",
+          },
+        };
+        const updatedBoard = { ...existingBoards, ...newFormat };
+        cache.writeQuery({
+          query: GetBoardsDocument,
+          variables: { projectId },
+          data: {
+            getBoards: {
+              boards: updatedBoard,
+            },
+          },
+        });
+        return "hello";
+      },
     });
   };
 
@@ -87,43 +156,6 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
-  const handleBoardUpdate = async (
-    options: Boardoptions,
-    projectId: string
-  ) => {
-    return await updateBoard({
-      variables: {
-        options,
-        projectId,
-      },
-      update: (cache, { data }) => {
-        const newBoardRes = data?.updateBoard.boards;
-        const existingBoards = client.readQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-        });
-        if (!newBoardRes) return;
-        // console.log(existingBoards);
-        const copyExistingBoards = existingBoards.getBoards.boards.slice();
-        copyExistingBoards.splice(
-          newBoardRes[0].boardColumnIndex,
-          1,
-          newBoardRes
-        );
-        client.writeQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-          data: {
-            getBoards: {
-              boards: copyExistingBoards,
-            },
-          },
-        });
-        console.log("updatedboard", newBoardRes);
-      },
-    });
-  };
-
   const handleTaskCreate = async (options: TaskOptions, projectId: string) => {
     return await createTask({
       variables: {
@@ -144,6 +176,30 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
 
   const handleTaskClick = (id: string) => {
     setSelectedTask(id);
+  };
+
+  const handleTaskUpdate = async (
+    options: TaskUpdateOptions,
+    projectId: string
+  ) => {
+    return await updateTask({
+      variables: { projectId, options },
+    });
+  };
+
+  const handleBoardUpdate = async (
+    options: Boardoptions,
+    projectId: string
+  ) => {
+    return await updateBoard({
+      variables: { options, projectId },
+      // update: (cache, { data }) => {
+      //   const existingBoards = cache.readQuery({
+      //     query: GetBoardsDocument,
+      //     variables: { projectId },
+      //   });
+      // },
+    });
   };
 
   useEffect(() => {
@@ -187,7 +243,11 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   handleTaskClick={handleTaskClick}
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
-                  boards={data !== null ? data?.getBoards.boards : []}
+                  handleTaskUpdate={handleTaskUpdate}
+                  // boards={data !== null ? data?.getBoards.boards : []}
+                  boards={curBoards}
+                  boardLoading={boardLoading}
+                  taskLoading={taskLoading}
                 />
               )}
             </Box>

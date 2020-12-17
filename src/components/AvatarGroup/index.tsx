@@ -27,7 +27,7 @@ export const avatarGroup: React.FC<AvatarGroupProps> = ({
   return (
     <AvatarGroup size={size} max={max}>
       {avatars?.map((avatarProps) => (
-        <Avatar {...avatarProps} />
+        <Avatar key={avatarProps.id} {...avatarProps} />
       ))}
     </AvatarGroup>
   );
