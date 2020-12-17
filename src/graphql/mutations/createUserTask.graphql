@@ -4,14 +4,12 @@ mutation CreateUserTask($userId:String!,$taskId:String!,$projectId:String!){
       id
       user{
         username
+        avatar
         id
       }
       task{
         id
         title
-        project {
-          id
-        }
       }
     }
     error{

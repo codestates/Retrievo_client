@@ -106,19 +106,19 @@ export enum RoleTypes {
 
 export type ProjectPermission = {
   __typename?: "ProjectPermission";
-  id: Scalars["String"];
+  id?: Scalars["String"];
   isAdmin?: Maybe<Scalars["Boolean"]>;
-  project: Project;
-  user: User;
+  project?: Project;
+  user?: User;
 };
 
 export type Project = {
   __typename?: "Project";
-  id: Scalars["String"];
-  name: Scalars["String"];
-  logo: Scalars["String"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  id?: Scalars["String"];
+  name?: Scalars["String"];
+  logo?: Scalars["String"];
+  createdAt?: Scalars["String"];
+  updatedAt?: Scalars["String"];
   projectPermissions?: Maybe<Array<ProjectPermission>>;
   sprint?: Maybe<Array<Sprint>>;
   board?: Maybe<Array<Board>>;
@@ -479,7 +479,8 @@ export type MutationCreateUserTaskArgs = {
 
 export type MutationDeleteUserTaskArgs = {
   projectId: Scalars["String"];
-  id: Scalars["String"];
+  userId: Scalars["String"];
+  taskId: Scalars["String"];
 };
 
 export type MutationCreateCommentArgs = {
@@ -1078,7 +1079,8 @@ export type DeleteTaskLabelMutation = { __typename?: "Mutation" } & {
 };
 
 export type DeleteUserTaskMutationVariables = Exact<{
-  id: Scalars["String"];
+  userId: Scalars["String"];
+  taskId: Scalars["String"];
   projectId: Scalars["String"];
 }>;
 
@@ -1509,7 +1511,10 @@ export type GetMeQuery = { __typename?: "Query" } & {
       { __typename?: "User" } & Pick<User, "id" | "username" | "email"> & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
-              project: { __typename?: "Project" } & Pick<Project, "id">;
+              project: { __typename?: "Project" } & Pick<
+                Project,
+                "id" | "name"
+              >;
             }
           >;
           userTask?: Maybe<
@@ -1768,7 +1773,10 @@ export type GetTaskQuery = { __typename?: "Query" } & {
             >;
             comment?: Maybe<
               Array<
-                { __typename?: "Comment" } & Pick<Comment, "id" | "content"> & {
+                { __typename?: "Comment" } & Pick<
+                  Comment,
+                  "id" | "content" | "createdAt"
+                > & {
                     user?: Maybe<
                       { __typename?: "User" } & Pick<
                         User,
@@ -2855,14 +2863,18 @@ export type DeleteTaskLabelMutationOptions = Apollo.BaseMutationOptions<
   DeleteTaskLabelMutationVariables
 >;
 export const DeleteUserTaskDocument = gql`
-  mutation DeleteUserTask($id: String!, $projectId: String!) {
-    deleteUserTask(id: $id, projectId: $projectId) {
+  mutation DeleteUserTask(
+    $userId: String!
+    $taskId: String!
+    $projectId: String!
+  ) {
+    deleteUserTask(userId: $userId, taskId: $taskId, projectId: $projectId) {
+      success
       error {
         message
         code
         field
       }
-      success
     }
   }
 `;
@@ -2884,7 +2896,8 @@ export type DeleteUserTaskMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteUserTaskMutation, { data, loading, error }] = useDeleteUserTaskMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      userId: // value for 'userId'
+ *      taskId: // value for 'taskId'
  *      projectId: // value for 'projectId'
  *   },
  * });
@@ -3823,6 +3836,7 @@ export const GetMeDocument = gql`
         projectPermissions {
           project {
             id
+            name
           }
         }
         userTask {
@@ -4306,6 +4320,7 @@ export const GetTaskDocument = gql`
         comment {
           id
           content
+          createdAt
           user {
             id
             username
