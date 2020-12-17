@@ -4,12 +4,10 @@ import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
-import ProjectListDropdown, {
-  ProjectListDropdownPropsType,
-} from "./ProjectListDropdown";
+import ProjectListDropdown from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
-import { useGetMeQuery } from "../../generated/graphql";
+import { useGetMeQuery, useGetProjectQuery } from "../../generated/graphql";
 
 type avatar = { name: string; src: string };
 
@@ -24,15 +22,30 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
   // onProjectSelect,
   ...args
 }) => {
+  /* Project Query & Props */
   const { projectId } = args.match.params;
   const { data, loading } = useGetMeQuery();
   const projectPermissions = data?.getMe.user?.projectPermissions;
-  console.log("projectPermissions:", projectPermissions);
   const currentProject = projectPermissions?.find(
     ({ project }) => project.id === projectId
   );
-  console.log("currentProject", currentProject);
   const projectConfig = { projectPermissions, currentProject };
+
+  /* User Query */
+  const { data: userData, loading: userLoading } = useGetProjectQuery({
+    variables: { projectId },
+  });
+  const usersInProject = userData?.project?.project?.projectPermissions;
+  console.log("usersInProject", usersInProject);
+  const mapUserToAvatar = () => {
+    if (!usersInProject) return null;
+    return usersInProject.map(({ user }) => {
+      return {
+        name: user.username,
+        src: user.avatar || undefined,
+      };
+    });
+  };
 
   const changeIconColor = () => {
     return (
@@ -85,7 +98,13 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
         justifyContent="space-between"
         w={180}
       >
-        {/* {<AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />} */}
+        {!userLoading && mapUserToAvatar() ? (
+          <AvatarGroup
+            avatars={mapUserToAvatar()}
+            size={AvatarSize.sm}
+            max={3}
+          />
+        ) : null}
         <Link to="/notification">
           <IconButton
             fontSize="xl"
