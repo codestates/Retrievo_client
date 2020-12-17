@@ -11,6 +11,8 @@ import Auth from "./pages/Auth";
 import Sprint from "./pages/Sprint";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/404";
+import Timeline from "./pages/Timeline";
+import Calendar from "./pages/Calendar";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
@@ -22,6 +24,8 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path="/project/dashboard/:projectId" component={Dashboard} />
           <Route path="/project/board/:projectId" component={Board} />
           <Route path="/project/sprint/:projectId" component={Sprint} />
+          <Route path="/project/timeline/:projectId" component={Timeline} />
+          <Route path="/project/calendar/:projectId" component={Calendar} />
           <Route
             path="/project/setting/:projectId"
             component={ProjectSetting}

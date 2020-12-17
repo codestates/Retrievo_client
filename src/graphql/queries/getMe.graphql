@@ -4,6 +4,7 @@ query GetMe{
       id
       username
       email
+      avatar
       projectPermissions{
         project {
           id
