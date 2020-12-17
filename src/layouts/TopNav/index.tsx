@@ -4,9 +4,9 @@ import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
-// import ProjectListDropdown, {
-//   ProjectListDropdownPropsType,
-// } from "./ProjectListDropdown";
+import ProjectListDropdown, {
+  ProjectListDropdownPropsType,
+} from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
 import { useGetMeQuery } from "../../generated/graphql";
@@ -26,12 +26,13 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
 }) => {
   const { projectId } = args.match.params;
   const { data, loading } = useGetMeQuery();
-  const projects = data?.getMe.user?.projectPermissions;
-  console.log("projects:", projects);
-  const currentProject = projects?.find(
+  const projectPermissions = data?.getMe.user?.projectPermissions;
+  console.log("projectPermissions:", projectPermissions);
+  const currentProject = projectPermissions?.find(
     ({ project }) => project.id === projectId
   );
-  const projectConfig = { projects, currentProject };
+  console.log("currentProject", currentProject);
+  const projectConfig = { projectPermissions, currentProject };
 
   const changeIconColor = () => {
     return (
@@ -67,7 +68,6 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
         width={450}
       >
         <Box display="flex" alignItems="center">
-          {/* <GiSittingDog size={25} color="achromatic.700" /> */}
           {changeIconColor()}
           <Link to="/">
             <Heading ml={1} headingType={headingEnum.homepage}>
@@ -75,13 +75,14 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
             </Heading>
           </Link>
         </Box>
-        {/* {loading ? null : <ProjectListDropdown {...projectConfig} />} */}
+        {loading || !data?.getMe.user?.projectPermissions ? null : (
+          <ProjectListDropdown {...projectConfig} />
+        )}
       </Box>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        // w={270}
         w={180}
       >
         {/* {<AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />} */}
