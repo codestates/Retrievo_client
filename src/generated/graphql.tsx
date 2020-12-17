@@ -457,7 +457,8 @@ export type MutationCreateTaskLabelArgs = {
 
 export type MutationDeleteTaskLabelArgs = {
   projectId: Scalars["String"];
-  id: Scalars["String"];
+  taskId: Scalars["String"];
+  labelId: Scalars["String"];
 };
 
 export type MutationUpdateLabelArgs = {
@@ -888,10 +889,11 @@ export type CreateUserTaskMutation = { __typename?: "Mutation" } & {
     userTask?: Maybe<
       Array<
         { __typename?: "UserTask" } & Pick<UserTask, "id"> & {
-            user: { __typename?: "User" } & Pick<User, "username" | "id">;
-            task: { __typename?: "Task" } & Pick<Task, "id" | "title"> & {
-                project: { __typename?: "Project" } & Pick<Project, "id">;
-              };
+            user: { __typename?: "User" } & Pick<
+              User,
+              "username" | "avatar" | "id"
+            >;
+            task: { __typename?: "Task" } & Pick<Task, "id" | "title">;
           }
       >
     >;
@@ -1054,25 +1056,6 @@ export type DeleteTaskMutation = { __typename?: "Mutation" } & {
         { __typename?: "FieldError" } & Pick<
           FieldError,
           "message" | "code" | "field"
-        >
-      >;
-    };
-};
-
-export type DeleteTaskLabelMutationVariables = Exact<{
-  id: Scalars["String"];
-  projectId: Scalars["String"];
-}>;
-
-export type DeleteTaskLabelMutation = { __typename?: "Mutation" } & {
-  deleteTaskLabel: { __typename?: "DeleteResponse" } & Pick<
-    DeleteResponse,
-    "success"
-  > & {
-      error?: Maybe<
-        { __typename?: "FieldError" } & Pick<
-          FieldError,
-          "code" | "field" | "message"
         >
       >;
     };
@@ -2392,14 +2375,12 @@ export const CreateUserTaskDocument = gql`
         id
         user {
           username
+          avatar
           id
         }
         task {
           id
           title
-          project {
-            id
-          }
         }
       }
       error {
@@ -2807,60 +2788,6 @@ export type DeleteTaskMutationResult = Apollo.MutationResult<DeleteTaskMutation>
 export type DeleteTaskMutationOptions = Apollo.BaseMutationOptions<
   DeleteTaskMutation,
   DeleteTaskMutationVariables
->;
-export const DeleteTaskLabelDocument = gql`
-  mutation DeleteTaskLabel($id: String!, $projectId: String!) {
-    deleteTaskLabel(id: $id, projectId: $projectId) {
-      success
-      error {
-        code
-        field
-        message
-      }
-    }
-  }
-`;
-export type DeleteTaskLabelMutationFn = Apollo.MutationFunction<
-  DeleteTaskLabelMutation,
-  DeleteTaskLabelMutationVariables
->;
-
-/**
- * __useDeleteTaskLabelMutation__
- *
- * To run a mutation, you first call `useDeleteTaskLabelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTaskLabelMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTaskLabelMutation, { data, loading, error }] = useDeleteTaskLabelMutation({
- *   variables: {
- *      id: // value for 'id'
- *      projectId: // value for 'projectId'
- *   },
- * });
- */
-export function useDeleteTaskLabelMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteTaskLabelMutation,
-    DeleteTaskLabelMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    DeleteTaskLabelMutation,
-    DeleteTaskLabelMutationVariables
-  >(DeleteTaskLabelDocument, baseOptions);
-}
-export type DeleteTaskLabelMutationHookResult = ReturnType<
-  typeof useDeleteTaskLabelMutation
->;
-export type DeleteTaskLabelMutationResult = Apollo.MutationResult<DeleteTaskLabelMutation>;
-export type DeleteTaskLabelMutationOptions = Apollo.BaseMutationOptions<
-  DeleteTaskLabelMutation,
-  DeleteTaskLabelMutationVariables
 >;
 export const DeleteUserTaskDocument = gql`
   mutation DeleteUserTask(
