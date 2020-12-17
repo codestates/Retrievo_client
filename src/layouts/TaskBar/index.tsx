@@ -29,7 +29,7 @@ import {
   useDeleteUserTaskMutation,
   GetTaskDocument,
   useCreateCommentMutation,
-  useDeleteTaskLabelMutation,
+  // useDeleteTaskLabelMutation,
   useCreateTaskLabelMutation,
   GetProjectDocument,
   useCreateUserTaskMutation,
@@ -87,7 +87,7 @@ export const TaskBar: React.FC<
   const [updateTaskMutation] = useUpdateTaskMutation();
   const [deleteUserTask] = useDeleteUserTaskMutation();
   const [createUserTask] = useCreateUserTaskMutation();
-  const [deleteTaskLabel] = useDeleteTaskLabelMutation();
+  // const [deleteTaskLabel] = useDeleteTaskLabelMutation();
   const [createTaskLabel] = useCreateTaskLabelMutation();
   const [getProject, { data: projectInfoData }] = useGetProjectLazyQuery();
   const [createComment] = useCreateCommentMutation();
@@ -214,21 +214,21 @@ export const TaskBar: React.FC<
 
   const handleLabelDelete = async ({ id }: { id: string }) => {
     try {
-      const res = await deleteTaskLabel({
-        variables: { projectId, id },
-        refetchQueries: [
-          {
-            query: GetTaskDocument,
-            variables: {
-              projectId,
-              id: taskId,
-            },
-          },
-        ],
-      });
-      if (res.data?.deleteTaskLabel.error) {
-        throw new Error(res.data?.deleteTaskLabel.error.message);
-      }
+      // const res = await deleteTaskLabel({
+      //   variables: { projectId, id },
+      //   refetchQueries: [
+      //     {
+      //       query: GetTaskDocument,
+      //       variables: {
+      //         projectId,
+      //         id: taskId,
+      //       },
+      //     },
+      //   ],
+      // });
+      // if (res.data?.deleteTaskLabel.error) {
+      //   throw new Error(res.data?.deleteTaskLabel.error.message);
+      // }
       createSuccessToast();
     } catch (error) {
       console.log("delete label Error", error);
@@ -585,7 +585,7 @@ export const TaskBar: React.FC<
                   <Box display="flex" mt={5}>
                     <Avatar
                       name={meData?.getMe.user?.username}
-                      // src={meData?.getMe.user} //TODO avatar 연결
+                      src={meData?.getMe.user?.avatar || undefined}
                       size="sm"
                       mr={2}
                     />
