@@ -1,3 +1,4 @@
+import moment from "moment";
 import { labelItem as labelItemType } from "../../components/LabelSearchInput";
 
 import { label as BoardLabelType } from "../../components/Label";
@@ -69,4 +70,11 @@ export const mappingLabelSelectorOptions = (
     id,
     label: title,
   }));
+};
+
+export const converToUnix = (
+  str: string | undefined | null
+): moment.Moment | null => {
+  if (!str) return null;
+  return moment.unix(Number(str) / 1000);
 };
