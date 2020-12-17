@@ -14,25 +14,27 @@ import {
   Center,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 /* utils */
-import moment from "moment";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import _ from "lodash";
+import moment from "moment";
 import {
   useGetProjectLazyQuery,
   useUpdateTaskMutation,
   useGetTaskLazyQuery,
   useDeleteUserTaskMutation,
   GetTaskDocument,
-  GetTaskQuery,
   useCreateCommentMutation,
   useDeleteTaskLabelMutation,
   useCreateTaskLabelMutation,
   GetProjectDocument,
+  useCreateUserTaskMutation,
+  useGetMeQuery,
+  useDeleteCommentMutation,
 } from "../../generated/graphql";
 import {
   mappingUserOption,
@@ -40,6 +42,7 @@ import {
   mappingProjectLabelOptions,
   mappingLabelSelectorOptions,
   converToUnix,
+  colorArr,
 } from "./utils";
 
 /* custom components */
@@ -83,10 +86,13 @@ export const TaskBar: React.FC<
   ] = useGetTaskLazyQuery();
   const [updateTaskMutation] = useUpdateTaskMutation();
   const [deleteUserTask] = useDeleteUserTaskMutation();
+  const [createUserTask] = useCreateUserTaskMutation();
   const [deleteTaskLabel] = useDeleteTaskLabelMutation();
   const [createTaskLabel] = useCreateTaskLabelMutation();
   const [getProject, { data: projectInfoData }] = useGetProjectLazyQuery();
   const [createComment] = useCreateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const { data: meData } = useGetMeQuery();
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
@@ -230,19 +236,7 @@ export const TaskBar: React.FC<
     }
   };
 
-  const createLabel = async (item: labelItem) => {
-    const colorArr = [
-      "labelTeal",
-      "labelYellow",
-      "labelOrange",
-      "labelGreen",
-      "labelViolet",
-      "labelPurple",
-      "labelPink",
-      "labelCyan",
-      "violet",
-    ];
-
+  const handleCreateLabel = async (item: labelItem) => {
     await createTaskLabel({
       variables: {
         projectId,
@@ -281,19 +275,10 @@ export const TaskBar: React.FC<
     updateTask({ sprintId });
   };
 
-  const updateDates = ({ startDate, endDate }: dateIFC) => {
-    // const unixStartDate = moment(startDate).unix();
-    // const unixEndDate = moment(endDate).unix();
-    handleUpdateTask({
-      startDate: startDate || null,
-      endDate: endDate || null,
-    });
-  };
-
   const handleDeleteAssignee = async (id: string) => {
     try {
       const res = await deleteUserTask({
-        variables: { id, projectId },
+        variables: { taskId, projectId, userId: id },
         refetchQueries: [
           {
             query: GetTaskDocument,
@@ -323,6 +308,63 @@ export const TaskBar: React.FC<
     }
   };
 
+  const handleCreateAssignee = async (id: string) => {
+    try {
+      const res = await createUserTask({
+        variables: { taskId, projectId, userId: id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+        // update:(store,{data})=>{
+        //   const task = store.readQuery<GetTaskQuery>({
+        //     query:GetTaskDocument,
+        //     data:{
+        //     }
+        //   })
+        // }
+      });
+
+      if (res.data?.createUserTask.error) {
+        throw new Error(res.data.createUserTask.error.message);
+      }
+
+      createSuccessToast();
+    } catch (err) {
+      createErrorToast();
+      console.log("delete assignee error:", err);
+    }
+  };
+
+  const handleDeleteComment = async (id: string) => {
+    try {
+      const res = await deleteComment({
+        variables: { projectId, id },
+        refetchQueries: [
+          {
+            query: GetTaskDocument,
+            variables: {
+              projectId,
+              id: taskId,
+            },
+          },
+        ],
+      });
+      if (res.data?.deleteComment.error) {
+        throw new Error(res.data?.deleteComment.error.message);
+      }
+      createSuccessToast();
+    } catch (error) {
+      console.log("delete label Error", error);
+      createErrorToast();
+    }
+  };
+
   /* component args */
   const sprintArg = {
     currentSprint: task.sprint,
@@ -337,8 +379,8 @@ export const TaskBar: React.FC<
         : null
     ),
     defaultValue: mappingUserOption(task.userTask),
-    deleteAssignee: handleDeleteAssignee, // TODO
-    createAssignee: (id) => console.log(id), // TODO
+    deleteAssignee: handleDeleteAssignee,
+    createAssignee: handleCreateAssignee,
   };
 
   const taskLabelSelectArgs = {
@@ -348,7 +390,7 @@ export const TaskBar: React.FC<
     defaultValue: mappingLabelOptions(
       task.taskLabel ? task.taskLabel : undefined
     ),
-    createTaskLabel: createLabel,
+    createTaskLabel: handleCreateLabel,
     deleteTaskLabel: handleLabelDelete,
   };
 
@@ -366,7 +408,7 @@ export const TaskBar: React.FC<
     defaultStartDate: converToUnix(task.startDate),
     defaultEndDate: converToUnix(task.endDate),
     handleSubmit: (value: dateIFC) => {
-      updateDates(value);
+      handleUpdateTask(value);
     },
   };
 
@@ -383,14 +425,19 @@ export const TaskBar: React.FC<
               <Text fontSize="sm" fontWeight="bold">
                 {comment.user?.username}
               </Text>
-              {comment.user?.id === "1234" ? (
+              <Text fontSize="xs" fontWeight="light" ml={3}>
+                {moment(Number(comment.createdAt)).fromNow().toString()}
+              </Text>
+              {comment.user?.email === meData?.getMe.user?.email ? (
                 <IconButton
                   aria-label="delete task"
                   iconButtonType="close"
                   padding="0"
                   h="1rem"
                   w="1rem"
-                  onClick={() => console.log("delete comment clicked")}
+                  onClick={() => {
+                    handleDeleteComment(comment.id);
+                  }}
                 />
               ) : null}
             </Box>
@@ -536,7 +583,12 @@ export const TaskBar: React.FC<
                   {renderComments()}
 
                   <Box display="flex" mt={5}>
-                    <Avatar name="myName" size="sm" mr={2} />
+                    <Avatar
+                      name={meData?.getMe.user?.username}
+                      // src={meData?.getMe.user} //TODO avatar 연결
+                      size="sm"
+                      mr={2}
+                    />
                     <Box width="full">
                       <CustomForm
                         validationSchema={commentValidation}
