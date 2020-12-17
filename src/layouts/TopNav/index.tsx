@@ -1,28 +1,46 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
-import ProjectListDropdown, {
-  ProjectListDropdownPropsType,
-} from "./ProjectListDropdown";
+import ProjectListDropdown from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
+import { useGetMeQuery, useGetProjectQuery } from "../../generated/graphql";
 
-type avatar = { name: string; src: string };
-
-export type TopNavPropsType = ProjectListDropdownPropsType & {
-  avatars: avatar[];
+export type TopNavPropsType = {
+  projectId: string;
 };
 
-const TopNav: React.FC<TopNavPropsType> = ({
-  avatars,
-  projects,
-  currentProject,
-  onProjectSelect,
+const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
+  ...args
 }) => {
-  const projectConfig = { projects, currentProject, onProjectSelect };
+  /* Project Query & Props */
+  const { projectId } = args.match.params;
+  const { data, loading } = useGetMeQuery();
+  const projectPermissions = data?.getMe.user?.projectPermissions;
+  const currentProject = projectPermissions?.find(
+    ({ project }) => project.id === projectId
+  );
+  const projectConfig = { projectPermissions, currentProject };
+
+  /* User Query */
+  const { data: userData, loading: userLoading } = useGetProjectQuery({
+    variables: { projectId },
+  });
+  const usersInProject = userData?.project?.project?.projectPermissions;
+  // console.log("usersInProject", usersInProject);
+  const mapUserToAvatar = () => {
+    if (!usersInProject) return null;
+    return usersInProject.map(({ user }) => {
+      return {
+        name: user.username,
+        src: user.avatar || undefined,
+      };
+    });
+  };
+
   const changeIconColor = () => {
     return (
       <>
@@ -32,6 +50,7 @@ const TopNav: React.FC<TopNavPropsType> = ({
       </>
     );
   };
+
   return (
     <Box
       position="fixed"
@@ -56,7 +75,6 @@ const TopNav: React.FC<TopNavPropsType> = ({
         width={450}
       >
         <Box display="flex" alignItems="center">
-          {/* <GiSittingDog size={25} color="achromatic.700" /> */}
           {changeIconColor()}
           <Link to="/">
             <Heading ml={1} headingType={headingEnum.homepage}>
@@ -64,16 +82,23 @@ const TopNav: React.FC<TopNavPropsType> = ({
             </Heading>
           </Link>
         </Box>
-        <ProjectListDropdown {...projectConfig} />
+        {loading || !data?.getMe.user?.projectPermissions ? null : (
+          <ProjectListDropdown {...projectConfig} />
+        )}
       </Box>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        // w={270}
         w={180}
       >
-        <AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />
+        {!userLoading && mapUserToAvatar() ? (
+          <AvatarGroup
+            avatars={mapUserToAvatar()}
+            size={AvatarSize.sm}
+            max={3}
+          />
+        ) : null}
         <Link to="/notification">
           <IconButton
             fontSize="xl"

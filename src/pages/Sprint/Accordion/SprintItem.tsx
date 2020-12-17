@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useState } from "react";
 import {
   Accordion,
@@ -20,7 +21,6 @@ import { Draggable } from "react-beautiful-dnd";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
 import TaskList from "./TaskList";
-import { sprintType } from "./index";
 import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
 import TextAreaField from "../../../components/TextArea";
@@ -28,17 +28,25 @@ import ModalLayout from "../../../layouts/Modal";
 import {
   useUpdateSprintMutation,
   useDeleteSprintMutation,
+  Sprint,
+  Task,
+  GetSprintsDocument,
+  GetSprintDocument,
 } from "../../../generated/graphql";
 
 type sprintItemProps = {
-  sprintData: sprintType;
+  sprintData: Sprint;
   ref?: HTMLElement;
   mappedIndex: number;
+  tasks: Task[];
+  refetch: () => void;
 };
 
-export const SprintItem: React.FC<sprintItemProps> = ({
+export const SprintItem: React.FC<Record<string, any>> = ({
   sprintData,
   mappedIndex,
+  tasks,
+  refetch,
 }) => {
   const location = useLocation();
   const toast = useToast();
@@ -77,16 +85,22 @@ export const SprintItem: React.FC<sprintItemProps> = ({
     });
   };
 
-  const handleDeleteSprint = () => {
-    deleteSprintMutation({ variables: { id: sprintData.id, projectId } });
-    onClose();
-    toast({
-      position: "bottom-right",
-      title: "Sprint Deleted!",
-      description: "Sprint has been successfully deleted",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
+  const handleDeleteSprint = async () => {
+    await deleteSprintMutation({
+      variables: { id: sprintData.id, projectId },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      update: (cache, { data }) => {
+        console.log(cache);
+        cache.evict({ id: `Sprint:${sprintData.id}` });
+        // cache.modify({
+        //   fields: {
+        //     getSprints: (existingFieldData) => {
+        //       console.log(existingFieldData);
+        //       return existingFieldData.pop();
+        //     },
+        //   },
+        // });
+      },
     });
   };
 
@@ -208,7 +222,7 @@ export const SprintItem: React.FC<sprintItemProps> = ({
                   </Menu>
                 </Flex>
               </Flex>
-              <TaskList />
+              <TaskList taskData={tasks} />
             </AccordionItem>
           </Accordion>
         );
