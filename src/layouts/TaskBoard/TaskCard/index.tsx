@@ -2,55 +2,25 @@ import React, { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { format } from "date-fns";
-import {
-  Task as taskType,
-  // Label as labelType,
-  // User as userType,
-} from "../../../generated/graphql";
+import { Task as taskType } from "../../../generated/graphql";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import Label from "../../../components/Label";
 import AvatarGroup, { AvatarSize } from "../../../components/AvatarGroup";
 
-// export type label = {
-//   label: {
-//     id: string;
-//     name: string;
-//     color?: string;
-//   };
-// };
-
-// export type user = {
-//   user: {
-//     id: string;
-//     username: string;
-//     avatar: string | null;
-//   };
-// };
-
-// export type task = {
-//   __typename?: "Task" | undefined;
-//   id: string;
-//   title: string;
-//   startDate: string | null;
-//   endDate: string | null;
-//   taskIndex: number;
-//   userTask: user[];
-//   taskLabel: label[];
-//   boardRowIndex: number;
-//   sprintRowIndex: number;
-// };
-
 export type TaskCardProps = {
   task?: taskType;
-  handleTaskDelete: (id: string) => void;
+  projectId: string;
   handleTaskClick: (id: string) => void;
+  setIsDeleteTaskModalOpen?: (isOpen: boolean) => void;
+  setDeletedTaskId?: (taskId: string) => void;
 };
 
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
   handleTaskClick,
-  handleTaskDelete,
+  setDeletedTaskId,
+  setIsDeleteTaskModalOpen,
 }): ReactElement | null => {
   const renderLabels = () => {
     return task?.taskLabel?.map((labelObj) => {
@@ -68,16 +38,20 @@ const TaskCard: React.FC<TaskCardProps> = ({
     return format(new Date(Number(date)), "MMM d");
   };
 
+  // FIXME
   const renderUsers = () => {
     if (!task) return [];
     const { userTask } = task;
-    return userTask?.map((userTaskObj) => {
+    if (!userTask) return null;
+    return userTask.map((userTaskObj) => {
       const { user } = userTaskObj;
-      return { name: user.username, src: user.avatar || "" };
+      return { name: user.username, src: user.avatar || undefined };
     });
   };
 
   if (!task) return null;
+  if (!setIsDeleteTaskModalOpen) return null;
+  if (!setDeletedTaskId) return null;
 
   return (
     <Box
@@ -95,7 +69,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
         position="absolute"
         right={4}
         top={4}
-        onClick={() => handleTaskDelete(task?.id)}
+        onClick={() => {
+          setIsDeleteTaskModalOpen(true);
+          setDeletedTaskId(task.id);
+        }}
       >
         <CgClose />
       </Box>
@@ -112,6 +89,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
             mr={2}
             color="primary.200"
           >{`${task?.taskIndex}`}</Text>
+          <Text
+            fontSize="xs"
+            mr={2}
+            color="fail"
+          >{`${task?.boardRowIndex}`}</Text>
           <Heading
             pr="1.5rem"
             fontWeight="normal"
@@ -132,10 +114,14 @@ const TaskCard: React.FC<TaskCardProps> = ({
         bottom={5}
         justifyContent="space-between"
       >
-        {/* <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} /> */}
-        <Text ml={2} fontSize="xs" color="achromatic.600">{`${isoToDate(
-          task.startDate
-        )} ~ ${isoToDate(task.endDate)}`}</Text>
+        {renderUsers() ? (
+          <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
+        ) : null}
+        <Text ml={2} fontSize="xs" color="achromatic.600">
+          {!task.startDate && !task.endDate
+            ? ""
+            : `${isoToDate(task.startDate)} ~ ${isoToDate(task.endDate)}`}
+        </Text>
       </Box>
     </Box>
   );

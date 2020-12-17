@@ -1,7 +1,9 @@
 import React, { ReactElement } from "react";
+import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import Text from "../../../components/Text";
 import Button, { buttonColor } from "../../../components/Button";
+import { getProjectId } from "../../../utils/getProjectIdFromLocation";
 
 const TaskBoardContainer = (): ReactElement => {
   return (
@@ -17,7 +19,7 @@ const TaskBoardContainer = (): ReactElement => {
     >
       <Text color="primary.200">Woof, woof! No Active Sprint!</Text>
       <Text color="primary.200">Create a new one.</Text>
-      <a href="/project/sprint">
+      <Link to={`/project/sprint/${getProjectId("/project/board/")}`}>
         <Button
           px={10}
           my={2}
@@ -27,7 +29,7 @@ const TaskBoardContainer = (): ReactElement => {
         >
           View Sprint
         </Button>
-      </a>
+      </Link>
     </Box>
   );
 };

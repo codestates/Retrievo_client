@@ -8,15 +8,18 @@ import {
   Center,
 } from "@chakra-ui/react";
 import React from "react";
-
-const data = {
-  overdueTasksCount: 14,
-  completedTasksCount: 15,
-  incompleteTasksCount: 30,
-  totalTasksCount: 59,
-};
+import { useLocation } from "react-router-dom";
+import Spinner from "../../../components/Spinner";
+import { useGetReportSummaryQuery } from "../../../generated/graphql";
 
 export const ReportCard: React.FC = () => {
+  const location = useLocation();
+  const projectId = location.pathname.split("/").pop() || "";
+  const { data, loading } = useGetReportSummaryQuery({
+    variables: { projectId },
+  });
+  if (loading) return <Spinner />;
+
   return (
     <Container maxW="60%">
       <Flex
@@ -37,7 +40,7 @@ export const ReportCard: React.FC = () => {
           flexDirection="column"
         >
           <Text fontSize="2rem" fontWeight="bold" color="achromatic.700">
-            {data.totalTasksCount}
+            {data?.reportSummary.taskCountSummary?.totalTasksCount}
           </Text>
           <Text fontSize="sm" color="achromatic.600">
             Total Task
@@ -48,7 +51,7 @@ export const ReportCard: React.FC = () => {
           <Divider orientation="vertical" borderLeftWidth="2px" />
           <Center flexDirection="column" width="100%" mr="0.5rem">
             <Text fontSize="2rem" fontWeight="bold">
-              {data.incompleteTasksCount}
+              {data?.reportSummary.taskCountSummary?.incompleteTasksCount}
             </Text>
             <Text fontSize="sm" color="achromatic.600">
               Incompleted Task
@@ -60,7 +63,7 @@ export const ReportCard: React.FC = () => {
           <Divider orientation="vertical" borderLeftWidth="2px" />
           <Center flexDirection="column" width="100%" mr="0.5rem">
             <Text fontSize="2rem" fontWeight="bold">
-              {data.completedTasksCount}
+              {data?.reportSummary.taskCountSummary?.completedTasksCount}
             </Text>
             <Text fontSize="sm" color="achromatic.600">
               Completed Task
@@ -72,7 +75,7 @@ export const ReportCard: React.FC = () => {
           <Divider orientation="vertical" borderLeftWidth="2px" />
           <Center flexDirection="column" width="100%" mr="0.5rem">
             <Text fontSize="2rem" fontWeight="bold">
-              {data.overdueTasksCount}
+              {data?.reportSummary.taskCountSummary?.overdueTasksCount}
             </Text>
             <Text fontSize="sm" color="achromatic.600">
               Overdue Task

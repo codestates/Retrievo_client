@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from "react";
+import { FetchResult } from "@apollo/client";
 import * as yup from "yup";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { CgClose } from "react-icons/cg";
 import { GoPlus } from "react-icons/go";
 import { IconContext } from "react-icons";
@@ -8,13 +9,19 @@ import Text from "../../../components/Text";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Form from "../../../components/Form";
 import Input from "../../../components/Input";
+import { CreateBoardMutation } from "../../../generated/graphql";
 
 export type boardType = {
   [key: string]: any;
 };
 
 export type SkeletonBoardProps = {
-  handleBoardCreate: (title: string, projectId: string) => Promise<any>;
+  handleBoardCreate: (
+    title: string,
+    projectId: string
+  ) => Promise<
+    FetchResult<CreateBoardMutation, Record<string, any>, Record<string, any>>
+  >;
   projectId: string;
 };
 
@@ -23,6 +30,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   projectId,
 }): ReactElement => {
   const [isCreating, setIsCreating] = useState(false);
+  const toast = useToast();
 
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
     return (
@@ -34,20 +42,23 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
     );
   };
 
-  const handleBoardCreateSubmit = async (
-    value: boardType,
-    { setFieldError }: any
-  ) => {
-    await handleBoardCreate(value.board, projectId);
-    // console.log(res);
-    // if (res.data?.createBoard.error) {
-    //   console.log("error");
-    //   setFieldError(
-    //     res.data.createBoard.error.field,
-    //     res.data.createBoard.error.message
-    //   );
-    // } else {
-    //   console.log("success");
+  const handleBoardCreateSubmit = async (value: boardType) => {
+    const res = await handleBoardCreate(value.board, projectId);
+    if (res.errors) {
+      toast({
+        title: "Board Creation Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+      });
+    } else {
+      toast({
+        title: "Board Creation Succeed🥳",
+        description: "Board is created",
+        duration: 5000,
+        status: "success",
+      });
+    }
     setIsCreating(false);
     // }
   };

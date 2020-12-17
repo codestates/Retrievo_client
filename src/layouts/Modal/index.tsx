@@ -54,14 +54,14 @@ const ModalLayout: React.FC<modalIFC> = ({
           <ModalBody>{children}</ModalBody>
           {footer ? (
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button mr={3} onClick={onClose}>
                 Close
               </Button>
               <Button
                 variant={buttonColor ? "solid" : "ghost"}
-                bgColor={buttonColor || "transparent"}
+                bgColor={buttonColor}
                 onClick={secondaryAction}
-                color={buttonFontColor || "transparent"}
+                color={buttonFontColor}
               >
                 {secondaryText}
               </Button>

@@ -8,70 +8,106 @@ import {
   Select,
   Text,
   useMediaQuery,
+  useToast,
 } from "@chakra-ui/react";
 import { GoChevronUp, GoChevronDown } from "react-icons/go";
-import { useFormik } from "formik";
+import { Formik } from "formik";
+import { useLocation } from "react-router-dom";
 import Heading, { headingEnum } from "../../../components/Heading";
 
 import CustomAvatar from "../../../components/Avatar";
 import useLoadMore from "../../../hooks/useLoadMore";
 import { roleType } from "../../MyProfile/Forms/roleSelectInput";
+import {
+  useUpdateProjectPermissionMutation,
+  useGetProjectQuery,
+} from "../../../generated/graphql";
+import Spinner from "../../../components/Spinner";
 
-const data = [
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Si Choi",
-    role: "member",
-  },
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Paul Kim",
-    role: "member",
-  },
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Hajeong Song",
-    role: "Admin",
-  },
+// const data = [
+//   {
+//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
+//     avatar:
+//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+//     username: "Si Choi",
+//     role: "member",
+//   },
+//   {
+//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
+//     avatar:
+//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+//     username: "Paul Kim",
+//     role: "member",
+//   },
+//   {
+//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
+//     avatar:
+//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+//     username: "Hajeong Song",
+//     role: "Admin",
+//   },
 
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "JungEun Kim",
-    role: "member",
-  },
+//   {
+//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
+//     avatar:
+//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+//     username: "JungEun Kim",
+//     role: "member",
+//   },
 
-  {
-    id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-    avatar:
-      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-    username: "Chank Knight",
-    role: "member",
-  },
-];
+//   {
+//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
+//     avatar:
+//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
+//     username: "Chank Knight",
+//     role: "member",
+//   },
+// ];
 
 export const AccessPermission: React.FC = () => {
-  const [items, setItems, visible, loadMore, reset] = useLoadMore(data, 5);
+  const location = useLocation();
+  const toast = useToast();
+  const projectId = location.pathname.split("/").pop() || "";
+
+  const [items, setItems, visible, loadMore, reset] = useLoadMore([], 5);
   const [isDesktop] = useMediaQuery("(min-width: 1440px)");
-  const formik = useFormik({
-    initialValues: {
-      role: "",
-    },
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
-    },
-  });
+  const { data, loading } = useGetProjectQuery({ variables: { projectId } });
+
+  if (data?.project?.project?.projectPermissions) {
+    const userData = data?.project?.project?.projectPermissions.map(
+      (projectPermission) => projectPermission.user
+    );
+    if (items.length < 1) {
+      setItems(userData);
+    }
+  }
+
+  const [
+    updateProjectPermissionMutation,
+    { loading: updateProjectLoading },
+  ] = useUpdateProjectPermissionMutation();
+
+  const onSubmit = async (values: Record<string, string>, userId: string) => {
+    await updateProjectPermissionMutation({
+      variables: {
+        projectId,
+        isAdmin: values.role === "ADMIN",
+        userId,
+      },
+    });
+    toast({
+      position: "bottom-right",
+      title: "Role Update Success!.",
+      description: "User role has been updated",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
 
   const roles = [
-    { key: "Admin", value: "admin" },
-    { key: "Member", value: "member" },
+    { key: "Admin", value: "ADMIN" },
+    { key: "Member", value: "MEMBER" },
   ];
 
   const renderRoleOptions = () => {
@@ -97,23 +133,31 @@ export const AccessPermission: React.FC = () => {
                 <Flex w={isDesktop ? "75%" : "100%"}>
                   <Text fontWeight="bold" pr={2}>{`${item.username}`}</Text>
                 </Flex>
-
-                <form style={isDesktop ? { width: "15%" } : { width: "33%" }}>
-                  <FormControl pr={3} justifySelf="flex-end">
-                    <FormLabel fontWeight="base" m={0} />
-                    <Select
-                      name="role"
-                      onChange={(e) => {
-                        formik.handleChange(e);
-                        formik.submitForm();
-                      }}
-                      placeholder="Select a role"
-                      borderColor="achromatic.400"
-                    >
-                      {renderRoleOptions()}
-                    </Select>
-                  </FormControl>
-                </form>
+                <Box style={isDesktop ? { width: "15%" } : { width: "33%" }}>
+                  <Formik
+                    initialValues={{ role: item.role }}
+                    onSubmit={(values) => onSubmit(values, item.id)}
+                  >
+                    {({ values, submitForm, handleChange }) => {
+                      return (
+                        <FormControl pr={3} justifySelf="flex-end">
+                          <FormLabel fontWeight="base" m={0} />
+                          <Select
+                            name="role"
+                            onChange={(e) => {
+                              handleChange(e);
+                              submitForm();
+                            }}
+                            defaultValue={item.role}
+                            borderColor="achromatic.400"
+                          >
+                            {renderRoleOptions()}
+                          </Select>
+                        </FormControl>
+                      );
+                    }}
+                  </Formik>
+                </Box>
               </Flex>
             </Flex>
             <Divider orientation="horizontal" />
@@ -123,6 +167,8 @@ export const AccessPermission: React.FC = () => {
       return null;
     });
   };
+
+  if (loading) return <Spinner />;
 
   return (
     <Box bg="primary.400" mt={12}>

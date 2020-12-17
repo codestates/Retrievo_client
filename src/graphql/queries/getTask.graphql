@@ -24,6 +24,7 @@ query GetTask($projectId:String!,$id:String!){
       comment{
         id
         content
+        createdAt
         user{
           id
           username

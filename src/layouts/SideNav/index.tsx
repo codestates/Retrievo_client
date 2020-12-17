@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { BiChalkboard, BiCalendarEvent } from "react-icons/bi";
 import { CgBoard } from "react-icons/cg";
@@ -55,7 +55,15 @@ export const sideBarMenu = [
   },
 ];
 
-const SideNav = (): ReactElement => {
+interface SideNavProps {
+  projectId: string;
+}
+
+const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
+  ...args
+}): ReactElement => {
+  const { projectId } = args.match.params;
+
   const changeIconColor = (icon: ReactElement) => {
     return (
       <Box mx={3}>
@@ -67,9 +75,6 @@ const SideNav = (): ReactElement => {
   };
 
   const renderMenu = () => {
-    // FIXME
-    const projectId = "projectId";
-
     return sideBarMenu.map((menu) => {
       return (
         <Link to={`${menu.path}/${projectId}`} key={menu.name}>

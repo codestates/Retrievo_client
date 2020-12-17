@@ -14,7 +14,7 @@ export enum AvatarSize {
 }
 
 export type AvatarGroupProps = {
-  avatars: BetterAvatarProps[];
+  avatars: BetterAvatarProps[] | null;
   size: AvatarSize;
   max: number;
 };
@@ -26,7 +26,7 @@ export const avatarGroup: React.FC<AvatarGroupProps> = ({
 }) => {
   return (
     <AvatarGroup size={size} max={max}>
-      {avatars.map((avatarProps) => (
+      {avatars?.map((avatarProps) => (
         <Avatar {...avatarProps} />
       ))}
     </AvatarGroup>

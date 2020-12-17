@@ -1,5 +1,6 @@
 import { Center, Container, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import Form from "./Forms";
 
@@ -60,7 +61,13 @@ const args = {
   ],
 };
 
-export const MyProfile: React.FC = () => {
+interface MyProfileType {
+  projectId: string;
+}
+
+export const MyProfile: React.FC<RouteComponentProps<MyProfileType>> = ({
+  ...args
+}) => {
   const [isTablet] = useMediaQuery("(max-width: 80em)");
 
   const maxW = isTablet ? "560px" : "30%";
