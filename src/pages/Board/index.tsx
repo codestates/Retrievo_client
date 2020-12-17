@@ -204,8 +204,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   return (
     <>
       <Box>
-        <TopNav {...projectArgs} />
-        <SideNav />
+        <TopNav {...args} />
+        <SideNav {...args} />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />

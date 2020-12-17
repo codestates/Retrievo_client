@@ -1,28 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
-import ProjectListDropdown, {
-  ProjectListDropdownPropsType,
-} from "./ProjectListDropdown";
+// import ProjectListDropdown, {
+//   ProjectListDropdownPropsType,
+// } from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
+import { useGetMeQuery } from "../../generated/graphql";
 
 type avatar = { name: string; src: string };
 
-export type TopNavPropsType = ProjectListDropdownPropsType & {
-  avatars: avatar[];
+export type TopNavPropsType = {
+  // avatars: avatar[];
+  projectId: string;
 };
 
-const TopNav: React.FC<TopNavPropsType> = ({
-  avatars,
-  projects,
-  currentProject,
-  onProjectSelect,
+const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
+  // avatars,
+  // currentProject,
+  // onProjectSelect,
+  ...args
 }) => {
-  const projectConfig = { projects, currentProject, onProjectSelect };
+  const { projectId } = args.match.params;
+  const { data, loading } = useGetMeQuery();
+  const projects = data?.getMe.user?.projectPermissions;
+  console.log("projects:", projects);
+  const currentProject = projects?.find(
+    ({ project }) => project.id === projectId
+  );
+  const projectConfig = { projects, currentProject };
+
   const changeIconColor = () => {
     return (
       <>
@@ -32,6 +42,7 @@ const TopNav: React.FC<TopNavPropsType> = ({
       </>
     );
   };
+
   return (
     <Box
       position="fixed"
@@ -64,7 +75,7 @@ const TopNav: React.FC<TopNavPropsType> = ({
             </Heading>
           </Link>
         </Box>
-        <ProjectListDropdown {...projectConfig} />
+        {/* {loading ? null : <ProjectListDropdown {...projectConfig} />} */}
       </Box>
       <Box
         display="flex"
@@ -73,7 +84,7 @@ const TopNav: React.FC<TopNavPropsType> = ({
         // w={270}
         w={180}
       >
-        <AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />
+        {/* {<AvatarGroup avatars={avatars} size={AvatarSize.sm} max={3} />} */}
         <Link to="/notification">
           <IconButton
             fontSize="xl"

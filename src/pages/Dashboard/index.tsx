@@ -1,4 +1,5 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 /* Layouts */
 import { Box } from "@chakra-ui/react";
@@ -66,12 +67,18 @@ const args = {
   ],
 };
 
-export const Dashboard: React.FC = () => {
+interface DashBoardType {
+  projectId: string;
+}
+
+export const Dashboard: React.FC<RouteComponentProps<DashBoardType>> = ({
+  ...args
+}) => {
   return (
     <>
       <Box>
         <TopNav {...args} />
-        <SideNav />
+        <SideNav {...args} />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
