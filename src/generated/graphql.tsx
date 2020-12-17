@@ -456,7 +456,8 @@ export type MutationCreateTaskLabelArgs = {
 
 export type MutationDeleteTaskLabelArgs = {
   projectId: Scalars["String"];
-  id: Scalars["String"];
+  taskId: Scalars["String"];
+  labelId: Scalars["String"];
 };
 
 export type MutationUpdateLabelArgs = {
@@ -887,10 +888,11 @@ export type CreateUserTaskMutation = { __typename?: "Mutation" } & {
     userTask?: Maybe<
       Array<
         { __typename?: "UserTask" } & Pick<UserTask, "id"> & {
-            user: { __typename?: "User" } & Pick<User, "username" | "id">;
-            task: { __typename?: "Task" } & Pick<Task, "id" | "title"> & {
-                project: { __typename?: "Project" } & Pick<Project, "id">;
-              };
+            user: { __typename?: "User" } & Pick<
+              User,
+              "username" | "avatar" | "id"
+            >;
+            task: { __typename?: "Task" } & Pick<Task, "id" | "title">;
           }
       >
     >;
@@ -1059,7 +1061,8 @@ export type DeleteTaskMutation = { __typename?: "Mutation" } & {
 };
 
 export type DeleteTaskLabelMutationVariables = Exact<{
-  id: Scalars["String"];
+  taskId: Scalars["String"];
+  labelId: Scalars["String"];
   projectId: Scalars["String"];
 }>;
 
@@ -2391,14 +2394,12 @@ export const CreateUserTaskDocument = gql`
         id
         user {
           username
+          avatar
           id
         }
         task {
           id
           title
-          project {
-            id
-          }
         }
       }
       error {
@@ -2808,8 +2809,12 @@ export type DeleteTaskMutationOptions = Apollo.BaseMutationOptions<
   DeleteTaskMutationVariables
 >;
 export const DeleteTaskLabelDocument = gql`
-  mutation DeleteTaskLabel($id: String!, $projectId: String!) {
-    deleteTaskLabel(id: $id, projectId: $projectId) {
+  mutation DeleteTaskLabel(
+    $taskId: String!
+    $labelId: String!
+    $projectId: String!
+  ) {
+    deleteTaskLabel(taskId: $taskId, labelId: $labelId, projectId: $projectId) {
       success
       error {
         code
@@ -2837,7 +2842,8 @@ export type DeleteTaskLabelMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteTaskLabelMutation, { data, loading, error }] = useDeleteTaskLabelMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      taskId: // value for 'taskId'
+ *      labelId: // value for 'labelId'
  *      projectId: // value for 'projectId'
  *   },
  * });

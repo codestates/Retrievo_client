@@ -5,12 +5,7 @@ import Heading, { headingEnum } from "../../components/Heading";
 import Text from "../../components/Text";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";
-import RoundButton, {
-  IconType,
-  ShadowType,
-  RoundButtonColor,
-  SizeType,
-} from "../../components/RoundButton";
+import RoundButton, { RoundButtonColor } from "../../components/RoundButton";
 
 const NewProject = (): ReactElement => {
   const initialValue = {
