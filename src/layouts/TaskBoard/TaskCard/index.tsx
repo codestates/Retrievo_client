@@ -38,7 +38,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
     return format(new Date(Number(date)), "MMM d");
   };
 
-  // FIXME
   const renderUsers = () => {
     if (!task) return [];
     const { userTask } = task;

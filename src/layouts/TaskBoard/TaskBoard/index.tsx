@@ -63,7 +63,7 @@ export type TaskBoardProps = TaskCardProps & {
   ) => Promise<
     FetchResult<CreateTaskMutation, Record<string, any>, Record<string, any>>
   >;
-  handleBoardUpdate: (
+  handleBoardUpdate?: (
     options: Boardoptions,
     projectId: string
   ) => Promise<
@@ -136,6 +136,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: `${res.errors}`,
         duration: 5000,
         status: "error",
+        position: "bottom-right",
       });
     } else {
       toast({
@@ -143,35 +144,40 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: "Board is deleted",
         duration: 5000,
         status: "success",
+        position: "bottom-right",
       });
       setIsDeleteModalOpen(false);
     }
   };
 
   const handleEditSubmit = async () => {
-    const res = await handleBoardUpdate(
-      {
-        id: board.id,
-        title: inputValue,
-      },
-      projectId
-    );
-    if (res.errors) {
-      toast({
-        title: "Board Update Failed😂",
-        description: `${res.errors}`,
-        duration: 5000,
-        status: "error",
-      });
-    } else {
-      toast({
-        title: "Board Update Succeed🥳",
-        description: "Board is updated",
-        duration: 5000,
-        status: "success",
-      });
+    if (handleBoardUpdate) {
+      const res = await handleBoardUpdate(
+        {
+          id: board.id,
+          title: inputValue,
+        },
+        projectId
+      );
+      if (res.errors) {
+        toast({
+          title: "Board Update Failed😂",
+          description: `${res.errors}`,
+          duration: 5000,
+          status: "error",
+          position: "bottom-right",
+        });
+      } else {
+        toast({
+          title: "Board Update Succeed🥳",
+          description: "Board is updated",
+          duration: 5000,
+          status: "success",
+          position: "bottom-right",
+        });
+      }
+      setIsEditModalOpen(false);
     }
-    setIsEditModalOpen(false);
   };
 
   const handleCreateTaskSubmit = async () => {
@@ -189,6 +195,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: `${res.errors}`,
         duration: 5000,
         status: "error",
+        position: "bottom-right",
       });
     } else {
       toast({
@@ -196,6 +203,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: "Task is created",
         duration: 5000,
         status: "success",
+        position: "bottom-right",
       });
     }
     setIsCreateTaskModalOpen(false);
@@ -209,6 +217,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: `${res.errors}`,
         duration: 5000,
         status: "error",
+        position: "bottom-right",
       });
     } else {
       toast({
@@ -216,6 +225,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         description: "Task is created",
         duration: 5000,
         status: "success",
+        position: "bottom-right",
       });
     }
     setIsDeleteTaskModalOpen(false);

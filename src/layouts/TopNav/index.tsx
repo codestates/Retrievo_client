@@ -24,7 +24,7 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
     ({ project }) => project.id === projectId
   );
   const projectConfig = { projectPermissions, currentProject };
-
+  console.log("projectPermissions", projectPermissions);
   /* User Query */
   const { data: userData, loading: userLoading } = useGetProjectQuery({
     variables: { projectId },

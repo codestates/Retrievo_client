@@ -26,12 +26,12 @@ const ProjectListDropdown: React.FC<ProjectListDropdownPropsType> = ({
   // );
 
   const renderProjects = () => {
-    return projectPermissions?.map(({ project }: projectType) => {
+    return projectPermissions?.map(({ project }: projectType, index) => {
       if (!project) return null;
+      console.log("projectname", index, project.name);
       return (
-        <Link to={`/project/dashboard/${project.id}`}>
+        <Link key={project.id} to={`/project/dashboard/${project.id}`}>
           <MenuItem
-            key={project.id}
             value={project.name}
             // value="dummy"
             backgroundColor={
