@@ -82,6 +82,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
 
   const renderLabels = () => {
     return currentOptions?.map((label) => {
+      console.log("label.color:", label.color);
       return (
         <Label
           key={label.id}

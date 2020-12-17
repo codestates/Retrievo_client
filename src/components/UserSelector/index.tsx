@@ -26,10 +26,10 @@ const ClearIndicator = (props: any) => {
 };
 
 export type userItem = {
-  id: string;
+  id?: string;
   value?: string;
   label?: string;
-  username: string;
+  username?: string;
   avatar?: string | null;
 };
 
@@ -71,6 +71,7 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
   const handleCreateChange = (newValue: userItem[]) => {
     const newUser = getCreatedValue(newValue);
     // TODO: create api 실행
+    if (!newUser.id) return;
     createAssignee(newUser.id);
     setCurrentOptions(newValue);
   };
@@ -125,6 +126,7 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
               name={user.username}
               userId={user.id}
               handleDelete={(id) => {
+                if (!id) return;
                 deleteAssignee(id);
               }}
             />
