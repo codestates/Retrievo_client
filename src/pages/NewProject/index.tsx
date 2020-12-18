@@ -1,24 +1,61 @@
 import React, { ReactElement } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useToast } from "@chakra-ui/react";
 import * as yup from "yup";
+import { useHistory } from "react-router-dom";
 import Heading, { headingEnum } from "../../components/Heading";
 import Text from "../../components/Text";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";
 import RoundButton, { RoundButtonColor } from "../../components/RoundButton";
+import { useCreateProjectMutation } from "../../generated/graphql";
 
 const NewProject = (): ReactElement => {
+  const [createProject] = useCreateProjectMutation();
+  const toast = useToast();
+  const history = useHistory();
+
   const initialValue = {
     name: "",
   };
 
   const validationSchema = yup.object({
-    name: yup.string().max(20).required(),
+    name: yup.string().max(25).required(),
   });
 
-  const handleCreateProject = (value: Record<string, any>) => {
-    // TODO
+  type fieldType = Record<string, any>;
+
+  const createErrorToast = () => {
+    toast({
+      status: "error",
+      title: "Something wrong...",
+      description: "Please try again in a moment😅",
+      position: "bottom-right",
+    });
   };
+
+  const handleCreateProject = async ({ name }: fieldType) => {
+    console.log("------ start create:", name);
+    try {
+      const res = await createProject({
+        variables: {
+          name,
+        },
+      });
+      if (res.data?.createProject.error) {
+        console.log("createProject err:", res.data?.createProject.error);
+        createErrorToast();
+        return;
+      }
+      // TODO 생성된 프로젝트로 라우팅
+      const projectId = res.data?.createProject.project?.id;
+      if (!projectId) throw Error("no project id");
+      history.push(`/project/dashboard/${projectId}`);
+    } catch (err) {
+      console.log("create new project error:", err);
+      createErrorToast();
+    }
+  };
+
   return (
     <Flex
       alignItems="center"
@@ -59,7 +96,6 @@ const NewProject = (): ReactElement => {
             validationSchema={validationSchema}
             onSubmit={handleCreateProject}
             isSubmitButton
-            // isFullButton
             submitBtnName="Submit"
           >
             <InputField
