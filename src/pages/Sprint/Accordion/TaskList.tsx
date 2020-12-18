@@ -185,9 +185,15 @@ import TaskListEntry from "./TaskListEntry";
 
 type TaskListPropType = {
   taskData: Task[];
+  setSelectedTask: () => void;
+  onTaskOpen: () => void;
 };
 
-export const TaskList: React.FC<TaskListPropType> = ({ taskData }) => {
+export const TaskList: React.FC<TaskListPropType> = ({
+  taskData,
+  setSelectedTask,
+  onTaskOpen,
+}) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const onDragEnd = (result: Record<string, any>) => {
@@ -216,6 +222,8 @@ export const TaskList: React.FC<TaskListPropType> = ({ taskData }) => {
             <Box {...provided.droppableProps} ref={provided.innerRef}>
               {tasks.map((task, idx) => (
                 <TaskListEntry
+                  setSelectedTask={setSelectedTask}
+                  onTaskOpen={onTaskOpen}
                   key={task.id}
                   taskData={task}
                   mappedIndex={idx}

@@ -19,7 +19,7 @@ import * as yup from "yup";
 import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 /* utils */
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import moment from "moment";
 import {
@@ -65,19 +65,15 @@ const commentValidation = yup.object({
   content: yup.string().min(5).required(),
 });
 
-interface MatchParams {
-  projectId: string;
-}
 export interface taskProps {
   taskId?: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const TaskBar: React.FC<
-  taskProps & RouteComponentProps<MatchParams>
-> = ({ taskId, match, isOpen, onClose }) => {
-  const projectId = match?.params.projectId;
+export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
+  const location = useLocation();
+  const projectId = location.pathname.split("/").pop() || "";
   const toast = useToast();
 
   const [
@@ -210,7 +206,7 @@ export const TaskBar: React.FC<
     }
   };
 
-  const handleLabelDelete = async ({ id }: { id: string }) => {
+  const handleDeleteLabel = async ({ id }: { id: string }) => {
     console.log("labelId:", id);
     try {
       const res = await deleteTaskLabel({
@@ -221,6 +217,12 @@ export const TaskBar: React.FC<
             variables: {
               projectId,
               id: taskId,
+            },
+          },
+          {
+            query: GetProjectDocument,
+            variables: {
+              projectId,
             },
           },
         ],
@@ -417,7 +419,7 @@ export const TaskBar: React.FC<
         : undefined
     ),
     createTaskLabel: handleCreateLabel,
-    deleteTaskLabel: handleLabelDelete,
+    deleteTaskLabel: handleDeleteLabel,
   };
 
   const labelSelectorArg: labelSelectorProps = {
@@ -647,4 +649,4 @@ export const TaskBar: React.FC<
   );
 };
 
-export default withRouter(TaskBar);
+export default TaskBar;

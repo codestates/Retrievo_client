@@ -1,14 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Box, Text, Divider, useDisclosure } from "@chakra-ui/react";
+import { Flex, Box, Text, Divider } from "@chakra-ui/react";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { RouteComponentProps, useLocation } from "react-router-dom";
+
 import Avatar, { AvatarSize } from "../../../components/Avatar";
 import AvatarGroup from "../../../components/AvatarGroup";
 import Label from "../../../components/Label";
 import Spinner from "../../../components/Spinner";
 import { Task } from "../../../generated/graphql";
-import { TaskBar } from "../../../layouts/TaskBar";
 
 // import TaskBar from "../../../layouts/TaskBar";
 // type userTaskUserType = {
@@ -28,16 +27,18 @@ import { TaskBar } from "../../../layouts/TaskBar";
 type taskListEntryProps = {
   taskData: Task;
   mappedIndex: number;
+  setSelectedTask: (id: string) => void;
+  onTaskOpen: () => void;
 };
 
 export const TaskListEntry: React.FC<taskListEntryProps> = ({
   taskData,
   mappedIndex,
+  setSelectedTask,
+  onTaskOpen,
 }) => {
   // const [isDesktop] = useMediaQuery("(min-width: 1280px)");
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+
   if (!taskData) return <Spinner />;
 
   return (
@@ -61,7 +62,13 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
               </Box>
               <Box w="65%">
                 {/* <TaskBar taskId={taskData.id} /> */}
-                <Text fontSize="base" onClick={() => console.log("hello")}>
+                <Text
+                  fontSize="base"
+                  onClick={() => {
+                    setSelectedTask(taskData.id);
+                    onTaskOpen();
+                  }}
+                >
                   {taskData.title}
                 </Text>
               </Box>
@@ -94,7 +101,6 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
           </>
         )}
       </Draggable>
-      <TaskBar taskId={taskData.id} isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

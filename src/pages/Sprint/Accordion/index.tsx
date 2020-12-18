@@ -1,5 +1,5 @@
-import React from "react";
-import { Accordion, Box } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Accordion, Box, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import SprintItem from "./SprintItem";
@@ -9,6 +9,7 @@ import {
   useUpdateSprintMutation,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
+import TaskBar from "../../../layouts/TaskBar";
 
 export const Sprints: React.FC = () => {
   const location = useLocation();
@@ -18,6 +19,10 @@ export const Sprints: React.FC = () => {
     fetchPolicy: "cache-and-network",
   });
   const sprints = data?.getSprints.sprints;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selected, setSelected] = useState<undefined | string>(undefined);
+
+  console.log(selected);
 
   const [updateSprintMutation] = useUpdateSprintMutation();
 
@@ -48,39 +53,44 @@ export const Sprints: React.FC = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Box>
-        <Droppable droppableId="droppableSprint">
-          {(provided) => (
-            <Box {...provided.droppableProps} ref={provided.innerRef}>
-              <Accordion
-                allowToggle
-                defaultIndex={startedSprint ? startedSprint.row : undefined}
-              >
-                {sprints ? (
-                  sprints.map((sprint: any) => {
-                    return (
-                      <SprintItem
-                        key={sprint.id}
-                        sprintData={sprint}
-                        row={sprint.row}
-                        tasks={sprint.task}
-                        startedSprint={startedSprint}
-                        completedSprint={completedSprint}
-                      />
-                    );
-                  })
-                ) : (
-                  <Box>Error</Box>
-                )}
-              </Accordion>
-              {provided.placeholder}
-              {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
-            </Box>
-          )}
-        </Droppable>
-      </Box>
-    </DragDropContext>
+    <>
+      <TaskBar taskId={selected} isOpen={isOpen} onClose={onClose} />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Box>
+          <Droppable droppableId="droppableSprint">
+            {(provided) => (
+              <Box {...provided.droppableProps} ref={provided.innerRef}>
+                <Accordion
+                  allowToggle
+                  defaultIndex={startedSprint ? startedSprint.row : undefined}
+                >
+                  {sprints ? (
+                    sprints.map((sprint: any) => {
+                      return (
+                        <SprintItem
+                          key={sprint.id}
+                          sprintData={sprint}
+                          row={sprint.row}
+                          tasks={sprint.task}
+                          startedSprint={startedSprint}
+                          completedSprint={completedSprint}
+                          setSelectedTask={setSelected}
+                          onTaskOpen={onOpen}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Box>Error</Box>
+                  )}
+                </Accordion>
+                {provided.placeholder}
+                {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
+              </Box>
+            )}
+          </Droppable>
+        </Box>
+      </DragDropContext>
+    </>
   );
 };
 

@@ -101,23 +101,27 @@ const Register: React.FC<RegisterPropsType> = () => {
           />
         </Form>
         <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
-          <RoundButton
-            aria-label="google login button"
-            iconType={IconType.google}
-            shadowType={ShadowType.base}
-            buttonColor={RoundButtonColor.white}
-            size="md"
-            variant="outline"
-            mr={2}
-          />
-          <RoundButton
-            aria-label="google login button"
-            iconType={IconType.github}
-            shadowType={ShadowType.base}
-            buttonColor={RoundButtonColor.white}
-            size="md"
-            variant="outline"
-          />
+          <a href="http://retrievo.io/auth/google">
+            <RoundButton
+              aria-label="google login button"
+              iconType={IconType.google}
+              shadowType={ShadowType.base}
+              buttonColor={RoundButtonColor.white}
+              size="md"
+              variant="outline"
+              mr={2}
+            />
+          </a>
+          <a href="http://retrievo.io/auth/github">
+            <RoundButton
+              aria-label="google login button"
+              iconType={IconType.github}
+              shadowType={ShadowType.base}
+              buttonColor={RoundButtonColor.white}
+              size="md"
+              variant="outline"
+            />
+          </a>
         </Box>
       </Box>
     </Box>

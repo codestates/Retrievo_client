@@ -45,7 +45,8 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   row,
   tasks,
   startedSprint,
-  completedSprint,
+  setSelectedTask,
+  onTaskOpen,
 }) => {
   const location = useLocation();
   const toast = useToast();
@@ -326,7 +327,11 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 </Menu>
               </Flex>
             </Flex>
-            <TaskList taskData={tasks} />
+            <TaskList
+              taskData={tasks}
+              setSelectedTask={setSelectedTask}
+              onTaskOpen={onTaskOpen}
+            />
           </AccordionItem>
         );
       }}

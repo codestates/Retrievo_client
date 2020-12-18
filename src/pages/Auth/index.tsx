@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { Box, Button, Center, useDisclosure } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { RouteComponentProps } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import RegisterWelcomeCard from "./RegisterWelcomeCard";
 import LoginWelcomeCard from "./LoginWelcomeCard";
-import { TaskBar } from "../../layouts/TaskBar";
 
 interface MatchParams {
-  projectId: string;
+  type: string;
 }
 
 const RegisterAndLogin: React.FC<RouteComponentProps<MatchParams>> = ({
   ...arg
 }) => {
-  const [isRegister, setIsRegister] = useState(true);
+  const { match } = arg;
+  const [isRegister, setIsRegister] = useState(
+    match.params.type === "register"
+  );
 
   const changeCard = () => {
     setIsRegister(!isRegister);
   };
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>

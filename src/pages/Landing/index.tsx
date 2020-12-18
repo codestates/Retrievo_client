@@ -11,7 +11,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import ReactPlayer from "react-player/lazy";
+
 import { chartData, chartOptions } from "./chartData";
 import { useCreateGuestMutation } from "../../generated/graphql";
 import Text from "../../components/Text";
@@ -41,7 +43,6 @@ import useProjectRoute from "../Auth/useProjectRoute";
 const Landing: React.FC<Record<string, never>> = () => {
   const [createGuest] = useCreateGuestMutation();
   const toast = useToast();
-  const history = useHistory();
   const { routeToProject } = useProjectRoute();
 
   const onCreateGuest = async () => {
@@ -127,20 +128,19 @@ const Landing: React.FC<Record<string, never>> = () => {
           >
             Retrievo
           </ChakraHeading>
-          <Button
-            border="2px solid white"
-            bgColor="white"
-            color="#7499E"
-            borderRadius={5}
-            w={170}
-            py={5}
-            mr={3}
-            onClick={() => {
-              history.push("/auth");
-            }}
-          >
-            SignIn
-          </Button>
+          <Link to="/auth/sign-in">
+            <Button
+              border="2px solid white"
+              bgColor="white"
+              color="#7499E"
+              borderRadius={5}
+              w={170}
+              py={5}
+              mr={3}
+            >
+              SignIn
+            </Button>
+          </Link>
         </Box>
 
         <Box
@@ -172,7 +172,12 @@ const Landing: React.FC<Record<string, never>> = () => {
             objectFit="contain"
           />
 
-          <Box display="flex">
+          <Box
+            display="grid"
+            gridTemplateColumns="1fr 1fr"
+            width="100%"
+            maxW="80vw"
+          >
             <Slide direction="down" duration={1000}>
               <Box mr="3rem">
                 <Flex flexDir="row">
@@ -227,19 +232,18 @@ const Landing: React.FC<Record<string, never>> = () => {
                 >
                   Take tour
                 </Button>
-                <Button
-                  border="2px solid #31D5BF"
-                  bgColor="primary.200"
-                  color="white"
-                  borderRadius={5}
-                  w={170}
-                  py={5}
-                  onClick={() => {
-                    history.push("/auth");
-                  }}
-                >
-                  Register
-                </Button>
+                <Link to="/auth/register">
+                  <Button
+                    border="2px solid #31D5BF"
+                    bgColor="primary.200"
+                    color="white"
+                    borderRadius={5}
+                    w={170}
+                    py={5}
+                  >
+                    Register
+                  </Button>
+                </Link>
               </Box>
             </Slide>
 
@@ -249,7 +253,15 @@ const Landing: React.FC<Record<string, never>> = () => {
               overflow="hidden"
               mt="-3rem"
               boxShadow="xl"
-            />
+            >
+              <ReactPlayer
+                url="https://retrievo-api-graphqi.s3.ap-northeast-2.amazonaws.com/board.mp4"
+                playing
+                loop
+                width="630"
+                height="450"
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

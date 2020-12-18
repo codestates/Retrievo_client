@@ -2072,7 +2072,7 @@ export type CreateGuestMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const CreateProjectDocument = gql`
   mutation CreateProject($name: String!) {
-    createProject(name: "hello") {
+    createProject(name: $name) {
       project {
         id
         name
