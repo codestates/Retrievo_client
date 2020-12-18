@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -26,12 +26,11 @@ const ProjectListDropdown: React.FC<ProjectListDropdownPropsType> = ({
   // );
 
   const renderProjects = () => {
-    return projectPermissions?.map(({ project }: projectType) => {
+    return projectPermissions?.map(({ project }: projectType, index) => {
       if (!project) return null;
       return (
-        <Link to={`/project/dashboard/${project.id}`}>
+        <Link key={project.id} to={`/project/dashboard/${project.id}`}>
           <MenuItem
-            key={project.id}
             value={project.name}
             // value="dummy"
             backgroundColor={
@@ -74,14 +73,14 @@ const ProjectListDropdown: React.FC<ProjectListDropdownPropsType> = ({
       <MenuList>
         {renderProjects()}
         <MenuDivider />
-        <a href="/newProject">
+        <Link to="/new-project">
           <MenuItem _hover={{ bg: "achromatic.200" }}>
             <Box mx={1}>
               <AiOutlinePlus />
             </Box>
             New Project
           </MenuItem>
-        </a>
+        </Link>
       </MenuList>
     </Menu>
   );

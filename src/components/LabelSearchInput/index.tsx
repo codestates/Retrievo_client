@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
-import React, { useState } from "react";
+import React from "react";
 import CreatableSelect from "react-select/creatable";
 import { Box } from "@chakra-ui/react";
 import _ from "lodash";
@@ -14,14 +14,12 @@ export type labelItem = {
   label: string;
   color: string;
 };
-
 export type OptionsType = {
   options: labelItem[] | null | undefined;
   defaultValue?: labelItem[] | null | undefined;
   createTaskLabel: (name: string) => void;
   deleteTaskLabel: (item: labelItem) => void;
 };
-
 enum actionTypes {
   selectOption = "select-option",
   deselectOption = "deselect-option",
@@ -31,7 +29,6 @@ enum actionTypes {
   clear = "clear",
   createOption = "create-option",
 }
-
 const LabelSearchInput: React.FC<OptionsType> = ({
   options,
   defaultValue,
@@ -53,11 +50,9 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     console.log("-------delete end:");
     createTaskLabel(newValue[0].label);
   };
-
   const handleDeleteChange = (selectedValue: labelItem) => {
     deleteTaskLabel(selectedValue);
   };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
@@ -65,19 +60,15 @@ const LabelSearchInput: React.FC<OptionsType> = ({
       case actionTypes.selectOption:
         handleCreatedValue(newValue);
         break;
-
-      // case actionTypes.popValue:
       case actionTypes.removeValue:
         handleDeleteChange(newValue);
         break;
-
       default:
         break;
     }
   };
-
   const renderLabels = () => {
-    console.log("-------defaultValue:", defaultValue);
+    console.log("defaultValue:", defaultValue);
     return defaultValue?.map((label) => {
       return (
         <Label
@@ -92,7 +83,6 @@ const LabelSearchInput: React.FC<OptionsType> = ({
       );
     });
   };
-
   const onCreate = (input: string) => {
     createTaskLabel(input);
   };
@@ -132,5 +122,4 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     </React.Fragment>
   );
 };
-
 export default LabelSearchInput;

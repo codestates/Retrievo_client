@@ -2,6 +2,7 @@ mutation UpdateSprint($projectId:String!, $options:SprintOptionInput!){
   updateSprint(projectId:$projectId, options:$options){
     success
     sprint {
+      id
       title
       description
       didStart

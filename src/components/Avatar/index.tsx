@@ -19,8 +19,8 @@ export const CustomAvatar: React.FC<BetterAvatarProps> = ({
   ...props
 }) => {
   return (
-    <Tooltip label={name} hasArrow>
-      <Avatar name={name} color="achromatic.100" {...props} />
+    <Tooltip label={name} hasArrow key={name}>
+      <Avatar name={name} key={name} color="achromatic.100" {...props} />
     </Tooltip>
   );
 };

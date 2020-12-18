@@ -1,6 +1,10 @@
 mutation DeleteProject($projectId: String!) {
   deleteProject(projectId: $projectId){
     success
+<<<<<<< HEAD
+
+=======
+>>>>>>> 4d3f3db1e3669949b016482375ed64b427eb60c0
     error{
       message
       code
