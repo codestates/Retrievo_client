@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from "react";
 import {
-  Accordion,
   AccordionItem,
   AccordionButton,
   AccordionIcon,
@@ -20,8 +19,6 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
-import { cachedDataVersionTag } from "v8";
-import { setNestedObjectValues } from "formik";
 import TaskList from "./TaskList";
 import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
@@ -47,11 +44,12 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   sprintData,
   row,
   tasks,
+  startedSprint,
+  completedSprint,
 }) => {
   const location = useLocation();
   const toast = useToast();
   const projectId = location.pathname.split("/").pop() || "";
-  const [selected, setSelected] = useState<boolean>(row === 0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [
     updateSprintMutation,
@@ -62,6 +60,13 @@ export const SprintItem: React.FC<Record<string, any>> = ({
     deleteSprintMutation,
     { loading: deleteSprintLoading },
   ] = useDeleteSprintMutation();
+
+  /* need to make row null on serverside */
+  // if (completedSprint) {
+  //   if (completedSprint.id === sprintData.id) return null;
+  // }
+
+  if (!sprintData.id) return null;
 
   const handleUpdateSprint = async (values: Record<string, any>) => {
     await updateSprintMutation({
@@ -138,6 +143,63 @@ export const SprintItem: React.FC<Record<string, any>> = ({
     });
   };
 
+  // eslint-disable-next-line consistent-return
+  const handleStartSprint = async (values: Record<string, any>) => {
+    if (startedSprint) {
+      toast({
+        position: "bottom-right",
+        title: "Error",
+        description:
+          "You cannot start another sprint while the other is active",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return null;
+    }
+    await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: sprintData.id,
+          didStart: true,
+        },
+      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+    });
+    toast({
+      position: "bottom-right",
+      title: "Sprint Started!",
+      description: "Sprint has been successfully started",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
+  // eslint-disable-next-line consistent-return
+  const handleCompleteSprint = async (values: Record<string, any>) => {
+    await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: sprintData.id,
+          isCompleted: true,
+        },
+      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+    });
+    handleDeleteSprint();
+    toast({
+      position: "bottom-right",
+      title: "Congrats, You completed your sprint!",
+      description: "Sprint has been successfully completed",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
       {(provided) => {
@@ -149,7 +211,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           >
             <Flex
               alignItems="center"
-              bgColor={row === 0 ? "primary.400" : "achromatic.100"}
+              bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
               p={2}
             >
               <Center w="40px" h="40px" overflow="hidden">
@@ -175,7 +237,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               <Flex
                 justifyContent="flex-end"
                 p={3}
-                visibility={selected ? "visible" : "hidden"}
+                // visibility={selected ? "visible" : "hidden"}
               >
                 <Menu>
                   <MenuButton
@@ -198,6 +260,22 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                     <BsThreeDotsVertical />
                   </MenuButton>
                   <MenuList>
+                    {!startedSprint ? (
+                      <MenuItem onClick={handleStartSprint}>
+                        Start Sprint
+                      </MenuItem>
+                    ) : null}
+
+                    {startedSprint && startedSprint.id !== sprintData.id ? (
+                      <MenuItem onClick={handleStartSprint}>
+                        Start Sprint
+                      </MenuItem>
+                    ) : null}
+                    {startedSprint && startedSprint.id === sprintData.id ? (
+                      <MenuItem onClick={handleCompleteSprint}>
+                        Complete Sprint
+                      </MenuItem>
+                    ) : null}
                     <MenuItem onClick={onOpen}>Update Sprint</MenuItem>
                     <ModalLayout
                       isOpen={isOpen}
