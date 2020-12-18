@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
 /* eslint-disable indent */
-import React, { useState } from "react";
+import React from "react";
 import CreatableSelect from "react-select/creatable";
 import { Box } from "@chakra-ui/react";
 import _ from "lodash";
@@ -61,7 +61,6 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         handleCreatedValue(newValue);
         break;
       case actionTypes.removeValue:
-      case actionTypes.popValue:
         handleDeleteChange(newValue);
         break;
       default:
@@ -87,17 +86,17 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   const onCreate = (input: string) => {
     createTaskLabel(input);
   };
-  return (
-    <React.Fragment>
-      <Box spacing="5px" marginBottom="0.5rem">
-        {renderLabels()}
-      </Box>
+
+  const renderSelect = () => {
+    console.log("renderSelect");
+    return (
       <CreatableSelect
         isMulti
         onChange={handleChange}
         options={options || undefined}
         onCreateOption={onCreate}
         defaultValue={defaultValue}
+        value={defaultValue}
         placeholder="Select Task's Label"
         styles={{
           multiValue: (base) => ({
@@ -111,6 +110,15 @@ const LabelSearchInput: React.FC<OptionsType> = ({
           }),
         }}
       />
+    );
+  };
+
+  return (
+    <React.Fragment>
+      <Box spacing="5px" marginBottom="0.5rem">
+        {renderLabels()}
+      </Box>
+      {renderSelect()}
     </React.Fragment>
   );
 };

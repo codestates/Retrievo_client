@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { Box, Button, Center, useDisclosure } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { RouteComponentProps } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import RegisterWelcomeCard from "./RegisterWelcomeCard";
 import LoginWelcomeCard from "./LoginWelcomeCard";
-import { TaskBar } from "../../layouts/TaskBar";
 
 interface MatchParams {
-  projectId: string;
+  type: string;
 }
 
 const RegisterAndLogin: React.FC<RouteComponentProps<MatchParams>> = ({
   ...arg
 }) => {
-  const [isRegister, setIsRegister] = useState(true);
+  const { match } = arg;
+  const [isRegister, setIsRegister] = useState(
+    match.params.type === "register"
+  );
 
   const changeCard = () => {
     setIsRegister(!isRegister);
   };
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
@@ -68,13 +68,6 @@ const RegisterAndLogin: React.FC<RouteComponentProps<MatchParams>> = ({
           </Box>
         </Center>
       </Box>
-      <Button onClick={onOpen}>열려라 태스크</Button>
-      <TaskBar
-        {...arg}
-        taskId="0d71f3a1-3c47-4ef4-904c-970dcf64f69d"
-        isOpen={isOpen}
-        onClose={onClose}
-      />
     </>
   );
 };

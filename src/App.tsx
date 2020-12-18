@@ -20,7 +20,7 @@ const App: React.FC<Record<string, never>> = () => {
       <ChakraProvider theme={theme}>
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/auth/:projectId" component={Auth} />
+          <Route path="/auth/:type" component={Auth} />
           <Route path="/project/dashboard/:projectId" component={Dashboard} />
           <Route path="/project/board/:projectId" component={Board} />
           <Route path="/project/sprint/:projectId" component={Sprint} />
