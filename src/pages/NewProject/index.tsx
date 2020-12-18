@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { Link } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import * as yup from "yup";
 import Heading, { headingEnum } from "../../components/Heading";
@@ -43,11 +44,13 @@ const NewProject = (): ReactElement => {
             size="xs"
             mr={2}
           />
-          <RoundButton
-            aria-label="decoration button"
-            buttonColor={RoundButtonColor.red}
-            size="xs"
-          />
+          <Link to="/">
+            <RoundButton
+              aria-label="decoration button"
+              buttonColor={RoundButtonColor.red}
+              size="xs"
+            />
+          </Link>
         </Flex>
         <Box bg="achromatic.100" h={300} p={10} borderBottomRadius={10}>
           <Heading headingType={headingEnum.auth}>New Project</Heading>

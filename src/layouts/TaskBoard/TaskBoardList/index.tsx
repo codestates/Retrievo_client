@@ -12,25 +12,36 @@ import TaskBoard, { Boardoptions, TaskBoardProps } from "../TaskBoard";
 import SkeletonBoard, { SkeletonBoardProps } from "../TaskBoard/SkeletonBoard";
 import {
   Board as boardType,
+  UpdateSprintMutation,
   // GetBoardsDocument,
   UpdateTaskMutation,
   // useUpdateBoardMutation,
   // useUpdateTaskMutation,
 } from "../../../generated/graphql";
-import { TaskUpdateOptions } from "../../../pages/Board";
+import { TaskUpdateOptions, SprintUpdateOptions } from "../../../pages/Board";
 
 export type TaskBoardListProps = TaskBoardProps &
   SkeletonBoardProps & {
     boards: boardType[];
     projectId: string;
+    boardLoading: boolean;
+    taskLoading: boolean;
     handleTaskUpdate: (
       options: TaskUpdateOptions,
       projectId: string
     ) => Promise<
       FetchResult<UpdateTaskMutation, Record<string, any>, Record<string, any>>
     >;
-    boardLoading: boolean;
-    taskLoading: boolean;
+    // handleUpdateSprint: (
+    //   projectId: string,
+    //   options: SprintUpdateOptions
+    // ) => Promise<
+    //   FetchResult<
+    //     UpdateSprintMutation,
+    //     Record<string, any>,
+    //     Record<string, any>
+    //   >
+    // >;
   };
 
 const TaskBoardList: React.FC<TaskBoardListProps> = ({

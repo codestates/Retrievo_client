@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 /* Layouts & types */
-import { Box, useDisclosure, Text, Flex } from "@chakra-ui/react";
+import { Box, useDisclosure, Text, Flex, useToast } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -24,10 +24,13 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
+  useUpdateSprintMutation,
+  SetStartedSprintDocument,
 } from "../../generated/graphql";
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
 import Button, { buttonColor } from "../../components/Button";
+import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
 
 interface BoardProps {
   projectId: string;
@@ -40,13 +43,19 @@ export interface TaskUpdateOptions {
   newBoardRowIndex?: number;
 }
 
+export interface SprintUpdateOptions {
+  id: string;
+  didStart: boolean;
+}
+
 export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   ...args
 }) => {
   const { projectId } = args.match.params;
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
+  // const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   /* Mutation, Query */
   const { loading, data } = useGetBoardsQuery({
@@ -69,12 +78,13 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     updateBoard,
     { data: boardData, loading: boardLoading },
   ] = useUpdateBoardMutation();
+  const [updateSprint] = useUpdateSprintMutation();
 
-  useEffect(() => {
-    if (data?.getBoards && data?.getBoards?.boards) {
-      setCurBoard(data.getBoards.boards);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.getBoards && data?.getBoards?.boards) {
+  //     setCurBoard(data.getBoards.boards);
+  //   }
+  // }, [data]);
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -202,6 +212,54 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
+  const handleUpdateSprint = async (
+    projectId: string,
+    options: SprintUpdateOptions
+  ) => {
+    if (options.id === "") {
+      toast({
+        title: "Sprint Completion Failed😂",
+        description: "Connot find sprint",
+        duration: 5000,
+        status: "error",
+        position: "bottom-right",
+      });
+    }
+    const res = await updateSprint({
+      variables: { projectId, options },
+      refetchQueries: [
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
+      // update: async (cache, { data }) => {
+      //   if (!data) return;
+      //   cache.modify({
+      //     fields: {
+      //       getStartedSprint: () => {
+      //         return {};
+      //       },
+      //     },
+      //   });
+      // },
+    });
+    if (res.errors) {
+      toast({
+        title: "Sprint Completion Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+        position: "bottom-right",
+      });
+    } else {
+      toast({
+        title: "Sprint Completion Succeed🥳",
+        description: "Sprint is completed",
+        duration: 5000,
+        status: "success",
+        position: "bottom-right",
+      });
+    }
+  };
+
   useEffect(() => {
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
@@ -218,12 +276,23 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
             <PageHeading />
             <Flex alignItems="flex-end" mt={7} mb={5} ml={5}>
               <Heading mr={3} headingType={headingEnum.sprint}>
-                {!sprintData?.getStartedSprint.sprint?.title
+                {!sprintData?.getStartedSprint ||
+                !sprintData?.getStartedSprint.sprint ||
+                !sprintData?.getStartedSprint.sprint?.title
                   ? ""
                   : sprintData?.getStartedSprint.sprint?.title}
               </Heading>
-              {sprintData?.getStartedSprint.sprint ? (
-                <Button size="sm" buttontype={buttonColor.primary}>
+              {sprintData?.getStartedSprint.sprint?.id ? (
+                <Button
+                  size="sm"
+                  buttontype={buttonColor.primary}
+                  onClick={() =>
+                    handleUpdateSprint(projectId, {
+                      id: sprintData?.getStartedSprint.sprint?.id || "",
+                      didStart: false,
+                    })
+                  }
+                >
                   Sprint complete
                 </Button>
               ) : null}
@@ -244,8 +313,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
                   handleTaskUpdate={handleTaskUpdate}
-                  // boards={data !== null ? data?.getBoards.boards : []}
-                  boards={curBoards}
+                  boards={data !== null ? data?.getBoards.boards : []}
+                  // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
                 />
