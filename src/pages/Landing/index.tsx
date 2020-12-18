@@ -11,7 +11,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
-import ReactPlayer from "react-player/lazy";
 import { useHistory } from "react-router-dom";
 import { chartData, chartOptions } from "./chartData";
 import { useCreateGuestMutation } from "../../generated/graphql";
@@ -37,7 +36,6 @@ import Shape13 from "../../asset/img/shape13.png";
 import TaskImage from "../../asset/img/TaskImage.png";
 import LandingAstro from "../../asset/img/LandingAstro";
 import TaskBoard from "../../asset/img/TaskBoard.png";
-import BoardVideo from "../../asset/movie/board.mp4";
 import useProjectRoute from "../Auth/useProjectRoute";
 
 const Landing: React.FC<Record<string, never>> = () => {
@@ -251,15 +249,7 @@ const Landing: React.FC<Record<string, never>> = () => {
               overflow="hidden"
               mt="-3rem"
               boxShadow="xl"
-            >
-              <ReactPlayer
-                url={BoardVideo}
-                playing
-                loop
-                width="630"
-                height="450"
-              />
-            </Box>
+            />
           </Box>
         </Box>
       </Box>

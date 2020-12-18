@@ -48,14 +48,17 @@ export const dataSchemaGenerator = (
       "completedTasksCount",
       "overdueTasksCount",
     ];
+
+    const context = data.slice(0, 5);
+
     const backgroundColors = ["#31D5BF", "#3949AB", "#76B515"];
     const hoverBackgroundColor = ["#CDF1EC", "#933183", "#FFE81D"];
-    const labels = data.map(
+    const labels = context.map(
       (
         assignee: Record<string, string | number | null | undefined>,
         index: number
       ) => {
-        const name = data[index].username?.split(" ");
+        const name = context[index].username?.split(" ");
         if (!name) {
           return null;
         }
@@ -65,13 +68,13 @@ export const dataSchemaGenerator = (
         return name[0].toUpperCase();
       }
     );
-    const incompleteTasksCountData = data.map(
+    const incompleteTasksCountData = context.map(
       (assignee) => assignee.incompleteTasksCount
     );
-    const completedTasksCountData = data.map(
+    const completedTasksCountData = context.map(
       (assignee) => assignee.completedTasksCount
     );
-    const overdueTasksCountData = data.map(
+    const overdueTasksCountData = context.map(
       (assignee) => assignee.overdueTasksCount
     );
     const compositeCountData = [

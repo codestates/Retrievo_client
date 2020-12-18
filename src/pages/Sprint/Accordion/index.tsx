@@ -17,6 +17,7 @@ export const Sprints: React.FC = () => {
     variables: { projectId },
     fetchPolicy: "cache-and-network",
   });
+
   const [updateSprintMutation] = useUpdateSprintMutation();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export const Sprints: React.FC = () => {
   }, [data]);
 
   if (loading) return <Spinner />;
+  if (!data?.getSprints.sprints) return <Spinner />;
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
@@ -61,6 +63,7 @@ export const Sprints: React.FC = () => {
     setSprints(items);
   };
 
+  console.log(data?.getSprints.sprints);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
