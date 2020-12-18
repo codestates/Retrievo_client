@@ -1324,6 +1324,7 @@ export type UpdateSprintMutation = { __typename?: "Mutation" } & {
       sprint?: Maybe<
         { __typename?: "Sprint" } & Pick<
           Sprint,
+          | "id"
           | "title"
           | "description"
           | "didStart"
@@ -3465,6 +3466,7 @@ export const UpdateSprintDocument = gql`
     updateSprint(projectId: $projectId, options: $options) {
       success
       sprint {
+        id
         title
         description
         didStart

@@ -66,8 +66,8 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         handleCreatedValue(newValue);
         break;
 
+      // case actionTypes.popValue:
       case actionTypes.removeValue:
-      case actionTypes.popValue:
         handleDeleteChange(newValue);
         break;
 
@@ -77,7 +77,7 @@ const LabelSearchInput: React.FC<OptionsType> = ({
   };
 
   const renderLabels = () => {
-    console.log("defaultValue:", defaultValue);
+    console.log("-------defaultValue:", defaultValue);
     return defaultValue?.map((label) => {
       return (
         <Label
@@ -97,17 +97,16 @@ const LabelSearchInput: React.FC<OptionsType> = ({
     createTaskLabel(input);
   };
 
-  return (
-    <React.Fragment>
-      <Box spacing="5px" marginBottom="0.5rem">
-        {renderLabels()}
-      </Box>
+  const renderSelect = () => {
+    console.log("renderSelect");
+    return (
       <CreatableSelect
         isMulti
         onChange={handleChange}
         options={options || undefined}
         onCreateOption={onCreate}
         defaultValue={defaultValue}
+        value={defaultValue}
         placeholder="Select Task's Label"
         styles={{
           multiValue: (base) => ({
@@ -121,6 +120,15 @@ const LabelSearchInput: React.FC<OptionsType> = ({
           }),
         }}
       />
+    );
+  };
+
+  return (
+    <React.Fragment>
+      <Box spacing="5px" marginBottom="0.5rem">
+        {renderLabels()}
+      </Box>
+      {renderSelect()}
     </React.Fragment>
   );
 };

@@ -210,7 +210,7 @@ export const TaskBar: React.FC<
     }
   };
 
-  const handleLabelDelete = async ({ id }: { id: string }) => {
+  const handleDeleteLabel = async ({ id }: { id: string }) => {
     console.log("labelId:", id);
     try {
       const res = await deleteTaskLabel({
@@ -221,6 +221,12 @@ export const TaskBar: React.FC<
             variables: {
               projectId,
               id: taskId,
+            },
+          },
+          {
+            query: GetProjectDocument,
+            variables: {
+              projectId,
             },
           },
         ],
@@ -417,7 +423,7 @@ export const TaskBar: React.FC<
         : undefined
     ),
     createTaskLabel: handleCreateLabel,
-    deleteTaskLabel: handleLabelDelete,
+    deleteTaskLabel: handleDeleteLabel,
   };
 
   const labelSelectorArg: labelSelectorProps = {
