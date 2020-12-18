@@ -20,7 +20,7 @@ const App: React.FC<Record<string, never>> = () => {
       <ChakraProvider theme={theme}>
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/auth/:projectId" component={Auth} />
+          <Route path="/auth" component={Auth} />
           <Route path="/project/dashboard/:projectId" component={Dashboard} />
           <Route path="/project/board/:projectId" component={Board} />
           <Route path="/project/sprint/:projectId" component={Sprint} />
@@ -33,6 +33,7 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path="/new-project" component={NewProject} />
           <Route path="/my-profile" component={MyProfile} />
           <Route path="/not-found" component={NotFound} />
+          <Route path="/graphql" />
           <Redirect path="*" to="/not-found" />
         </Switch>
       </ChakraProvider>
