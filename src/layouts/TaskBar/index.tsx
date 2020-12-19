@@ -121,7 +121,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
 
   const taskArr = getTaskData?.getTask.task;
   if (!taskArr) {
-    return <Text>no task</Text>;
+    return <></>;
   }
 
   const createErrorToast = () => {

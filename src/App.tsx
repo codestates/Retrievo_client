@@ -2,6 +2,10 @@ import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import theme from "./styles/theme";
+import PrivateRoute from "./utils/privateRoute";
+import ROUTE from "./utils/RoutePath";
+
+/* components */
 import Dashboard from "./pages/Dashboard";
 import MyProfile from "./pages/MyProfile";
 import NewProject from "./pages/NewProject";
@@ -19,21 +23,58 @@ const App: React.FC<Record<string, never>> = () => {
     <>
       <ChakraProvider theme={theme}>
         <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route path="/auth/:type" component={Auth} />
-          <Route path="/project/dashboard/:projectId" component={Dashboard} />
-          <Route path="/project/board/:projectId" component={Board} />
-          <Route path="/project/sprint/:projectId" component={Sprint} />
-          <Route path="/project/timeline/:projectId" component={Timeline} />
-          <Route path="/project/calendar/:projectId" component={Calendar} />
-          <Route
-            path="/project/setting/:projectId"
-            component={ProjectSetting}
+          <Route exact path={ROUTE.LANDING} component={Landing} />
+          <Route path={ROUTE.AUTH} component={Auth} />
+          <PrivateRoute
+            path={ROUTE.DASHBOARD}
+            component={Dashboard}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
           />
-          <Route path="/new-project" component={NewProject} />
-          <Route path="/my-profile" component={MyProfile} />
-          <Route path="/not-found" component={NotFound} />
-          <Redirect path="*" to="/not-found" />
+          <PrivateRoute
+            path={ROUTE.BOARD}
+            component={Board}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.SPRINT}
+            component={Sprint}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.TIMELINE}
+            component={Timeline}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.CALENDAR}
+            component={Calendar}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.PROJECT_SETTING}
+            component={ProjectSetting}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.NEW_PROJECT}
+            component={NewProject}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <PrivateRoute
+            path={ROUTE.MY_PROFILE}
+            component={MyProfile}
+            redirect={ROUTE.AUTH}
+            permission="projectId"
+          />
+          <Route path={ROUTE.NOT_FOUND} component={NotFound} />
+          {/* <Redirect path="*" to={ROUTE.NOT_FOUND} /> */}
         </Switch>
       </ChakraProvider>
     </>
