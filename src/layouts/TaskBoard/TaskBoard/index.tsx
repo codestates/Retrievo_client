@@ -86,7 +86,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   boards,
   projectId,
   sprintId,
-  // lazyGetBoard,
   ...props
 }): ReactElement | null => {
   /* State */
@@ -124,8 +123,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleDeleteSubmit = async () => {
-    console.log("delete");
-    console.log("selectedNewBoard", selectedNewBoard);
     if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
     const res = await handleBoardDelete(
       board.id,
@@ -153,7 +150,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleEditSubmit = async () => {
-    // lazyGetBoard({ variables: { projectId } });
     const res = await handleBoardUpdate(
       {
         id: board.id,
@@ -214,7 +210,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     const res = await handleTaskDelete(deletedTaskId, projectId);
     if (res.data?.deleteTask.error) {
       toast({
-        title: "Task Creation Failed😂",
+        title: "Task Deletion Failed😂",
         description: `${res.data?.deleteTask.error.message}`,
         duration: 5000,
         status: "error",
@@ -222,7 +218,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       });
     } else {
       toast({
-        title: "Task Creation Succeed🥳",
+        title: "Task Deletion Succeed🥳",
         description: "Task is created",
         duration: 5000,
         status: "success",
@@ -294,11 +290,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             <IconButton
               aria-label="delete board"
               iconButtonType="deleteBin"
-              // color={
-              //   board.boardColumnIndex >= boards.length - 1
-              //     ? "transparent"
-              //     : "achromatic.600"
-              // }
               color="achromatic.600"
               onClick={() => {
                 if (board.boardColumnIndex === 0) {

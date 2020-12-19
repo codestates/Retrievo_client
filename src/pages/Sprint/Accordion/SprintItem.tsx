@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState } from "react";
+import React from "react";
 import {
   AccordionItem,
   AccordionButton,
@@ -213,140 +213,142 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   };
 
   return (
-    <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
-      {(provided) => {
-        return (
-          <AccordionItem
-            ref={provided.innerRef}
-            {...provided.dragHandleProps}
-            {...provided.draggableProps}
-          >
-            <Flex
-              alignItems="center"
-              bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
-              p={2}
+    <>
+      <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
+        {(provided) => {
+          return (
+            <AccordionItem
+              ref={provided.innerRef}
+              {...provided.dragHandleProps}
+              {...provided.draggableProps}
             >
-              <Center w="40px" h="40px" overflow="hidden">
-                <AccordionButton
-                  p="8px"
-                  w="100%"
-                  h="100%"
-                  display="flex"
-                  justifyContent="center"
-                  _hover={{
-                    bg: "primary.400",
-                    borderRadius: "9999px",
-                    transition: "ease 0.3s",
-                  }}
-                  _focus={{ outline: "none" }}
-                >
-                  <AccordionIcon fontSize="2rem" />
-                </AccordionButton>
-              </Center>
-              <Box flex="1" ml={3} textAlign="left">
-                {sprintData.title}
-              </Box>
               <Flex
-                justifyContent="flex-end"
+                alignItems="center"
+                bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
                 p={2}
-                // visibility={selected ? "visible" : "hidden"}
               >
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    p={3}
-                    border="none"
-                    backgroundColor="transparent"
-                    outline="none"
+                <Center w="40px" h="40px" overflow="hidden">
+                  <AccordionButton
+                    p="8px"
+                    w="100%"
+                    h="100%"
+                    display="flex"
+                    justifyContent="center"
                     _hover={{
-                      outline: "none",
-                      backgroundColor: "transparent",
+                      bg: "primary.400",
+                      borderRadius: "9999px",
+                      transition: "ease 0.3s",
                     }}
-                    _focus={{
-                      outline: "none",
-                      backgroundColor: "transparent",
-                    }}
-                    color="achromatic.600"
-                    fontSize="xl"
+                    _focus={{ outline: "none" }}
                   >
-                    <BsThreeDotsVertical />
-                  </MenuButton>
-                  <MenuList>
-                    {!startedSprint ? (
-                      <MenuItem onClick={handleStartSprint}>
-                        Start Sprint
-                      </MenuItem>
-                    ) : null}
-
-                    {startedSprint && startedSprint.id !== sprintData.id ? (
-                      <MenuItem onClick={handleStartSprint}>
-                        Start Sprint
-                      </MenuItem>
-                    ) : null}
-                    {startedSprint && startedSprint.id === sprintData.id ? (
-                      <MenuItem onClick={handleCompleteSprint}>
-                        Complete Sprint
-                      </MenuItem>
-                    ) : null}
-                    <MenuItem onClick={onOpen}>Update Sprint</MenuItem>
-                    <ModalLayout
-                      isOpen={isOpen}
-                      onOpen={onOpen}
-                      onClose={onClose}
-                      footer={false}
-                      title="Update Sprint"
-                      buttonText="Update Sprint"
-                      bgColor="primary.400"
+                    <AccordionIcon fontSize="2rem" />
+                  </AccordionButton>
+                </Center>
+                <Box flex="1" ml={3} textAlign="left">
+                  {sprintData.title}
+                </Box>
+                <Flex
+                  justifyContent="flex-end"
+                  p={2}
+                  // visibility={selected ? "visible" : "hidden"}
+                >
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      p={3}
+                      border="none"
+                      backgroundColor="transparent"
+                      outline="none"
+                      _hover={{
+                        outline: "none",
+                        backgroundColor: "transparent",
+                      }}
+                      _focus={{
+                        outline: "none",
+                        backgroundColor: "transparent",
+                      }}
                       color="achromatic.600"
-                      borderRadius="9999px"
-                      display="none"
+                      fontSize="xl"
                     >
-                      <Box mb={3}>
-                        <CustomForm
-                          initialValues={{
-                            sprintName: "",
-                            description: "",
-                          }}
-                          buttonPosition="right"
-                          isSubmitButton
-                          submitBtnName="Update Sprint"
-                          onSubmit={handleUpdateSprint}
-                        >
-                          <Box lineHeight={8}>
-                            <Box p={2}>
-                              <InputField
-                                label="Sprint Name"
-                                name="sprintName"
-                                placeholder={sprintData.title}
-                              />
-                            </Box>
-                            <Box p={2} mb={6}>
-                              <TextAreaField
-                                label="Sprint Description"
-                                name="description"
-                                placeholder={sprintData.description}
-                              />
-                            </Box>
-                          </Box>
-                        </CustomForm>
-                      </Box>
-                    </ModalLayout>
-                    <MenuItem onClick={handleDeleteSprint}>
-                      Delete Sprint
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                      <BsThreeDotsVertical />
+                    </MenuButton>
+                    <MenuList>
+                      {!startedSprint ? (
+                        <MenuItem onClick={handleStartSprint}>
+                          Start Sprint
+                        </MenuItem>
+                      ) : null}
+
+                      {startedSprint && startedSprint.id !== sprintData.id ? (
+                        <MenuItem onClick={handleStartSprint}>
+                          Start Sprint
+                        </MenuItem>
+                      ) : null}
+                      {startedSprint && startedSprint.id === sprintData.id ? (
+                        <MenuItem onClick={handleCompleteSprint}>
+                          Complete Sprint
+                        </MenuItem>
+                      ) : null}
+                      <MenuItem onClick={onOpen}>Update Sprint</MenuItem>
+                      <MenuItem onClick={handleDeleteSprint}>
+                        Delete Sprint
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Flex>
               </Flex>
-            </Flex>
-            <TaskList
-              taskData={tasks}
-              setSelectedTask={setSelectedTask}
-              onTaskOpen={onTaskOpen}
-            />
-          </AccordionItem>
-        );
-      }}
-    </Draggable>
+              <TaskList
+                taskData={tasks}
+                setSelectedTask={setSelectedTask}
+                onTaskOpen={onTaskOpen}
+              />
+            </AccordionItem>
+          );
+        }}
+      </Draggable>
+      <ModalLayout
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        footer={false}
+        title="Update Sprint"
+        buttonText="Update Sprint"
+        bgColor="primary.400"
+        color="achromatic.600"
+        borderRadius="9999px"
+        display="none"
+      >
+        <Box mb={3}>
+          <CustomForm
+            initialValues={{
+              sprintName: `${sprintData.title}`,
+              description: "",
+            }}
+            buttonPosition="right"
+            isSubmitButton
+            submitBtnName="Update Sprint"
+            onSubmit={handleUpdateSprint}
+          >
+            <Box lineHeight={8}>
+              <Box p={2}>
+                <InputField
+                  label="Sprint Name"
+                  name="sprintName"
+                  // placeholder={sprintData.title}
+                />
+              </Box>
+              <Box p={2} mb={6}>
+                <TextAreaField
+                  label="Sprint Description"
+                  name="description"
+                  placeholder={sprintData.description}
+                />
+              </Box>
+            </Box>
+          </CustomForm>
+        </Box>
+      </ModalLayout>
+    </>
   );
 };
 

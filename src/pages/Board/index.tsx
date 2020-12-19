@@ -79,7 +79,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      // refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -114,6 +114,7 @@ export const Board: React.FC<Record<string, never>> = () => {
         options,
         projectId,
       },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -123,6 +124,7 @@ export const Board: React.FC<Record<string, never>> = () => {
         id,
         projectId,
       },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -132,6 +134,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   ) => {
     return await updateTask({
       variables: { projectId, options },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -189,36 +192,7 @@ export const Board: React.FC<Record<string, never>> = () => {
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
 
-  // if (!sprintData && loading)
-  // if (!sprintData)
-  // -> 드래그앤드롭 심리스
-  // -> 보드 update x
-  // -> 보드 create X
-  // -> 보드 delete X
-  // -> 테스크 업데이트 x
-
-  // if (!sprintData || loading)
-  // if (loading)
-  // -> 드래그앤드롭 심리스 x
-  // -> 보드 update O
-  // -> 보드 create O
-  // -> 보드 delete X
-  // -> 테스크 update O
-  // -> 테스크 create X
-  // -> 테스크 delete X
-
-  // 현재 되지 않는 것
-  // -> 드래그앤드롭 심리스 O
-  // -> 보드 update X
-  // -> 보드 create X
-  // -> 보드 delete X
-  // -> 테스크 update X
-  // -> 테스크 create X
-  // -> 테스크 delete X
-
-  // sprint -> start를 하고 나서 board에 오면 반영이 안 되는 문제
-
-  if (!sprintData || sprintLoading) {
+  if (!sprintData || sprintLoading || loading) {
     return (
       <Flex justifyContent="center" alignItems="center" h="100vh">
         <Spinner />
