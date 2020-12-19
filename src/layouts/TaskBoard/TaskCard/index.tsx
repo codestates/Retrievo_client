@@ -26,7 +26,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     return task?.taskLabel?.map((labelObj) => {
       const { label } = labelObj;
       return (
-        <Label mr="2px" key={label.id} bgColor={label.color}>
+        <Label mr="2px" mb="3px" key={label.id} bgColor={label.color}>
           {label.name}
         </Label>
       );
@@ -79,25 +79,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
         onClick={() => handleTaskClick(task.id)}
       >
         <Box>
-          <Box
-            // display="flex"
-            // gridRow="1fr 3fr"
-            // flexDir="row"
-            // alignItems="flex-start"
-            mb={2}
-            _hover={{ cursor: "pointer" }}
-          >
+          <Box mb={2} _hover={{ cursor: "pointer" }}>
             <Text
               fontSize="xs"
-              // w="4rem"
-              // mr={2}
               color="primary.200"
             >{`Task-${task?.taskIndex}`}</Text>
-            {/* <Text
-              fontSize="xs"
-              mr={2}
-              color="fail"
-            >{`${task?.boardRowIndex}`}</Text> */}
             <Heading
               pr="1.5rem"
               fontWeight="normal"
@@ -106,7 +92,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
               {task?.title}
             </Heading>
           </Box>
-          <Box display="flex" flexDir="row" alignItems="center" mb={6}>
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            flexDir="row"
+            alignItems="center"
+            mb={6}
+          >
             {renderLabels()}
           </Box>
         </Box>
@@ -114,8 +106,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
           display="flex"
           flexDir="row"
           alignItems="flex-end"
-          // position="absolute"
-          // alignSelf="flex-end"
           bottom={5}
           justifyContent="space-between"
         >
