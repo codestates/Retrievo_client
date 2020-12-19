@@ -34,7 +34,7 @@ const App: React.FC<Record<string, never>> = () => {
             path={ROUTE.PROJECT_SETTING}
             component={ProjectSetting}
           />
-          <ProjectRoute path={ROUTE.NEW_PROJECT} component={NewProject} />
+          <Route path={ROUTE.NEW_PROJECT} component={NewProject} />
           <ProjectRoute path={ROUTE.MY_PROFILE} component={MyProfile} />
           <Route path={ROUTE.NOT_FOUND} component={NotFound} />
           {/* <Redirect path="*" to={ROUTE.NOT_FOUND} /> */}
