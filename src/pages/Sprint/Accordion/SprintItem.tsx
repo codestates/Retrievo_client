@@ -227,7 +227,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           return (
             <AccordionItem
               ref={provided.innerRef}
-              // {...provided.dragHandleProps}
               {...provided.draggableProps}
               bgColor="white"
             >
