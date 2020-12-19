@@ -33,8 +33,7 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path="/new-project" component={NewProject} />
           <Route path="/my-profile" component={MyProfile} />
           <Route path="/not-found" component={NotFound} />
-          <Route path="/graphql" />
-          <Redirect path="*" to="/not-found" />
+          {/* <Redirect path="*" to="/" /> */}
         </Switch>
       </ChakraProvider>
     </>

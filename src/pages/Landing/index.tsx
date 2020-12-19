@@ -11,8 +11,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
+import { useHistory, Link } from "react-router-dom";
 import ReactPlayer from "react-player/lazy";
-import { Link } from "react-router-dom";
+
 import { chartData, chartOptions } from "./chartData";
 import { useCreateGuestMutation } from "../../generated/graphql";
 import Text from "../../components/Text";

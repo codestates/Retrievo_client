@@ -3,6 +3,8 @@
 import React from "react";
 import { Spinner } from "@chakra-ui/react";
 import { Doughnut, Bar } from "react-chartjs-2";
+import format from "date-fns/format";
+import { enUS } from "date-fns/esm/locale";
 import { chartVariant } from "./types";
 import dataSchemaGenerator from "./utils";
 
@@ -42,10 +44,9 @@ const Chart: React.FC<chartProps> = ({ variant, data, ...props }) => {
         const fontSize = (height / 228).toFixed(2);
         ctx.font = `${fontSize}em sans-serif`;
         ctx.textBaseline = "middle";
-        const today = new Date().getDate();
-        const thisMonth = new Date().getMonth() + 1;
+        const formattedToday = format(new Date(), "MMM d");
 
-        const text = `${thisMonth}/${today}`;
+        const text = `${formattedToday}`;
         const textX = Math.round((width - ctx.measureText(text).width) / 2);
         const textY = height / 1.8;
 
@@ -73,6 +74,11 @@ const Chart: React.FC<chartProps> = ({ variant, data, ...props }) => {
       scales: {
         xAxes: [
           {
+            ticks: {
+              maxTicksLimit: 5,
+              display: true,
+              autoSkip: true,
+            },
             stacked: true,
             gridLines: { display: false },
           },
