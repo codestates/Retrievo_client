@@ -202,29 +202,6 @@ export const TaskList: React.FC<TaskListPropType> = ({
 }) => {
   const query = useQuery();
   const projectId = query.get("projectId");
-  // const { data, loading } = useGetSprintsQuery({
-  //   variables: { projectId },
-  //   fetchPolicy: "cache-and-network",
-  // });
-  // const onDragEnd = (result: Record<string, any>) => {
-  //   if (!result.destination) return;
-
-  //   /* fe dnd logic */
-  //   // const items = Array.from(sprints);
-  //   // const [reorderedItem] = items.splice(result.source.index, 1);
-  //   // items.splice(result.destination.index, 0, reorderedItem);
-
-  //   updateSprintMutation({
-  //     variables: {
-  //       projectId,
-  //       options: {
-  //         id: result.draggableId,
-  //         row: result.destination.index,
-  //       },
-  //     },
-  //     refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
-  //   });
-  // };
 
   const [
     updateTaskMutation,
@@ -245,21 +222,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
       },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
-    // if (!result.destination) return;
-    // const items = Array.from(taskData);
-    // const [reorderedItem] = items.splice(result.source.index, 1);
-    // items.splice(result.desttask.sprintRowIndextion.index, 0, reorderedItem);
   };
-
-  // if (tasks.length < 1 && taskData.length > 1) {
-  //   setTasks(taskData);
-  // }
-
-  /*
-      update
-      result.destination.index,
-      sprint.id
-    */
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

@@ -8,7 +8,11 @@ import TopNav from "../../layouts/TopNav";
 import Sprints from "./Accordion";
 import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
-import { useCreateSprintMutation } from "../../generated/graphql";
+import {
+  GetBoardsDocument,
+  SetStartedSprintDocument,
+  useCreateSprintMutation,
+} from "../../generated/graphql";
 import useQuery from "../../hooks/useQuery";
 
 export const Sprint: React.FC<Record<string, never>> = () => {
@@ -31,7 +35,6 @@ export const Sprint: React.FC<Record<string, never>> = () => {
         if (!data.createSprint.sprint) return;
         const cacheId = cache.identify(data.createSprint.sprint);
         if (!cacheId) return;
-
         cache.modify({
           fields: {
             getSprints: (existingSprints, { toReference }) => {
@@ -40,6 +43,10 @@ export const Sprint: React.FC<Record<string, never>> = () => {
           },
         });
       },
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
     });
     onClose();
     toast({
