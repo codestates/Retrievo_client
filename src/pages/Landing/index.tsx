@@ -127,7 +127,7 @@ const Landing: React.FC<Record<string, never>> = () => {
           >
             Retrievo
           </ChakraHeading>
-          <Link to="/auth/sign-in">
+          <Link to="/auth?type=sign-in">
             <Button
               border="2px solid white"
               bgColor="white"
@@ -231,7 +231,7 @@ const Landing: React.FC<Record<string, never>> = () => {
                 >
                   Take tour
                 </Button>
-                <Link to="/auth/register">
+                <Link to="/auth?type=register">
                   <Button
                     border="2px solid #31D5BF"
                     bgColor="primary.200"
