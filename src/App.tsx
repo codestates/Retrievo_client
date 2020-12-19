@@ -1,6 +1,6 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import theme from "./styles/theme";
 import ProjectRoute from "./utils/privateRoute";
 import ROUTE from "./utils/RoutePath";

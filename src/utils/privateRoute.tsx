@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, useParams, useLocation } from "react-router-dom";
 import ROUTES from "./RoutePath";
 import useQuery from "../hooks/useQuery";
 

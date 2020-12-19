@@ -38,7 +38,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   handleBoardUpdate,
   boardLoading,
   taskLoading,
-  lazyGetBoard,
+  // lazyGetBoard,
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
@@ -89,7 +89,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
             >
               <TaskBoard
                 board={currentBoard}
-                lazyGetBoard={lazyGetBoard}
+                // lazyGetBoard={lazyGetBoard}
                 {...boardConfig}
               />
             </Box>
@@ -104,10 +104,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
     if (boardLoading || taskLoading) return;
     if (!destination) return;
-    console.log("destination", destination);
-    console.log("source", source);
-    console.log("------destination droppableId", destination.droppableId);
-    console.log("------source droppableId", source.droppableId);
+    // console.log("destination", destination);
+    // console.log("source", source);
+    // console.log("------destination droppableId", destination.droppableId);
+    // console.log("------source droppableId", source.droppableId);
 
     /* TASK의 DND인 경우 */
     if (type === "TASK") {
@@ -118,11 +118,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         return;
       }
 
-      // [준비물]
-      // 원래 task의 boardRowIndex : source.index
-      // 원래 task의 board : sourceBoard
-      // 이동할 destinationBoard의 index : destination.index
-      // 이동할 destinationBoard : destinationBoard
       const sourceBoard = boardLists.find(
         (boardList) => boardList.id === source.droppableId
       );
@@ -144,28 +139,27 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       )
         return;
 
-      console.log("-------------start-------------");
-      const newSourceTask = sourceBoard.task.slice();
-      const sourceTask = newSourceTask.splice(source.index, 1);
+      // console.log("-------------start-------------");
+      const allSourceTasks = sourceBoard.task.slice();
+      const sourceTask = allSourceTasks.splice(source.index, 1);
       // 1. 기존 보드에서 sourceTask 삭제
-      console.log("sourceTask: 삭제된 index", source.index);
-      console.log("sourceTask: 삭제된 것", sourceTask);
-      let changedSourceBoard = {
-        ...sourceBoard,
-        task: newSourceTask,
-      };
-      console.log("changedSourceBoard", changedSourceBoard);
+
       // 2. 기존 보드의 테스크 중 이동한 테스크보다 큰 인덱스 - 1
-      const newSourceIndex = changedSourceBoard.task.map((task) => {
-        if (task.boardRowIndex === undefined) return task;
-        if (task.boardRowIndex === null) return task;
+      const changedIndexSourceBoardTasks = allSourceTasks.map((task) => {
+        if (task.boardRowIndex === undefined || task.boardRowIndex === null)
+          return task;
         if (task.boardRowIndex > source.index) {
-          console.log("before:", task.boardRowIndex);
-          console.log("after:", task.boardRowIndex - 1);
           return { ...task, boardRowIndex: task.boardRowIndex - 1 };
         }
         return task;
       });
+      // console.log("sourceTask: 삭제된 index", source.index);
+      // console.log("sourceTask: 삭제된 것", sourceTask);
+      let changedSourceBoard = {
+        ...sourceBoard,
+        task: changedIndexSourceBoardTasks,
+      };
+      // console.log("changedSourceBoard", changedSourceBoard);
 
       /* TASK-CASE-1 : TASK가 같은 보드로 이동한 경우 */
       if (destination.droppableId === source.droppableId) {
@@ -180,13 +174,12 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         });
 
         // 2. destination index로 task의 index 수정
-
         const changedTask = {
           ...sourceTask[0],
           boardId: source.droppableId,
           boardRowIndex: destination.index,
         };
-        console.log("changedTask1", changedTask);
+        // console.log("changedTask1", changedTask);
 
         doubleChangedSourceTask.splice(destination.index, 0, changedTask);
         // 3. changedSourceBoard에 task 다시 추가
@@ -199,10 +192,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         const copyBoardList = [...boardLists];
         copyBoardList[sourceBoardIndex] = changedSourceBoard;
         setBoardLists(copyBoardList);
-        console.log("copyBoardList", copyBoardList);
+        // console.log("copyBoardList", copyBoardList);
 
         // 5. server update
-        console.log("changedTask1.id: ", changedTask.id);
+        // console.log("changedTask1.id: ", changedTask.id);
 
         handleTaskUpdateToServer({
           id: changedTask.id,
@@ -244,7 +237,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       setBoardLists(copyBoardList2);
 
       // 5. server update
-      console.log("changedTask2: ", changedTask.id);
+      // console.log("changedTask2: ", changedTask.id);
 
       handleTaskUpdateToServer({
         id: changedTask.id,
@@ -270,16 +263,17 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
       /* source와 destination 스왑하면서 boardColumnIndex도 수정하기 */
       const copyBoardLists = [...boardLists];
-      const temp = copyBoardLists[source.index];
-      copyBoardLists[source.index] = copyBoardLists[destination.index];
-      copyBoardLists[destination.index] = temp;
+      const sourceBoard = copyBoardLists[source.index];
+      copyBoardLists.splice(source.index, 1);
+      copyBoardLists.splice(destination.index, 0, sourceBoard);
+
       const changedIndexBoardList = copyBoardLists.map((board, index) => {
         return { ...board, boardColumnIndex: index };
       });
 
       /* 서버에 업데이트 */
       handleBoardUpdateToServer({
-        id: temp.id,
+        id: sourceBoard.id,
         boardColumnIndex: destination.index,
       });
 
@@ -304,7 +298,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
               <SkeletonBoard
                 handleBoardCreate={handleBoardCreate}
                 projectId={projectId}
-                lazyGetBoard={lazyGetBoard}
+                // lazyGetBoard={lazyGetBoard}
               />
             </Box>
           </>
