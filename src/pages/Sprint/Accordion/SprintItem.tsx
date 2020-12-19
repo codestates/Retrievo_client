@@ -183,6 +183,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         },
       },
       refetchQueries: [
+        { query: GetSprintsDocument, variables: { projectId } },
         { query: GetBoardsDocument, variables: { projectId } },
         { query: SetStartedSprintDocument, variables: { projectId } },
       ],
