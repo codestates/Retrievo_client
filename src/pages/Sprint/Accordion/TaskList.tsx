@@ -1,7 +1,13 @@
 import { AccordionPanel, Box } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { Task } from "../../../generated/graphql";
+import { useLocation } from "react-router-dom";
+import Spinner from "../../../components/Spinner";
+import {
+  Task,
+  useUpdateTaskMutation,
+  GetSprintsDocument,
+} from "../../../generated/graphql";
 import TaskListEntry from "./TaskListEntry";
 
 // const taskData = [
@@ -185,22 +191,68 @@ import TaskListEntry from "./TaskListEntry";
 
 type TaskListPropType = {
   taskData: Task[];
+  setSelectedTask: () => void;
+  onTaskOpen: () => void;
 };
 
-export const TaskList: React.FC<TaskListPropType> = ({ taskData }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+export const TaskList: React.FC<TaskListPropType> = ({
+  taskData,
+  setSelectedTask,
+  onTaskOpen,
+}) => {
+  const location = useLocation();
+  const projectId = location.pathname.split("/").pop() || "";
+  // const { data, loading } = useGetSprintsQuery({
+  //   variables: { projectId },
+  //   fetchPolicy: "cache-and-network",
+  // });
+  // const onDragEnd = (result: Record<string, any>) => {
+  //   if (!result.destination) return;
+
+  //   /* fe dnd logic */
+  //   // const items = Array.from(sprints);
+  //   // const [reorderedItem] = items.splice(result.source.index, 1);
+  //   // items.splice(result.destination.index, 0, reorderedItem);
+
+  //   updateSprintMutation({
+  //     variables: {
+  //       projectId,
+  //       options: {
+  //         id: result.draggableId,
+  //         row: result.destination.index,
+  //       },
+  //     },
+  //     refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+  //   });
+  // };
+
+  const [
+    updateTaskMutation,
+    { data, loading, error },
+  ] = useUpdateTaskMutation();
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-    const items = Array.from(tasks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setTasks(items);
+
+    updateTaskMutation({
+      variables: {
+        projectId,
+        options: {
+          id: result.draggableId,
+          sprintRowIndex: result.destination.index,
+        },
+      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+    });
+    // if (!result.destination) return;
+    // const items = Array.from(taskData);
+    // const [reorderedItem] = items.splice(result.source.index, 1);
+    // items.splice(result.desttask.sprintRowIndextion.index, 0, reorderedItem);
   };
 
-  if (tasks.length < 1 && taskData.length > 1) {
-    setTasks(taskData);
-  }
+  // if (tasks.length < 1 && taskData.length > 1) {
+  //   setTasks(taskData);
+  // }
 
   /*
       update
@@ -214,13 +266,19 @@ export const TaskList: React.FC<TaskListPropType> = ({ taskData }) => {
         <Droppable droppableId="droppableTask">
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
-              {tasks.map((task, idx) => (
-                <TaskListEntry
-                  key={task.id}
-                  taskData={task}
-                  mappedIndex={idx}
-                />
-              ))}
+              {taskData.map((task) => {
+                if (!task.sprintRowIndex) return undefined;
+
+                return (
+                  <TaskListEntry
+                    setSelectedTask={setSelectedTask}
+                    onTaskOpen={onTaskOpen}
+                    key={task.id}
+                    taskData={task}
+                    mappedIndex={task.sprintRowIndex}
+                  />
+                );
+              })}
               {provided.placeholder}
             </Box>
           )}

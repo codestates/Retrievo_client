@@ -1,37 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import SprintItem from "./SprintItem";
 import {
+  GetSprintsDocument,
   useGetSprintsQuery,
   useUpdateSprintMutation,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
+import TaskBar from "../../../layouts/TaskBar";
 
 export const Sprints: React.FC = () => {
   const location = useLocation();
   const projectId = location.pathname.split("/").pop() || "";
-  const [sprints, setSprints] = useState<Record<string, any>[]>([]);
-  const { data, loading, error } = useGetSprintsQuery({
+  const { data, loading } = useGetSprintsQuery({
     variables: { projectId },
-    fetchPolicy: "cache-and-network",
   });
+  const sprints = data?.getSprints.sprints;
+  const [selected, setSelected] = useState<undefined | string>(undefined);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateSprintMutation] = useUpdateSprintMutation();
-
-  useEffect(() => {
-    if (data?.getSprints.sprints) {
-      setSprints(data?.getSprints.sprints);
-    }
-    console.log("howmany times am i rendering?");
-  }, [data]);
+  const toast = useToast();
 
   if (loading) return <Spinner />;
+  if (!sprints) return <Spinner />;
+
+  const startedSprint = sprints.find((sprint) => sprint.didStart);
+  const completedSprint = sprints.find((sprint) => sprint.isCompleted);
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-    console.log("result", result);
-
+    if (startedSprint) {
+      if (
+        result.draggableId !== startedSprint.id &&
+        result.destination.index === 0
+      ) {
+        toast({
+          position: "bottom-right",
+          title: "Invalid Action!",
+          description: "Started Sprint always has to be on top of the list!",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+    }
     updateSprintMutation({
       variables: {
         projectId,
@@ -40,50 +55,49 @@ export const Sprints: React.FC = () => {
           row: result.destination.index,
         },
       },
-      update: (cache, { data }) => {
-        console.log(data);
-        if (!data) return;
-        if (!data.updateSprint.sprint) return;
-        const cacheId = cache.identify(data.updateSprint.sprint);
-        if (!cacheId) return;
-        cache.modify({
-          fields: {
-            getSprints: (existingSprints, { toReference }) => {
-              return [...existingSprints.sprints, toReference(cacheId)];
-            },
-          },
-        });
-      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
-    const items = Array.from(sprints); // items = sprints
-    // const [reorderedItem] = items.splice(result.source.index, 1);
-    // items.splice(result.destination.index, 0, reorderedItem);
-    setSprints(items);
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
-      <Box>
-        <Droppable droppableId="droppableSprint">
-          {(provided) => (
-            <Box {...provided.droppableProps} ref={provided.innerRef}>
-              {sprints.map((sprint: any) => {
-                return (
-                  <SprintItem
-                    key={sprint.id}
-                    sprintData={sprint}
-                    row={sprint.row}
-                    tasks={sprint.task}
-                  />
-                );
-              })}
-              {provided.placeholder}
-            </Box>
-          )}
-        </Droppable>
-      </Box>
-    </DragDropContext>
+    <>
+      <TaskBar taskId={selected} isOpen={isOpen} onClose={onClose} />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Box>
+          <Droppable droppableId="droppableSprint">
+            {(provided) => (
+              <Box {...provided.droppableProps} ref={provided.innerRef}>
+                <Accordion
+                  allowToggle
+                  defaultIndex={startedSprint ? 0 : undefined}
+                >
+                  {sprints ? (
+                    sprints.map((sprint: any) => {
+                      return (
+                        <SprintItem
+                          key={sprint.id}
+                          sprintData={sprint}
+                          row={sprint.row}
+                          tasks={sprint.task}
+                          startedSprint={startedSprint}
+                          completedSprint={completedSprint}
+                          setSelectedTask={setSelected}
+                          onTaskOpen={onOpen}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Box>Error</Box>
+                  )}
+                </Accordion>
+                {provided.placeholder}
+                {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
+              </Box>
+            )}
+          </Droppable>
+        </Box>
+      </DragDropContext>
+    </>
   );
 };
 
