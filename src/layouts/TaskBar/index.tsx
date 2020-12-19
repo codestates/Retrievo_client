@@ -37,6 +37,10 @@ import {
   useGetMeQuery,
   useDeleteCommentMutation,
   useDeleteTaskMutation,
+  useGetBoardsLazyQuery,
+  useGetSprintLazyQuery,
+  GetBoardsDocument,
+  GetSprintsDocument,
 } from "../../generated/graphql";
 import {
   mappingUserOption,
@@ -98,6 +102,8 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
   const [createComment] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const { data: meData } = useGetMeQuery();
+  const [getBoard] = useGetBoardsLazyQuery();
+  const [getSprint] = useGetSprintLazyQuery();
 
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
@@ -106,9 +112,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
-      console.log("isOpen:", isOpen);
-      console.log("taskId:", taskId);
-      console.log("projectId", projectId);
       if (!getTaskData) {
         getTask({
           variables: {
@@ -210,7 +213,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       if (res.data?.createComment.error) {
         throw new Error(res.data.createComment.error.message);
       }
-
       resetForm();
 
       createSuccessToast();
@@ -297,6 +299,20 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
         id: taskId,
         projectId,
       },
+      refetchQueries: [
+        {
+          query: GetBoardsDocument,
+          variables: {
+            projectId,
+          },
+        },
+        {
+          query: GetSprintsDocument,
+          variables: {
+            projectId,
+          },
+        },
+      ],
     });
 
     if (res.data?.deleteTask.error) {
@@ -304,6 +320,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       return;
     }
 
+    onCloseDeleteModal();
     onClose();
   };
 
