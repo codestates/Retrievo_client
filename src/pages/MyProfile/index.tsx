@@ -1,6 +1,5 @@
 import { Center, Container, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import Form from "./Forms";
 
