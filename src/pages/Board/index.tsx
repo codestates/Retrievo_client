@@ -1,9 +1,17 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { gql } from "@apollo/client";
 
 /* Layouts & types */
-import { Box, useDisclosure, Text, Flex, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  useDisclosure,
+  Text,
+  Flex,
+  useToast,
+  Container,
+} from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -11,6 +19,7 @@ import TaskBoardList from "../../layouts/TaskBoard/TaskBoardList";
 import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 import { TaskBar } from "../../layouts/TaskBar";
 import { Boardoptions, TaskOptions } from "../../layouts/TaskBoard/TaskBoard";
+import Spinner from "../../components/Spinner";
 
 /* GraphQL & Apollo */
 import {
@@ -30,7 +39,7 @@ import {
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
 import Button, { buttonColor } from "../../components/Button";
-import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
+// import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
 
 interface BoardProps {
   projectId: string;
@@ -68,17 +77,17 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   });
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
-  const [createTask] = useCreateTaskMutation();
-  const [deleteTask] = useDeleteTaskMutation();
-  const [
-    updateTask,
-    { data: taskData, loading: taskLoading },
-  ] = useUpdateTaskMutation();
   const [
     updateBoard,
     { data: boardData, loading: boardLoading },
   ] = useUpdateBoardMutation();
+  const [createTask] = useCreateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
   const [updateSprint] = useUpdateSprintMutation();
+  const [
+    updateTask,
+    { data: taskData, loading: taskLoading },
+  ] = useUpdateTaskMutation();
 
   // useEffect(() => {
   //   if (data?.getBoards && data?.getBoards?.boards) {
@@ -90,50 +99,36 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      update: (cache, { data }) => {
-        const newBoardRes = data?.createBoard.boards;
-        const newBoard = newBoardRes && newBoardRes[newBoardRes.length - 2];
-        const existingBoards: any = cache.readQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-        });
-        console.log("existingBoards", existingBoards);
-        console.log("newBoard", newBoard);
-        // console.log("data", newBoardRes);
-        // if (!data?.createBoard) return null;
-        // eslint-disable-next-line no-underscore-dangle
-        // if (!newBoard || !newBoard.__typename) return null;
-        // const cacheId = cache.identify(data.createBoard);
-        // console.log("cacheId", cacheId);
-        // cache.modify({
-        //   fields: {
-        //     getBoards: (existingFieldData, { toReference }) => {
-        //       console.log("existing", existingFieldData);
-        //       return Object.assign(existingFieldData, {
-        //         id: `Board:${newBoard.id}`,
-        //       });
-        //     },
-        //   },
-        // });
-        const newFormat = {
-          getBoards: {
-            boards: [...existingBoards?.getBoards.boards, newBoard],
-            error: null,
-            __typename: "BoardResponse",
-          },
-        };
-        const updatedBoard = { ...existingBoards, ...newFormat };
-        cache.writeQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-          data: {
-            getBoards: {
-              boards: updatedBoard,
-            },
-          },
-        });
-        return "hello";
-      },
+      // TODO : refetch 시도하기
+      // TODO : 이거 안되면 코드 자체를 그냥 뜯어보기 어디서 막히는고여ㅑㅁ
+
+      // update: (cache, { data }) => {
+      //   if (!data) return;
+      //   if (!data.createBoard) return;
+
+      //   const allBoards = data?.createBoard.boards;
+      //   if (!allBoards) return;
+
+      //   const cacheId = cache.identify(allBoards[allBoards.length - 2]);
+      //   if (!cacheId) return;
+
+      //   cache.modify({
+      //     fields: {
+      //       getBoards: (existingBoards, { toReference }) => {
+      //         const newData = existingBoards.boards.slice();
+      //         const insertedData = toReference(cacheId);
+
+      //         newData.splice(newData.length - 2, 0, insertedData);
+      //         console.log("newData", newData);
+      //         // const newBoards = [
+      //         //   ...existingBoards.boards,
+      //         //   toReference(cacheId),
+      //         // ];
+      //         return { ...existingBoards, boards: newData };
+      //       },
+      //     },
+      //   });
+      // },
     });
   };
 
@@ -166,6 +161,21 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
+  const handleBoardUpdate = async (
+    options: Boardoptions,
+    projectId: string
+  ) => {
+    return await updateBoard({
+      variables: { options, projectId },
+      // update: (cache, { data }) => {
+      //   const existingBoards = cache.readQuery({
+      //     query: GetBoardsDocument,
+      //     variables: { projectId },
+      //   });
+      // },
+    });
+  };
+
   const handleTaskCreate = async (options: TaskOptions, projectId: string) => {
     return await createTask({
       variables: {
@@ -184,10 +194,6 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
-  const handleTaskClick = (id: string) => {
-    setSelectedTask(id);
-  };
-
   const handleTaskUpdate = async (
     options: TaskUpdateOptions,
     projectId: string
@@ -197,19 +203,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     });
   };
 
-  const handleBoardUpdate = async (
-    options: Boardoptions,
-    projectId: string
-  ) => {
-    return await updateBoard({
-      variables: { options, projectId },
-      // update: (cache, { data }) => {
-      //   const existingBoards = cache.readQuery({
-      //     query: GetBoardsDocument,
-      //     variables: { projectId },
-      //   });
-      // },
-    });
+  const handleTaskClick = (id: string) => {
+    setSelectedTask(id);
   };
 
   const handleUpdateSprint = async (
@@ -264,7 +259,12 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
 
-  if (!sprintData || !sprintData) return null;
+  if (!sprintData && loading)
+    return (
+      <Flex justifyContent="center" alignItems="center" h="100vh">
+        <Spinner />
+      </Flex>
+    );
 
   return (
     <>
@@ -298,8 +298,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
               ) : null}
             </Flex>
             <Box mt={9}>
-              {loading ||
-              !data?.getBoards.boards ||
+              {!data?.getBoards.boards ||
               !sprintData?.getStartedSprint.sprint?.id ? (
                 <TaskBoardContainer />
               ) : (
@@ -313,7 +312,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
                   handleTaskUpdate={handleTaskUpdate}
-                  boards={data !== null ? data?.getBoards.boards : []}
+                  boards={data?.getBoards.boards}
+                  // boards={data !== null ? data?.getBoards.boards : []}
                   // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
@@ -329,9 +329,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
             isOpen={isOpen}
             onClose={onClose}
           />
-        ) : (
-          <Text>oh?</Text>
-        )}
+        ) : null}
       </Box>
     </>
   );

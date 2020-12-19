@@ -10,15 +10,11 @@ import {
 } from "react-beautiful-dnd";
 import TaskBoard, { Boardoptions, TaskBoardProps } from "../TaskBoard";
 import SkeletonBoard, { SkeletonBoardProps } from "../TaskBoard/SkeletonBoard";
+import { TaskUpdateOptions } from "../../../pages/Board";
 import {
   Board as boardType,
-  UpdateSprintMutation,
-  // GetBoardsDocument,
   UpdateTaskMutation,
-  // useUpdateBoardMutation,
-  // useUpdateTaskMutation,
 } from "../../../generated/graphql";
-import { TaskUpdateOptions, SprintUpdateOptions } from "../../../pages/Board";
 
 export type TaskBoardListProps = TaskBoardProps &
   SkeletonBoardProps & {
@@ -32,16 +28,6 @@ export type TaskBoardListProps = TaskBoardProps &
     ) => Promise<
       FetchResult<UpdateTaskMutation, Record<string, any>, Record<string, any>>
     >;
-    // handleUpdateSprint: (
-    //   projectId: string,
-    //   options: SprintUpdateOptions
-    // ) => Promise<
-    //   FetchResult<
-    //     UpdateSprintMutation,
-    //     Record<string, any>,
-    //     Record<string, any>
-    //   >
-    // >;
   };
 
 const TaskBoardList: React.FC<TaskBoardListProps> = ({
@@ -54,14 +40,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   taskLoading,
   ...props
 }): ReactElement => {
-  // const [
-  //   updateTask,
-  //   { data: taskData, loading: taskLoading },
-  // ] = useUpdateTaskMutation();
-  // const [
-  //   updateBoard,
-  //   { data: boardData, loading: boardLoading },
-  // ] = useUpdateBoardMutation();
   const [boardLists, setBoardLists] = useState(boards);
   const toast = useToast();
 
@@ -272,6 +250,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
     /* 보드의 DND인 경우 */
     if (type === "BOARD") {
+      /* 마지막 보드로 이동하지 못하게 방지 */
       if (destination.index === boardLists.length - 1) {
         toast({
           title: "Not Available",
@@ -284,18 +263,22 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         return;
       }
 
+      /* source와 destination 스왑하면서 boardColumnIndex도 수정하기 */
       const copyBoardLists = [...boardLists];
       const temp = copyBoardLists[source.index];
       copyBoardLists[source.index] = copyBoardLists[destination.index];
       copyBoardLists[destination.index] = temp;
+      const changedIndexBoardList = copyBoardLists.map((board, index) => {
+        return { ...board, boardColumnIndex: index };
+      });
 
-      console.log("boardId(aka temp.id): ", temp.id);
+      /* 서버에 업데이트 */
       handleBoardUpdateToServer({
         id: temp.id,
         boardColumnIndex: destination.index,
       });
 
-      setBoardLists(copyBoardLists);
+      setBoardLists(changedIndexBoardList);
     }
   };
 
