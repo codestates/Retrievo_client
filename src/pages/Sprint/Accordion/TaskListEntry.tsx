@@ -73,6 +73,7 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                   setSelectedTask(taskData.id);
                   onTaskOpen();
                 }}
+                width="fit-content"
                 _hover={{
                   cursor: "pointer",
                   borderBottom: "1px solid",
