@@ -87,7 +87,9 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                     <AvatarGroup
                       max={3}
                       size={AvatarSize.sm}
-                      avatars={taskData.userTask.map((user: any) => user.user)}
+                      avatars={taskData.userTask.map(({ user }: any) => {
+                        return { name: user.username, src: user.avatar };
+                      })}
                     />
                   ) : (
                     <Avatar
