@@ -24,51 +24,52 @@ export const Sprint: React.FC<Record<string, never>> = () => {
 
   const handleCreateSprint = async (values: Record<string, string>) => {
     if (!projectId) return;
-    try {
-      await createSprintMutation({
-        variables: {
-          projectId,
-          title: values.sprintName,
-          description: values.description,
-        },
-        update: (cache, { data }) => {
-          if (!data) return;
-          if (!data.createSprint.sprint) return;
-          const cacheId = cache.identify(data.createSprint.sprint);
-          if (!cacheId) return;
-          cache.modify({
-            fields: {
-              getSprints: (existingSprints, { toReference }) => {
-                return [...existingSprints.sprints, toReference(cacheId)];
-              },
+
+    const res = await createSprintMutation({
+      variables: {
+        projectId,
+        title: values.sprintName,
+        description: values.description,
+      },
+      update: (cache, { data }) => {
+        if (!data) return;
+        if (!data.createSprint.sprint) return;
+        const cacheId = cache.identify(data.createSprint.sprint);
+        if (!cacheId) return;
+        cache.modify({
+          fields: {
+            getSprints: (existingSprints, { toReference }) => {
+              return [...existingSprints.sprints, toReference(cacheId)];
             },
-          });
-        },
-        refetchQueries: [
-          { query: GetBoardsDocument, variables: { projectId } },
-          { query: SetStartedSprintDocument, variables: { projectId } },
-        ],
-      });
-      onClose();
+          },
+        });
+      },
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
+    });
+    if (res.data?.createSprint.error) {
       toast({
         position: "bottom-right",
-        title: "Sprint Created!",
-        description: "Sprint has been successfully created",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-    } catch (err) {
-      console.log(err);
-      toast({
-        position: "bottom-right",
-        title: "error",
-        description: "Sprint Cannot be Created",
+        title: "Sprint Creation Failed!",
+        description: res.data?.createSprint.error.message,
         status: "error",
         duration: 2000,
         isClosable: true,
       });
+      onClose();
+      return;
     }
+    onClose();
+    toast({
+      position: "bottom-right",
+      title: "Sprint Created!",
+      description: "Sprint has been successfully created",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   };
 
   return (
