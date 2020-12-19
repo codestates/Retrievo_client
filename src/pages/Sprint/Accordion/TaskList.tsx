@@ -1,13 +1,13 @@
 import { AccordionPanel, Box } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useLocation } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import {
   Task,
   useUpdateTaskMutation,
   GetSprintsDocument,
 } from "../../../generated/graphql";
+import useQuery from "../../../hooks/useQuery";
 import TaskListEntry from "./TaskListEntry";
 
 // const taskData = [
@@ -200,8 +200,8 @@ export const TaskList: React.FC<TaskListPropType> = ({
   setSelectedTask,
   onTaskOpen,
 }) => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+  const query = useQuery();
+  const projectId = query.get("projectId");
   // const { data, loading } = useGetSprintsQuery({
   //   variables: { projectId },
   //   fetchPolicy: "cache-and-network",
@@ -230,6 +230,8 @@ export const TaskList: React.FC<TaskListPropType> = ({
     updateTaskMutation,
     { data, loading, error },
   ] = useUpdateTaskMutation();
+
+  if (!projectId) return null;
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;

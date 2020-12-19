@@ -84,7 +84,7 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                 {taskData.board ? (
                   <Label mr={9}>{taskData.board.title}</Label>
                 ) : null}
-                {taskData.userTask ? (
+                {taskData.userTask && taskData.userTask.length ? (
                   taskData.userTask.length > 1 ? (
                     <AvatarGroup
                       max={3}

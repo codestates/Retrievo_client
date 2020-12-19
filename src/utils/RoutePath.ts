@@ -1,4 +1,4 @@
-export default {
+export const ROUTES = {
   LANDING: "/",
   AUTH: "/auth",
   DASHBOARD: "/project/dashboard",
@@ -11,3 +11,4 @@ export default {
   MY_PROFILE: "/my-profile",
   NOT_FOUND: "/not-found",
 };
+export default ROUTES;

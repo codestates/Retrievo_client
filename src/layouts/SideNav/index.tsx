@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { BiChalkboard, BiCalendarEvent } from "react-icons/bi";
 import { CgBoard } from "react-icons/cg";
 import { FiClock, FiSettings, FiFastForward } from "react-icons/fi";
-import { AiOutlineDoubleLeft } from "react-icons/ai";
 import { IconContext } from "react-icons";
+import useQuery from "../../hooks/useQuery";
 
 export type MenuType = {
   path: string;
@@ -55,14 +55,9 @@ export const sideBarMenu = [
   },
 ];
 
-interface SideNavProps {
-  projectId: string;
-}
-
-const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
-  ...args
-}): ReactElement => {
-  const { projectId } = args.match.params;
+const SideNav: React.FC<Record<string, never>> = (): ReactElement => {
+  const query = useQuery();
+  const projectId = query.get("projectId");
 
   const changeIconColor = (icon: ReactElement) => {
     return (
@@ -77,7 +72,7 @@ const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
   const renderMenu = () => {
     return sideBarMenu.map((menu) => {
       return (
-        <Link to={`${menu.path}/${projectId}`} key={menu.name}>
+        <Link to={`${menu.path}?projectId=${projectId}`} key={menu.name}>
           <Box
             bg={
               window.location.pathname.includes(menu.path)
@@ -107,6 +102,7 @@ const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
       );
     });
   };
+
   return (
     <Box
       position="fixed"
