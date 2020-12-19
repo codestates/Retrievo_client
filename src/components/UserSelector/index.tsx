@@ -111,6 +111,9 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
                 if (!id) return;
                 deleteAssignee(id);
               }}
+              size="sm"
+              mr={1}
+              mb={1}
             />
           );
         })
@@ -119,7 +122,7 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
 
   return (
     <React.Fragment>
-      <HStack spacing="5px" marginBottom="0.5rem">
+      <HStack spacing="5px" marginBottom="0.5rem" wrap="wrap">
         {renderMembers()}
       </HStack>
       <Box position="relative">
