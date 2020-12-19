@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from "react";
 import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";

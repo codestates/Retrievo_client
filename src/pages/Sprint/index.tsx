@@ -26,11 +26,12 @@ export const Sprint: React.FC<Record<string, never>> = () => {
         title: values.sprintName,
         description: values.description,
       },
-      update: async (cache, { data }) => {
+      update: (cache, { data }) => {
         if (!data) return;
         if (!data.createSprint.sprint) return;
         const cacheId = cache.identify(data.createSprint.sprint);
         if (!cacheId) return;
+
         cache.modify({
           fields: {
             getSprints: (existingSprints, { toReference }) => {

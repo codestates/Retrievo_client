@@ -125,18 +125,19 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       variables: { id: sprintData.id, projectId },
       update: async (cache) => {
         try {
-          const existingSprints: any = await cache.readQuery({
-            query: GetSprintsDocument,
-            variables: { projectId },
-          });
+          cache.modify({
+            fields: {
+              getSprints(existingSprintsRef, { readField }) {
+                const newSprintsRef = existingSprintsRef.sprints.filter(
+                  (sprint: any) => {
+                    console.log(sprint);
+                    return sprintData.id !== readField("id", sprint);
+                  }
+                );
 
-          const newSprints = existingSprints.getSprints.sprints.filter(
-            (sprint: any) => sprint.id !== sprintData.id
-          );
-
-          cache.writeQuery({
-            query: GetSprintsDocument,
-            data: { getSprints: { sprints: newSprints } },
+                return { ...existingSprintsRef, sprints: newSprintsRef };
+              },
+            },
           });
         } catch (err) {
           console.log(err);
