@@ -27,6 +27,7 @@ export const Sprints: React.FC = () => {
   const [updateSprintMutation] = useUpdateSprintMutation();
 
   if (loading) return <Spinner />;
+
   if (!sprints) return <Spinner />;
 
   const startedSprint = sprints.find((sprint) => sprint.didStart);

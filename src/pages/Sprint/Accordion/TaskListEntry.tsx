@@ -57,25 +57,33 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
               alignItems="center"
               p={2}
             >
-              <Box w="80px">
+              <Box w="130px">
                 <Label>{`No. ${taskData.taskIndex}`}</Label>
               </Box>
-              <Box w="65%">
+              <Box minW="30%" maxW="65%">
                 {/* <TaskBar taskId={taskData.id} /> */}
-                <Text
-                  fontSize="base"
-                  onClick={() => {
-                    setSelectedTask(taskData.id);
-                    onTaskOpen();
-                  }}
-                >
-                  {taskData.title}
-                </Text>
+                <Flex>
+                  <Text
+                    fontSize="base"
+                    onClick={() => {
+                      setSelectedTask(taskData.id);
+                      onTaskOpen();
+                    }}
+                    _hover={{
+                      cursor: "pointer",
+                      borderBottom: "1px solid",
+                    }}
+                  >
+                    {taskData.title}
+                  </Text>
+                </Flex>
               </Box>
-              <Box w="20%">
-                {taskData.board ? <Label>{taskData.board.title}</Label> : null}
-              </Box>
-              <Box w="10%">
+              {/* <Flex w="100%" justifyContent="flex-end">
+              </Flex> */}
+              <Flex w="100%" justifyContent="flex-end" mr="2rem">
+                {taskData.board ? (
+                  <Label mr={9}>{taskData.board.title}</Label>
+                ) : null}
                 {taskData.userTask ? (
                   taskData.userTask.length > 1 ? (
                     <AvatarGroup
@@ -95,7 +103,7 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                     />
                   )
                 ) : undefined}
-              </Box>
+              </Flex>
             </Flex>
             <Divider />
           </>

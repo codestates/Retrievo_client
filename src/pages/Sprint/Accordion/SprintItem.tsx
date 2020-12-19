@@ -145,7 +145,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   };
 
   // eslint-disable-next-line consistent-return
-  const handleStartSprint = async (values: Record<string, any>) => {
+  const handleStartSprint = async () => {
     if (startedSprint) {
       toast({
         position: "bottom-right",
@@ -237,7 +237,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               </Box>
               <Flex
                 justifyContent="flex-end"
-                p={3}
+                p={2}
                 // visibility={selected ? "visible" : "hidden"}
               >
                 <Menu>
