@@ -23,6 +23,7 @@ import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
 import TextAreaField from "../../../components/TextArea";
 import ModalLayout from "../../../layouts/Modal";
+import Heading, { headingEnum } from "../../../components/Heading";
 import {
   useUpdateSprintMutation,
   useDeleteSprintMutation,
@@ -34,12 +35,13 @@ import {
 } from "../../../generated/graphql";
 import { useQuery } from "../../../hooks/useQuery";
 
-type sprintItemProps = {
+export type sprintItemProps = {
   sprintData: Sprint;
   ref?: HTMLElement;
   mappedIndex: number;
   tasks: Task[];
   refetch: () => void;
+  selectedTask: string | null;
 };
 
 export const SprintItem: React.FC<Record<string, any>> = ({
@@ -48,6 +50,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   tasks,
   startedSprint,
   setSelectedTask,
+  selectedTask,
   onTaskOpen,
 }) => {
   const toast = useToast();
@@ -226,11 +229,12 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               ref={provided.innerRef}
               {...provided.dragHandleProps}
               {...provided.draggableProps}
+              bgColor="white"
             >
               <Flex
                 alignItems="center"
                 bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
-                p={2}
+                px={2}
               >
                 <Center w="40px" h="40px" overflow="hidden">
                   <AccordionButton
@@ -250,7 +254,9 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                   </AccordionButton>
                 </Center>
                 <Box flex="1" ml={3} textAlign="left">
-                  {sprintData.title}
+                  <Heading headingType={headingEnum.table}>
+                    {sprintData.title}
+                  </Heading>
                 </Box>
                 <Flex
                   justifyContent="flex-end"
@@ -305,6 +311,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               <TaskList
                 taskData={tasks}
                 setSelectedTask={setSelectedTask}
+                selectedTask={selectedTask}
                 onTaskOpen={onTaskOpen}
               />
             </AccordionItem>
