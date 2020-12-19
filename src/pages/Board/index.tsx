@@ -35,6 +35,8 @@ import {
   useUpdateSprintMutation,
   SetStartedSprintDocument,
   useGetBoardsLazyQuery,
+  useDeleteSprintMutation,
+  GetSprintsDocument,
 } from "../../generated/graphql";
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
@@ -69,16 +71,13 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   /* Mutation, Query */
   const { loading, data } = useGetBoardsQuery({
     variables: { projectId },
-    fetchPolicy: "cache-and-network",
   });
-  // const [
-  //   lazyGetBoard,
-  //   { data: lazyBoardData, loading: lazyBoardLoading },
-  // ] = useGetBoardsLazyQuery();
-  const { data: sprintData } = useSetStartedSprintQuery({
-    variables: { projectId },
-    fetchPolicy: "cache-and-network",
-  });
+  const { data: sprintData, loading: sprintLoading } = useSetStartedSprintQuery(
+    {
+      variables: { projectId },
+    }
+  );
+  const [deleteSprint] = useDeleteSprintMutation();
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
   const [
@@ -225,22 +224,20 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         position: "bottom-right",
       });
     }
-    const res = await updateSprint({
-      variables: { projectId, options },
+    // TODO : sprint update로 바꾸기
+    // const res = await updateSprint({
+    //   variables: { projectId, options },
+    //   refetchQueries: [
+    //     { query: SetStartedSprintDocument, variables: { projectId } },
+    //   ],
+    // });
+    const res = await deleteSprint({
+      variables: { id: options.id, projectId },
       refetchQueries: [
         { query: SetStartedSprintDocument, variables: { projectId } },
       ],
-      // update: async (cache, { data }) => {
-      //   if (!data) return;
-      //   cache.modify({
-      //     fields: {
-      //       getStartedSprint: () => {
-      //         return {};
-      //       },
-      //     },
-      //   });
-      // },
     });
+
     if (res.errors) {
       toast({
         title: "Sprint Completion Failed😂",
@@ -282,13 +279,15 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   // -> 테스크 create X
   // -> 테스크 delete X
 
-  // if (loading) {
-  //   return (
-  //     <Flex justifyContent="center" alignItems="center" h="100vh">
-  //       <Spinner />
-  //     </Flex>
-  //   );
-  // }
+  // sprint -> start를 하고 나서 board에 오면 반영이 안 되는 문제
+
+  if (!sprintData || sprintLoading) {
+    return (
+      <Flex justifyContent="center" alignItems="center" h="100vh">
+        <Spinner />
+      </Flex>
+    );
+  }
 
   return (
     <>
