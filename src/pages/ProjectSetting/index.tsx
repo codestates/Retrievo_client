@@ -1,6 +1,7 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import ModalLayout from "../../layouts/Modal";
 import PageHeading from "../../layouts/PageHeader";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";

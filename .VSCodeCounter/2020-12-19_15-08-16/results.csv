@@ -1,0 +1,187 @@
+"filename", "language", "TypeScript React", "TypeScript", "GraphQL", "JavaScript", "JSON", "Shell Script", "YAML", "Markdown", "CSS", "HTML", "comment", "blank", "total"
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/.eslintrc.js", "JavaScript", 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0, 1, 56
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/.prettierrc", "JSON", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/main.js", "JavaScript", 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 3, 35
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/preview-head.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/preview.js", "JavaScript", 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 27
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 20, 60
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/codegen.yml", "YAML", 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 1, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/package-lock.json", "JSON", 0, 0, 0, 0, 27333, 0, 0, 0, 0, 0, 0, 1, 27334
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/package.json", "JSON", 0, 0, 0, 0, 106, 0, 0, 0, 0, 0, 0, 1, 107
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/public/index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 3, 23
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/public/manifest.json", "JSON", 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 1, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/pre-commit.sh", "Shell Script", 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 1, 3, 8
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/pre-push.sh", "Shell Script", 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 1, 3, 12
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/prepare-commit-msg.sh", "Shell Script", 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 1, 6, 24
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/App.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 44
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/asset/img/LandingAstro.tsx", "TypeScript React", 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 72
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Avatar/avatar.stories.tsx", "TypeScript React", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 46
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Avatar/index.tsx", "TypeScript React", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 29
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/AvatarGroup/avatarGroup.stories.tsx", "TypeScript React", 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 49
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/AvatarGroup/index.tsx", "TypeScript React", 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 37
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/button.stories.tsx", "TypeScript React", 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 41
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/button.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/index.tsx", "TypeScript React", 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 51
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/calendar.stories.tsx", "TypeScript React", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 5, 28
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/calendar.styled.tsx", "TypeScript React", 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 69
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/index.tsx", "TypeScript React", 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 66
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/react_dates_override.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 24, 12, 77
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/Chart.stories.tsx", "TypeScript React", 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 9, 117
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/index.tsx", "TypeScript React", 139, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16, 159
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/types.ts", "TypeScript", 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 34
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/utils.ts", "TypeScript", 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 139
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/DeleteableAvatar/DeleteableAvatar.styled.tsx", "TypeScript React", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 18
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/DeleteableAvatar/index.tsx", "TypeScript React", 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 36
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Form/form.stories.tsx", "TypeScript React", 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 61
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Form/index.tsx", "TypeScript React", 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 8, 91
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/heading.stories.tsx", "TypeScript React", 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 108
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/heading.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/index.tsx", "TypeScript React", 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 102
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/IconButton/IconButton.stories.tsx", "TypeScript React", 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 31
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/IconButton/index.tsx", "TypeScript React", 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 81
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Input/Input.stories.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 47
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Input/index.tsx", "TypeScript React", 78, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 86
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/index.tsx", "TypeScript React", 92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 101
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/label.stories.tsx", "TypeScript React", 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 70
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/label.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/index.tsx", "TypeScript React", 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 126
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/label.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/labelSearchInput.stories.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 49
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSelector/index.tsx", "TypeScript React", 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 64
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/ListItem/ListItem.stories.tsx", "TypeScript React", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/ListItem/index.tsx", "TypeScript React", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/RoundButton.stories.tsx", "TypeScript React", 98, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 107
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/RoundButton.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/index.tsx", "TypeScript React", 89, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11, 101
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Spinner/Spinner.stories.tsx", "TypeScript React", 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 45
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Spinner/index.tsx", "TypeScript React", 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 54
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/index.tsx", "TypeScript React", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 24
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/text.stories.tsx", "TypeScript React", 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 60
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/text.styled.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextArea/Input.stories.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 47
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextArea/index.tsx", "TypeScript React", 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 90
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextButton/TextButton.stories.tsx", "TypeScript React", 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 58
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextButton/index.tsx", "TypeScript React", 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 60
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Toast/toast.stories.tsx", "TypeScript React", 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 48
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/UserSelector/index.tsx", "TypeScript React", 139, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 20, 169
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/UserSelector/userSelector.stories.tsx", "TypeScript React", 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 78
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/generated/graphql.tsx", "TypeScript React", 3515, 0, 0, 0, 0, 0, 0, 0, 0, 0, 676, 200, 4391
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/RouteInvitation.graphql", "GraphQL", 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createBoard.graphql", "GraphQL", 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 37
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createComment.graphql", "GraphQL", 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createGuest.graphql", "GraphQL", 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createProject.graphql", "GraphQL", 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createSprint.graphql", "GraphQL", 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createTask.graphql", "GraphQL", 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createTaskLabel.graphql", "GraphQL", 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createUserTask.graphql", "GraphQL", 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteBoard.graphql", "GraphQL", 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 37
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteComment.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteLabel.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteProject.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteSprint.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteTask.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteTaskLabel.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteUserTask.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/inviteUser.graphql", "GraphQL", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/login.graphql", "GraphQL", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/logout.graphql", "GraphQL", 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/register.graphql", "GraphQL", 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateBoard.graphql", "GraphQL", 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 37
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateComment.graphql", "GraphQL", 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateLabel.graphql", "GraphQL", 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateProjectName.graphql", "GraphQL", 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateProjectPermission.graphql", "GraphQL", 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateSprint.graphql", "GraphQL", 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateTask.graphql", "GraphQL", 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateUserProfile.graphql", "GraphQL", 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateUserSetting.graphql", "GraphQL", 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/boards.graphql", "GraphQL", 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 1, 38
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getLabels.graphql", "GraphQL", 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getMe.graphql", "GraphQL", 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 1, 34
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getProject.graphql", "GraphQL", 0, 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getReportSummary.graphql", "GraphQL", 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 3, 28
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getSprint.graphql", "GraphQL", 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 2, 34
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getSprints.graphql", "GraphQL", 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getStartedSprint.graphql", "GraphQL", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getTask.graphql", "GraphQL", 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/hooks/useLoadMore.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 41
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/hooks/useLocalStorage.ts", "TypeScript", 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/index.tsx", "TypeScript React", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 27
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/DeleteBoardModal.tsx", "TypeScript React", 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 62
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/ModalLayout.stories.tsx", "TypeScript React", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 24
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/index.tsx", "TypeScript React", 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 77
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/PageHeader/index.tsx", "TypeScript React", 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 46
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/PageHeader/pageHeader.stories.tsx", "TypeScript React", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 19
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/SideNav/index.tsx", "TypeScript React", 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 8, 141
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/SideNav/sideNav.stories.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 4, 13
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/SprintSelector/index.tsx", "TypeScript React", 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 75
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/SprintSelector/sprintSelector.stories.tsx", "TypeScript React", 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 43
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/TextLabel/index.tsx", "TypeScript React", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 17
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/index.tsx", "TypeScript React", 573, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 653
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/taskBar.stories.tsx", "TypeScript React", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 19
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/utils.ts", "TypeScript", 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 93
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/SkeletonBoard.tsx", "TypeScript React", 151, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 10, 168
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/index.tsx", "TypeScript React", 393, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 18, 414
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/taskBoard.stories.tsx", "TypeScript React", 105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 110
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardContainer/index.tsx", "TypeScript React", 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 38
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardContainer/taskBoardContainer.stories.tsx", "TypeScript React", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 12
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardList/index.tsx", "TypeScript React", 259, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 34, 318
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardList/taskBoardList.stories.tsx", "TypeScript React", 693, 0, 0, 0, 0, 0, 0, 0, 0, 0, 185, 4, 882
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/DragPositionCard.tsx", "TypeScript React", 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 36
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/index.tsx", "TypeScript React", 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 130
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/taskCard.stories.tsx", "TypeScript React", 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 65
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/ProjectListDropdown/index.tsx", "TypeScript React", 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 6, 90
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/ProjectListDropdown/projectListDropdown.stories.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 4, 43
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/index.tsx", "TypeScript React", 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 119
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/topNav.stories.tsx", "TypeScript React", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58, 4, 63
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/404/index.tsx", "TypeScript React", 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 68
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Image/Dog.tsx", "TypeScript React", 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 53
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Image/Universe.tsx", "TypeScript React", 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 88
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Login.tsx", "TypeScript React", 105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 113
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/LoginWelcomeCard.tsx", "TypeScript React", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 45
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Register.tsx", "TypeScript React", 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 132
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/RegisterWelcomeCard.tsx", "TypeScript React", 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 46
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/index.tsx", "TypeScript React", 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 76
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/useProjectRoute.tsx", "TypeScript React", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 23
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Board/dummyData.ts", "TypeScript", 0, 699, 0, 0, 0, 0, 0, 0, 0, 0, 186, 1, 886
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Board/index.tsx", "TypeScript React", 263, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 26, 345
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Calendar/index.tsx", "TypeScript React", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ComingSoon/index.tsx", "TypeScript React", 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 59
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ActivityStream/ActivityStream.styled.tsx", "TypeScript React", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ActivityStream/index.tsx", "TypeScript React", 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 10, 107
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/IncompleteTasks.tsx", "TypeScript React", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 29
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/TasksByAssignee.tsx", "TypeScript React", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/index.tsx", "TypeScript React", 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 51
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/taskCountSummary.tsx", "TypeScript React", 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 28
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/MyTasks/MyTasks.styled.tsx", "TypeScript React", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/MyTasks/index.tsx", "TypeScript React", 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 11, 94
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ReportCard/index.tsx", "TypeScript React", 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 8, 114
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ReportHero/index.tsx", "TypeScript React", 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 71
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/index.tsx", "TypeScript React", 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 54
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/background.styled.tsx", "TypeScript React", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/chartData.ts", "TypeScript", 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 39
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/index.tsx", "TypeScript React", 656, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 15, 674
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/last.tsx", "TypeScript React", 205, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 214
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/Forms/index.tsx", "TypeScript React", 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 112
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/Forms/roleSelectInput.tsx", "TypeScript React", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 41
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/MyProfile.styled.tsx", "TypeScript React", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 19
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/index.tsx", "TypeScript React", 96, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 104
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/NewProject/index.tsx", "TypeScript React", 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 118
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/AccessPermission/index.tsx", "TypeScript React", 249, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 267
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/BasicDetail/BasicDetail.styled.tsx", "TypeScript React", 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 38
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/BasicDetail/index.tsx", "TypeScript React", 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 10, 136
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/index.tsx", "TypeScript React", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 38
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/SprintItem.tsx", "TypeScript React", 326, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 18, 352
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/TaskList.tsx", "TypeScript React", 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 211, 14, 292
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/TaskListEntry.tsx", "TypeScript React", 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 9, 117
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/index.tsx", "TypeScript React", 98, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 105
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/index.tsx", "TypeScript React", 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 118
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Timeline/index.tsx", "TypeScript React", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 26
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/react-app-env.d.ts", "TypeScript", 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 6
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/styles/theme.ts", "TypeScript", 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 67
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/RoutePath.ts", "TypeScript", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 13
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/getProjectIdFromLocation.ts", "TypeScript", 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 6
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/toErrorMap.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 13
+"/Users/paulkim/Desktop/cs_projects/Retrievo_client/tsconfig.json", "JSON", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 1, 28
+"Total", "-", 12964, 1111, 840, 111, 27495, 29, 9, 40, 41, 21, 1683, 1156, 45500
