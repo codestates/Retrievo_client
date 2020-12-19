@@ -210,7 +210,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     const res = await handleTaskDelete(deletedTaskId, projectId);
     if (res.data?.deleteTask.error) {
       toast({
-        title: "Task Creation Failed😂",
+        title: "Task Deletion Failed😂",
         description: `${res.data?.deleteTask.error.message}`,
         duration: 5000,
         status: "error",
@@ -218,7 +218,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       });
     } else {
       toast({
-        title: "Task Creation Succeed🥳",
+        title: "Task Deletion Succeed🥳",
         description: "Task is created",
         duration: 5000,
         status: "success",
