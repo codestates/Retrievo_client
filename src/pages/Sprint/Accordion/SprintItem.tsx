@@ -227,7 +227,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           return (
             <AccordionItem
               ref={provided.innerRef}
-              {...provided.dragHandleProps}
               {...provided.draggableProps}
               bgColor="white"
             >
@@ -235,6 +234,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 alignItems="center"
                 bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
                 px={2}
+                {...provided.dragHandleProps}
               >
                 <Center w="40px" h="40px" overflow="hidden">
                   <AccordionButton
