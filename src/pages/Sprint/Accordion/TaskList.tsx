@@ -233,7 +233,6 @@ export const TaskList: React.FC<TaskListPropType> = ({
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-    console.log(result);
     updateTaskMutation({
       variables: {
         projectId,
@@ -259,7 +258,6 @@ export const TaskList: React.FC<TaskListPropType> = ({
       result.destination.index,
       sprint.id
     */
-  console.log(taskData);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
