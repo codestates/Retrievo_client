@@ -1,6 +1,6 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import theme from "./styles/theme";
 import Dashboard from "./pages/Dashboard";
 import MyProfile from "./pages/MyProfile";
@@ -33,8 +33,7 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path="/new-project" component={NewProject} />
           <Route path="/my-profile" component={MyProfile} />
           <Route path="/not-found" component={NotFound} />
-          <Route path="/graphql" />
-          <Redirect path="*" to="/not-found" />
+          {/* <Redirect path="*" to="/not-found" /> */}
         </Switch>
       </ChakraProvider>
     </>
