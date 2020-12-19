@@ -22,7 +22,7 @@ export const Invitation: React.FC = () => {
     express();
   }, [keyToken, routeInvitationMutation, history]);
 
-  return <p>Hello</p>;
+  return <p>Redirecting...</p>;
 };
 
 export default Invitation;

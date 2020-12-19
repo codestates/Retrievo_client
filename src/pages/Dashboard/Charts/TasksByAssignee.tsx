@@ -13,6 +13,7 @@ export const TasksByAssignee: React.FC = () => {
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });
+
   if (loading) return <Spinner />;
   return (
     <>

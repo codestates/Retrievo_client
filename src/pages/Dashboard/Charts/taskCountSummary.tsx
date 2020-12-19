@@ -13,7 +13,7 @@ export const TasksCountSummary: React.FC = () => {
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });
-  console.log("chartSummary", data);
+
   if (loading) return <Spinner />;
 
   return (
