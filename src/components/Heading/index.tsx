@@ -58,7 +58,7 @@ const Heading: React.FC<HeadingProps> = ({
     }
 
     if (headingType === headingEnum.sprint) {
-      fontSize = "3xl";
+      fontSize = "xl";
       fontWeight = "medium";
     }
 
