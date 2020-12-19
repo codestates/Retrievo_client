@@ -1,5 +1,5 @@
 import { AccordionPanel, Box } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Spinner from "../../../components/Spinner";
 import {
@@ -193,11 +193,13 @@ type TaskListPropType = {
   taskData: Task[];
   setSelectedTask: () => void;
   onTaskOpen: () => void;
+  selectedTask: string | null;
 };
 
 export const TaskList: React.FC<TaskListPropType> = ({
   taskData,
   setSelectedTask,
+  selectedTask,
   onTaskOpen,
 }) => {
   const query = useQuery();
@@ -245,6 +247,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
       },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
+
     // if (!result.destination) return;
     // const items = Array.from(taskData);
     // const [reorderedItem] = items.splice(result.source.index, 1);
@@ -273,6 +276,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
                 return (
                   <TaskListEntry
                     setSelectedTask={setSelectedTask}
+                    selectedTask={selectedTask}
                     onTaskOpen={onTaskOpen}
                     key={task.id}
                     taskData={task}
