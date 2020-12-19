@@ -170,6 +170,9 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
           projectId,
           options: { ...value, id: taskId },
         },
+        refetchQueries: [
+          { query: GetSprintsDocument, variables: { projectId } },
+        ],
       });
 
       if (res.data?.updateTask.error) {
