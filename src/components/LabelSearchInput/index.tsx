@@ -40,19 +40,16 @@ const LabelSearchInput: React.FC<OptionsType> = ({
       createTaskLabel(values[0].label);
       return;
     }
-    console.log("-------delete start");
-    console.log("values:", values);
-    console.log("defaultValue:", defaultValue);
     const newValue = values.filter(
       (el) => !defaultValue.find((oldValue) => oldValue.id === el.id)
     );
-    console.log("-------newValue:", newValue);
-    console.log("-------delete end:");
     createTaskLabel(newValue[0].label);
   };
+
   const handleDeleteChange = (selectedValue: labelItem) => {
     deleteTaskLabel(selectedValue);
   };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
@@ -67,33 +64,39 @@ const LabelSearchInput: React.FC<OptionsType> = ({
         break;
     }
   };
+
+  const sortLabel = (a: labelItem, b: labelItem) => {
+    if (!a.label || !b.label) return -1;
+    return a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1;
+  };
+
   const renderLabels = () => {
-    console.log("defaultValue:", defaultValue);
-    return defaultValue?.map((label) => {
-      return (
-        <Label
-          key={label.id}
-          m={1}
-          bgColor={label.color}
-          hasCloseButton
-          onClose={() => handleDeleteChange(label)}
-        >
-          {label.value}
-        </Label>
-      );
-    });
+    return defaultValue
+      ? defaultValue.sort(sortLabel).map((label) => {
+          return (
+            <Label
+              key={label.id}
+              m={1}
+              bgColor={label.color}
+              hasCloseButton
+              onClose={() => handleDeleteChange(label)}
+            >
+              {label.value}
+            </Label>
+          );
+        })
+      : null;
   };
   const onCreate = (input: string) => {
     createTaskLabel(input);
   };
 
   const renderSelect = () => {
-    console.log("renderSelect");
     return (
       <CreatableSelect
         isMulti
         onChange={handleChange}
-        options={options || undefined}
+        options={options?.sort(sortLabel)}
         onCreateOption={onCreate}
         defaultValue={defaultValue}
         value={defaultValue}
