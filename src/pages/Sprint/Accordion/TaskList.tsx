@@ -1,7 +1,6 @@
 import { AccordionPanel, Box } from "@chakra-ui/react";
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Spinner from "../../../components/Spinner";
 import {
   Task,
   useUpdateTaskMutation,
