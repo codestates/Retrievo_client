@@ -17,6 +17,7 @@ export const Sprints: React.FC = () => {
   const projectId = query.get("projectId");
   const [selected, setSelected] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [updateSprintMutation] = useUpdateSprintMutation();
   const toast = useToast();
 
@@ -50,17 +51,46 @@ export const Sprints: React.FC = () => {
         });
         return;
       }
+
+      if (
+        result.draggableId === startedSprint.id &&
+        result.destination.index !== 0
+      ) {
+        toast({
+          position: "bottom-right",
+          title: "Invalid Action!",
+          description: "Started Sprint always has to be on top of the list!",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
-    updateSprintMutation({
-      variables: {
-        projectId,
-        options: {
-          id: result.draggableId,
-          row: result.destination.index,
+    try {
+      updateSprintMutation({
+        variables: {
+          projectId,
+          options: {
+            id: result.draggableId,
+            row: result.destination.index,
+          },
         },
-      },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
-    });
+        refetchQueries: [
+          { query: GetSprintsDocument, variables: { projectId } },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+      toast({
+        position: "bottom-right",
+        title: "Error",
+        description: "Server Error",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -106,7 +136,6 @@ export const Sprints: React.FC = () => {
                   )}
                 </Accordion>
                 {provided.placeholder}
-                {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
               </Box>
             )}
           </Droppable>

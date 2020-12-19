@@ -185,6 +185,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       refetchQueries: [
         { query: GetBoardsDocument, variables: { projectId } },
         { query: SetStartedSprintDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
       ],
     });
     toast({
