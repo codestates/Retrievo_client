@@ -22,8 +22,6 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
   setSelectedTask,
   onTaskOpen,
 }) => {
-  // const [isDesktop] = useMediaQuery("(min-width: 1280px)");
-
   if (!taskData) return <Spinner />;
 
   return (
