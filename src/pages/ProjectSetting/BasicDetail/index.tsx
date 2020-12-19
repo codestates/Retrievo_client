@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Flex, useDisclosure, useToast } from "@chakra-ui/react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
 import Heading, { headingEnum } from "../../../components/Heading";
@@ -12,13 +12,15 @@ import {
   useGetProjectQuery,
   useUpdateProjectNameMutation,
 } from "../../../generated/graphql";
+import useQuery from "../../../hooks/useQuery";
 
 export const BasicDetail: React.FC = () => {
-  const location = useLocation();
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  if (!projectId) return null;
+
   const history = useHistory();
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
-
   const [
     deleteProjectMutation,
     { loading: deleteLoading },

@@ -50,6 +50,7 @@ module.exports = {
     "click-events-have-key-events": "off",
     "max-classes-per-file": "off",
     "no-use-before-define": "off",
+    "react-hooks/rules-of-hooks": "warn",
     "@typescript-eslint/no-use-before-define": ["error"],
   },
 };

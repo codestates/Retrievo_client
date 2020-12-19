@@ -1,24 +1,16 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
-import ModalLayout from "../../layouts/Modal";
 import PageHeading from "../../layouts/PageHeader";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import AccessPermission from "./AccessPermission";
 import BasicSetting from "./BasicDetail";
 
-interface ProjectSettingType {
-  projectId: string;
-}
-
-export const ProjectSetting: React.FC<
-  RouteComponentProps<ProjectSettingType>
-> = ({ ...args }) => {
+export const ProjectSetting: React.FC<Record<string, never>> = () => {
   return (
     <>
-      <TopNav {...args} />
-      <SideNav {...args} />
+      <TopNav />
+      <SideNav />
       <Box display="flex" ml={210} mt={50}>
         <Box w="100%" p={9}>
           <Box>

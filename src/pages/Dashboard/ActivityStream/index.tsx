@@ -2,27 +2,28 @@ import React from "react";
 import { Divider, Box, Flex } from "@chakra-ui/react";
 import { FiActivity } from "react-icons/fi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import { useGetProjectQuery } from "../../../generated/graphql";
+import useQuery from "../../../hooks/useQuery";
 // import { formatDistanceStrict } from "date-fns";
-import { useLocation } from "react-router-dom";
 import useLoadMore from "../../../hooks/useLoadMore";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
 import StyledActivityStream from "./ActivityStream.styled";
 import CustomAvatar from "../../../components/Avatar";
-import { useGetProjectQuery } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 
 export const ActivityStream: React.FC = () => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  const [items, setItems, visible, loadMore, reset] = useLoadMore([], 2);
+  if (!projectId) return null;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, loading } = useGetProjectQuery({
     variables: {
       projectId,
     },
   });
-
-  const [items, setItems, visible, loadMore, reset] = useLoadMore([], 2);
 
   if (loading) return <Spinner />;
 

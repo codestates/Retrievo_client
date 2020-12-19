@@ -8,13 +8,15 @@ import {
   Center,
 } from "@chakra-ui/react";
 import React from "react";
-import { useLocation } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import { useGetReportSummaryQuery } from "../../../generated/graphql";
+import { useQuery } from "../../../hooks/useQuery";
 
 export const ReportCard: React.FC = () => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  if (!projectId) return null;
+
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });

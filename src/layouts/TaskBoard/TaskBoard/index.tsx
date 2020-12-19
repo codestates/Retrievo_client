@@ -75,7 +75,7 @@ export type TaskBoardProps = TaskCardProps & {
     FetchResult<DeleteTaskMutation, Record<string, any>, Record<string, any>>
   >;
   handleTaskClick: (id: string) => void;
-  lazyGetBoard: (options: Record<string, string>) => void;
+  // lazyGetBoard: (options: Record<string, Record<string, string>>) => void;
 };
 
 const TaskBoard: React.FC<TaskBoardProps> = ({
@@ -86,6 +86,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   boards,
   projectId,
   sprintId,
+  // lazyGetBoard,
   ...props
 }): ReactElement | null => {
   /* State */
@@ -94,10 +95,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
-  const [selectedNewBoard, setSelectedNewBoard] = useState<boardType | null>(
-    null
-  ); // selectMenu 첫 번째 값
-  const [defaultBoard, setDefaultBoard] = useState<boardType>(boards[0]);
+  const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
+    boards[0]
+  );
   const [inputValue, setInputValue] = useState(board?.title);
   const [taskTitle, setTestTitle] = useState("");
   const [deletedTaskId, setDeletedTaskId] = useState("");
@@ -124,16 +124,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleDeleteSubmit = async () => {
+    console.log("delete");
+    console.log("selectedNewBoard", selectedNewBoard);
     if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
     const res = await handleBoardDelete(
       board.id,
       selectedNewBoard.id,
       projectId
     );
-    if (res.errors) {
+    if (res.data?.deleteBoard.error) {
       toast({
         title: "Board Deletion Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteBoard.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -151,6 +153,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleEditSubmit = async () => {
+    // lazyGetBoard({ variables: { projectId } });
     const res = await handleBoardUpdate(
       {
         id: board.id,
@@ -158,10 +161,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       },
       projectId
     );
-    if (res.errors) {
+    if (res.data?.updateBoard.error) {
       toast({
         title: "Board Update Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.updateBoard.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -187,10 +190,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       },
       projectId
     );
-    if (res.errors) {
+    if (res.data?.createTask.error) {
       toast({
         title: "Task Creation Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.createTask.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -209,10 +212,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   const handleDeleteTaskSubmit = async () => {
     const res = await handleTaskDelete(deletedTaskId, projectId);
-    if (res.errors) {
+    if (res.data?.deleteTask.error) {
       toast({
         title: "Task Creation Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteTask.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -278,11 +281,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             {board.title}
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
-          <Text color="fail">{`${board.boardColumnIndex}`}</Text>
+          {/* <Text color="fail">{`${board.boardColumnIndex}`}</Text> */}
         </Box>
         <Flex flexDir="row">
           <IconButton
-            aria-label="delete board"
+            aria-label="edit board"
             iconButtonType="pencil"
             color="achromatic.600"
             onClick={() => setIsEditModalOpen(true)}
@@ -291,23 +294,18 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             <IconButton
               aria-label="delete board"
               iconButtonType="deleteBin"
-              color={
-                board.boardColumnIndex >= boards.length - 1
-                  ? "transparent"
-                  : "achromatic.600"
-              }
-              onClick={
-                board.boardColumnIndex === boards.length - 1
-                  ? () => {
-                      return null;
-                    }
-                  : () => {
-                      if (board.boardColumnIndex === 0) {
-                        setDefaultBoard(boards[1]);
-                      }
-                      setIsDeleteModalOpen(true);
-                    }
-              }
+              // color={
+              //   board.boardColumnIndex >= boards.length - 1
+              //     ? "transparent"
+              //     : "achromatic.600"
+              // }
+              color="achromatic.600"
+              onClick={() => {
+                if (board.boardColumnIndex === 0) {
+                  setSelectedNewBoard(boards[1]);
+                }
+                setIsDeleteModalOpen(true);
+              }}
             />
           )}
         </Flex>
@@ -321,6 +319,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         display="flex"
         flexDir="column"
         alignItems="center"
+        justifyContent="flex-end"
         minH={170}
       >
         <Droppable droppableId={board.id} type="TASK">
@@ -358,7 +357,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <Text mb={3}>Which Board you want to move the tasks to?</Text>
           <Menu>
             <MenuButton as={Button} rightIcon={<BiChevronDown />}>
-              {defaultBoard.title}
+              {selectedNewBoard.title}
             </MenuButton>
             <MenuList>{renderModalMenu()}</MenuList>
           </Menu>

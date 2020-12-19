@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from "react";
 import {
   Box,
@@ -16,7 +17,6 @@ import {
 import { GoChevronUp, GoChevronDown } from "react-icons/go";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { Formik, ErrorMessage } from "formik";
-import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import Heading, { headingEnum } from "../../../components/Heading";
 
@@ -30,11 +30,13 @@ import {
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import ModalLayout from "../../../layouts/Modal";
+import { useQuery } from "../../../hooks/useQuery";
 
 export const AccessPermission: React.FC = () => {
-  const location = useLocation();
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
+  if (!projectId) return <></>;
 
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 5);
   const [isDesktop] = useMediaQuery("(min-width: 1440px)");

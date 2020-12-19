@@ -56,59 +56,36 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
   deleteAssignee,
   createAssignee,
 }) => {
-  const [currentOptions, setCurrentOptions] = useState<userItem[]>(
-    defaultValue || []
-  );
+  const handleCreatedValue = (values: userItem[]) => {
+    if (!defaultValue || defaultValue.length < 1) {
+      if (values[0].id) {
+        createAssignee(values[0].id);
+      }
+      return;
+    }
+    const newValue = values.filter(
+      (el) => !defaultValue.find((oldValue) => oldValue.id === el.id)
+    );
 
-  const getCreatedValue = (newValue: userItem[]): userItem => {
-    return _.difference(newValue, currentOptions)[0];
+    if (newValue[0].id) {
+      createAssignee(newValue[0].id);
+    }
   };
 
-  const getDeletedValue = (newValue: userItem[]): userItem => {
-    return _.difference(currentOptions, newValue)[0];
-  };
-
-  const handleCreateChange = (newValue: userItem[]) => {
-    const newUser = getCreatedValue(newValue);
-    // TODO: create api 실행
-    if (!newUser.id) return;
-    createAssignee(newUser.id);
-    setCurrentOptions(newValue);
-  };
-
-  const handleDeleteChange = (newValue: userItem[]) => {
-    getDeletedValue(newValue);
-    // TODO: delete Mutation
-    setCurrentOptions(newValue);
+  const handleDeleteChange = (newValue: userItem) => {
+    if (!newValue.id) return;
+    deleteAssignee(newValue.id);
   };
 
   const handleChange = (newValue: any, { action }: { action: string }) => {
     switch (action) {
       case actionTypes.selectOption:
       case actionTypes.createOption:
-        // selectOption: 리스트 선택시
-        // createOption: 없던 옵션 생성시
-        // TODO : create mutation
-        handleCreateChange(newValue);
+        handleCreatedValue(newValue);
         break;
 
       case actionTypes.removeValue:
         handleDeleteChange(newValue);
-        // removeValue: 라벨 하나의 x 버튼 눌렀을시
-        setCurrentOptions(newValue);
-        break;
-
-      case actionTypes.clear:
-        console.log("clear");
-        // 전체삭제 버튼 눌렀을 시
-        break;
-
-      case actionTypes.deselectOption:
-        console.log("deselectOption");
-        break;
-
-      case actionTypes.setValue:
-        console.log("setValue");
         break;
 
       default:
@@ -116,9 +93,14 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
     }
   };
 
+  const sortUserName = (a: userItem, b: userItem) => {
+    if (!a.username || !b.username) return -1;
+    return a.username.toUpperCase() < b.username.toUpperCase() ? -1 : 1;
+  };
+
   const renderMembers = () => {
-    return currentOptions
-      ? currentOptions.map((user) => {
+    return defaultValue
+      ? defaultValue.sort(sortUserName).map((user) => {
           return (
             <DeleteableAvatar
               key={user.id}
@@ -154,10 +136,11 @@ const UserSelect: React.FC<UserSelectPropTypes> = ({
               display: "none",
             }),
           }}
+          value={defaultValue}
           defaultValue={defaultValue}
           isMulti
           placeholder="add user to assignee"
-          options={options}
+          options={options?.sort(sortUserName)}
           onChange={handleChange}
         />
       </Box>

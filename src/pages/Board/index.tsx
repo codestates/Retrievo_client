@@ -1,17 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { gql } from "@apollo/client";
-
 /* Layouts & types */
-import {
-  Box,
-  useDisclosure,
-  Text,
-  Flex,
-  useToast,
-  Container,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -20,10 +11,10 @@ import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 import { TaskBar } from "../../layouts/TaskBar";
 import { Boardoptions, TaskOptions } from "../../layouts/TaskBoard/TaskBoard";
 import Spinner from "../../components/Spinner";
-
-/* GraphQL & Apollo */
+import Heading, { headingEnum } from "../../components/Heading";
+import Button, { buttonColor } from "../../components/Button";
+/* GraphQL */
 import {
-  Board as BoardType,
   GetBoardsDocument,
   useCreateBoardMutation,
   useDeleteBoardMutation,
@@ -33,18 +24,13 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
-  useUpdateSprintMutation,
   SetStartedSprintDocument,
-  useGetBoardsLazyQuery,
+  useDeleteSprintMutation,
+  // useUpdateSprintMutation,
+  // GetSprintsDocument,
 } from "../../generated/graphql";
-import { client } from "../../index";
-import Heading, { headingEnum } from "../../components/Heading";
-import Button, { buttonColor } from "../../components/Button";
-// import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
-
-interface BoardProps {
-  projectId: string;
-}
+/* hooks */
+import { useQuery } from "../../hooks/useQuery";
 
 export interface TaskUpdateOptions {
   id: string;
@@ -58,82 +44,42 @@ export interface SprintUpdateOptions {
   didStart: boolean;
 }
 
-export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
-  ...args
-}) => {
-  const { projectId } = args.match.params;
+export const Board: React.FC<Record<string, never>> = () => {
+  /* get projectId */
+  const query = useQuery();
+  const projectId = query.get("projectId");
+  if (!projectId) return null;
+
+  /* state & hooks */
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  // const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   /* Mutation, Query */
   const { loading, data } = useGetBoardsQuery({
     variables: { projectId },
-    fetchPolicy: "cache-and-network",
   });
-  const [
-    lazyGetBoard,
-    { data: lazyBoardData, loading: lazyBoardLoading },
-  ] = useGetBoardsLazyQuery();
-  const { data: sprintData } = useSetStartedSprintQuery({
-    variables: { projectId },
-    fetchPolicy: "cache-and-network",
-  });
+  const { data: sprintData, loading: sprintLoading } = useSetStartedSprintQuery(
+    {
+      variables: { projectId },
+    }
+  );
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
-  const [
-    updateBoard,
-    { data: boardData, loading: boardLoading },
-  ] = useUpdateBoardMutation();
+  const [updateBoard, { loading: boardLoading }] = useUpdateBoardMutation();
   const [createTask] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
-  const [updateSprint] = useUpdateSprintMutation();
-  const [
-    updateTask,
-    { data: taskData, loading: taskLoading },
-  ] = useUpdateTaskMutation();
+  const [updateTask, { loading: taskLoading }] = useUpdateTaskMutation();
+  const [deleteSprint] = useDeleteSprintMutation();
+  // const [updateSprint] = useUpdateSprintMutation();
 
-  // useEffect(() => {
-  //   if (data?.getBoards && data?.getBoards?.boards) {
-  //     setCurBoard(data.getBoards.boards);
-  //   }
-  // }, [data]);
+  if (!projectId) return null;
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      // TODO : refetch 시도하기
-      // TODO : 이거 안되면 코드 자체를 그냥 뜯어보기 어디서 막히는고여ㅑㅁ
-
-      // update: (cache, { data }) => {
-      //   if (!data) return;
-      //   if (!data.createBoard) return;
-
-      //   const allBoards = data?.createBoard.boards;
-      //   if (!allBoards) return;
-
-      //   const cacheId = cache.identify(allBoards[allBoards.length - 2]);
-      //   if (!cacheId) return;
-
-      //   cache.modify({
-      //     fields: {
-      //       getBoards: (existingBoards, { toReference }) => {
-      //         const newData = existingBoards.boards.slice();
-      //         const insertedData = toReference(cacheId);
-
-      //         newData.splice(newData.length - 2, 0, insertedData);
-      //         console.log("newData", newData);
-      //         // const newBoards = [
-      //         //   ...existingBoards.boards,
-      //         //   toReference(cacheId),
-      //         // ];
-      //         return { ...existingBoards, boards: newData };
-      //       },
-      //     },
-      //   });
-      // },
+      // refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -148,21 +94,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         newBoardId,
         projectId,
       },
-      update: (cache, { data }) => {
-        const newBoardRes = data?.deleteBoard.boards;
-        if (!newBoardRes) return;
-        client.writeQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-          data: {
-            getBoards: {
-              boards: [...newBoardRes],
-            },
-          },
-        });
-        console.log("deleteboard", newBoardRes);
-        // if (refetch) refetch();
-      },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -172,12 +104,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   ) => {
     return await updateBoard({
       variables: { options, projectId },
-      // update: (cache, { data }) => {
-      //   const existingBoards = cache.readQuery({
-      //     query: GetBoardsDocument,
-      //     variables: { projectId },
-      //   });
-      // },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -225,26 +152,24 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         position: "bottom-right",
       });
     }
-    const res = await updateSprint({
-      variables: { projectId, options },
+    // TODO : sprint update로 바꾸기
+    // const res = await updateSprint({
+    //   variables: { projectId, options },
+    //   refetchQueries: [
+    //     { query: SetStartedSprintDocument, variables: { projectId } },
+    //   ],
+    // });
+    const res = await deleteSprint({
+      variables: { id: options.id, projectId },
       refetchQueries: [
         { query: SetStartedSprintDocument, variables: { projectId } },
       ],
-      // update: async (cache, { data }) => {
-      //   if (!data) return;
-      //   cache.modify({
-      //     fields: {
-      //       getStartedSprint: () => {
-      //         return {};
-      //       },
-      //     },
-      //   });
-      // },
     });
-    if (res.errors) {
+
+    if (res.data?.deleteSprint.error) {
       toast({
         title: "Sprint Completion Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteSprint.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -264,18 +189,48 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
 
-  if (!sprintData && loading)
+  // if (!sprintData && loading)
+  // if (!sprintData)
+  // -> 드래그앤드롭 심리스
+  // -> 보드 update x
+  // -> 보드 create X
+  // -> 보드 delete X
+  // -> 테스크 업데이트 x
+
+  // if (!sprintData || loading)
+  // if (loading)
+  // -> 드래그앤드롭 심리스 x
+  // -> 보드 update O
+  // -> 보드 create O
+  // -> 보드 delete X
+  // -> 테스크 update O
+  // -> 테스크 create X
+  // -> 테스크 delete X
+
+  // 현재 되지 않는 것
+  // -> 드래그앤드롭 심리스 O
+  // -> 보드 update X
+  // -> 보드 create X
+  // -> 보드 delete X
+  // -> 테스크 update X
+  // -> 테스크 create X
+  // -> 테스크 delete X
+
+  // sprint -> start를 하고 나서 board에 오면 반영이 안 되는 문제
+
+  if (!sprintData || sprintLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" h="100vh">
         <Spinner />
       </Flex>
     );
+  }
 
   return (
     <>
       <Box>
-        <TopNav {...args} />
-        <SideNav {...args} />
+        <TopNav />
+        <SideNav />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
@@ -303,7 +258,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
               ) : null}
             </Flex>
             <Box mt={9}>
-              {!data?.getBoards.boards ||
+              {loading ||
+              !data?.getBoards.boards ||
               !sprintData?.getStartedSprint.sprint?.id ? (
                 <TaskBoardContainer />
               ) : (
@@ -322,7 +278,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
-                  lazyGetBoard={lazyGetBoard}
+                  // lazyGetBoard={lazyGetBoard}
                 />
               )}
             </Box>
@@ -331,9 +287,11 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         {selectedTask ? (
           <TaskBar
             taskId={selectedTask}
-            {...args}
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={() => {
+              onClose();
+              setSelectedTask(null);
+            }}
           />
         ) : null}
       </Box>
