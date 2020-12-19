@@ -220,7 +220,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       isClosable: true,
     });
   };
-
   return (
     <>
       <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
