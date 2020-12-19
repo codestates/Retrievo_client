@@ -10,6 +10,7 @@ import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
 import {
   GetBoardsDocument,
+  GetSprintDocument,
   SetStartedSprintDocument,
   useCreateSprintMutation,
 } from "../../generated/graphql";
@@ -24,39 +25,51 @@ export const Sprint: React.FC<Record<string, never>> = () => {
 
   const handleCreateSprint = async (values: Record<string, string>) => {
     if (!projectId) return;
-    await createSprintMutation({
-      variables: {
-        projectId,
-        title: values.sprintName,
-        description: values.description,
-      },
-      update: (cache, { data }) => {
-        if (!data) return;
-        if (!data.createSprint.sprint) return;
-        const cacheId = cache.identify(data.createSprint.sprint);
-        if (!cacheId) return;
-        cache.modify({
-          fields: {
-            getSprints: (existingSprints, { toReference }) => {
-              return [...existingSprints.sprints, toReference(cacheId)];
+    try {
+      await createSprintMutation({
+        variables: {
+          projectId,
+          title: values.sprintName,
+          description: values.description,
+        },
+        update: (cache, { data }) => {
+          if (!data) return;
+          if (!data.createSprint.sprint) return;
+          const cacheId = cache.identify(data.createSprint.sprint);
+          if (!cacheId) return;
+          cache.modify({
+            fields: {
+              getSprints: (existingSprints, { toReference }) => {
+                return [...existingSprints.sprints, toReference(cacheId)];
+              },
             },
-          },
-        });
-      },
-      refetchQueries: [
-        { query: GetBoardsDocument, variables: { projectId } },
-        { query: SetStartedSprintDocument, variables: { projectId } },
-      ],
-    });
-    onClose();
-    toast({
-      position: "bottom-right",
-      title: "Sprint Created!",
-      description: "Sprint has been successfully created",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
+          });
+        },
+        refetchQueries: [
+          { query: GetBoardsDocument, variables: { projectId } },
+          { query: SetStartedSprintDocument, variables: { projectId } },
+        ],
+      });
+      onClose();
+      toast({
+        position: "bottom-right",
+        title: "Sprint Created!",
+        description: "Sprint has been successfully created",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (err) {
+      console.log(err);
+      toast({
+        position: "bottom-right",
+        title: "error",
+        description: "Sprint Cannot be Created",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   return (

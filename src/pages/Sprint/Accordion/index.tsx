@@ -51,17 +51,46 @@ export const Sprints: React.FC = () => {
         });
         return;
       }
+
+      if (
+        result.draggableId === startedSprint.id &&
+        result.destination.index !== 0
+      ) {
+        toast({
+          position: "bottom-right",
+          title: "Invalid Action!",
+          description: "Started Sprint always has to be on top of the list!",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
-    updateSprintMutation({
-      variables: {
-        projectId,
-        options: {
-          id: result.draggableId,
-          row: result.destination.index,
+    try {
+      updateSprintMutation({
+        variables: {
+          projectId,
+          options: {
+            id: result.draggableId,
+            row: result.destination.index,
+          },
         },
-      },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
-    });
+        refetchQueries: [
+          { query: GetSprintsDocument, variables: { projectId } },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+      toast({
+        position: "bottom-right",
+        title: "Error",
+        description: "Server Error",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
