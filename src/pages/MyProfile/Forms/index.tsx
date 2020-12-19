@@ -47,7 +47,11 @@ export const MyProfile: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    await logoutMutation();
+    await logoutMutation({
+      update: (store) => {
+        store.reset();
+      },
+    });
   };
 
   if (meLoading) return <Spinner />;
