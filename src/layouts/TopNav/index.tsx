@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
@@ -8,22 +8,27 @@ import ProjectListDropdown from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
 import { useGetMeQuery, useGetProjectQuery } from "../../generated/graphql";
+import useQuery from "../../hooks/useQuery";
+import ROUTES from "../../utils/RoutePath";
 
 export type TopNavPropsType = {
   projectId: string;
 };
 
-const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
-  ...args
-}) => {
+const TopNav: React.FC<Record<string, never>> = () => {
   /* Project Query & Props */
-  const { projectId } = args.match.params;
+  const query = useQuery();
+  const projectId = query.get("projectId");
   const { data, loading } = useGetMeQuery();
+
+  if (!projectId) return null;
+
   const projectPermissions = data?.getMe.user?.projectPermissions;
   const currentProject = projectPermissions?.find(
     ({ project }) => project.id === projectId
   );
   const projectConfig = { projectPermissions, currentProject };
+
   /* User Query */
   const { data: userData, loading: userLoading } = useGetProjectQuery({
     variables: { projectId },
@@ -74,7 +79,7 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
       >
         <Box display="flex" alignItems="center">
           {changeIconColor()}
-          <Link to="/">
+          <Link to={ROUTES.LANDING}>
             <Heading ml={1} headingType={headingEnum.homepage}>
               Retrievo
             </Heading>
@@ -101,7 +106,7 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
               iconButtonType={IconButtonType.notification}
             />
           </Link>
-          <Link to="/my-profile">
+          <Link to={`${ROUTES.MY_PROFILE}?projectId=${projectId}`}>
             <IconButton
               fontSize="xl"
               color="achromatic.700"

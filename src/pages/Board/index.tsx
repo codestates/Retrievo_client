@@ -4,14 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { gql } from "@apollo/client";
 
 /* Layouts & types */
-import {
-  Box,
-  useDisclosure,
-  Text,
-  Flex,
-  useToast,
-  Container,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -40,6 +33,7 @@ import {
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
 import Button, { buttonColor } from "../../components/Button";
+import { useQuery } from "../../hooks/useQuery";
 // import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
 
 interface BoardProps {
@@ -58,28 +52,15 @@ export interface SprintUpdateOptions {
   didStart: boolean;
 }
 
-export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
-  ...args
-}) => {
-  const { projectId } = args.match.params;
+export const Board: React.FC<Record<string, never>> = () => {
+  const query = useQuery();
+  const projectId = query.get("projectId");
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   // const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
   /* Mutation, Query */
-  const { loading, data } = useGetBoardsQuery({
-    variables: { projectId },
-    fetchPolicy: "cache-and-network",
-  });
-  const [
-    lazyGetBoard,
-    { data: lazyBoardData, loading: lazyBoardLoading },
-  ] = useGetBoardsLazyQuery();
-  const { data: sprintData } = useSetStartedSprintQuery({
-    variables: { projectId },
-    fetchPolicy: "cache-and-network",
-  });
+
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
   const [
@@ -93,6 +74,21 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     updateTask,
     { data: taskData, loading: taskLoading },
   ] = useUpdateTaskMutation();
+
+  if (!projectId) return null;
+
+  const { loading, data } = useGetBoardsQuery({
+    variables: { projectId },
+    fetchPolicy: "cache-and-network",
+  });
+  const [
+    lazyGetBoard,
+    { data: lazyBoardData, loading: lazyBoardLoading },
+  ] = useGetBoardsLazyQuery();
+  const { data: sprintData } = useSetStartedSprintQuery({
+    variables: { projectId },
+    fetchPolicy: "cache-and-network",
+  });
 
   // useEffect(() => {
   //   if (data?.getBoards && data?.getBoards?.boards) {
@@ -274,8 +270,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   return (
     <>
       <Box>
-        <TopNav {...args} />
-        <SideNav {...args} />
+        <TopNav />
+        <SideNav />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
@@ -329,12 +325,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
           </Box>
         </Box>
         {selectedTask ? (
-          <TaskBar
-            taskId={selectedTask}
-            {...args}
-            isOpen={isOpen}
-            onClose={onClose}
-          />
+          <TaskBar taskId={selectedTask} isOpen={isOpen} onClose={onClose} />
         ) : null}
       </Box>
     </>

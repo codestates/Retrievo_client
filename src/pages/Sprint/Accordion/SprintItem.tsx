@@ -18,7 +18,6 @@ import {
 import { Draggable } from "react-beautiful-dnd";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
 import TaskList from "./TaskList";
 import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
@@ -31,6 +30,7 @@ import {
   Task,
   GetSprintsDocument,
 } from "../../../generated/graphql";
+import { useQuery } from "../../../hooks/useQuery";
 
 type sprintItemProps = {
   sprintData: Sprint;
@@ -48,9 +48,9 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   setSelectedTask,
   onTaskOpen,
 }) => {
-  const location = useLocation();
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
+  const query = useQuery();
+  const projectId = query.get("projectId");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [
     updateSprintMutation,
@@ -68,6 +68,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   // }
 
   if (!sprintData.id) return null;
+  if (!projectId) return null;
 
   const handleUpdateSprint = async (values: Record<string, any>) => {
     await updateSprintMutation({

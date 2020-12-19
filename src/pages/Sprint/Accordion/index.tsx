@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useLocation } from "react-router-dom";
 import SprintItem from "./SprintItem";
 import {
   GetSprintsDocument,
@@ -10,10 +9,13 @@ import {
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import TaskBar from "../../../layouts/TaskBar";
+import useQuery from "../../../hooks/useQuery";
 
 export const Sprints: React.FC = () => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+  const query = useQuery();
+  const projectId = query.get("projectId");
+  if (!projectId) return null;
+
   const { data, loading } = useGetSprintsQuery({
     variables: { projectId },
   });

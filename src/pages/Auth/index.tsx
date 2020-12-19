@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import { Box, Center } from "@chakra-ui/react";
-import { RouteComponentProps } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import RegisterWelcomeCard from "./RegisterWelcomeCard";
 import LoginWelcomeCard from "./LoginWelcomeCard";
+import useQuery from "../../hooks/useQuery";
 
-interface MatchParams {
-  type: string;
-}
-
-const RegisterAndLogin: React.FC<RouteComponentProps<MatchParams>> = ({
-  ...arg
-}) => {
-  const { match } = arg;
-  const [isRegister, setIsRegister] = useState(
-    match.params.type === "register"
-  );
+const RegisterAndLogin: React.FC<Record<string, never>> = () => {
+  const query = useQuery();
+  const type = query.get("type");
+  const [isRegister, setIsRegister] = useState(type === "register");
 
   const changeCard = () => {
     setIsRegister(!isRegister);

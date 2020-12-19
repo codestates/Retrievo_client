@@ -13,18 +13,12 @@ import ReportHero from "./ReportHero";
 import ReportCard from "./ReportCard";
 import Charts from "./Charts";
 
-interface DashBoardType {
-  projectId: string;
-}
-
-export const Dashboard: React.FC<RouteComponentProps<DashBoardType>> = ({
-  ...args
-}) => {
+export const Dashboard: React.FC<Record<string, never>> = () => {
   return (
     <>
       <Box>
-        <TopNav {...args} />
-        <SideNav {...args} />
+        <TopNav />
+        <SideNav />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />

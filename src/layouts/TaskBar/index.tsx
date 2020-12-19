@@ -19,9 +19,9 @@ import * as yup from "yup";
 import { BsPaperclip } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 /* utils */
-import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 import {
   useGetProjectLazyQuery,
   useUpdateTaskMutation,
@@ -44,6 +44,7 @@ import {
   converToUnix,
   colorArr,
 } from "./utils";
+import ROUTES from "../../utils/RoutePath";
 
 /* custom components */
 import CustomForm from "../../components/Form";
@@ -57,6 +58,7 @@ import TextLabel from "./TextLabel";
 import Calendar, { calendarProps, dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput, { labelItem } from "../../components/LabelSearchInput";
+import useQuery from "../../hooks/useQuery";
 
 const titleValidation = yup.object({
   email: yup.string().max(5).required(),
@@ -72,8 +74,6 @@ export interface taskProps {
 }
 
 export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
   const toast = useToast();
 
   const [
@@ -89,6 +89,11 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
   const [createComment] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const { data: meData } = useGetMeQuery();
+
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  const history = useHistory();
+  if (!projectId) history.push(ROUTES.AUTH);
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {
@@ -117,11 +122,11 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
     getTaskData,
   ]);
 
-  if (!taskId) return null;
+  if (!projectId || !taskId) return null;
 
   const taskArr = getTaskData?.getTask.task;
   if (!taskArr) {
-    return <Text>no task</Text>;
+    return <></>;
   }
 
   const createErrorToast = () => {

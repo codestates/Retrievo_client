@@ -1,13 +1,15 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import Chart from "../../../components/Chart";
 import { chartVariant } from "../../../components/Chart/types";
 import Spinner from "../../../components/Spinner";
 import { useGetReportSummaryQuery } from "../../../generated/graphql";
+import { useQuery } from "../../../hooks/useQuery";
 
 export const TasksCountSummary: React.FC = () => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  if (!projectId) return null;
+
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });

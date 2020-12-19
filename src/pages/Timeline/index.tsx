@@ -1,20 +1,14 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import CommingSoon from "../ComingSoon";
 
-interface TimelineType {
-  projectId: string;
-}
-export const Timeline: React.FC<RouteComponentProps<TimelineType>> = ({
-  ...args
-}) => {
+export const Timeline: React.FC<Record<string, never>> = () => {
   return (
     <>
-      <TopNav {...args} />
-      <SideNav {...args} />
+      <TopNav />
+      <SideNav />
       <Box display="flex" ml={210} mt={50}>
         <CommingSoon />
       </Box>
