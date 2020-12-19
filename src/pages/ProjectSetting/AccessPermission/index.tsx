@@ -157,7 +157,7 @@ export const AccessPermission: React.FC = () => {
                     initialValues={{ role: item.role }}
                     onSubmit={(values) => onSubmit(values, item.id)}
                   >
-                    {({ values, submitForm, handleChange }) => {
+                    {({ submitForm, handleChange }) => {
                       return (
                         <FormControl pr={3} justifySelf="flex-end">
                           <FormLabel fontWeight="base" m={0} />
