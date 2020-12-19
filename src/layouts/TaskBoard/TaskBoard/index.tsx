@@ -319,6 +319,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         display="flex"
         flexDir="column"
         alignItems="center"
+        justifyContent="flex-end"
         minH={170}
       >
         <Droppable droppableId={board.id} type="TASK">
