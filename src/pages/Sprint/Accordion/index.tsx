@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, Box, useDisclosure } from "@chakra-ui/react";
+import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
 import SprintItem from "./SprintItem";
@@ -16,18 +16,14 @@ export const Sprints: React.FC = () => {
   const projectId = location.pathname.split("/").pop() || "";
   const { data, loading } = useGetSprintsQuery({
     variables: { projectId },
-    fetchPolicy: "cache-and-network",
   });
   const sprints = data?.getSprints.sprints;
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selected, setSelected] = useState<undefined | string>(undefined);
-
-  console.log(selected);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateSprintMutation] = useUpdateSprintMutation();
+  const toast = useToast();
 
   if (loading) return <Spinner />;
-
   if (!sprints) return <Spinner />;
 
   const startedSprint = sprints.find((sprint) => sprint.didStart);
@@ -35,12 +31,22 @@ export const Sprints: React.FC = () => {
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-
-    /* fe dnd logic */
-    // const items = Array.from(sprints);
-    // const [reorderedItem] = items.splice(result.source.index, 1);
-    // items.splice(result.destination.index, 0, reorderedItem);
-
+    if (startedSprint) {
+      if (
+        result.draggableId !== startedSprint.id &&
+        result.destination.index === 0
+      ) {
+        toast({
+          position: "bottom-right",
+          title: "Invalid Action!",
+          description: "Started Sprint always has to be on top of the list!",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+    }
     updateSprintMutation({
       variables: {
         projectId,
@@ -63,7 +69,7 @@ export const Sprints: React.FC = () => {
               <Box {...provided.droppableProps} ref={provided.innerRef}>
                 <Accordion
                   allowToggle
-                  defaultIndex={startedSprint ? startedSprint.row : undefined}
+                  defaultIndex={startedSprint ? 0 : undefined}
                 >
                   {sprints ? (
                     sprints.map((sprint: any) => {

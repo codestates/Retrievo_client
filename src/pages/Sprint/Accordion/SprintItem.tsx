@@ -166,6 +166,15 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           didStart: true,
         },
       },
+    });
+    await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: sprintData.id,
+          row: 0,
+        },
+      },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
     toast({
