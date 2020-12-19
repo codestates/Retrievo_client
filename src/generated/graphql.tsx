@@ -396,6 +396,10 @@ export type MutationDeleteMemberArgs = {
   userId: Scalars["String"];
 };
 
+export type MutationRouteInvitationArgs = {
+  keyToken: Scalars["String"];
+};
+
 export type MutationCreateBoardArgs = {
   projectId: Scalars["String"];
   title: Scalars["String"];
@@ -430,7 +434,6 @@ export type MutationDeleteSprintArgs = {
 
 export type MutationReadSprintNotificationArgs = {
   id: Scalars["String"];
-  projectId: Scalars["String"];
 };
 
 export type MutationCreateTaskArgs = {
@@ -630,7 +633,9 @@ export type CommentDeleteResponse = {
   error?: Maybe<FieldError>;
 };
 
-export type RouteInvitationMutationVariables = Exact<{ [key: string]: never }>;
+export type RouteInvitationMutationVariables = Exact<{
+  keyToken: Scalars["String"];
+}>;
 
 export type RouteInvitationMutation = { __typename?: "Mutation" } & {
   routeInvitation: { __typename?: "ProjectReturnType" } & Pick<
@@ -638,7 +643,10 @@ export type RouteInvitationMutation = { __typename?: "Mutation" } & {
     "success"
   > & {
       error?: Maybe<
-        { __typename?: "FieldError" } & Pick<FieldError, "field" | "code">
+        { __typename?: "FieldError" } & Pick<
+          FieldError,
+          "field" | "message" | "code"
+        >
       >;
     };
 };
@@ -1810,11 +1818,12 @@ export type GetTaskQuery = { __typename?: "Query" } & {
 };
 
 export const RouteInvitationDocument = gql`
-  mutation RouteInvitation {
-    routeInvitation {
+  mutation RouteInvitation($keyToken: String!) {
+    routeInvitation(keyToken: $keyToken) {
       success
       error {
         field
+        message
         code
       }
     }
@@ -1838,6 +1847,7 @@ export type RouteInvitationMutationFn = Apollo.MutationFunction<
  * @example
  * const [routeInvitationMutation, { data, loading, error }] = useRouteInvitationMutation({
  *   variables: {
+ *      keyToken: // value for 'keyToken'
  *   },
  * });
  */
