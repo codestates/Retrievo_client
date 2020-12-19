@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import { Box, Flex, useDisclosure, useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
@@ -8,6 +9,8 @@ import StyledBasicDetailWrapper from "./BasicDetail.styled";
 import ModalLayout from "../../../layouts/Modal";
 import Spinner from "../../../components/Spinner";
 import {
+  GetMeDocument,
+  GetProjectDocument,
   useDeleteProjectMutation,
   useGetProjectQuery,
   useUpdateProjectNameMutation,
@@ -18,23 +21,25 @@ export const BasicDetail: React.FC = () => {
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
   if (!projectId) return null;
-
   const history = useHistory();
+
   const toast = useToast();
+
+  const { data, loading } = useGetProjectQuery({
+    variables: { projectId },
+  });
+
   const [
     deleteProjectMutation,
     { loading: deleteLoading },
   ] = useDeleteProjectMutation({
     variables: { projectId },
   });
+
   const [
     updateProjectName,
     { loading: updateLoading },
   ] = useUpdateProjectNameMutation();
-
-  const { data, loading } = useGetProjectQuery({
-    variables: { projectId },
-  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -43,30 +48,53 @@ export const BasicDetail: React.FC = () => {
   const handleUpdateProject = async ({
     projectName,
   }: Record<string, string>) => {
-    try {
-      await updateProjectName({ variables: { projectId, name: projectName } });
-      // toast({
-      //   title: "Success!",
-      //   description: "Project name has been successfully updated!",
-      //   status: "success",
-      //   duration: 2000,
-      //   isClosable: true,
-      // });
-    } catch (err) {
+    const res = await updateProjectName({
+      variables: { projectId, name: projectName },
+    });
+
+    if (res.data?.updateProjectName.error) {
       toast({
-        title: "An error occurred.",
-        description: "Unable to update project name.",
+        position: "bottom-right",
+        title: "Project Update Failed!",
+        description: res.data?.updateProjectName.error.message,
         status: "error",
         duration: 2000,
         isClosable: true,
       });
+      return;
     }
+    toast({
+      title: "Success!",
+      description: "Project name has been successfully updated!",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   };
 
   const handleDeleteProject = async () => {
-    await deleteProjectMutation({
+    const res = await deleteProjectMutation({
       variables: { projectId },
+      refetchQueries: [
+        { query: GetProjectDocument, variables: { projectId } },
+        { query: GetMeDocument },
+      ],
     });
+    onClose();
+
+    if (res.data?.deleteProject.error) {
+      toast({
+        position: "bottom-right",
+        title: "Project Deletion Failed!",
+        description: res.data?.deleteProject.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      onClose();
+      return;
+    }
+
     toast({
       position: "bottom-right",
       title: "Project Deleted",
@@ -75,7 +103,7 @@ export const BasicDetail: React.FC = () => {
       duration: 2000,
       isClosable: true,
     });
-    history.push("/my-profile");
+    history.push("/project");
   };
 
   return (
@@ -86,18 +114,11 @@ export const BasicDetail: React.FC = () => {
       <StyledBasicDetailWrapper pl={6}>
         <CustomForm
           initialValues={{
-            projectName: data?.project.project?.name, // TODO 추후 유저의 fullname 값 입력
+            projectName: data?.project.project?.name,
           }}
           isSubmitButton
           onSubmit={async (values) => {
-            await handleUpdateProject(values); // TODO 추후에 데이터 업데이트 할 때 추가
-            toast({
-              title: "Success!",
-              description: "Project name has been successfully updated!",
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-            });
+            await handleUpdateProject(values);
           }}
         >
           <Box lineHeight={8}>

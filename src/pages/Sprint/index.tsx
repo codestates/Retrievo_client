@@ -10,7 +10,6 @@ import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
 import {
   GetBoardsDocument,
-  GetSprintDocument,
   SetStartedSprintDocument,
   useCreateSprintMutation,
 } from "../../generated/graphql";

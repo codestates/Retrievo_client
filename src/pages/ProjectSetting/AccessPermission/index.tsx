@@ -36,7 +36,18 @@ export const AccessPermission: React.FC = () => {
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
   const toast = useToast();
-  if (!projectId) return <></>;
+
+  if (!projectId) {
+    toast({
+      position: "bottom-right",
+      title: "Bad Request",
+      description: "Project ID doesn't Exist",
+      status: "error",
+      duration: 2000,
+      isClosable: true,
+    });
+    return <p>ProjectId does not exist</p>;
+  }
 
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 5);
   const [isDesktop] = useMediaQuery("(min-width: 1440px)");
@@ -56,20 +67,35 @@ export const AccessPermission: React.FC = () => {
     updateProjectPermissionMutation,
   ] = useUpdateProjectPermissionMutation();
 
-  const [inviteUserMutation, error] = useInviteUserMutation();
+  const [inviteUserMutation] = useInviteUserMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  if (loading) return <Spinner />;
+
   const onSubmit = async (values: Record<string, string>, userId: string) => {
-    await updateProjectPermissionMutation({
+    const res = await updateProjectPermissionMutation({
       variables: {
         projectId,
         isAdmin: values.role === "ADMIN",
         userId,
       },
     });
+
+    if (res.data?.updateProjectPermission.error) {
+      toast({
+        position: "bottom-right",
+        title: "Role Update Failed!",
+        description: res.data?.updateProjectPermission.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
     toast({
       position: "bottom-right",
-      title: "Role Update Success!.",
+      title: "Role Update Success!",
       description: "User role has been updated",
       status: "success",
       duration: 2000,
@@ -79,11 +105,25 @@ export const AccessPermission: React.FC = () => {
 
   const onInvitation = async (values: Record<string, string>) => {
     const filtered = Object.values(values).filter((email) => email.length > 1);
-    inviteUserMutation({
+    const res = await inviteUserMutation({
       variables: { projectId, emails: filtered },
     });
+
+    if (res.data?.inviteUser.error) {
+      toast({
+        position: "bottom-right",
+        title: "User Invitation Failed!",
+        description: res.data?.inviteUser.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
     onClose();
   };
+
   const roles = [
     { key: "Admin", value: "ADMIN" },
     { key: "Member", value: "MEMBER" },
@@ -117,7 +157,7 @@ export const AccessPermission: React.FC = () => {
                     initialValues={{ role: item.role }}
                     onSubmit={(values) => onSubmit(values, item.id)}
                   >
-                    {({ values, submitForm, handleChange }) => {
+                    {({ submitForm, handleChange }) => {
                       return (
                         <FormControl pr={3} justifySelf="flex-end">
                           <FormLabel fontWeight="base" m={0} />
@@ -146,8 +186,6 @@ export const AccessPermission: React.FC = () => {
       return null;
     });
   };
-
-  if (loading) return <Spinner />;
 
   return (
     <Box bg="primary.400" mt={12}>
