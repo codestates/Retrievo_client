@@ -281,8 +281,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             {board.title}
           </Heading>
           <Text color="primary.300">{`${board.task?.length}`}</Text>
-          {/* TODO : Delete This  */}
-          <Text color="fail">{`${board.boardColumnIndex}`}</Text>
+          {/* <Text color="fail">{`${board.boardColumnIndex}`}</Text> */}
         </Box>
         <Flex flexDir="row">
           <IconButton
