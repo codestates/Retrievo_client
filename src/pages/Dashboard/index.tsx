@@ -1,5 +1,4 @@
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 
 /* Layouts */
 import { Box } from "@chakra-ui/react";

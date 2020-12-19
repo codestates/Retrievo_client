@@ -1,8 +1,6 @@
 /* eslint-disable indent */
 import React from "react";
-import useCookies from "react-cookie/es6/useCookies";
-import { Route, Redirect, useParams, useLocation } from "react-router-dom";
-import { useGetProjectLazyQuery } from "../generated/graphql";
+import { Route, Redirect } from "react-router-dom";
 import ROUTES from "./RoutePath";
 import useQuery from "../hooks/useQuery";
 

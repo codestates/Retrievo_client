@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Flex, useDisclosure, useToast } from "@chakra-ui/react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
 import Heading, { headingEnum } from "../../../components/Heading";
