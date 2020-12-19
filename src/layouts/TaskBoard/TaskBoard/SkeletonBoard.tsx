@@ -23,7 +23,7 @@ export type SkeletonBoardProps = {
   ) => Promise<
     FetchResult<CreateBoardMutation, Record<string, any>, Record<string, any>>
   >;
-  lazyGetBoard: (options: Record<string, string>) => void;
+  // lazyGetBoard: (options: Record<string, string>) => void;
 };
 
 const SkeletonBoard: React.FC<SkeletonBoardProps> = ({

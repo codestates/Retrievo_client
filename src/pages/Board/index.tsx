@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { gql } from "@apollo/client";
 
 /* Layouts & types */
 import {
@@ -72,10 +71,10 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     variables: { projectId },
     fetchPolicy: "cache-and-network",
   });
-  const [
-    lazyGetBoard,
-    { data: lazyBoardData, loading: lazyBoardLoading },
-  ] = useGetBoardsLazyQuery();
+  // const [
+  //   lazyGetBoard,
+  //   { data: lazyBoardData, loading: lazyBoardLoading },
+  // ] = useGetBoardsLazyQuery();
   const { data: sprintData } = useSetStartedSprintQuery({
     variables: { projectId },
     fetchPolicy: "cache-and-network",
@@ -148,21 +147,21 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         newBoardId,
         projectId,
       },
-      update: (cache, { data }) => {
-        const newBoardRes = data?.deleteBoard.boards;
-        if (!newBoardRes) return;
-        client.writeQuery({
-          query: GetBoardsDocument,
-          variables: { projectId },
-          data: {
-            getBoards: {
-              boards: [...newBoardRes],
-            },
-          },
-        });
-        console.log("deleteboard", newBoardRes);
-        // if (refetch) refetch();
-      },
+      // update: (cache, { data }) => {
+      //   const newBoardRes = data?.deleteBoard.boards;
+      //   if (!newBoardRes) return;
+      //   client.writeQuery({
+      //     query: GetBoardsDocument,
+      //     variables: { projectId },
+      //     data: {
+      //       getBoards: {
+      //         boards: [...newBoardRes],
+      //       },
+      //     },
+      //   });
+      //   console.log("deleteboard", newBoardRes);
+      //   // if (refetch) refetch();
+      // },
     });
   };
 
@@ -265,12 +264,31 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     if (selectedTask) onOpen();
   }, [selectedTask, onOpen]);
 
-  if (!sprintData && loading)
-    return (
-      <Flex justifyContent="center" alignItems="center" h="100vh">
-        <Spinner />
-      </Flex>
-    );
+  // if (!sprintData && loading)
+  // if (!sprintData)
+  // -> 드래그앤드롭 심리스
+  // -> 보드 update x
+  // -> 보드 create X
+  // -> 보드 delete X
+  // -> 테스크 업데이트 x
+
+  // if (!sprintData || loading)
+  // if (loading)
+  // -> 드래그앤드롭 심리스 x
+  // -> 보드 update O
+  // -> 보드 create O
+  // -> 보드 delete X
+  // -> 테스크 update O
+  // -> 테스크 create X
+  // -> 테스크 delete X
+
+  // if (loading) {
+  //   return (
+  //     <Flex justifyContent="center" alignItems="center" h="100vh">
+  //       <Spinner />
+  //     </Flex>
+  //   );
+  // }
 
   return (
     <>
@@ -304,7 +322,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
               ) : null}
             </Flex>
             <Box mt={9}>
-              {!data?.getBoards.boards ||
+              {loading ||
+              !data?.getBoards.boards ||
               !sprintData?.getStartedSprint.sprint?.id ? (
                 <TaskBoardContainer />
               ) : (
@@ -323,7 +342,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
-                  lazyGetBoard={lazyGetBoard}
+                  // lazyGetBoard={lazyGetBoard}
                 />
               )}
             </Box>

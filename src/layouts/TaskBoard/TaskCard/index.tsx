@@ -61,8 +61,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
       borderRadius={10}
       boxShadow="1px 2px 5px rgba(0,0,0,0.2)"
       position="relative"
-      _hover={{ cursor: "pointer" }}
-      onClick={() => handleTaskClick(task.id)}
     >
       <Box
         position="absolute"
@@ -75,52 +73,58 @@ const TaskCard: React.FC<TaskCardProps> = ({
       >
         <CgClose />
       </Box>
-      <Box>
+      <Box
+        h={130}
+        _hover={{ cursor: "pointer" }}
+        onClick={() => handleTaskClick(task.id)}
+      >
+        <Box>
+          <Box
+            display="flex"
+            flexDir="row"
+            alignItems="flex-start"
+            mb={2}
+            _hover={{ cursor: "pointer" }}
+          >
+            <Text
+              fontSize="xs"
+              mr={2}
+              color="primary.200"
+            >{`${task?.taskIndex}`}</Text>
+            <Text
+              fontSize="xs"
+              mr={2}
+              color="fail"
+            >{`${task?.boardRowIndex}`}</Text>
+            <Heading
+              pr="1.5rem"
+              fontWeight="normal"
+              headingType={headingEnum.taskCard}
+            >
+              {task?.title}
+            </Heading>
+          </Box>
+          <Box display="flex" flexDir="row" alignItems="center" mb={50}>
+            {renderLabels()}
+          </Box>
+        </Box>
         <Box
           display="flex"
           flexDir="row"
-          alignItems="flex-start"
-          mb={2}
-          _hover={{ cursor: "pointer" }}
+          alignItems="center"
+          position="absolute"
+          bottom={5}
+          justifyContent="space-between"
         >
-          <Text
-            fontSize="xs"
-            mr={2}
-            color="primary.200"
-          >{`${task?.taskIndex}`}</Text>
-          <Text
-            fontSize="xs"
-            mr={2}
-            color="fail"
-          >{`${task?.boardRowIndex}`}</Text>
-          <Heading
-            pr="1.5rem"
-            fontWeight="normal"
-            headingType={headingEnum.taskCard}
-          >
-            {task?.title}
-          </Heading>
+          {renderUsers() ? (
+            <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
+          ) : null}
+          <Text ml={2} fontSize="xs" color="achromatic.600">
+            {!task.startDate && !task.endDate
+              ? ""
+              : `${isoToDate(task.startDate)} ~ ${isoToDate(task.endDate)}`}
+          </Text>
         </Box>
-        <Box display="flex" flexDir="row" alignItems="center" mb={50}>
-          {renderLabels()}
-        </Box>
-      </Box>
-      <Box
-        display="flex"
-        flexDir="row"
-        alignItems="center"
-        position="absolute"
-        bottom={5}
-        justifyContent="space-between"
-      >
-        {renderUsers() ? (
-          <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
-        ) : null}
-        <Text ml={2} fontSize="xs" color="achromatic.600">
-          {!task.startDate && !task.endDate
-            ? ""
-            : `${isoToDate(task.startDate)} ~ ${isoToDate(task.endDate)}`}
-        </Text>
       </Box>
     </Box>
   );

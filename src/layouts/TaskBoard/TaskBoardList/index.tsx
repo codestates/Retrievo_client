@@ -38,7 +38,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   handleBoardUpdate,
   boardLoading,
   taskLoading,
-  lazyGetBoard,
+  // lazyGetBoard,
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
@@ -302,7 +302,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
               <SkeletonBoard
                 handleBoardCreate={handleBoardCreate}
                 projectId={projectId}
-                lazyGetBoard={lazyGetBoard}
+                // lazyGetBoard={lazyGetBoard}
               />
             </Box>
           </>
