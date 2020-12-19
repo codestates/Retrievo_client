@@ -4,6 +4,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 
+const PROD = "https://retrievo.io/graphql";
+const DEV = "http://localhost:4000/graphql";
 // eslint-disable-next-line import/prefer-default-export
 export const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",

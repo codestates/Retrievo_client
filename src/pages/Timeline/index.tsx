@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
-import CommingSoon from "../CommingSoon";
+import CommingSoon from "../ComingSoon";
 
 interface TimelineType {
   projectId: string;

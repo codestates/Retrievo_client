@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Box, Flex, useToast } from "@chakra-ui/react";
 import * as yup from "yup";
-import { useHistory } from "react-router-dom";
 import Heading, { headingEnum } from "../../components/Heading";
 import Text from "../../components/Text";
 import Form from "../../components/Form";
@@ -80,11 +80,13 @@ const NewProject = (): ReactElement => {
             size="xs"
             mr={2}
           />
-          <RoundButton
-            aria-label="decoration button"
-            buttonColor={RoundButtonColor.red}
-            size="xs"
-          />
+          <Link to="/">
+            <RoundButton
+              aria-label="decoration button"
+              buttonColor={RoundButtonColor.red}
+              size="xs"
+            />
+          </Link>
         </Flex>
         <Box bg="achromatic.100" h={300} p={10} borderBottomRadius={10}>
           <Heading headingType={headingEnum.auth}>New Project</Heading>

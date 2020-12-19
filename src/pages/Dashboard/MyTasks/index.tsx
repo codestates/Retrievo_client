@@ -49,7 +49,7 @@ export const MyTasks: React.FC = (): any => {
               <Label>{item.task.board ? item.task.board.title : "todo"}</Label>
             </Flex>
             <Flex
-              w="100%"
+              w="85%"
               alignItems="center"
               justifyContent="flex-end"
               color="achromatic.600"

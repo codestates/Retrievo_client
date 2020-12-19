@@ -9,10 +9,7 @@ import TopNav from "../../layouts/TopNav";
 import Sprints from "./Accordion";
 import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
-import {
-  GetSprintsDocument,
-  useCreateSprintMutation,
-} from "../../generated/graphql";
+import { useCreateSprintMutation } from "../../generated/graphql";
 
 interface SprintType {
   projectId: string;
