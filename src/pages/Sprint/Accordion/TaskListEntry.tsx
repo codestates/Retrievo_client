@@ -64,7 +64,7 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
               >
                 {taskData.title}
               </Text>
-              <Flex justifyContent="flex-end">
+              <Flex justifyContent="center">
                 {taskData.board ? <Label>{taskData.board.title}</Label> : null}
               </Flex>
               <Flex justifyContent="flex-end">
