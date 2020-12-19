@@ -9,34 +9,41 @@ import ModalLayout from "../../../layouts/Modal";
 import Spinner from "../../../components/Spinner";
 import {
   useDeleteProjectMutation,
+  useGetMeQuery,
   useGetProjectQuery,
   useUpdateProjectNameMutation,
 } from "../../../generated/graphql";
 import useQuery from "../../../hooks/useQuery";
 
 export const BasicDetail: React.FC = () => {
+  const toast = useToast();
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
+  const history = useHistory();
+  const { data: getMeData } = useGetMeQuery();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [
+    updateProjectName,
+    { loading: updateLoading },
+  ] = useUpdateProjectNameMutation();
+
   if (!projectId) return null;
 
-  const history = useHistory();
-  const toast = useToast();
   const [
     deleteProjectMutation,
     { loading: deleteLoading },
   ] = useDeleteProjectMutation({
     variables: { projectId },
   });
-  const [
-    updateProjectName,
-    { loading: updateLoading },
-  ] = useUpdateProjectNameMutation();
 
   const { data, loading } = useGetProjectQuery({
     variables: { projectId },
   });
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const myPermission = data?.project.project?.projectPermissions?.find(
+    (el) => el.user.id === getMeData?.getMe.user?.id
+  );
 
   if (updateLoading || deleteLoading || loading) return <Spinner />;
 
@@ -88,7 +95,7 @@ export const BasicDetail: React.FC = () => {
           initialValues={{
             projectName: data?.project.project?.name, // TODO 추후 유저의 fullname 값 입력
           }}
-          isSubmitButton
+          isSubmitButton={!!myPermission?.isAdmin}
           onSubmit={async (values) => {
             await handleUpdateProject(values); // TODO 추후에 데이터 업데이트 할 때 추가
             toast({
@@ -105,6 +112,7 @@ export const BasicDetail: React.FC = () => {
               label="Project Name"
               name="projectName"
               placeholder="Enter Project Name..."
+              disabled={!myPermission?.isAdmin}
             />
           </Box>
         </CustomForm>
@@ -114,6 +122,7 @@ export const BasicDetail: React.FC = () => {
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
+          disabled={!myPermission?.isAdmin}
           title="Delete Project"
           buttonText="Delete Project"
           bgColor="fail"

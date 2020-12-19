@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
 
@@ -1511,7 +1510,7 @@ export type GetMeQuery = { __typename?: "Query" } & {
     user?: Maybe<
       { __typename?: "User" } & Pick<
         User,
-        "id" | "username" | "email" | "avatar"
+        "id" | "username" | "email" | "avatar" | "role"
       > & {
           projectPermissions: Array<
             { __typename?: "ProjectPermission" } & {
@@ -3840,6 +3839,7 @@ export const GetMeDocument = gql`
         username
         email
         avatar
+        role
         projectPermissions {
           project {
             id
