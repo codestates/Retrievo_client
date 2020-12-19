@@ -43,20 +43,18 @@ export const MyTasks: React.FC = (): any => {
     return items.slice(0, visible).map((item) => {
       return (
         <>
-          <StyledListItem p={3} bg="achromatic.100" w="100%" key={item.id}>
-            <Flex ml={9}>{item.task.title}</Flex>
-            <Flex ml={5}>
-              <Label>{item.task.board ? item.task.board.title : "todo"}</Label>
-            </Flex>
-            <Flex
-              w="85%"
-              alignItems="center"
-              justifyContent="flex-end"
-              color="achromatic.600"
-              mr={3}
-            >
-              <GoChevronRight className="_icon" opacity="0" />
-            </Flex>
+          <StyledListItem
+            display="grid"
+            gridTemplateColumns="auto 1fr 2rem"
+            gridColumnGap="1rem"
+            p={3}
+            bg="achromatic.100"
+            w="100%"
+            key={item.id}
+          >
+            <Label>{item.task.board ? item.task.board.title : "todo"}</Label>
+            {item.task.title}
+            <GoChevronRight className="_icon" opacity="0" />
           </StyledListItem>
           <Divider orientation="horizontal" />
         </>
