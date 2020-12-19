@@ -247,7 +247,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                   </AccordionButton>
                 </Center>
                 <Box flex="1" ml={3} textAlign="left">
-                  <Heading headingType={headingEnum.sprint}>
+                  <Heading headingType={headingEnum.table}>
                     {sprintData.title}
                   </Heading>
                 </Box>
