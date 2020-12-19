@@ -74,7 +74,7 @@ const commentValidation = yup.object({
 });
 
 export interface taskProps {
-  taskId?: string;
+  taskId?: string | null;
   isOpen: boolean;
   onClose: () => void;
 }

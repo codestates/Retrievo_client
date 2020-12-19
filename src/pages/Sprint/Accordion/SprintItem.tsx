@@ -23,21 +23,25 @@ import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
 import TextAreaField from "../../../components/TextArea";
 import ModalLayout from "../../../layouts/Modal";
+import Heading, { headingEnum } from "../../../components/Heading";
 import {
   useUpdateSprintMutation,
   useDeleteSprintMutation,
   Sprint,
   Task,
   GetSprintsDocument,
+  GetBoardsDocument,
+  SetStartedSprintDocument,
 } from "../../../generated/graphql";
 import { useQuery } from "../../../hooks/useQuery";
 
-type sprintItemProps = {
+export type sprintItemProps = {
   sprintData: Sprint;
   ref?: HTMLElement;
   mappedIndex: number;
   tasks: Task[];
   refetch: () => void;
+  selectedTask: string | null;
 };
 
 export const SprintItem: React.FC<Record<string, any>> = ({
@@ -46,6 +50,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   tasks,
   startedSprint,
   setSelectedTask,
+  selectedTask,
   onTaskOpen,
 }) => {
   const toast = useToast();
@@ -130,7 +135,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               getSprints(existingSprintsRef, { readField }) {
                 const newSprintsRef = existingSprintsRef.sprints.filter(
                   (sprint: any) => {
-                    console.log(sprint);
                     return sprintData.id !== readField("id", sprint);
                   }
                 );
@@ -143,6 +147,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           console.log(err);
         }
       },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -177,7 +182,10 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           row: 0,
         },
       },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
     });
     toast({
       position: "bottom-right",
@@ -221,11 +229,12 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               ref={provided.innerRef}
               {...provided.dragHandleProps}
               {...provided.draggableProps}
+              bgColor="white"
             >
               <Flex
                 alignItems="center"
                 bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
-                p={2}
+                px={2}
               >
                 <Center w="40px" h="40px" overflow="hidden">
                   <AccordionButton
@@ -245,7 +254,9 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                   </AccordionButton>
                 </Center>
                 <Box flex="1" ml={3} textAlign="left">
-                  {sprintData.title}
+                  <Heading headingType={headingEnum.table}>
+                    {sprintData.title}
+                  </Heading>
                 </Box>
                 <Flex
                   justifyContent="flex-end"
@@ -300,6 +311,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               <TaskList
                 taskData={tasks}
                 setSelectedTask={setSelectedTask}
+                selectedTask={selectedTask}
                 onTaskOpen={onTaskOpen}
               />
             </AccordionItem>
@@ -321,7 +333,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         <Box mb={3}>
           <CustomForm
             initialValues={{
-              sprintName: `${sprintData.title}`,
+              sprintName: "",
               description: "",
             }}
             buttonPosition="right"
@@ -334,7 +346,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 <InputField
                   label="Sprint Name"
                   name="sprintName"
-                  // placeholder={sprintData.title}
+                  placeholder={sprintData.title}
                 />
               </Box>
               <Box p={2} mb={6}>
