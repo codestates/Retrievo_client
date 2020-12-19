@@ -1,7 +1,6 @@
 import { AccordionPanel, Box } from "@chakra-ui/react";
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Spinner from "../../../components/Spinner";
 import {
   Task,
   useUpdateTaskMutation,
@@ -14,13 +13,11 @@ type TaskListPropType = {
   taskData: Task[];
   setSelectedTask: () => void;
   onTaskOpen: () => void;
-  selectedTask: string | null;
 };
 
 export const TaskList: React.FC<TaskListPropType> = ({
   taskData,
   setSelectedTask,
-  selectedTask,
   onTaskOpen,
 }) => {
   const query = useQuery();
@@ -54,12 +51,11 @@ export const TaskList: React.FC<TaskListPropType> = ({
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
               {taskData.map((task) => {
-                if (!task.sprintRowIndex) return undefined;
+                if (typeof task.sprintRowIndex !== "number") return undefined;
 
                 return (
                   <TaskListEntry
                     setSelectedTask={setSelectedTask}
-                    selectedTask={selectedTask}
                     onTaskOpen={onTaskOpen}
                     key={task.id}
                     taskData={task}

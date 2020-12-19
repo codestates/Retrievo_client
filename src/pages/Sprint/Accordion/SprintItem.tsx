@@ -50,7 +50,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   tasks,
   startedSprint,
   setSelectedTask,
-  selectedTask,
   onTaskOpen,
 }) => {
   const toast = useToast();
@@ -183,6 +182,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         },
       },
       refetchQueries: [
+        { query: GetSprintsDocument, variables: { projectId } },
         { query: GetBoardsDocument, variables: { projectId } },
         { query: SetStartedSprintDocument, variables: { projectId } },
         { query: GetSprintsDocument, variables: { projectId } },
@@ -312,7 +312,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               <TaskList
                 taskData={tasks}
                 setSelectedTask={setSelectedTask}
-                selectedTask={selectedTask}
                 onTaskOpen={onTaskOpen}
               />
             </AccordionItem>

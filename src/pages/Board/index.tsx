@@ -26,6 +26,7 @@ import {
   useUpdateTaskMutation,
   SetStartedSprintDocument,
   useDeleteSprintMutation,
+  GetSprintsDocument,
   // useUpdateSprintMutation,
   // GetSprintsDocument,
 } from "../../generated/graphql";
@@ -79,7 +80,10 @@ export const Board: React.FC<Record<string, never>> = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -94,7 +98,10 @@ export const Board: React.FC<Record<string, never>> = () => {
         newBoardId,
         projectId,
       },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -104,7 +111,10 @@ export const Board: React.FC<Record<string, never>> = () => {
   ) => {
     return await updateBoard({
       variables: { options, projectId },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -114,7 +124,10 @@ export const Board: React.FC<Record<string, never>> = () => {
         options,
         projectId,
       },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -124,7 +137,10 @@ export const Board: React.FC<Record<string, never>> = () => {
         id,
         projectId,
       },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -134,7 +150,10 @@ export const Board: React.FC<Record<string, never>> = () => {
   ) => {
     return await updateTask({
       variables: { projectId, options },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
     });
   };
 
@@ -166,6 +185,7 @@ export const Board: React.FC<Record<string, never>> = () => {
       variables: { id: options.id, projectId },
       refetchQueries: [
         { query: SetStartedSprintDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
       ],
     });
 

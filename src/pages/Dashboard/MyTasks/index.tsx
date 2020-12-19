@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import { Divider, Container, Box, Flex } from "@chakra-ui/react";
+import { Divider, Box, Flex } from "@chakra-ui/react";
 import { ImClipboard } from "react-icons/im";
 import { GoChevronDown, GoChevronUp, GoChevronRight } from "react-icons/go";
-
-import { useLocation } from "react-router-dom";
 import useLoadMore from "../../../hooks/useLoadMore";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Text from "../../../components/Text";
@@ -13,14 +11,24 @@ import Spinner from "../../../components/Spinner";
 import Label from "../../../components/Label";
 import useQuery from "../../../hooks/useQuery";
 
-export const MyTasks: React.FC = (): any => {
+interface MyTaskPropType {
+  setSelectedTask: (id: string) => void;
+}
+
+export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
-  const { data: meData, loading: meLoading } = useGetMeQuery();
+  const { data: meData, loading: meLoading, refetch } = useGetMeQuery();
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 3);
   if (!projectId) return null;
 
-  console.log(meData);
+  useEffect(() => {
+    if (refetch) {
+      refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (!meData) return;
     if (!meData.getMe) return;
@@ -36,10 +44,21 @@ export const MyTasks: React.FC = (): any => {
 
   if (meLoading) return <Spinner />;
 
-  // if (meData?.getMe?.user?.userTask && !items.length) {
-  // }
-
   const renderVisible = () => {
+    if (!items.length)
+      return (
+        <Box
+          w="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          p={2}
+          bg="achromatic.100"
+        >
+          <Text color="achromatic.600">Noting to do. Dobby is free!!!</Text>
+        </Box>
+      );
+
     return items.slice(0, visible).map((item) => {
       return (
         <>
@@ -51,6 +70,7 @@ export const MyTasks: React.FC = (): any => {
             bg="achromatic.100"
             w="100%"
             key={item.id}
+            onClick={() => setSelectedTask(item.task.id)}
           >
             <Label>{item.task.board ? item.task.board.title : "todo"}</Label>
             {item.task.title}

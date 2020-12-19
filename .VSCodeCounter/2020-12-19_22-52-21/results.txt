@@ -1,0 +1,295 @@
+Date : 2020-12-19 22:52:21
+Directory : /Users/paulkim/Desktop/cs_projects/Retrievo_client
+Total : 189 files,  42743 codes, 1402 comments, 1167 blanks, all 45312 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JSON             |          5 |     27,528 |          0 |          5 |     27,533 |
+| TypeScript React |        120 |     12,994 |      1,184 |      1,036 |     15,214 |
+| TypeScript       |         14 |      1,124 |        191 |         61 |      1,376 |
+| GraphQL          |         39 |        845 |          0 |          9 |        854 |
+| JavaScript       |          3 |        112 |          0 |          7 |        119 |
+| CSS              |          1 |         41 |         24 |         12 |         77 |
+| Markdown         |          1 |         40 |          0 |         20 |         60 |
+| Shell Script     |          3 |         29 |          3 |         12 |         44 |
+| HTML             |          2 |         21 |          0 |          4 |         25 |
+| YAML             |          1 |          9 |          0 |          1 |         10 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                          |        189 |     42,743 |      1,402 |      1,167 |     45,312 |
+| .storybook                                                                                                                 |          3 |         57 |          0 |          7 |         64 |
+| public                                                                                                                     |          2 |         45 |          0 |          4 |         49 |
+| scripts                                                                                                                    |          3 |         29 |          3 |         12 |         44 |
+| src                                                                                                                        |        174 |     15,004 |      1,399 |      1,118 |     17,521 |
+| src/asset                                                                                                                  |          1 |         69 |          0 |          3 |         72 |
+| src/asset/img                                                                                                              |          1 |         69 |          0 |          3 |         72 |
+| src/components                                                                                                             |         50 |      2,580 |         81 |        337 |      2,998 |
+| src/components/Avatar                                                                                                      |          2 |         62 |          1 |         12 |         75 |
+| src/components/AvatarGroup                                                                                                 |          2 |         75 |          1 |         10 |         86 |
+| src/components/Button                                                                                                      |          3 |         79 |          1 |         14 |         94 |
+| src/components/Calendar                                                                                                    |          4 |        169 |         33 |         38 |        240 |
+| src/components/Chart                                                                                                       |          4 |        382 |         25 |         42 |        449 |
+| src/components/DeleteableAvatar                                                                                            |          2 |         47 |          0 |          7 |         54 |
+| src/components/Form                                                                                                        |          2 |        135 |          3 |         14 |        152 |
+| src/components/Heading                                                                                                     |          3 |        180 |          1 |         31 |        212 |
+| src/components/IconButton                                                                                                  |          2 |         99 |          1 |         12 |        112 |
+| src/components/Input                                                                                                       |          2 |        119 |          1 |         13 |        133 |
+| src/components/Label                                                                                                       |          3 |        156 |          1 |         16 |        173 |
+| src/components/LabelSearchInput                                                                                            |          3 |        157 |          7 |         16 |        180 |
+| src/components/LabelSelector                                                                                               |          1 |         56 |          0 |          8 |         64 |
+| src/components/ListItem                                                                                                    |          2 |         36 |          0 |         10 |         46 |
+| src/components/RoundButton                                                                                                 |          3 |        188 |          1 |         21 |        210 |
+| src/components/Spinner                                                                                                     |          2 |         86 |          1 |         12 |         99 |
+| src/components/Text                                                                                                        |          3 |         74 |          0 |         12 |         86 |
+| src/components/TextArea                                                                                                    |          2 |        129 |          0 |          8 |        137 |
+| src/components/TextButton                                                                                                  |          2 |        104 |          0 |         14 |        118 |
+| src/components/Toast                                                                                                       |          1 |         44 |          0 |          4 |         48 |
+| src/components/UserSelector                                                                                                |          2 |        203 |          4 |         23 |        230 |
+| src/generated                                                                                                              |          1 |      3,523 |        677 |        201 |      4,401 |
+| src/graphql                                                                                                                |         39 |        845 |          0 |          9 |        854 |
+| src/graphql/mutations                                                                                                      |         30 |        555 |          0 |          2 |        557 |
+| src/graphql/queries                                                                                                        |          9 |        290 |          0 |          7 |        297 |
+| src/hooks                                                                                                                  |          3 |         54 |          2 |         19 |         75 |
+| src/layouts                                                                                                                |         27 |      3,147 |        351 |        230 |      3,728 |
+| src/layouts/Modal                                                                                                          |          3 |        148 |          1 |         14 |        163 |
+| src/layouts/PageHeader                                                                                                     |          2 |         53 |          1 |         11 |         65 |
+| src/layouts/SideNav                                                                                                        |          2 |        120 |         18 |         12 |        150 |
+| src/layouts/TaskBar                                                                                                        |          6 |        843 |         10 |         77 |        930 |
+| src/layouts/TaskBar/SprintSelector                                                                                         |          2 |        106 |          2 |         10 |        118 |
+| src/layouts/TaskBar/TextLabel                                                                                              |          1 |         13 |          0 |          4 |         17 |
+| src/layouts/TaskBoard                                                                                                      |         10 |      1,788 |        216 |         93 |      2,097 |
+| src/layouts/TaskBoard/TaskBoard                                                                                            |          3 |        599 |          4 |         31 |        634 |
+| src/layouts/TaskBoard/TaskBoardContainer                                                                                   |          2 |         43 |          0 |          7 |         50 |
+| src/layouts/TaskBoard/TaskBoardList                                                                                        |          2 |        935 |        212 |         38 |      1,185 |
+| src/layouts/TaskBoard/TaskCard                                                                                             |          3 |        211 |          0 |         17 |        228 |
+| src/layouts/TopNav                                                                                                         |          4 |        195 |        105 |         23 |        323 |
+| src/layouts/TopNav/ProjectListDropdown                                                                                     |          2 |         81 |         45 |         10 |        136 |
+| src/pages                                                                                                                  |         44 |      4,602 |        282 |        294 |      5,178 |
+| src/pages/404                                                                                                              |          1 |         65 |          0 |          3 |         68 |
+| src/pages/Auth                                                                                                             |          8 |        534 |          0 |         42 |        576 |
+| src/pages/Auth/Image                                                                                                       |          2 |        135 |          0 |          6 |        141 |
+| src/pages/Board                                                                                                            |          2 |        934 |        208 |         21 |      1,163 |
+| src/pages/Calendar                                                                                                         |          1 |         17 |          0 |          3 |         20 |
+| src/pages/ComingSoon                                                                                                       |          1 |         56 |          0 |          3 |         59 |
+| src/pages/Dashboard                                                                                                        |         11 |        520 |         31 |         62 |        613 |
+| src/pages/Dashboard/ActivityStream                                                                                         |          2 |        108 |          5 |         13 |        126 |
+| src/pages/Dashboard/Charts                                                                                                 |          4 |        121 |          0 |         18 |        139 |
+| src/pages/Dashboard/MyTasks                                                                                                |          2 |         98 |          3 |         13 |        114 |
+| src/pages/Dashboard/ReportCard                                                                                             |          1 |         87 |         20 |          9 |        116 |
+| src/pages/Dashboard/ReportHero                                                                                             |          1 |         65 |          1 |          5 |         71 |
+| src/pages/Invitation                                                                                                       |          1 |         24 |          0 |          5 |         29 |
+| src/pages/Landing                                                                                                          |          4 |        920 |          8 |         25 |        953 |
+| src/pages/MyProfile                                                                                                        |          4 |        194 |          1 |         27 |        222 |
+| src/pages/MyProfile/Forms                                                                                                  |          2 |        136 |          1 |         17 |        154 |
+| src/pages/NewProject                                                                                                       |          1 |        108 |          1 |          9 |        118 |
+| src/pages/ProjectSetting                                                                                                   |          4 |        479 |          8 |         42 |        529 |
+| src/pages/ProjectSetting/AccessPermission                                                                                  |          1 |        299 |          1 |         23 |        323 |
+| src/pages/ProjectSetting/BasicDetail                                                                                       |          2 |        153 |          7 |         16 |        176 |
+| src/pages/Sprint                                                                                                           |          5 |        734 |         25 |         49 |        808 |
+| src/pages/Sprint/Accordion                                                                                                 |          4 |        618 |         25 |         44 |        687 |
+| src/pages/Timeline                                                                                                         |          1 |         17 |          0 |          3 |         20 |
+| src/styles                                                                                                                 |          1 |         64 |          0 |          3 |         67 |
+| src/utils                                                                                                                  |          5 |         49 |          2 |         14 |         65 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                                   | language         | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/.eslintrc.js                                                            | JavaScript       |         56 |          0 |          1 |         57 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/.prettierrc                                                             | JSON             |          4 |          0 |          1 |          5 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/main.js                                                      | JavaScript       |         32 |          0 |          3 |         35 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/preview-head.html                                            | HTML             |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/.storybook/preview.js                                                   | JavaScript       |         24 |          0 |          3 |         27 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/README.md                                                               | Markdown         |         40 |          0 |         20 |         60 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/codegen.yml                                                             | YAML             |          9 |          0 |          1 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/package-lock.json                                                       | JSON             |     27,366 |          0 |          1 |     27,367 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/package.json                                                            | JSON             |        106 |          0 |          1 |        107 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/public/index.html                                                       | HTML             |         20 |          0 |          3 |         23 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/public/manifest.json                                                    | JSON             |         25 |          0 |          1 |         26 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/pre-commit.sh                                                   | Shell Script     |          4 |          1 |          3 |          8 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/pre-push.sh                                                     | Shell Script     |          8 |          1 |          3 |         12 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/scripts/prepare-commit-msg.sh                                           | Shell Script     |         17 |          1 |          6 |         24 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/App.tsx                                                             | TypeScript React |         45 |          1 |          4 |         50 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/asset/img/LandingAstro.tsx                                          | TypeScript React |         69 |          0 |          3 |         72 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Avatar/avatar.stories.tsx                                | TypeScript React |         39 |          0 |          7 |         46 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Avatar/index.tsx                                         | TypeScript React |         23 |          1 |          5 |         29 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/AvatarGroup/avatarGroup.stories.tsx                      | TypeScript React |         44 |          0 |          5 |         49 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/AvatarGroup/index.tsx                                    | TypeScript React |         31 |          1 |          5 |         37 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/button.stories.tsx                                | TypeScript React |         35 |          0 |          6 |         41 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/button.styled.tsx                                 | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Button/index.tsx                                         | TypeScript React |         43 |          1 |          7 |         51 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/calendar.stories.tsx                            | TypeScript React |         15 |          8 |          5 |         28 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/calendar.styled.tsx                             | TypeScript React |         56 |          0 |         13 |         69 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/index.tsx                                       | TypeScript React |         57 |          1 |          8 |         66 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Calendar/react_dates_override.css                        | CSS              |         41 |         24 |         12 |         77 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/Chart.stories.tsx                                  | TypeScript React |         88 |         20 |          9 |        117 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/index.tsx                                          | TypeScript React |        139 |          4 |         16 |        159 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/types.ts                                           | TypeScript       |         27 |          1 |          6 |         34 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Chart/utils.ts                                           | TypeScript       |        128 |          0 |         11 |        139 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/DeleteableAvatar/DeleteableAvatar.styled.tsx             | TypeScript React |         15 |          0 |          3 |         18 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/DeleteableAvatar/index.tsx                               | TypeScript React |         32 |          0 |          4 |         36 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Form/form.stories.tsx                                    | TypeScript React |         55 |          0 |          6 |         61 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Form/index.tsx                                           | TypeScript React |         80 |          3 |          8 |         91 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/heading.stories.tsx                              | TypeScript React |         95 |          0 |         13 |        108 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/heading.styled.tsx                               | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Heading/index.tsx                                        | TypeScript React |         84 |          1 |         17 |        102 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/IconButton/IconButton.stories.tsx                        | TypeScript React |         27 |          0 |          4 |         31 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/IconButton/index.tsx                                     | TypeScript React |         72 |          1 |          8 |         81 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Input/Input.stories.tsx                                  | TypeScript React |         41 |          0 |          6 |         47 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Input/index.tsx                                          | TypeScript React |         78 |          1 |          7 |         86 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/index.tsx                                          | TypeScript React |         92 |          0 |          9 |        101 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/label.stories.tsx                                  | TypeScript React |         63 |          1 |          6 |         70 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Label/label.styled.tsx                                   | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/index.tsx                               | TypeScript React |        115 |          6 |          8 |        129 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/label.styled.tsx                        | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSearchInput/labelSearchInput.stories.tsx            | TypeScript React |         41 |          1 |          7 |         49 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/LabelSelector/index.tsx                                  | TypeScript React |         56 |          0 |          8 |         64 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/ListItem/ListItem.stories.tsx                            | TypeScript React |         21 |          0 |          5 |         26 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/ListItem/index.tsx                                       | TypeScript React |         15 |          0 |          5 |         20 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/RoundButton.stories.tsx                      | TypeScript React |         98 |          0 |          9 |        107 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/RoundButton.styled.tsx                       | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/RoundButton/index.tsx                                    | TypeScript React |         89 |          1 |         11 |        101 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Spinner/Spinner.stories.tsx                              | TypeScript React |         40 |          0 |          5 |         45 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Spinner/index.tsx                                        | TypeScript React |         46 |          1 |          7 |         54 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/index.tsx                                           | TypeScript React |         20 |          0 |          4 |         24 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/text.stories.tsx                                    | TypeScript React |         53 |          0 |          7 |         60 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Text/text.styled.tsx                                     | TypeScript React |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextArea/Input.stories.tsx                               | TypeScript React |         41 |          0 |          6 |         47 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextArea/index.tsx                                       | TypeScript React |         88 |          0 |          2 |         90 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextButton/TextButton.stories.tsx                        | TypeScript React |         51 |          0 |          7 |         58 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/TextButton/index.tsx                                     | TypeScript React |         53 |          0 |          7 |         60 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/Toast/toast.stories.tsx                                  | TypeScript React |         44 |          0 |          4 |         48 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/UserSelector/index.tsx                                   | TypeScript React |        133 |          3 |         16 |        152 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/components/UserSelector/userSelector.stories.tsx                    | TypeScript React |         70 |          1 |          7 |         78 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/generated/graphql.tsx                                               | TypeScript React |      3,523 |        677 |        201 |      4,401 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/RouteInvitation.graphql                           | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createBoard.graphql                               | GraphQL          |         37 |          0 |          0 |         37 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createComment.graphql                             | GraphQL          |         24 |          0 |          0 |         24 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createGuest.graphql                               | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createProject.graphql                             | GraphQL          |         22 |          0 |          0 |         22 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createSprint.graphql                              | GraphQL          |         15 |          0 |          0 |         15 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createTask.graphql                                | GraphQL          |         49 |          0 |          0 |         49 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createTaskLabel.graphql                           | GraphQL          |         20 |          0 |          0 |         20 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/createUserTask.graphql                            | GraphQL          |         21 |          0 |          0 |         21 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteBoard.graphql                               | GraphQL          |         37 |          0 |          0 |         37 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteComment.graphql                             | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteLabel.graphql                               | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteProject.graphql                             | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteSprint.graphql                              | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteTask.graphql                                | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteTaskLabel.graphql                           | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/deleteUserTask.graphql                            | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/inviteUser.graphql                                | GraphQL          |         10 |          0 |          0 |         10 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/login.graphql                                     | GraphQL          |         13 |          0 |          0 |         13 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/logout.graphql                                    | GraphQL          |          3 |          0 |          1 |          4 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/register.graphql                                  | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateBoard.graphql                               | GraphQL          |         37 |          0 |          0 |         37 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateComment.graphql                             | GraphQL          |         23 |          0 |          0 |         23 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateLabel.graphql                               | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateProjectName.graphql                         | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateProjectPermission.graphql                   | GraphQL          |         17 |          0 |          1 |         18 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateSprint.graphql                              | GraphQL          |         20 |          0 |          0 |         20 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateTask.graphql                                | GraphQL          |         49 |          0 |          0 |         49 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateUserProfile.graphql                         | GraphQL          |          9 |          0 |          0 |          9 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/mutations/updateUserSetting.graphql                         | GraphQL          |          9 |          0 |          0 |          9 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/boards.graphql                                      | GraphQL          |         37 |          0 |          1 |         38 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getLabels.graphql                                   | GraphQL          |         14 |          0 |          0 |         14 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getMe.graphql                                       | GraphQL          |         33 |          0 |          1 |         34 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getProject.graphql                                  | GraphQL          |         39 |          0 |          0 |         39 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getReportSummary.graphql                            | GraphQL          |         25 |          0 |          3 |         28 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getSprint.graphql                                   | GraphQL          |         32 |          0 |          2 |         34 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getSprints.graphql                                  | GraphQL          |         40 |          0 |          0 |         40 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getStartedSprint.graphql                            | GraphQL          |         13 |          0 |          0 |         13 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/graphql/queries/getTask.graphql                                     | GraphQL          |         57 |          0 |          0 |         57 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/hooks/useLoadMore.ts                                                | TypeScript       |         30 |          2 |          9 |         41 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/hooks/useLocalStorage.ts                                            | TypeScript       |         19 |          0 |          7 |         26 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/hooks/useQuery.ts                                                   | TypeScript       |          5 |          0 |          3 |          8 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/index.tsx                                                           | TypeScript React |         22 |          2 |          3 |         27 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/DeleteBoardModal.tsx                                  | TypeScript React |         58 |          0 |          4 |         62 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/ModalLayout.stories.tsx                               | TypeScript React |         17 |          1 |          6 |         24 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/Modal/index.tsx                                             | TypeScript React |         73 |          0 |          4 |         77 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/PageHeader/index.tsx                                        | TypeScript React |         40 |          0 |          6 |         46 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/PageHeader/pageHeader.stories.tsx                           | TypeScript React |         13 |          1 |          5 |         19 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/SideNav/index.tsx                                           | TypeScript React |        119 |         10 |          8 |        137 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/SideNav/sideNav.stories.tsx                                 | TypeScript React |          1 |          8 |          4 |         13 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/SprintSelector/index.tsx                            | TypeScript React |         69 |          0 |          6 |         75 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/SprintSelector/sprintSelector.stories.tsx           | TypeScript React |         37 |          2 |          4 |         43 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/TextLabel/index.tsx                                 | TypeScript React |         13 |          0 |          4 |         17 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/index.tsx                                           | TypeScript React |        629 |          7 |         47 |        683 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/taskBar.stories.tsx                                 | TypeScript React |         13 |          1 |          5 |         19 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBar/utils.ts                                            | TypeScript       |         82 |          0 |         11 |         93 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/SkeletonBoard.tsx                       | TypeScript React |        112 |          0 |          8 |        120 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/index.tsx                               | TypeScript React |        382 |          4 |         18 |        404 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoard/taskBoard.stories.tsx                   | TypeScript React |        105 |          0 |          5 |        110 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardContainer/index.tsx                      | TypeScript React |         35 |          0 |          3 |         38 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardContainer/taskBoardContainer.stories.tsx | TypeScript React |          8 |          0 |          4 |         12 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardList/index.tsx                           | TypeScript React |        242 |         27 |         34 |        303 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskBoardList/taskBoardList.stories.tsx           | TypeScript React |        693 |        185 |          4 |        882 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/DragPositionCard.tsx                     | TypeScript React |         32 |          0 |          4 |         36 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/index.tsx                                | TypeScript React |        119 |          0 |          8 |        127 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TaskBoard/TaskCard/taskCard.stories.tsx                     | TypeScript React |         60 |          0 |          5 |         65 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/ProjectListDropdown/index.tsx                        | TypeScript React |         80 |          7 |          6 |         93 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/ProjectListDropdown/projectListDropdown.stories.tsx  | TypeScript React |          1 |         38 |          4 |         43 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/index.tsx                                            | TypeScript React |        113 |          2 |          9 |        124 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/layouts/TopNav/topNav.stories.tsx                                   | TypeScript React |          1 |         58 |          4 |         63 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/404/index.tsx                                                 | TypeScript React |         65 |          0 |          3 |         68 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Image/Dog.tsx                                            | TypeScript React |         50 |          0 |          3 |         53 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Image/Universe.tsx                                       | TypeScript React |         85 |          0 |          3 |         88 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Login.tsx                                                | TypeScript React |        104 |          0 |          8 |        112 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/LoginWelcomeCard.tsx                                     | TypeScript React |         41 |          0 |          4 |         45 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/Register.tsx                                             | TypeScript React |        123 |          0 |          9 |        132 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/RegisterWelcomeCard.tsx                                  | TypeScript React |         42 |          0 |          4 |         46 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/index.tsx                                                | TypeScript React |         71 |          0 |          6 |         77 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Auth/useProjectRoute.tsx                                      | TypeScript React |         18 |          0 |          5 |         23 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Board/dummyData.ts                                            | TypeScript       |        699 |        186 |          1 |        886 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Board/index.tsx                                               | TypeScript React |        235 |         22 |         20 |        277 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Calendar/index.tsx                                            | TypeScript React |         17 |          0 |          3 |         20 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ComingSoon/index.tsx                                          | TypeScript React |         56 |          0 |          3 |         59 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ActivityStream/ActivityStream.styled.tsx            | TypeScript React |         14 |          0 |          4 |         18 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ActivityStream/index.tsx                            | TypeScript React |         94 |          5 |          9 |        108 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/IncompleteTasks.tsx                          | TypeScript React |         24 |          0 |          6 |         30 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/TasksByAssignee.tsx                          | TypeScript React |         24 |          0 |          4 |         28 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/index.tsx                                    | TypeScript React |         48 |          0 |          3 |         51 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/Charts/taskCountSummary.tsx                         | TypeScript React |         25 |          0 |          5 |         30 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/MyTasks/MyTasks.styled.tsx                          | TypeScript React |         18 |          0 |          4 |         22 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/MyTasks/index.tsx                                   | TypeScript React |         80 |          3 |          9 |         92 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ReportCard/index.tsx                                | TypeScript React |         87 |         20 |          9 |        116 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/ReportHero/index.tsx                                | TypeScript React |         65 |          1 |          5 |         71 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Dashboard/index.tsx                                           | TypeScript React |         41 |          2 |          4 |         47 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Invitation/index.tsx                                          | TypeScript React |         24 |          0 |          5 |         29 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/background.styled.tsx                                 | TypeScript React |         22 |          0 |          4 |         26 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/chartData.ts                                          | TypeScript       |         37 |          0 |          2 |         39 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/index.tsx                                             | TypeScript React |        656 |          3 |         15 |        674 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Landing/last.tsx                                              | TypeScript React |        205 |          5 |          4 |        214 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/Forms/index.tsx                                     | TypeScript React |        102 |          1 |         10 |        113 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/Forms/roleSelectInput.tsx                           | TypeScript React |         34 |          0 |          7 |         41 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/MyProfile.styled.tsx                                | TypeScript React |         15 |          0 |          4 |         19 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/MyProfile/index.tsx                                           | TypeScript React |         43 |          0 |          6 |         49 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/NewProject/index.tsx                                          | TypeScript React |        108 |          1 |          9 |        118 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/AccessPermission/index.tsx                     | TypeScript React |        299 |          1 |         23 |        323 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/BasicDetail/BasicDetail.styled.tsx             | TypeScript React |         32 |          0 |          6 |         38 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/BasicDetail/index.tsx                          | TypeScript React |        121 |          7 |         10 |        138 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/ProjectSetting/index.tsx                                      | TypeScript React |         27 |          0 |          3 |         30 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/SprintItem.tsx                               | TypeScript React |        343 |          8 |         17 |        368 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/TaskList.tsx                                 | TypeScript React |         71 |          0 |          9 |         80 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/TaskListEntry.tsx                            | TypeScript React |         95 |         15 |          9 |        119 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/Accordion/index.tsx                                    | TypeScript React |        109 |          2 |          9 |        120 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Sprint/index.tsx                                              | TypeScript React |        116 |          0 |          5 |        121 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/pages/Timeline/index.tsx                                            | TypeScript React |         17 |          0 |          3 |         20 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/react-app-env.d.ts                                                  | TypeScript       |          4 |          1 |          1 |          6 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/styles/theme.ts                                                     | TypeScript       |         64 |          0 |          3 |         67 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/RoutePath.ts                                                  | TypeScript       |         15 |          0 |          1 |         16 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/RouteType.ts                                                  | TypeScript       |          1 |          0 |          1 |          2 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/getProjectIdFromLocation.ts                                   | TypeScript       |          4 |          1 |          1 |          6 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/privateRoute.tsx                                              | TypeScript React |         20 |          1 |          7 |         28 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/src/utils/toErrorMap.ts                                                 | TypeScript       |          9 |          0 |          4 |         13 |
+| /Users/paulkim/Desktop/cs_projects/Retrievo_client/tsconfig.json                                                           | JSON             |         27 |          0 |          1 |         28 |
+| Total                                                                                                                      |                  |     42,743 |      1,402 |      1,167 |     45,312 |
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
