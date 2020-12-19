@@ -82,7 +82,7 @@ const Login = (): ReactElement => {
           />
         </Form>
         <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
-          <a href="http://localhost:4000/auth/google">
+          <a href="http://retrievo.io/auth/google">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.google}
@@ -93,7 +93,7 @@ const Login = (): ReactElement => {
               mr={2}
             />
           </a>
-          <a href="http://localhost:4000/auth/github">
+          <a href="http://retrievo.io/auth/github">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.github}

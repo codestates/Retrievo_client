@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { FetchResult } from "@apollo/client";
 import * as yup from "yup";
 import { Box, useToast, Input } from "@chakra-ui/react";
@@ -17,22 +16,23 @@ export type boardType = {
 };
 
 export type SkeletonBoardProps = {
+  projectId: string;
   handleBoardCreate: (
     title: string,
     projectId: string
   ) => Promise<
     FetchResult<CreateBoardMutation, Record<string, any>, Record<string, any>>
   >;
-  projectId: string;
+  lazyGetBoard: (options: Record<string, string>) => void;
 };
 
 const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   handleBoardCreate,
   projectId,
+  lazyGetBoard,
 }): ReactElement => {
   const [isCreating, setIsCreating] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const history = useHistory();
   const toast = useToast();
 
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {

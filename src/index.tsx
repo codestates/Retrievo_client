@@ -7,6 +7,7 @@ import App from "./App";
 // eslint-disable-next-line import/prefer-default-export
 export const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
+  // uri: "https://retrievo.io/graphql",
   cache: new InMemoryCache(),
   credentials: "include",
 });
