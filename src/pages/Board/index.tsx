@@ -209,6 +209,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   };
 
   const handleTaskClick = (id: string) => {
+    console.log("-----------selectedTask:", selectedTask);
     setSelectedTask(id);
   };
 
@@ -333,7 +334,10 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
             taskId={selectedTask}
             {...args}
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={() => {
+              onClose();
+              setSelectedTask(null);
+            }}
           />
         ) : null}
       </Box>
