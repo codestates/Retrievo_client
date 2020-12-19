@@ -9,33 +9,16 @@ import Label from "../../../components/Label";
 import Spinner from "../../../components/Spinner";
 import { Task } from "../../../generated/graphql";
 
-// import TaskBar from "../../../layouts/TaskBar";
-// type userTaskUserType = {
-//   src?: string;
-//   name?: string;
-// };
-
-// type taskDataType = {
-//   id: string;
-//   taskIndex: number;
-//   sprintRowIndex: number;
-//   title: string;
-//   board: Record<string, string>;
-//   userTask: userTaskType[];
-// };
-
 type taskListEntryProps = {
   taskData: Task;
   mappedIndex: number;
   setSelectedTask: (id: string | null) => void;
   onTaskOpen: () => void;
-  selectedTask: string | null;
 };
 
 export const TaskListEntry: React.FC<taskListEntryProps> = ({
   taskData,
   mappedIndex,
-  selectedTask,
   setSelectedTask,
   onTaskOpen,
 }) => {

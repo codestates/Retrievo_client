@@ -13,13 +13,11 @@ type TaskListPropType = {
   taskData: Task[];
   setSelectedTask: () => void;
   onTaskOpen: () => void;
-  selectedTask: string | null;
 };
 
 export const TaskList: React.FC<TaskListPropType> = ({
   taskData,
   setSelectedTask,
-  selectedTask,
   onTaskOpen,
 }) => {
   const query = useQuery();
@@ -58,7 +56,6 @@ export const TaskList: React.FC<TaskListPropType> = ({
                 return (
                   <TaskListEntry
                     setSelectedTask={setSelectedTask}
-                    selectedTask={selectedTask}
                     onTaskOpen={onTaskOpen}
                     key={task.id}
                     taskData={task}
