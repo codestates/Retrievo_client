@@ -97,7 +97,6 @@ export const Sprints: React.FC = () => {
                           startedSprint={startedSprint}
                           completedSprint={completedSprint}
                           setSelectedTask={setSelected}
-                          selectedTask={selected}
                           onTaskOpen={onOpen}
                         />
                       );
