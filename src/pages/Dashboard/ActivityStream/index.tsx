@@ -2,6 +2,7 @@ import React from "react";
 import { Divider, Box, Flex } from "@chakra-ui/react";
 import { FiActivity } from "react-icons/fi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import _ from "lodash";
 import { useGetProjectQuery } from "../../../generated/graphql";
 import useQuery from "../../../hooks/useQuery";
 // import { formatDistanceStrict } from "date-fns";
@@ -40,41 +41,74 @@ export const ActivityStream: React.FC = () => {
     setItems(userData);
   }
 
+  const makeRandomMessage = (): string => {
+    const messages = [
+      "completed this task",
+      "created this task",
+      "write this comment",
+    ];
+    return messages[_.random(0, messages.length - 1)];
+  };
+
+  const dummyItems: { username: string; avatar: string; message: string }[] = [
+    {
+      username: "Ben award",
+      avatar: "",
+      message: "update new Video on Youtube",
+    },
+    {
+      username: "Kim Coding ",
+      avatar: "",
+      message: "write the comment to you",
+    },
+    { username: "Nomard", avatar: "", message: "create New Task for Sichoi" },
+    {
+      username: "Kim JungEun",
+      avatar: "",
+      message: "like Dongoc's new project",
+    },
+    { username: "Buzz", avatar: "", message: "complete 3 tasks" },
+    { username: "Paul Kim", avatar: "", message: "sing a new song" },
+    { username: "Pomeranian", avatar: "", message: "assign task to Si Choi" },
+    {
+      username: "Codestates",
+      avatar: "",
+      message: "have a new plan for everyone",
+    },
+    { username: "DKJE", avatar: "", message: "write comment to you" },
+    { username: "Sichoi", avatar: "", message: "leave a message on Task 215" },
+  ];
+
   const renderVisible = () => {
-    return items.slice(0, visible).map((item) => {
-      if (typeof item.notification !== "string") {
-        return (
-          <>
-            <StyledActivityStream p={2} bg="achromatic.100" w="100%">
-              <Flex w="6rem" justifyContent="center" alignItems="center">
-                <CustomAvatar
-                  name={`${item.username}`}
-                  src={`${item.avatar}`}
-                />
-              </Flex>
-              <Flex w="70%">
-                <Text fontWeight="bold" pr={2}>{`${item.username}`}</Text>
-                <Text>did something</Text>
-              </Flex>
-              <Flex
-                w="25%"
-                alignItems="center"
-                justifyContent="flex-end"
-                color="achromatic.600"
-                pr={4}
-              >
-                {/* {`${formatDistanceStrict(
+    // TODO : dummy를 items로 바꾸기
+    return dummyItems.slice(0, visible).map((item) => {
+      return (
+        <>
+          <StyledActivityStream p={2} bg="achromatic.100" w="100%">
+            <Flex w="6rem" justifyContent="center" alignItems="center">
+              <CustomAvatar name={`${item.username}`} src={`${item.avatar}`} />
+            </Flex>
+            <Flex w="70%">
+              <Text fontWeight="bold" pr={2}>{`${item.username}`}</Text>
+              <Text>{item.message}</Text>
+            </Flex>
+            <Flex
+              w="25%"
+              alignItems="center"
+              justifyContent="flex-end"
+              color="achromatic.600"
+              pr={4}
+            >
+              {/* {`${formatDistanceStrict(
                   new Date(Number(item.notification.createdAt)),
                   new Date(),
                   { addSuffix: true }
                 )}`} */}
-              </Flex>
-            </StyledActivityStream>
-            <Divider orientation="horizontal" />
-          </>
-        );
-      }
-      return null;
+            </Flex>
+          </StyledActivityStream>
+          <Divider orientation="horizontal" />
+        </>
+      );
     });
   };
 

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 /* Layouts */
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
+import TaskBar from "../../layouts/TaskBar";
 /* Child-Components */
 import MyTasks from "./MyTasks";
 import ActivityStream from "./ActivityStream";
@@ -13,6 +14,17 @@ import ReportCard from "./ReportCard";
 import Charts from "./Charts";
 
 export const Dashboard: React.FC<Record<string, never>> = () => {
+  const [selectedTask, setSelectedTask] = useState<string | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (selectedTask) {
+      onOpen();
+    } else {
+      onClose();
+    }
+  }, [selectedTask, onOpen, onClose]);
+
   return (
     <>
       <Box>
@@ -22,7 +34,7 @@ export const Dashboard: React.FC<Record<string, never>> = () => {
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
             <Box mt={9}>
-              <MyTasks />
+              <MyTasks setSelectedTask={setSelectedTask} />
             </Box>
             <Box mt={9}>
               <ActivityStream />
@@ -38,6 +50,16 @@ export const Dashboard: React.FC<Record<string, never>> = () => {
             </Box>
           </Box>
         </Box>
+        {selectedTask ? (
+          <TaskBar
+            taskId={selectedTask}
+            isOpen={isOpen}
+            onClose={() => {
+              onClose();
+              setSelectedTask(null);
+            }}
+          />
+        ) : null}
       </Box>
     </>
   );
