@@ -118,11 +118,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         return;
       }
 
-      // [준비물]
-      // 원래 task의 boardRowIndex : source.index
-      // 원래 task의 board : sourceBoard
-      // 이동할 destinationBoard의 index : destination.index
-      // 이동할 destinationBoard : destinationBoard
       const sourceBoard = boardLists.find(
         (boardList) => boardList.id === source.droppableId
       );
@@ -268,16 +263,17 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
 
       /* source와 destination 스왑하면서 boardColumnIndex도 수정하기 */
       const copyBoardLists = [...boardLists];
-      const temp = copyBoardLists[source.index];
-      copyBoardLists[source.index] = copyBoardLists[destination.index];
-      copyBoardLists[destination.index] = temp;
+      const sourceBoard = copyBoardLists[source.index];
+      copyBoardLists.splice(source.index, 1);
+      copyBoardLists.splice(destination.index, 0, sourceBoard);
+
       const changedIndexBoardList = copyBoardLists.map((board, index) => {
         return { ...board, boardColumnIndex: index };
       });
 
       /* 서버에 업데이트 */
       handleBoardUpdateToServer({
-        id: temp.id,
+        id: sourceBoard.id,
         boardColumnIndex: destination.index,
       });
 

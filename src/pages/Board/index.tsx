@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
-
 /* Layouts & types */
 import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
@@ -13,10 +11,10 @@ import TaskBoardContainer from "../../layouts/TaskBoard/TaskBoardContainer";
 import { TaskBar } from "../../layouts/TaskBar";
 import { Boardoptions, TaskOptions } from "../../layouts/TaskBoard/TaskBoard";
 import Spinner from "../../components/Spinner";
-
-/* GraphQL & Apollo */
+import Heading, { headingEnum } from "../../components/Heading";
+import Button, { buttonColor } from "../../components/Button";
+/* GraphQL */
 import {
-  Board as BoardType,
   GetBoardsDocument,
   useCreateBoardMutation,
   useDeleteBoardMutation,
@@ -26,21 +24,13 @@ import {
   useCreateTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
-  useUpdateSprintMutation,
   SetStartedSprintDocument,
-  useGetBoardsLazyQuery,
   useDeleteSprintMutation,
-  GetSprintsDocument,
+  // useUpdateSprintMutation,
+  // GetSprintsDocument,
 } from "../../generated/graphql";
-import { client } from "../../index";
-import Heading, { headingEnum } from "../../components/Heading";
-import Button, { buttonColor } from "../../components/Button";
+/* hooks */
 import { useQuery } from "../../hooks/useQuery";
-// import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
-
-interface BoardProps {
-  projectId: string;
-}
 
 export interface TaskUpdateOptions {
   id: string;
@@ -60,6 +50,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   const projectId = query.get("projectId");
   if (!projectId) return null;
 
+  /* state & hooks */
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -73,21 +64,14 @@ export const Board: React.FC<Record<string, never>> = () => {
       variables: { projectId },
     }
   );
-  const [deleteSprint] = useDeleteSprintMutation();
-
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
-  const [
-    updateBoard,
-    { data: boardData, loading: boardLoading },
-  ] = useUpdateBoardMutation();
+  const [updateBoard, { loading: boardLoading }] = useUpdateBoardMutation();
   const [createTask] = useCreateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
-  const [updateSprint] = useUpdateSprintMutation();
-  const [
-    updateTask,
-    { data: taskData, loading: taskLoading },
-  ] = useUpdateTaskMutation();
+  const [updateTask, { loading: taskLoading }] = useUpdateTaskMutation();
+  const [deleteSprint] = useDeleteSprintMutation();
+  // const [updateSprint] = useUpdateSprintMutation();
 
   if (!projectId) return null;
 
@@ -95,36 +79,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      // TODO : refetch 시도하기
-      // TODO : 이거 안되면 코드 자체를 그냥 뜯어보기 어디서 막히는고여ㅑㅁ
-
-      // update: (cache, { data }) => {
-      //   if (!data) return;
-      //   if (!data.createBoard) return;
-
-      //   const allBoards = data?.createBoard.boards;
-      //   if (!allBoards) return;
-
-      //   const cacheId = cache.identify(allBoards[allBoards.length - 2]);
-      //   if (!cacheId) return;
-
-      //   cache.modify({
-      //     fields: {
-      //       getBoards: (existingBoards, { toReference }) => {
-      //         const newData = existingBoards.boards.slice();
-      //         const insertedData = toReference(cacheId);
-
-      //         newData.splice(newData.length - 2, 0, insertedData);
-      //         console.log("newData", newData);
-      //         // const newBoards = [
-      //         //   ...existingBoards.boards,
-      //         //   toReference(cacheId),
-      //         // ];
-      //         return { ...existingBoards, boards: newData };
-      //       },
-      //     },
-      //   });
-      // },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -139,21 +94,7 @@ export const Board: React.FC<Record<string, never>> = () => {
         newBoardId,
         projectId,
       },
-      // update: (cache, { data }) => {
-      //   const newBoardRes = data?.deleteBoard.boards;
-      //   if (!newBoardRes) return;
-      //   client.writeQuery({
-      //     query: GetBoardsDocument,
-      //     variables: { projectId },
-      //     data: {
-      //       getBoards: {
-      //         boards: [...newBoardRes],
-      //       },
-      //     },
-      //   });
-      //   console.log("deleteboard", newBoardRes);
-      //   // if (refetch) refetch();
-      // },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -163,12 +104,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   ) => {
     return await updateBoard({
       variables: { options, projectId },
-      // update: (cache, { data }) => {
-      //   const existingBoards = cache.readQuery({
-      //     query: GetBoardsDocument,
-      //     variables: { projectId },
-      //   });
-      // },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -200,7 +136,6 @@ export const Board: React.FC<Record<string, never>> = () => {
   };
 
   const handleTaskClick = (id: string) => {
-    console.log("-----------selectedTask:", selectedTask);
     setSelectedTask(id);
   };
 
@@ -231,10 +166,10 @@ export const Board: React.FC<Record<string, never>> = () => {
       ],
     });
 
-    if (res.errors) {
+    if (res.data?.deleteSprint.error) {
       toast({
         title: "Sprint Completion Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteSprint.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",

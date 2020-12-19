@@ -5,11 +5,19 @@ import Login from "./Login";
 import RegisterWelcomeCard from "./RegisterWelcomeCard";
 import LoginWelcomeCard from "./LoginWelcomeCard";
 import useQuery from "../../hooks/useQuery";
+import { useGetMeQuery } from "../../generated/graphql";
+import useProjectRoute from "./useProjectRoute";
 
 const RegisterAndLogin: React.FC<Record<string, never>> = () => {
   const query = useQuery();
   const type = query.get("type");
   const [isRegister, setIsRegister] = useState(type === "register");
+  const { routeToProject } = useProjectRoute();
+  const { data } = useGetMeQuery();
+
+  if (data?.getMe.user) {
+    routeToProject();
+  } // TODO: 현재는 invitation을 거치지 않고 넘어감
 
   const changeCard = () => {
     setIsRegister(!isRegister);

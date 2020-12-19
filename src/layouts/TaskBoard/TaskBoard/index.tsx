@@ -161,7 +161,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       },
       projectId
     );
-    console.log("edit", res);
     if (res.data?.updateBoard.error) {
       toast({
         title: "Board Update Failed😂",
