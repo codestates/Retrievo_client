@@ -50,20 +50,21 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
       >
         {(provided) => (
           <>
-            <Flex
+            <Box
+              display="grid"
+              gridTemplateColumns="1fr 8rem 5rem"
+              gridColumnGap="2rem"
               ref={provided.innerRef}
               {...provided.dragHandleProps}
               {...provided.draggableProps}
               alignItems="center"
               p={2}
             >
-              <Box w="130px">
-                <Label>{`No. ${taskData.taskIndex}`}</Label>
-              </Box>
-              <Box minW="30%" maxW="65%">
-                {/* <TaskBar taskId={taskData.id} /> */}
+              <Box>
                 <Flex>
+                  <Label>{`No. ${taskData.taskIndex}`}</Label>
                   <Text
+                    ml={2}
                     fontSize="base"
                     onClick={() => {
                       setSelectedTask(taskData.id);
@@ -78,12 +79,10 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                   </Text>
                 </Flex>
               </Box>
-              {/* <Flex w="100%" justifyContent="flex-end">
-              </Flex> */}
-              <Flex w="100%" justifyContent="flex-end" mr="2rem">
-                {taskData.board ? (
-                  <Label mr={9}>{taskData.board.title}</Label>
-                ) : null}
+              <Flex justifyContent="flex-end">
+                {taskData.board ? <Label>{taskData.board.title}</Label> : null}
+              </Flex>
+              <Flex justifyContent="flex-end">
                 {taskData.userTask && taskData.userTask.length ? (
                   taskData.userTask.length > 1 ? (
                     <AvatarGroup
@@ -104,7 +103,7 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                   )
                 ) : undefined}
               </Flex>
-            </Flex>
+            </Box>
             <Divider />
           </>
         )}
