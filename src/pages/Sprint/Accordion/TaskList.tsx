@@ -233,13 +233,13 @@ export const TaskList: React.FC<TaskListPropType> = ({
 
   const onDragEnd = (result: Record<string, any>) => {
     if (!result.destination) return;
-
+    console.log(result);
     updateTaskMutation({
       variables: {
         projectId,
         options: {
           id: result.draggableId,
-          sprintRowIndex: result.destination.index,
+          newSprintRowIndex: result.destination.index,
         },
       },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
@@ -259,6 +259,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
       result.destination.index,
       sprint.id
     */
+  console.log(taskData);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
