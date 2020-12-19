@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, AlertIcon, Box, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
@@ -7,7 +7,6 @@ import {
   useUpdateUserSettingMutation,
   useLogoutMutation,
   useGetMeQuery,
-  // UpdateUserSettingDocument,
   GetMeDocument,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
@@ -18,32 +17,49 @@ export const MyProfile: React.FC = () => {
 
   const toast = useToast();
 
-  const [
-    updateUserSettingMutation,
-    {
-      data: updateUserData,
-      loading: updateUserLoading,
-      error: updateUserError,
-    },
-  ] = useUpdateUserSettingMutation();
+  const [updateUserSettingMutation] = useUpdateUserSettingMutation();
 
-  const [
-    logoutMutation,
-    { data: logoutData, loading: logoutLoading, error: logoutError },
-  ] = useLogoutMutation();
+  const [logoutMutation] = useLogoutMutation();
+
+  if (meLoading) return <Spinner />;
 
   const handleUpdateUser = async (values: any) => {
     const { username, email, password } = values;
 
     if (password) {
-      await updateUserSettingMutation({
+      const passwordRes = await updateUserSettingMutation({
         variables: { ...values },
+        refetchQueries: [{ query: GetMeDocument }],
       });
+
+      if (passwordRes.data?.updateUserSetting.error) {
+        toast({
+          position: "bottom-right",
+          title: "User Password Update Failed!",
+          description: passwordRes.data?.updateUserSetting.error.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
 
-    await updateUserSettingMutation({
+    const res = await updateUserSettingMutation({
       variables: { username, email },
+      refetchQueries: [{ query: GetMeDocument }],
     });
+
+    if (res.data?.updateUserSetting.error) {
+      toast({
+        position: "bottom-right",
+        title: "User Name Update Failed!",
+        description: res.data?.updateUserSetting.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   const handleLogout = async () => {
@@ -54,7 +70,6 @@ export const MyProfile: React.FC = () => {
     });
   };
 
-  if (meLoading) return <Spinner />;
   return (
     <>
       <CustomForm
@@ -113,4 +128,5 @@ export const MyProfile: React.FC = () => {
     </>
   );
 };
+
 export default MyProfile;

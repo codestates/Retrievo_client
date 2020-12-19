@@ -116,7 +116,7 @@ export const Sprints: React.FC = () => {
                   defaultIndex={startedSprint ? 0 : undefined}
                 >
                   {sprints ? (
-                    sprints.map((sprint: any) => {
+                    sprints.map((sprint) => {
                       return (
                         <SprintItem
                           key={sprint.id}
