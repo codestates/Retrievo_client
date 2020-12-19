@@ -17,7 +17,7 @@ const RegisterAndLogin: React.FC<Record<string, never>> = () => {
 
   if (data?.getMe.user) {
     routeToProject();
-  }
+  } // TODO: 현재는 invitation을 거치지 않고 넘어감
 
   const changeCard = () => {
     setIsRegister(!isRegister);

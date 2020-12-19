@@ -11,14 +11,14 @@ import StyledListItem from "./MyTasks.styled";
 import { useGetMeQuery } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import Label from "../../../components/Label";
+import useQuery from "../../../hooks/useQuery";
 
 export const MyTasks: React.FC = (): any => {
-  const location = useLocation();
-  const projectId = location.pathname.split("/").pop() || "";
-
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
   const { data: meData, loading: meLoading } = useGetMeQuery();
-
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 3);
+  if (!projectId) return null;
 
   console.log(meData);
   useEffect(() => {
