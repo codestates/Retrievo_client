@@ -27,13 +27,15 @@ import { Task } from "../../../generated/graphql";
 type taskListEntryProps = {
   taskData: Task;
   mappedIndex: number;
-  setSelectedTask: (id: string) => void;
+  setSelectedTask: (id: string | null) => void;
   onTaskOpen: () => void;
+  selectedTask: string | null;
 };
 
 export const TaskListEntry: React.FC<taskListEntryProps> = ({
   taskData,
   mappedIndex,
+  selectedTask,
   setSelectedTask,
   onTaskOpen,
 }) => {
