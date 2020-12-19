@@ -38,7 +38,7 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path={ROUTE.NEW_PROJECT} component={NewProject} />
           <Route path={ROUTE.MY_PROFILE} component={MyProfile} />
           <Route path={ROUTE.NOT_FOUND} component={NotFound} />
-          <Route Path={ROUTE.INVITATION} component={Invitation} />
+          <Route path={ROUTE.INVITATION} component={Invitation} />
           {/* <Redirect path="*" to={ROUTE.NOT_FOUND} /> */}
         </Switch>
       </ChakraProvider>

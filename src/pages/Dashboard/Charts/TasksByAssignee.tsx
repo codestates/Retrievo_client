@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import Chart from "../../../components/Chart";
 import { chartVariant } from "../../../components/Chart/types";
