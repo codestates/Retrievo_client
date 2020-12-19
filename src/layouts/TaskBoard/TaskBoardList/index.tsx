@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { FetchResult } from "@apollo/client";
 import { Box, useToast } from "@chakra-ui/react";
 import {
@@ -38,7 +38,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   handleBoardUpdate,
   boardLoading,
   taskLoading,
-  // lazyGetBoard,
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
@@ -72,6 +71,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     sprintId,
   };
 
+  useEffect(() => {
+    setBoardLists(boards);
+  }, [boards]);
+
   const renderBoards = (boards: boardType[]) => {
     return boards.map((currentBoard) => {
       return (
@@ -87,11 +90,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
               {...provided.dragHandleProps}
               ref={provided.innerRef}
             >
-              <TaskBoard
-                board={currentBoard}
-                // lazyGetBoard={lazyGetBoard}
-                {...boardConfig}
-              />
+              <TaskBoard board={currentBoard} {...boardConfig} />
             </Box>
           )}
         </Draggable>
@@ -139,10 +138,9 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       )
         return;
 
-      // console.log("-------------start-------------");
+      // 1. 기존 보드에서 sourceTask 삭제
       const allSourceTasks = sourceBoard.task.slice();
       const sourceTask = allSourceTasks.splice(source.index, 1);
-      // 1. 기존 보드에서 sourceTask 삭제
 
       // 2. 기존 보드의 테스크 중 이동한 테스크보다 큰 인덱스 - 1
       const changedIndexSourceBoardTasks = allSourceTasks.map((task) => {
@@ -159,7 +157,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         ...sourceBoard,
         task: changedIndexSourceBoardTasks,
       };
-      // console.log("changedSourceBoard", changedSourceBoard);
 
       /* TASK-CASE-1 : TASK가 같은 보드로 이동한 경우 */
       if (destination.droppableId === source.droppableId) {
@@ -179,9 +176,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
           boardId: source.droppableId,
           boardRowIndex: destination.index,
         };
-        // console.log("changedTask1", changedTask);
-
         doubleChangedSourceTask.splice(destination.index, 0, changedTask);
+
         // 3. changedSourceBoard에 task 다시 추가
         changedSourceBoard = {
           ...changedSourceBoard,
@@ -192,11 +188,8 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
         const copyBoardList = [...boardLists];
         copyBoardList[sourceBoardIndex] = changedSourceBoard;
         setBoardLists(copyBoardList);
-        // console.log("copyBoardList", copyBoardList);
 
         // 5. server update
-        // console.log("changedTask1.id: ", changedTask.id);
-
         handleTaskUpdateToServer({
           id: changedTask.id,
           newBoardRowIndex: destination.index,
@@ -237,8 +230,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       setBoardLists(copyBoardList2);
 
       // 5. server update
-      // console.log("changedTask2: ", changedTask.id);
-
       handleTaskUpdateToServer({
         id: changedTask.id,
         boardId: destination.droppableId,

@@ -86,7 +86,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   boards,
   projectId,
   sprintId,
-  // lazyGetBoard,
   ...props
 }): ReactElement | null => {
   /* State */
@@ -124,8 +123,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleDeleteSubmit = async () => {
-    console.log("delete");
-    console.log("selectedNewBoard", selectedNewBoard);
     if (!selectedNewBoard || board.id === selectedNewBoard.id) return;
     const res = await handleBoardDelete(
       board.id,
@@ -153,7 +150,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleEditSubmit = async () => {
-    // lazyGetBoard({ variables: { projectId } });
     const res = await handleBoardUpdate(
       {
         id: board.id,
@@ -294,11 +290,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
             <IconButton
               aria-label="delete board"
               iconButtonType="deleteBin"
-              // color={
-              //   board.boardColumnIndex >= boards.length - 1
-              //     ? "transparent"
-              //     : "achromatic.600"
-              // }
               color="achromatic.600"
               onClick={() => {
                 if (board.boardColumnIndex === 0) {
