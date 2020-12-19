@@ -88,17 +88,7 @@ export const Sprints: React.FC = () => {
         duration: 2000,
         isClosable: true,
       });
-      return;
     }
-
-    toast({
-      position: "bottom-right",
-      title: "Error",
-      description: "Server Error",
-      status: "error",
-      duration: 2000,
-      isClosable: true,
-    });
   };
 
   return (
