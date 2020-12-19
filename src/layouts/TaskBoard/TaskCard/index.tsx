@@ -109,6 +109,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
           bottom={5}
           justifyContent="space-between"
         >
+          {/* <Text
+            fontSize="xs"
+            mr={2}
+            color="fail"
+          >{`${task?.boardRowIndex}`}</Text> */}
           {renderUsers() ? (
             <AvatarGroup size={AvatarSize.sm} avatars={renderUsers()} max={3} />
           ) : null}
