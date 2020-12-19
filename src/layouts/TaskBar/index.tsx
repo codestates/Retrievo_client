@@ -57,7 +57,7 @@ import UserSelect, { UserSelectPropTypes } from "../../components/UserSelector";
 import TextLabel from "./TextLabel";
 import Calendar, { calendarProps, dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
-import LabelSearchInput, { labelItem } from "../../components/LabelSearchInput";
+import LabelSearchInput from "../../components/LabelSearchInput";
 import useQuery from "../../hooks/useQuery";
 
 const titleValidation = yup.object({
@@ -317,13 +317,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
             },
           },
         ],
-        // update:(store,{data})=>{
-        //   const task = store.readQuery<GetTaskQuery>({
-        //     query:GetTaskDocument,
-        //     data:{
-        //     }
-        //   })
-        // }
       });
 
       if (res.data?.deleteUserTask.error) {
@@ -350,13 +343,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
             },
           },
         ],
-        // update:(store,{data})=>{
-        //   const task = store.readQuery<GetTaskQuery>({
-        //     query:GetTaskDocument,
-        //     data:{
-        //     }
-        //   })
-        // }
       });
 
       if (res.data?.createUserTask.error) {
@@ -412,8 +398,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
     createAssignee: handleCreateAssignee,
   };
 
-  console.log("getTaskData", getTaskData);
-
   const taskLabelSelectArgs = {
     options: mappingProjectLabelOptions(
       projectInfoData?.project.project?.label
@@ -427,9 +411,9 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
     deleteTaskLabel: handleDeleteLabel,
   };
 
-  const labelSelectorArg: labelSelectorProps = {
-    defaultOption: getTaskData?.getTask.task?.sprint
-      ? mappingLabelSelectorOptions([getTaskData.getTask.task.sprint])[0]
+  const boardLabelSelectorArg: labelSelectorProps = {
+    defaultOption: getTaskData?.getTask.task?.board
+      ? mappingLabelSelectorOptions([getTaskData.getTask.task.board])[0]
       : undefined,
     options: projectInfoData?.project.project?.board
       ? mappingLabelSelectorOptions(projectInfoData?.project.project?.board)
@@ -525,7 +509,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
                       Task - {getTaskData?.getTask.task?.taskIndex}
                     </Text>
                     {getTaskData?.getTask.task?.sprint.didStart ? (
-                      <BoardLabelSelector {...labelSelectorArg} />
+                      <BoardLabelSelector {...boardLabelSelectorArg} />
                     ) : null}
                   </Box>
                   <CustomForm
