@@ -271,7 +271,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
               {taskData.map((task) => {
-                if (!task.sprintRowIndex) return undefined;
+                if (typeof task.sprintRowIndex !== "number") return undefined;
 
                 return (
                   <TaskListEntry

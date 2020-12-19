@@ -17,6 +17,7 @@ export const Sprints: React.FC = () => {
   const projectId = query.get("projectId");
   const [selected, setSelected] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [updateSprintMutation] = useUpdateSprintMutation();
   const toast = useToast();
 
@@ -106,7 +107,6 @@ export const Sprints: React.FC = () => {
                   )}
                 </Accordion>
                 {provided.placeholder}
-                {/* <pre>{JSON.stringify(sprints, null, 2)}</pre> */}
               </Box>
             )}
           </Droppable>
