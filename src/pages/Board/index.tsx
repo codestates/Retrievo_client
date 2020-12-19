@@ -35,6 +35,7 @@ import {
   useUpdateTaskMutation,
   useUpdateSprintMutation,
   SetStartedSprintDocument,
+  useGetBoardsLazyQuery,
 } from "../../generated/graphql";
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
@@ -71,6 +72,10 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     variables: { projectId },
     fetchPolicy: "cache-and-network",
   });
+  const [
+    lazyGetBoard,
+    { data: lazyBoardData, loading: lazyBoardLoading },
+  ] = useGetBoardsLazyQuery();
   const { data: sprintData } = useSetStartedSprintQuery({
     variables: { projectId },
     fetchPolicy: "cache-and-network",
@@ -317,6 +322,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
                   // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
+                  lazyGetBoard={lazyGetBoard}
                 />
               )}
             </Box>
