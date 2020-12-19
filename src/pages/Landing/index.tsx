@@ -9,6 +9,7 @@ import {
   Avatar,
   IconButton,
   useToast,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Bar } from "react-chartjs-2";
 import { useHistory, Link } from "react-router-dom";
@@ -63,7 +64,6 @@ const Landing: React.FC<Record<string, never>> = () => {
 
   return (
     <Box width="100%">
-      {/* top section */}
       <Box
         position="relative"
         width="100%"
@@ -221,18 +221,26 @@ const Landing: React.FC<Record<string, never>> = () => {
                   Let Retrievo handle legworks so you can focus on actual
                   Project
                 </Text>
-                <Button
-                  border="2px solid #67499E"
-                  bgColor="white"
-                  color="#67499E"
-                  borderRadius={5}
-                  w={170}
-                  py={5}
-                  mr={3}
-                  onClick={onCreateGuest}
+
+                <Tooltip
+                  hasArrow
+                  label="You can experience the service without membership."
+                  bg="#67499E"
                 >
-                  Take tour
-                </Button>
+                  <Button
+                    border="2px solid #67499E"
+                    bgColor="white"
+                    color="#67499E"
+                    borderRadius={5}
+                    w={170}
+                    py={5}
+                    mr={3}
+                    onClick={onCreateGuest}
+                    textAlign="center"
+                  >
+                    Take tour
+                  </Button>
+                </Tooltip>
                 <Link to="/auth?type=register">
                   <Button
                     border="2px solid #31D5BF"
@@ -266,7 +274,7 @@ const Landing: React.FC<Record<string, never>> = () => {
           </Box>
         </Box>
       </Box>
-      {/* taskbar section */}
+
       <Box
         backgroundImage="linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, rgba(255, 255, 255, 0) 86.41%)"
         pt={150}
@@ -629,17 +637,23 @@ const Landing: React.FC<Record<string, never>> = () => {
             <Text mt={3} mb={12} fontSize="3xl">
               Make informed decision with our product tour
             </Text>
-            <Button
-              border="2px solid #31D5BF"
-              bgColor="white"
-              color="#31D5BF"
-              borderRadius={5}
-              w={170}
-              py={5}
-              onClick={onCreateGuest}
+            <Tooltip
+              hasArrow
+              label="You can experience the service without membership."
+              bg="#67499E"
             >
-              Take tour
-            </Button>
+              <Button
+                border="2px solid #31D5BF"
+                bgColor="white"
+                color="#31D5BF"
+                borderRadius={5}
+                w={170}
+                py={5}
+                onClick={onCreateGuest}
+              >
+                Take tour
+              </Button>
+            </Tooltip>
           </Slide>
           <Box position="absolute" top="-2rem" left="30rem">
             <LandingAstro />
