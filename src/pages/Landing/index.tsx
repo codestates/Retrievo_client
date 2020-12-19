@@ -16,7 +16,7 @@ import { useHistory, Link } from "react-router-dom";
 import ReactPlayer from "react-player/lazy";
 
 import { chartData, chartOptions } from "./chartData";
-import { useCreateGuestMutation } from "../../generated/graphql";
+import { useCreateGuestMutation, useGetMeQuery } from "../../generated/graphql";
 import Text from "../../components/Text";
 import {
   BackgroundShapePupple,
@@ -44,7 +44,13 @@ import useProjectRoute from "../Auth/useProjectRoute";
 const Landing: React.FC<Record<string, never>> = () => {
   const [createGuest] = useCreateGuestMutation();
   const toast = useToast();
+  const history = useHistory();
   const { routeToProject } = useProjectRoute();
+  const { data, loading } = useGetMeQuery();
+
+  if (!loading && data?.getMe.user) {
+    history.push("/project/dashboard");
+  }
 
   const onCreateGuest = async () => {
     const response = await createGuest();
