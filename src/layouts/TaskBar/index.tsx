@@ -506,7 +506,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
                 >
                   <Box display="flex" alignItems="center" mb={2}>
                     <Text mr="2" fontSize="sm" color="primary.200">
-                      Task - {getTaskData?.getTask.task?.taskIndex}
+                      Task-{getTaskData?.getTask.task?.taskIndex}
                     </Text>
                     {getTaskData?.getTask.task?.sprint.didStart ? (
                       <BoardLabelSelector {...boardLabelSelectorArg} />
