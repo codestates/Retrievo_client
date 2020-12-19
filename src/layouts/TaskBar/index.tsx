@@ -13,6 +13,7 @@ import {
   Spinner,
   Center,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import * as yup from "yup";
@@ -35,6 +36,7 @@ import {
   useCreateUserTaskMutation,
   useGetMeQuery,
   useDeleteCommentMutation,
+  useDeleteTaskMutation,
 } from "../../generated/graphql";
 import {
   mappingUserOption,
@@ -59,6 +61,7 @@ import Calendar, { calendarProps, dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
 import useQuery from "../../hooks/useQuery";
+import ModalLayout from "../Modal";
 
 const titleValidation = yup.object({
   email: yup.string().max(5).required(),
@@ -80,6 +83,12 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
     getTask,
     { loading: getTaskLoading, data: getTaskData, refetch: refetchTask },
   ] = useGetTaskLazyQuery();
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onOpenDeleteModal,
+    onClose: onCloseDeleteModal,
+  } = useDisclosure();
+  const [deleteTask] = useDeleteTaskMutation();
   const [updateTaskMutation] = useUpdateTaskMutation();
   const [deleteUserTask] = useDeleteUserTaskMutation();
   const [createUserTask] = useCreateUserTaskMutation();
@@ -266,20 +275,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
             },
           },
         ],
-        // update: (cache, { data }) => {
-        //   if (!data) return undefined;
-        //   const cacheId = cache.identify(data?.createTaskLabel);
-        //   console.log("----------------");
-        //   console.log("cacheId");
-        //   console.log("data:");
-        //   console.log("cache");
-        //   // store.modify({
-        //   //   fields: {
-        //   //     getTask: (existingFieldData, { toReference }) => {},
-        //   //   },
-        //   // });
-        //   return false;
-        // },
       });
       if (res.data?.createTaskLabel.error) {
         throw new Error(res.data?.createTaskLabel.error.message);
@@ -294,6 +289,22 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
   const handleUpdateTask = (value: formValue) => {
     console.log("formValue:", value);
     updateTask({ basicOptions: { ...value } });
+  };
+
+  const handleDeleteTask = async () => {
+    const res = await deleteTask({
+      variables: {
+        id: taskId,
+        projectId,
+      },
+    });
+
+    if (res.data?.deleteTask.error) {
+      createErrorToast();
+      return;
+    }
+
+    onClose();
   };
 
   const handleBoardSelect = (newBoardRecord: formValue) => {
@@ -588,6 +599,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
                       padding="0"
                       h="1rem"
                       w="0"
+                      onClick={onOpenDeleteModal}
                     />
                   </Box>
                 </Box>
@@ -634,6 +646,18 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
           )}
         </DrawerOverlay>
       </Drawer>
+      <ModalLayout
+        onClose={onCloseDeleteModal}
+        title="Are you sure you want to delete it?😨"
+        buttonText="delete"
+        isOpen={isDeleteModalOpen}
+        secondaryText="Sure"
+        buttonColor="primary.300"
+        buttonFontColor="achromatic.100"
+        secondaryAction={handleDeleteTask}
+      >
+        <Box>Deleted tasks cannot be recovered</Box>
+      </ModalLayout>
     </div>
   );
 };
