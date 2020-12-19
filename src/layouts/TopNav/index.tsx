@@ -84,12 +84,7 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
           <ProjectListDropdown {...projectConfig} />
         )}
       </Box>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        w={180}
-      >
+      <Box display="flex">
         {!userLoading && mapUserToAvatar() ? (
           <AvatarGroup
             avatars={mapUserToAvatar()}
@@ -97,22 +92,24 @@ const TopNav: React.FC<RouteComponentProps<TopNavPropsType>> = ({
             max={3}
           />
         ) : null}
-        <Link to="/notification">
-          <IconButton
-            fontSize="xl"
-            color="achromatic.700"
-            aria-label="notification"
-            iconButtonType={IconButtonType.notification}
-          />
-        </Link>
-        <Link to="/my-profile">
-          <IconButton
-            fontSize="xl"
-            color="achromatic.700"
-            aria-label="project member list"
-            iconButtonType={IconButtonType.user}
-          />
-        </Link>
+        <Box>
+          <Link to="/notification">
+            <IconButton
+              fontSize="xl"
+              color="achromatic.700"
+              aria-label="notification"
+              iconButtonType={IconButtonType.notification}
+            />
+          </Link>
+          <Link to="/my-profile">
+            <IconButton
+              fontSize="xl"
+              color="achromatic.700"
+              aria-label="project member list"
+              iconButtonType={IconButtonType.user}
+            />
+          </Link>
+        </Box>
       </Box>
     </Box>
   );

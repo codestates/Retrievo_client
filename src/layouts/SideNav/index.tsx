@@ -120,7 +120,7 @@ const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
       flexDirection="column"
       boxShadow="2px 0px 2px rgba(0,0,0,0.1)"
     >
-      <Box
+      {/* <Box
         h={55}
         color="achromatic.600"
         _hover={{ cursor: "pointer" }}
@@ -131,7 +131,7 @@ const SideNav: React.FC<RouteComponentProps<SideNavProps>> = ({
       >
         {changeIconColor(<AiOutlineDoubleLeft />)}
         Hide side bar
-      </Box>
+      </Box> */}
       {renderMenu()}
     </Box>
   );
