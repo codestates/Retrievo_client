@@ -30,6 +30,8 @@ import {
   Sprint,
   Task,
   GetSprintsDocument,
+  GetBoardsDocument,
+  SetStartedSprintDocument,
 } from "../../../generated/graphql";
 import { useQuery } from "../../../hooks/useQuery";
 
@@ -133,7 +135,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               getSprints(existingSprintsRef, { readField }) {
                 const newSprintsRef = existingSprintsRef.sprints.filter(
                   (sprint: any) => {
-                    console.log(sprint);
                     return sprintData.id !== readField("id", sprint);
                   }
                 );
@@ -146,6 +147,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           console.log(err);
         }
       },
+      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -180,7 +182,11 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           row: 0,
         },
       },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetSprintsDocument, variables: { projectId } },
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
     });
     toast({
       position: "bottom-right",
@@ -249,7 +255,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                   </AccordionButton>
                 </Center>
                 <Box flex="1" ml={3} textAlign="left">
-                  <Heading headingType={headingEnum.sprint}>
+                  <Heading headingType={headingEnum.table}>
                     {sprintData.title}
                   </Heading>
                 </Box>
@@ -328,7 +334,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         <Box mb={3}>
           <CustomForm
             initialValues={{
-              sprintName: `${sprintData.title}`,
+              sprintName: "",
               description: "",
             }}
             buttonPosition="right"
@@ -341,7 +347,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 <InputField
                   label="Sprint Name"
                   name="sprintName"
-                  // placeholder={sprintData.title}
+                  placeholder={sprintData.title}
                 />
               </Box>
               <Box p={2} mb={6}>

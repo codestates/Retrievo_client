@@ -37,10 +37,9 @@ import {
   useGetMeQuery,
   useDeleteCommentMutation,
   useDeleteTaskMutation,
-  useGetBoardsLazyQuery,
-  useGetSprintLazyQuery,
   GetBoardsDocument,
   GetSprintsDocument,
+  GetMeDocument,
 } from "../../generated/graphql";
 import {
   mappingUserOption,
@@ -102,8 +101,6 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
   const [createComment] = useCreateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const { data: meData } = useGetMeQuery();
-  const [getBoard] = useGetBoardsLazyQuery();
-  const [getSprint] = useGetSprintLazyQuery();
 
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
@@ -240,6 +237,9 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
             variables: {
               projectId,
             },
+          },
+          {
+            query: GetMeDocument,
           },
         ],
       });

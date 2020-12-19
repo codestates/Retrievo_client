@@ -1,8 +1,13 @@
-mutation RouteInvitation {
-     routeInvitation {
+<<<<<<< HEAD
+mutation RouteInvitation($keyToken:string) {
+=======
+mutation RouteInvitation($keyToken:String!) {
+>>>>>>> beb03f9317d6af3b37378c4290070b04519a1981
+  routeInvitation(keyToken:$keyToken) {
     success
     error {
       field
+      message
       code
     }
   }
