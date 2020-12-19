@@ -26,7 +26,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     return task?.taskLabel?.map((labelObj) => {
       const { label } = labelObj;
       return (
-        <Label mx={1} key={label.id} bgColor={label.color}>
+        <Label mr="2px" key={label.id} bgColor={label.color}>
           {label.name}
         </Label>
       );
@@ -74,28 +74,30 @@ const TaskCard: React.FC<TaskCardProps> = ({
         <CgClose />
       </Box>
       <Box
-        h={130}
+        minH={120}
         _hover={{ cursor: "pointer" }}
         onClick={() => handleTaskClick(task.id)}
       >
         <Box>
           <Box
-            display="flex"
-            flexDir="row"
-            alignItems="flex-start"
+            // display="flex"
+            // gridRow="1fr 3fr"
+            // flexDir="row"
+            // alignItems="flex-start"
             mb={2}
             _hover={{ cursor: "pointer" }}
           >
             <Text
               fontSize="xs"
-              mr={2}
+              // w="4rem"
+              // mr={2}
               color="primary.200"
-            >{`${task?.taskIndex}`}</Text>
-            <Text
+            >{`Task-${task?.taskIndex}`}</Text>
+            {/* <Text
               fontSize="xs"
               mr={2}
               color="fail"
-            >{`${task?.boardRowIndex}`}</Text>
+            >{`${task?.boardRowIndex}`}</Text> */}
             <Heading
               pr="1.5rem"
               fontWeight="normal"
@@ -104,15 +106,16 @@ const TaskCard: React.FC<TaskCardProps> = ({
               {task?.title}
             </Heading>
           </Box>
-          <Box display="flex" flexDir="row" alignItems="center" mb={50}>
+          <Box display="flex" flexDir="row" alignItems="center" mb={6}>
             {renderLabels()}
           </Box>
         </Box>
         <Box
           display="flex"
           flexDir="row"
-          alignItems="center"
-          position="absolute"
+          alignItems="flex-end"
+          // position="absolute"
+          // alignSelf="flex-end"
           bottom={5}
           justifyContent="space-between"
         >

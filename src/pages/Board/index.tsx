@@ -79,7 +79,7 @@ export const Board: React.FC<Record<string, never>> = () => {
   const handleBoardCreate = async (title: string, projectId: string) => {
     return await createBoard({
       variables: { title, projectId },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      // refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
   };
 
@@ -204,6 +204,15 @@ export const Board: React.FC<Record<string, never>> = () => {
   // -> 보드 create O
   // -> 보드 delete X
   // -> 테스크 update O
+  // -> 테스크 create X
+  // -> 테스크 delete X
+
+  // 현재 되지 않는 것
+  // -> 드래그앤드롭 심리스 O
+  // -> 보드 update X
+  // -> 보드 create X
+  // -> 보드 delete X
+  // -> 테스크 update X
   // -> 테스크 create X
   // -> 테스크 delete X
 
