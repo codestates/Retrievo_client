@@ -1,7 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import * as yup from "yup";
-import { useHistory } from "react-router-dom";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";

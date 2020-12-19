@@ -1,16 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 /* Layouts & types */
-import {
-  Box,
-  useDisclosure,
-  Text,
-  Flex,
-  useToast,
-  Container,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -41,6 +35,7 @@ import {
 import { client } from "../../index";
 import Heading, { headingEnum } from "../../components/Heading";
 import Button, { buttonColor } from "../../components/Button";
+import { useQuery } from "../../hooks/useQuery";
 // import { sprintListDropdown } from "../../layouts/TaskBar/SprintSelector/sprintSelector.stories";
 
 interface BoardProps {
@@ -59,12 +54,13 @@ export interface SprintUpdateOptions {
   didStart: boolean;
 }
 
-export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
-  ...args
-}) => {
-  const { projectId } = args.match.params;
+export const Board: React.FC<Record<string, never>> = () => {
+  /* get projectId */
+  const query = useQuery();
+  const projectId = query.get("projectId");
+  if (!projectId) return null;
+
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
-  // const [curBoards, setCurBoard] = useState<BoardType[] | []>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -78,6 +74,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     }
   );
   const [deleteSprint] = useDeleteSprintMutation();
+
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
   const [
@@ -92,11 +89,7 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
     { data: taskData, loading: taskLoading },
   ] = useUpdateTaskMutation();
 
-  // useEffect(() => {
-  //   if (data?.getBoards && data?.getBoards?.boards) {
-  //     setCurBoard(data.getBoards.boards);
-  //   }
-  // }, [data]);
+  if (!projectId) return null;
 
   /* Function Props */
   const handleBoardCreate = async (title: string, projectId: string) => {
@@ -292,8 +285,8 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
   return (
     <>
       <Box>
-        <TopNav {...args} />
-        <SideNav {...args} />
+        <TopNav />
+        <SideNav />
         <Box display="flex">
           <Box w="100%" p={9} ml={210} mt={50}>
             <PageHeading />
@@ -350,7 +343,6 @@ export const Board: React.FC<RouteComponentProps<BoardProps>> = ({
         {selectedTask ? (
           <TaskBar
             taskId={selectedTask}
-            {...args}
             isOpen={isOpen}
             onClose={() => {
               onClose();

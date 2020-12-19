@@ -132,10 +132,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       selectedNewBoard.id,
       projectId
     );
-    if (res.errors) {
+    if (res.data?.deleteBoard.error) {
       toast({
         title: "Board Deletion Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteBoard.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -161,10 +161,11 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       },
       projectId
     );
-    if (res.errors) {
+    console.log("edit", res);
+    if (res.data?.updateBoard.error) {
       toast({
         title: "Board Update Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.updateBoard.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -190,10 +191,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       },
       projectId
     );
-    if (res.errors) {
+    if (res.data?.createTask.error) {
       toast({
         title: "Task Creation Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.createTask.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",
@@ -212,10 +213,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   const handleDeleteTaskSubmit = async () => {
     const res = await handleTaskDelete(deletedTaskId, projectId);
-    if (res.errors) {
+    if (res.data?.deleteTask.error) {
       toast({
         title: "Task Creation Failed😂",
-        description: `${res.errors}`,
+        description: `${res.data?.deleteTask.error.message}`,
         duration: 5000,
         status: "error",
         position: "bottom-right",

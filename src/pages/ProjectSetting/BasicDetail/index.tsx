@@ -12,13 +12,15 @@ import {
   useGetProjectQuery,
   useUpdateProjectNameMutation,
 } from "../../../generated/graphql";
+import useQuery from "../../../hooks/useQuery";
 
 export const BasicDetail: React.FC = () => {
-  const location = useLocation();
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
+  if (!projectId) return null;
+
   const history = useHistory();
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
-
   const [
     deleteProjectMutation,
     { loading: deleteLoading },

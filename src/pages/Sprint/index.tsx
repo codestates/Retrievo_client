@@ -1,6 +1,6 @@
 import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import React from "react";
-import { useLocation, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import CustomForm from "../../components/Form";
 import ModalLayout from "../../layouts/Modal";
 import PageHeading from "../../layouts/PageHeader";
@@ -10,21 +10,17 @@ import Sprints from "./Accordion";
 import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
 import { useCreateSprintMutation } from "../../generated/graphql";
+import useQuery from "../../hooks/useQuery";
 
-interface SprintType {
-  projectId: string;
-}
-
-export const Sprint: React.FC<RouteComponentProps<SprintType>> = ({
-  ...args
-}) => {
-  const location = useLocation();
+export const Sprint: React.FC<Record<string, never>> = () => {
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [createSprintMutation] = useCreateSprintMutation();
 
   const handleCreateSprint = async (values: Record<string, string>) => {
+    if (!projectId) return;
     await createSprintMutation({
       variables: {
         projectId,
@@ -58,8 +54,8 @@ export const Sprint: React.FC<RouteComponentProps<SprintType>> = ({
 
   return (
     <>
-      <TopNav {...args} />
-      <SideNav {...args} />
+      <TopNav />
+      <SideNav />
       <Box display="flex" ml={210} mt={50}>
         <Box w="100%" p={9}>
           <Box>
