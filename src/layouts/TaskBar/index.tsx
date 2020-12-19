@@ -170,7 +170,11 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
           projectId,
           options: { ...value, id: taskId },
         },
+        refetchQueries: [
+          { query: GetSprintsDocument, variables: { projectId } },
+        ],
       });
+      console.log("Task가 업데이트가 되나여");
 
       if (res.data?.updateTask.error) {
         throw new Error(res.data?.updateTask.error.message);
