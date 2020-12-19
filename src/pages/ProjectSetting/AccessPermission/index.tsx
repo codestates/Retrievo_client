@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -27,6 +27,8 @@ import {
   useUpdateProjectPermissionMutation,
   useGetProjectQuery,
   useInviteUserMutation,
+  useGetMeQuery,
+  RoleTypes,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import ModalLayout from "../../../layouts/Modal";
@@ -53,6 +55,11 @@ export const AccessPermission: React.FC = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1440px)");
   const { data, loading } = useGetProjectQuery({ variables: { projectId } });
   const [numInvitation, setNumInvitation] = useState<number>(1);
+  const { data: getMeData } = useGetMeQuery();
+
+  const myPermission = data?.project.project?.projectPermissions?.find(
+    (el) => el.user.id === getMeData?.getMe.user?.id
+  );
 
   if (data?.project?.project?.projectPermissions) {
     const userData = data?.project?.project?.projectPermissions.map(
@@ -162,6 +169,7 @@ export const AccessPermission: React.FC = () => {
                         <FormControl pr={3} justifySelf="flex-end">
                           <FormLabel fontWeight="base" m={0} />
                           <Select
+                            disabled={!myPermission?.isAdmin}
                             name="role"
                             onChange={(e) => {
                               handleChange(e);
