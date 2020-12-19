@@ -33,11 +33,13 @@ const NotFound = (): ReactElement => {
             size="xs"
             mr={2}
           />
-          <RoundButton
-            aria-label="decoration button"
-            buttonColor={RoundButtonColor.red}
-            size="xs"
-          />
+          <Link to="/">
+            <RoundButton
+              aria-label="decoration button"
+              buttonColor={RoundButtonColor.red}
+              size="xs"
+            />
+          </Link>
         </Flex>
         <Flex
           bgColor="white"

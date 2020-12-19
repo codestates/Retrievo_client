@@ -47,6 +47,7 @@ const Landing: React.FC<Record<string, never>> = () => {
 
   const onCreateGuest = async () => {
     const response = await createGuest();
+    console.log("response", response);
     if (response.data?.createGuest.error) {
       toast({
         title: "Guest Creation Failed😂",
@@ -184,7 +185,7 @@ const Landing: React.FC<Record<string, never>> = () => {
                   <ChakraHeading
                     fontSize="5xl"
                     color="achromatic.800"
-                    fontWeigh="bold"
+                    fontWeight="bold"
                     mr={3}
                     zIndex={99}
                   >

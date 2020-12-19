@@ -49,7 +49,6 @@ export type TaskBoardProps = TaskCardProps & {
   boards: boardType[];
   projectId: string;
   sprintId: string;
-  // ref: (element: HTMLElement | null) => any;
   handleBoardDelete: (
     id: string,
     newBoardId: string,
@@ -76,6 +75,7 @@ export type TaskBoardProps = TaskCardProps & {
     FetchResult<DeleteTaskMutation, Record<string, any>, Record<string, any>>
   >;
   handleTaskClick: (id: string) => void;
+  lazyGetBoard: (options: Record<string, string>) => void;
 };
 
 const TaskBoard: React.FC<TaskBoardProps> = ({
@@ -86,7 +86,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   boards,
   projectId,
   sprintId,
-  // ref,
   ...props
 }): ReactElement | null => {
   /* State */
@@ -95,9 +94,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [isDeleteTaskModalOpen, setIsDeleteTaskModalOpen] = useState(false);
-  const [selectedNewBoard, setSelectedNewBoard] = useState<boardType>(
-    boards[0]
-  );
+  const [selectedNewBoard, setSelectedNewBoard] = useState<boardType | null>(
+    null
+  ); // selectMenu 첫 번째 값
+  const [defaultBoard, setDefaultBoard] = useState<boardType>(boards[0]);
   const [inputValue, setInputValue] = useState(board?.title);
   const [taskTitle, setTestTitle] = useState("");
   const [deletedTaskId, setDeletedTaskId] = useState("");
@@ -107,8 +107,8 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   if (!board) return null;
 
   const taskConfig = {
-    handleTaskClick,
     projectId,
+    handleTaskClick,
     setIsDeleteTaskModalOpen,
     setDeletedTaskId,
   };
@@ -151,33 +151,31 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   };
 
   const handleEditSubmit = async () => {
-    if (handleBoardUpdate) {
-      const res = await handleBoardUpdate(
-        {
-          id: board.id,
-          title: inputValue,
-        },
-        projectId
-      );
-      if (res.errors) {
-        toast({
-          title: "Board Update Failed😂",
-          description: `${res.errors}`,
-          duration: 5000,
-          status: "error",
-          position: "bottom-right",
-        });
-      } else {
-        toast({
-          title: "Board Update Succeed🥳",
-          description: "Board is updated",
-          duration: 5000,
-          status: "success",
-          position: "bottom-right",
-        });
-      }
-      setIsEditModalOpen(false);
+    const res = await handleBoardUpdate(
+      {
+        id: board.id,
+        title: inputValue,
+      },
+      projectId
+    );
+    if (res.errors) {
+      toast({
+        title: "Board Update Failed😂",
+        description: `${res.errors}`,
+        duration: 5000,
+        status: "error",
+        position: "bottom-right",
+      });
+    } else {
+      toast({
+        title: "Board Update Succeed🥳",
+        description: "Board is updated",
+        duration: 5000,
+        status: "success",
+        position: "bottom-right",
+      });
     }
+    setIsEditModalOpen(false);
   };
 
   const handleCreateTaskSubmit = async () => {
@@ -266,7 +264,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
     ));
   };
 
-  // column
   return (
     <Box w={330} mr={4} minH={1000}>
       <Box
@@ -304,7 +301,12 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                   ? () => {
                       return null;
                     }
-                  : () => setIsDeleteModalOpen(true)
+                  : () => {
+                      if (board.boardColumnIndex === 0) {
+                        setDefaultBoard(boards[1]);
+                      }
+                      setIsDeleteModalOpen(true);
+                    }
               }
             />
           )}
@@ -356,7 +358,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           <Text mb={3}>Which Board you want to move the tasks to?</Text>
           <Menu>
             <MenuButton as={Button} rightIcon={<BiChevronDown />}>
-              {selectedNewBoard.title}
+              {defaultBoard.title}
             </MenuButton>
             <MenuList>{renderModalMenu()}</MenuList>
           </Menu>

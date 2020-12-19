@@ -47,7 +47,7 @@ const CommingSoon = (): ReactElement => {
           borderBottomRadius={20}
         >
           <Text>Woof Woof!</Text>
-          <Heading headingType={headingEnum.auth}>Comming Soon</Heading>
+          <Heading headingType={headingEnum.auth}>Coming Soon</Heading>
           <Dog />
         </Flex>
       </Box>
