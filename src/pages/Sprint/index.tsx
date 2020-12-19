@@ -1,6 +1,5 @@
 import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
 import React from "react";
-import { RouteComponentProps } from "react-router-dom";
 import CustomForm from "../../components/Form";
 import ModalLayout from "../../layouts/Modal";
 import PageHeading from "../../layouts/PageHeader";
