@@ -14,16 +14,17 @@ import useQuery from "../../../hooks/useQuery";
 export const Sprints: React.FC = () => {
   const query = useQuery();
   const projectId = query.get("projectId");
-  if (!projectId) return null;
+  const [selected, setSelected] = useState<null | string>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [updateSprintMutation] = useUpdateSprintMutation();
+  const toast = useToast();
 
+  if (!projectId) return null;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, loading } = useGetSprintsQuery({
     variables: { projectId },
   });
   const sprints = data?.getSprints.sprints;
-  const [selected, setSelected] = useState<undefined | string>(undefined);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [updateSprintMutation] = useUpdateSprintMutation();
-  const toast = useToast();
 
   if (loading) return <Spinner />;
   if (!sprints) return <Spinner />;
@@ -63,7 +64,17 @@ export const Sprints: React.FC = () => {
 
   return (
     <>
-      <TaskBar taskId={selected} isOpen={isOpen} onClose={onClose} />
+      {selected ? (
+        <TaskBar
+          taskId={selected}
+          isOpen={isOpen}
+          onClose={() => {
+            setSelected(null);
+            onClose();
+          }}
+        />
+      ) : null}
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Box>
           <Droppable droppableId="droppableSprint">
@@ -84,6 +95,7 @@ export const Sprints: React.FC = () => {
                           startedSprint={startedSprint}
                           completedSprint={completedSprint}
                           setSelectedTask={setSelected}
+                          selectedTask={selected}
                           onTaskOpen={onOpen}
                         />
                       );

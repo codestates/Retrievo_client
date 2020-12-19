@@ -27,13 +27,15 @@ import { Task } from "../../../generated/graphql";
 type taskListEntryProps = {
   taskData: Task;
   mappedIndex: number;
-  setSelectedTask: (id: string) => void;
+  setSelectedTask: (id: string | null) => void;
   onTaskOpen: () => void;
+  selectedTask: string | null;
 };
 
 export const TaskListEntry: React.FC<taskListEntryProps> = ({
   taskData,
   mappedIndex,
+  selectedTask,
   setSelectedTask,
   onTaskOpen,
 }) => {
@@ -67,8 +69,10 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                     ml={2}
                     fontSize="base"
                     onClick={() => {
+                      console.log("마음은 열릴 것입니다.", selectedTask);
                       setSelectedTask(taskData.id);
                       onTaskOpen();
+                      console.log("마음이 열렸습니다", selectedTask);
                     }}
                     _hover={{
                       cursor: "pointer",

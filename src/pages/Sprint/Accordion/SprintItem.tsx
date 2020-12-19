@@ -32,12 +32,13 @@ import {
 } from "../../../generated/graphql";
 import { useQuery } from "../../../hooks/useQuery";
 
-type sprintItemProps = {
+export type sprintItemProps = {
   sprintData: Sprint;
   ref?: HTMLElement;
   mappedIndex: number;
   tasks: Task[];
   refetch: () => void;
+  selectedTask: string | null;
 };
 
 export const SprintItem: React.FC<Record<string, any>> = ({
@@ -46,6 +47,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   tasks,
   startedSprint,
   setSelectedTask,
+  selectedTask,
   onTaskOpen,
 }) => {
   const toast = useToast();
@@ -299,6 +301,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               <TaskList
                 taskData={tasks}
                 setSelectedTask={setSelectedTask}
+                selectedTask={selectedTask}
                 onTaskOpen={onTaskOpen}
               />
             </AccordionItem>
