@@ -17,6 +17,7 @@ import Landing from "./pages/Landing";
 import NotFound from "./pages/404";
 import Timeline from "./pages/Timeline";
 import Calendar from "./pages/Calendar";
+import Invitation from "./pages/Invitation";
 
 const App: React.FC<Record<string, never>> = () => {
   return (
@@ -37,6 +38,7 @@ const App: React.FC<Record<string, never>> = () => {
           <Route path={ROUTE.NEW_PROJECT} component={NewProject} />
           <Route path={ROUTE.MY_PROFILE} component={MyProfile} />
           <Route path={ROUTE.NOT_FOUND} component={NotFound} />
+          <Route Path={ROUTE.INVITATION} component={Invitation} />
           {/* <Redirect path="*" to={ROUTE.NOT_FOUND} /> */}
         </Switch>
       </ChakraProvider>
