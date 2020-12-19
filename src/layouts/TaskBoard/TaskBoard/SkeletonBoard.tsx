@@ -1,13 +1,10 @@
 import React, { ReactElement, useState } from "react";
 import { FetchResult } from "@apollo/client";
-// import * as yup from "yup";
 import { Box, useToast, Input } from "@chakra-ui/react";
-// import { CgClose } from "react-icons/cg";
 import { GoPlus } from "react-icons/go";
 import { IconContext } from "react-icons";
 import Text from "../../../components/Text";
 import Heading, { headingEnum } from "../../../components/Heading";
-// import Form from "../../../components/Form";
 import Modal from "../../Modal/index";
 import { CreateBoardMutation } from "../../../generated/graphql";
 
@@ -23,13 +20,11 @@ export type SkeletonBoardProps = {
   ) => Promise<
     FetchResult<CreateBoardMutation, Record<string, any>, Record<string, any>>
   >;
-  // lazyGetBoard: (options: Record<string, string>) => void;
 };
 
 const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   handleBoardCreate,
   projectId,
-  // lazyGetBoard,
 }): ReactElement => {
   const [isCreating, setIsCreating] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -66,51 +61,11 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
           position: "bottom-right",
         });
       }
-      // history.push(`/project/board/${projectId}`);
     } catch (err) {
       console.log(err);
-      // setIsCreating(false);
     }
     setIsCreating(false);
-    // history.push(`/project/board/${projectId}`);
   };
-
-  // const validationSchema = yup.object({
-  //   board: yup.string().required(),
-  // });
-
-  // const renderHeaderOrInput = () => {
-  //   return isCreating ? (
-  //     <Form
-  //       initialValues={{ board: "" }}
-  //       validationSchema={validationSchema}
-  //       buttonPosition="right"
-  //       onSubmit={handleBoardCreateSubmit}
-  //       isOnBlurSubmit={false}
-  //       // isFullButton={false}
-  //       // isSubmitButton
-  //       // isCancelButton
-  //       onCancel={() => setIsCreating(false)}
-  //     >
-  //       <Box display="flex" flexDir="row" alignItems="center" px={2} w={330}>
-  //         <Input
-  //           isEditable={false}
-  //           isLabelNonVisible
-  //           label="board"
-  //           name="board"
-  //           type="text"
-  //         />
-  //         <Box
-  //           ml={2}
-  //           _hover={{ cursor: "pointer" }}
-  //           onClick={() => setIsCreating(false)}
-  //         >
-  //           <CgClose />
-  //         </Box>
-  //       </Box>
-  //     </Form>
-  //   ) : null;
-  // };
 
   return (
     <Box w={330}>
@@ -155,10 +110,7 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
         buttonColor="primary.200"
         buttonFontColor="white"
       >
-        <Input
-          onChange={(e) => setInputValue(e.target.value)}
-          // defaultValue={board.title}
-        />
+        <Input onChange={(e) => setInputValue(e.target.value)} />
       </Modal>
     </Box>
   );
