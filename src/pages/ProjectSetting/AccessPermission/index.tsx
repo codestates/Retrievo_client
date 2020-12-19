@@ -1,18 +1,23 @@
-import React from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useState } from "react";
 import {
   Box,
+  Button,
   Divider,
   Flex,
   FormControl,
   FormLabel,
+  Input,
   Select,
   Text,
+  useDisclosure,
   useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { GoChevronUp, GoChevronDown } from "react-icons/go";
-import { Formik } from "formik";
-import { useLocation } from "react-router-dom";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { Formik, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import Heading, { headingEnum } from "../../../components/Heading";
 
 import CustomAvatar from "../../../components/Avatar";
@@ -21,57 +26,22 @@ import { roleType } from "../../MyProfile/Forms/roleSelectInput";
 import {
   useUpdateProjectPermissionMutation,
   useGetProjectQuery,
+  useInviteUserMutation,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
-
-// const data = [
-//   {
-//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-//     avatar:
-//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-//     username: "Si Choi",
-//     role: "member",
-//   },
-//   {
-//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-//     avatar:
-//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-//     username: "Paul Kim",
-//     role: "member",
-//   },
-//   {
-//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-//     avatar:
-//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-//     username: "Hajeong Song",
-//     role: "Admin",
-//   },
-
-//   {
-//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-//     avatar:
-//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-//     username: "JungEun Kim",
-//     role: "member",
-//   },
-
-//   {
-//     id: "0aac4f5b-8bff-4cf6-944d-7379831bb915",
-//     avatar:
-//       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0fGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60",
-//     username: "Chank Knight",
-//     role: "member",
-//   },
-// ];
+import ModalLayout from "../../../layouts/Modal";
+import { useQuery } from "../../../hooks/useQuery";
 
 export const AccessPermission: React.FC = () => {
-  const location = useLocation();
+  const urlQuery = useQuery();
+  const projectId = urlQuery.get("projectId");
   const toast = useToast();
-  const projectId = location.pathname.split("/").pop() || "";
+  if (!projectId) return <></>;
 
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 5);
   const [isDesktop] = useMediaQuery("(min-width: 1440px)");
   const { data, loading } = useGetProjectQuery({ variables: { projectId } });
+  const [numInvitation, setNumInvitation] = useState<number>(1);
 
   if (data?.project?.project?.projectPermissions) {
     const userData = data?.project?.project?.projectPermissions.map(
@@ -84,8 +54,10 @@ export const AccessPermission: React.FC = () => {
 
   const [
     updateProjectPermissionMutation,
-    { loading: updateProjectLoading },
   ] = useUpdateProjectPermissionMutation();
+
+  const [inviteUserMutation, error] = useInviteUserMutation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onSubmit = async (values: Record<string, string>, userId: string) => {
     await updateProjectPermissionMutation({
@@ -105,6 +77,13 @@ export const AccessPermission: React.FC = () => {
     });
   };
 
+  const onInvitation = async (values: Record<string, string>) => {
+    const filtered = Object.values(values).filter((email) => email.length > 1);
+    inviteUserMutation({
+      variables: { projectId, emails: filtered },
+    });
+    onClose();
+  };
   const roles = [
     { key: "Admin", value: "ADMIN" },
     { key: "Member", value: "MEMBER" },
@@ -182,6 +161,146 @@ export const AccessPermission: React.FC = () => {
           </Heading>
         </Box>
       </Flex>
+      <Flex p={3} bg="achromatic.100" w="100%">
+        <Flex
+          ml={7}
+          alignItems="center"
+          color="achromatic.500"
+          onClick={() => onOpen()}
+          _hover={{ cursor: "pointer", color: "black" }}
+        >
+          <AiOutlinePlusCircle size="2rem" />
+
+          <Text pl={3}>Invite New Member...</Text>
+        </Flex>
+      </Flex>
+      <ModalLayout
+        title="Invite Member(s)"
+        display="none"
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={() => {
+          setNumInvitation(1);
+          onClose();
+        }}
+        footer={false}
+      >
+        <Formik
+          initialValues={{
+            email0: "",
+            email1: "",
+            email2: "",
+            email3: "",
+            email4: "",
+            email5: "",
+            email6: "",
+            email7: "",
+            email8: "",
+            email9: "",
+          }}
+          onSubmit={onInvitation}
+          validationSchema={Yup.object({
+            email0: Yup.string()
+              .email("Must be valid Email Format")
+              .required("Please enter email address"),
+            email1: Yup.string().email("Must be valid Email Format"),
+
+            email2: Yup.string().email("Must be valid Email Format"),
+
+            email3: Yup.string().email("Must be valid Email Format"),
+
+            email4: Yup.string().email("Must be valid Email Format"),
+
+            email5: Yup.string().email("Must be valid Email Format"),
+
+            email6: Yup.string().email("Must be valid Email Format"),
+
+            email7: Yup.string().email("Must be valid Email Format"),
+
+            email8: Yup.string().email("Must be valid Email Format"),
+
+            email9: Yup.string().email("Must be valid Email Format"),
+          })}
+        >
+          {({ values, handleChange, submitForm, isSubmitting }: any) => {
+            const elements = new Array(numInvitation).fill("");
+            return (
+              <>
+                {/* {JSON.stringify(numInvitation, null, 2)} */}
+                <Box>
+                  <ErrorMessage component="div" name="email0" />
+                  <ErrorMessage component="div" name="email1" />
+                  <ErrorMessage component="div" name="email2" />
+                  <ErrorMessage component="div" name="email3" />
+                  <ErrorMessage component="div" name="email4" />
+                  <ErrorMessage component="div" name="email5" />
+                  <ErrorMessage component="div" name="email6" />
+                  <ErrorMessage component="div" name="email7" />
+                  <ErrorMessage component="div" name="email8" />
+                  <ErrorMessage component="div" name="email9" />
+                </Box>
+                {elements.map((el, count) => (
+                  <Flex alignItems="center" mt={3}>
+                    <Input
+                      type="text"
+                      name={`email${count}`}
+                      placeholder="Enter email..."
+                      value={values[`email${count}`]}
+                      onChange={handleChange}
+                    />
+                    <Box>
+                      <Flex
+                        ml={3}
+                        onClick={() => {
+                          if (numInvitation >= 10) {
+                            toast({
+                              title: "Invalid Action",
+                              description:
+                                "You cannot invite more than 10 people at once",
+                              status: "error",
+                              duration: 9000,
+                              isClosable: true,
+                            });
+                            return;
+                          }
+                          setNumInvitation((prev) => prev + 1);
+                        }}
+                        color="lightGrey"
+                        _hover={{ color: "grey", cursor: "pointer" }}
+                        display={count > 0 ? "none" : undefined}
+                      >
+                        <AiOutlinePlusCircle size="2rem" />
+                      </Flex>
+                      <Flex
+                        ml={3}
+                        onClick={() => setNumInvitation((prev) => prev - 1)}
+                        color="lightGrey"
+                        _hover={{ color: "grey", cursor: "pointer" }}
+                        display={count < 1 ? "none" : undefined}
+                      >
+                        <AiOutlineMinusCircle size="2rem" />
+                      </Flex>
+                    </Box>
+                  </Flex>
+                ))}
+                <Flex justifyContent="flex-end" w="100%">
+                  <Button
+                    mr={6}
+                    mt={6}
+                    mb={3}
+                    onClick={() => submitForm()}
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    Invite Member(s)
+                  </Button>
+                </Flex>
+              </>
+            );
+          }}
+        </Formik>
+      </ModalLayout>
+      <Divider orientation="horizontal" />
       {renderVisible()}
       <Flex width="100%" justifyContent="center">
         <button

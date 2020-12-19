@@ -23,6 +23,7 @@ import CustomForm from "../../../components/Form";
 import InputField from "../../../components/Input";
 import TextAreaField from "../../../components/TextArea";
 import ModalLayout from "../../../layouts/Modal";
+import Heading, { headingEnum } from "../../../components/Heading";
 import {
   useUpdateSprintMutation,
   useDeleteSprintMutation,
@@ -127,18 +128,19 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       variables: { id: sprintData.id, projectId },
       update: async (cache) => {
         try {
-          const existingSprints: any = await cache.readQuery({
-            query: GetSprintsDocument,
-            variables: { projectId },
-          });
+          cache.modify({
+            fields: {
+              getSprints(existingSprintsRef, { readField }) {
+                const newSprintsRef = existingSprintsRef.sprints.filter(
+                  (sprint: any) => {
+                    console.log(sprint);
+                    return sprintData.id !== readField("id", sprint);
+                  }
+                );
 
-          const newSprints = existingSprints.getSprints.sprints.filter(
-            (sprint: any) => sprint.id !== sprintData.id
-          );
-
-          cache.writeQuery({
-            query: GetSprintsDocument,
-            data: { getSprints: { sprints: newSprints } },
+                return { ...existingSprintsRef, sprints: newSprintsRef };
+              },
+            },
           });
         } catch (err) {
           console.log(err);
@@ -222,11 +224,12 @@ export const SprintItem: React.FC<Record<string, any>> = ({
               ref={provided.innerRef}
               {...provided.dragHandleProps}
               {...provided.draggableProps}
+              bgColor="white"
             >
               <Flex
                 alignItems="center"
                 bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
-                p={2}
+                px={2}
               >
                 <Center w="40px" h="40px" overflow="hidden">
                   <AccordionButton
@@ -246,7 +249,9 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                   </AccordionButton>
                 </Center>
                 <Box flex="1" ml={3} textAlign="left">
-                  {sprintData.title}
+                  <Heading headingType={headingEnum.sprint}>
+                    {sprintData.title}
+                  </Heading>
                 </Box>
                 <Flex
                   justifyContent="flex-end"

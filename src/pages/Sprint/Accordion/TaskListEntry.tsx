@@ -54,35 +54,32 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
           <>
             <Box
               display="grid"
-              gridTemplateColumns="1fr 8rem 5rem"
-              gridColumnGap="2rem"
+              gridTemplateColumns="4.5rem 1fr 8rem 5rem"
+              gridColumnGap="0.5rem"
               ref={provided.innerRef}
               {...provided.dragHandleProps}
               {...provided.draggableProps}
               alignItems="center"
               p={2}
+              bgColor="white"
             >
-              <Box>
-                <Flex>
-                  <Label>{`No. ${taskData.taskIndex}`}</Label>
-                  <Text
-                    ml={2}
-                    fontSize="base"
-                    onClick={() => {
-                      console.log("마음은 열릴 것입니다.", selectedTask);
-                      setSelectedTask(taskData.id);
-                      onTaskOpen();
-                      console.log("마음이 열렸습니다", selectedTask);
-                    }}
-                    _hover={{
-                      cursor: "pointer",
-                      borderBottom: "1px solid",
-                    }}
-                  >
-                    {taskData.title}
-                  </Text>
-                </Flex>
-              </Box>
+              <Text
+                fontSize="sm"
+                color="primary.200"
+              >{`Task-${taskData.taskIndex}`}</Text>
+              <Text
+                fontSize="base"
+                onClick={() => {
+                  setSelectedTask(taskData.id);
+                  onTaskOpen();
+                }}
+                _hover={{
+                  cursor: "pointer",
+                  borderBottom: "1px solid",
+                }}
+              >
+                {taskData.title}
+              </Text>
               <Flex justifyContent="flex-end">
                 {taskData.board ? <Label>{taskData.board.title}</Label> : null}
               </Flex>
@@ -92,7 +89,9 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                     <AvatarGroup
                       max={3}
                       size={AvatarSize.sm}
-                      avatars={taskData.userTask.map((user: any) => user.user)}
+                      avatars={taskData.userTask.map(({ user }: any) => {
+                        return { name: user.username, src: user.avatar };
+                      })}
                     />
                   ) : (
                     <Avatar

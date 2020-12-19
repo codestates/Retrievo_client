@@ -93,6 +93,7 @@ export const MyProfile: React.FC = () => {
               name="email"
               placeholder="Enter Email"
               type="email"
+              disabled
             />
           </Box>
           <Box p={2} mb={6}>
