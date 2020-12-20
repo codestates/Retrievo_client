@@ -21,7 +21,7 @@ export const ReportCard: React.FC = () => {
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });
-  if (loading) return <Spinner />;
+  if (loading) return <></>;
 
   return (
     <Container maxW="60%">

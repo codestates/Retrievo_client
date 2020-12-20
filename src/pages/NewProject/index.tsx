@@ -24,11 +24,11 @@ const NewProject = (): ReactElement => {
 
   type fieldType = Record<string, any>;
 
-  const createErrorToast = () => {
+  const createErrorToast = (message?: string) => {
     toast({
       status: "error",
       title: "Something wrong...",
-      description: "Please try again in a moment😅",
+      description: message || "Please try again in a moment😅",
       position: "bottom-right",
     });
   };
@@ -44,7 +44,9 @@ const NewProject = (): ReactElement => {
       console.log(res);
       if (res.data?.createProject.error) {
         console.log("createProject err:", res.data?.createProject.error);
-        createErrorToast();
+        if (res.data?.createProject.error.code === "403") {
+          createErrorToast("Please Register or Login to create new project😂");
+        }
         return;
       }
       // TODO 생성된 프로젝트로 라우팅

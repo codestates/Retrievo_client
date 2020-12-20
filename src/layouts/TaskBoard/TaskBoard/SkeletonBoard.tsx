@@ -46,11 +46,10 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   const handleBoardCreateSubmit = async () => {
     try {
       const res = await handleBoardCreate(inputValue, projectId);
-      console.log("create", res.data);
-      if (res.errors) {
+      if (res.data?.createBoard.error) {
         toast({
           title: "Board Creation Failed😂",
-          description: `${res.errors}`,
+          description: `${res.data?.createBoard.error.message}`,
           duration: 5000,
           status: "error",
           position: "bottom-right",

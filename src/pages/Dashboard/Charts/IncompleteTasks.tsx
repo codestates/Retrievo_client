@@ -1,3 +1,4 @@
+import { Center } from "@chakra-ui/react";
 import React from "react";
 import Chart from "../../../components/Chart";
 import { chartVariant } from "../../../components/Chart/types";
@@ -14,7 +15,12 @@ export const IncompleteTasks: React.FC = () => {
     variables: { projectId },
   });
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
 
   return (
     <>

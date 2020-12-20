@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Divider, Box, Flex } from "@chakra-ui/react";
+import { Divider, Box, Flex, Center } from "@chakra-ui/react";
 import { ImClipboard } from "react-icons/im";
 import { GoChevronDown, GoChevronUp, GoChevronRight } from "react-icons/go";
 import useLoadMore from "../../../hooks/useLoadMore";
@@ -37,12 +37,18 @@ export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
       const taskData = meData.getMe.user.userTask.filter((userTask) => {
         return userTask.task.project?.id === projectId;
       });
+
       setItems(taskData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meData]);
 
-  if (meLoading) return <Spinner />;
+  if (meLoading)
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
 
   const renderVisible = () => {
     if (!items.length)
@@ -55,7 +61,7 @@ export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
           p={2}
           bg="achromatic.100"
         >
-          <Text color="achromatic.600">Noting to do. Dobby is free!!!</Text>
+          <Text color="achromatic.600">Nothing to do. Dobby is free!!!</Text>
         </Box>
       );
 
