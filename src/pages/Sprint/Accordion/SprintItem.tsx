@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React from "react";
+import React, { useState } from "react";
 import {
   AccordionItem,
   AccordionButton,
@@ -14,6 +14,8 @@ import {
   Button,
   useDisclosure,
   useToast,
+  AccordionPanel,
+  Input,
 } from "@chakra-ui/react";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -32,8 +34,10 @@ import {
   GetSprintsDocument,
   GetBoardsDocument,
   SetStartedSprintDocument,
+  useCreateTaskMutation,
 } from "../../../generated/graphql";
 import { useQuery } from "../../../hooks/useQuery";
+import { TaskOptions } from "../../../layouts/TaskBoard/TaskBoard";
 
 export type sprintItemProps = {
   sprintData: Sprint;
@@ -56,6 +60,9 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   const query = useQuery();
   const projectId = query.get("projectId");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+  const [taskTitle, setTaskTitle] = useState("");
+
   const [
     updateSprintMutation,
     { loading: updateSprintLoading },
@@ -65,6 +72,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
     deleteSprintMutation,
     { loading: deleteSprintLoading },
   ] = useDeleteSprintMutation();
+  const [createTaskMutation] = useCreateTaskMutation();
 
   /* need to make row null on serverside */
   // if (completedSprint) {
@@ -283,6 +291,40 @@ export const SprintItem: React.FC<Record<string, any>> = ({
     });
   };
 
+  const handleTaskCreate = async () => {
+    const res = await createTaskMutation({
+      variables: {
+        options: {
+          title: taskTitle,
+          sprintId: sprintData.id,
+        },
+        projectId,
+      },
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: GetSprintsDocument, variables: { projectId } },
+      ],
+    });
+    if (res.data?.createTask.error) {
+      toast({
+        title: "Task Creation Failed😂",
+        description: `${res.data?.createTask.error.message}`,
+        duration: 5000,
+        status: "error",
+        position: "bottom-right",
+      });
+    } else {
+      toast({
+        title: "Task Creation Succeed🥳",
+        description: "Task is created",
+        duration: 5000,
+        status: "success",
+        position: "bottom-right",
+      });
+    }
+    setIsCreateTaskModalOpen(false);
+  };
+
   return (
     <>
       <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
@@ -376,6 +418,30 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 setSelectedTask={setSelectedTask}
                 onTaskOpen={onTaskOpen}
               />
+              <AccordionPanel paddingTop="0" _hover={{ backgroundColor: "" }}>
+                <Flex justifyContent="flex-end">
+                  <Button
+                    bgColor="transparent"
+                    p={0}
+                    fontWeight="none"
+                    onClick={() => setIsCreateTaskModalOpen(true)}
+                    _hover={{
+                      backgroundColor: "transparent",
+                      color: "#38B2AC",
+                    }}
+                    _active={{
+                      backgroundColor: "transparent",
+                      color: "#38B2AC",
+                    }}
+                    _focus={{
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    + Create New Task
+                  </Button>
+                </Flex>
+                {/* <Divider /> */}
+              </AccordionPanel>
             </AccordionItem>
           );
         }}
@@ -421,6 +487,20 @@ export const SprintItem: React.FC<Record<string, any>> = ({
             </Box>
           </CustomForm>
         </Box>
+      </ModalLayout>
+      <ModalLayout
+        title="Create Task"
+        isOpen={isCreateTaskModalOpen}
+        onClose={() => setIsCreateTaskModalOpen(false)}
+        secondaryText="Submit"
+        secondaryAction={handleTaskCreate}
+        buttonColor="primary.200"
+        buttonFontColor="white"
+      >
+        <Input
+          onChange={(e) => setTaskTitle(e.target.value)}
+          placeholder="Write Task Name"
+        />
       </ModalLayout>
     </>
   );

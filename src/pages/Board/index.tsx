@@ -53,6 +53,7 @@ export const Board: React.FC<Record<string, never>> = () => {
 
   /* state & hooks */
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
+  const [isChanged, setIsChanged] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -115,6 +116,16 @@ export const Board: React.FC<Record<string, never>> = () => {
         { query: GetBoardsDocument, variables: { projectId } },
         { query: GetSprintsDocument, variables: { projectId } },
       ],
+    });
+  };
+
+  const handleBoardDrag = async (options: Boardoptions, projectId: string) => {
+    return await updateBoard({
+      variables: { options, projectId },
+      // refetchQueries: [
+      //   { query: GetBoardsDocument, variables: { projectId } },
+      //   { query: GetSprintsDocument, variables: { projectId } },
+      // ],
     });
   };
 
@@ -267,11 +278,14 @@ export const Board: React.FC<Record<string, never>> = () => {
                   handleTaskCreate={handleTaskCreate}
                   handleTaskDelete={handleTaskDelete}
                   handleTaskUpdate={handleTaskUpdate}
+                  handleBoardDrag={handleBoardDrag}
                   boards={data?.getBoards.boards}
                   // boards={data !== null ? data?.getBoards.boards : []}
                   // boards={curBoards}
                   boardLoading={boardLoading}
                   taskLoading={taskLoading}
+                  setIsChanged={setIsChanged}
+                  isChanged={isChanged}
                   // lazyGetBoard={lazyGetBoard}
                 />
               )}
@@ -282,6 +296,7 @@ export const Board: React.FC<Record<string, never>> = () => {
           <TaskBar
             taskId={selectedTask}
             isOpen={isOpen}
+            setIsChanged={setIsChanged}
             onClose={() => {
               onClose();
               setSelectedTask(null);

@@ -16,14 +16,25 @@ export type TaskCardProps = {
   setDeletedTaskId?: (taskId: string) => void;
 };
 
+interface taskLabelType {
+  label: { id: string; name: string; color: string };
+}
+
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
   handleTaskClick,
   setDeletedTaskId,
   setIsDeleteTaskModalOpen,
 }): ReactElement | null => {
+  const sortLabel = (a: taskLabelType, b: taskLabelType) => {
+    if (!a.label || !b.label) return -1;
+    return a.label.name.toUpperCase() < b.label.name.toUpperCase() ? -1 : 1;
+  };
+
   const renderLabels = () => {
-    return task?.taskLabel?.map((labelObj) => {
+    const copyTaskLabel = task?.taskLabel?.slice();
+    if (!copyTaskLabel) return null;
+    return copyTaskLabel.sort(sortLabel).map((labelObj) => {
       const { label } = labelObj;
       return (
         <Label mr="2px" mb="3px" key={label.id} bgColor={label.color}>

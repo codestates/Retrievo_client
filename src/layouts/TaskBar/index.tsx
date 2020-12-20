@@ -77,9 +77,15 @@ export interface taskProps {
   taskId?: string | null;
   isOpen: boolean;
   onClose: () => void;
+  setIsChanged?: (status: boolean) => void;
 }
 
-export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
+export const TaskBar: React.FC<taskProps> = ({
+  taskId,
+  isOpen,
+  onClose,
+  setIsChanged,
+}) => {
   const toast = useToast();
 
   const [
@@ -178,7 +184,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       if (res.data?.updateTask.error) {
         throw new Error(res.data?.updateTask.error.message);
       }
-
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();
@@ -249,6 +255,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       if (res.data?.deleteTaskLabel.error) {
         throw new Error(res.data?.deleteTaskLabel.error.message);
       }
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (error) {
       console.log("delete label Error", error);
@@ -284,6 +291,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       if (res.data?.createTaskLabel.error) {
         throw new Error(res.data?.createTaskLabel.error.message);
       }
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (error) {
       console.log("create label Error", error);
@@ -323,6 +331,9 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
       return;
     }
 
+    setTimeout(() => {
+      if (setIsChanged) setIsChanged(true);
+    }, 700);
     onCloseDeleteModal();
     onClose();
   };
@@ -354,6 +365,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
         throw new Error(res.data.deleteUserTask.error.message);
       }
 
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();
@@ -380,6 +392,7 @@ export const TaskBar: React.FC<taskProps> = ({ taskId, isOpen, onClose }) => {
         throw new Error(res.data.createUserTask.error.message);
       }
 
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();

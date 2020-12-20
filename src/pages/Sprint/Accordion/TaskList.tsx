@@ -54,7 +54,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <AccordionPanel>
+      <AccordionPanel paddingBottom="0.2rem">
         <Droppable droppableId="droppableTask">
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>

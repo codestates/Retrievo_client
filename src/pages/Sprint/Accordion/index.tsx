@@ -78,7 +78,7 @@ export const Sprints: React.FC = () => {
         return;
       }
     }
-    console.log(result);
+
     const draggableSprint = sprints.find(
       (sprint) => sprint.id === result.draggableId
     );
@@ -110,14 +110,16 @@ export const Sprints: React.FC = () => {
     if (res.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
-        title: "Sprint Update Failed!",
-        description: res.data?.updateSprint.error.message,
+        title: "Error",
+        description: "Server Error",
         status: "error",
         duration: 2000,
         isClosable: true,
       });
     }
   };
+
+  console.log("나는 스프린츠에여", sprints);
 
   return (
     <>
