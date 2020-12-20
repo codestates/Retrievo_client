@@ -26,7 +26,7 @@ export const ActivityStream: React.FC = () => {
     },
   });
 
-  if (loading) return <Spinner />;
+  if (loading) return <></>;
 
   if (data?.project.project?.projectPermissions && items.length === 0) {
     const userData = data.project.project.projectPermissions.map(
