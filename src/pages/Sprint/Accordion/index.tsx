@@ -18,7 +18,10 @@ export const Sprints: React.FC = () => {
   const [selected, setSelected] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [updateSprintMutation] = useUpdateSprintMutation();
+  const [
+    updateSprintMutation,
+    { loading: updateSprintLoading },
+  ] = useUpdateSprintMutation();
   const toast = useToast();
 
   if (!projectId) return null;
@@ -29,10 +32,18 @@ export const Sprints: React.FC = () => {
   const sprints = data?.getSprints.sprints;
 
   if (loading) return <Spinner />;
+  if (updateSprintLoading) return <Spinner />;
   if (!sprints) return <Spinner />;
 
   const startedSprint = sprints.find((sprint) => sprint.didStart);
   const completedSprint = sprints.find((sprint) => sprint.isCompleted);
+
+  const reorder = (list: any[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
 
   const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;
@@ -67,7 +78,11 @@ export const Sprints: React.FC = () => {
         return;
       }
     }
-
+    console.log(result);
+    const draggableSprint = sprints.find(
+      (sprint) => sprint.id === result.draggableId
+    );
+    if (!draggableSprint?.title) return;
     const res = await updateSprintMutation({
       variables: {
         projectId,
@@ -76,8 +91,21 @@ export const Sprints: React.FC = () => {
           row: result.destination.index,
         },
       },
+      optimisticResponse: {
+        updateSprint: {
+          __typename: "SprintResponse",
+          sprint: {
+            __typename: "Sprint",
+            id: result.draggableId,
+            row: result.destination.index,
+            title: draggableSprint.title,
+          },
+        },
+      },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
+
+    console.log(res);
 
     if (res.data?.updateSprint.error) {
       toast({
