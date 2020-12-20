@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -28,7 +28,6 @@ import {
   useGetProjectQuery,
   useInviteUserMutation,
   useGetMeQuery,
-  RoleTypes,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import ModalLayout from "../../../layouts/Modal";
@@ -77,7 +76,7 @@ export const AccessPermission: React.FC = () => {
   const [inviteUserMutation] = useInviteUserMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (loading) return <Spinner />;
+  if (loading) return <></>;
 
   const onSubmit = async (values: Record<string, string>, userId: string) => {
     const res = await updateProjectPermissionMutation({
@@ -85,6 +84,25 @@ export const AccessPermission: React.FC = () => {
         projectId,
         isAdmin: values.role === "ADMIN",
         userId,
+      },
+      update: (cache, { data }) => {
+        if (!data?.updateProjectPermission.projectPermission) return;
+        const cacheId = cache.identify(
+          data.updateProjectPermission.projectPermission.project
+        );
+        if (!cacheId) return;
+        console.log(cache);
+        cache.modify({
+          fields: {
+            project: (existingProjectPermission, { toReference }) => {
+              console.log(existingProjectPermission);
+              return {
+                ...existingProjectPermission,
+                project: toReference(cacheId),
+              };
+            },
+          },
+        });
       },
     });
 

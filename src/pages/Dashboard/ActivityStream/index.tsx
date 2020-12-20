@@ -75,7 +75,12 @@ export const ActivityStream: React.FC = () => {
     return dummyItems.slice(0, visible).map((item) => {
       return (
         <>
-          <StyledActivityStream p={2} bg="achromatic.100" w="100%">
+          <StyledActivityStream
+            key={item.message} // TODO must be changed to ID once notification is updated
+            p={2}
+            bg="achromatic.100"
+            w="100%"
+          >
             <Flex w="6rem" justifyContent="center" alignItems="center">
               <CustomAvatar name={`${item.username}`} src={`${item.avatar}`} />
             </Flex>
