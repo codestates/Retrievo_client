@@ -210,7 +210,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       ],
     });
 
-    console.log("왜 터지는 거야?", res1.data);
     if (res1.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
