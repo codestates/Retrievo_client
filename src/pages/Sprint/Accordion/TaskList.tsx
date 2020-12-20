@@ -1,4 +1,4 @@
-import { AccordionPanel, Box } from "@chakra-ui/react";
+import { AccordionPanel, Box, useToast } from "@chakra-ui/react";
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
@@ -23,16 +23,13 @@ export const TaskList: React.FC<TaskListPropType> = ({
   const query = useQuery();
   const projectId = query.get("projectId");
 
-  const [
-    updateTaskMutation,
-    { data, loading, error },
-  ] = useUpdateTaskMutation();
-
+  const [updateTaskMutation] = useUpdateTaskMutation();
+  const toast = useToast();
   if (!projectId) return null;
 
-  const onDragEnd = (result: Record<string, any>) => {
+  const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;
-    updateTaskMutation({
+    const res = await updateTaskMutation({
       variables: {
         projectId,
         options: {
@@ -42,6 +39,17 @@ export const TaskList: React.FC<TaskListPropType> = ({
       },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
+
+    if (res.data?.updateTask.error) {
+      toast({
+        position: "bottom-right",
+        title: "Task Update Failed!",
+        description: res.data?.updateTask.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   return (

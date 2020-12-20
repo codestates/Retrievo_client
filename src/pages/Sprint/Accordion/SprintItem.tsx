@@ -75,7 +75,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   if (!projectId) return null;
 
   const handleUpdateSprint = async (values: Record<string, any>) => {
-    await updateSprintMutation({
+    const res = await updateSprintMutation({
       variables: {
         projectId,
         options: {
@@ -85,34 +85,44 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         },
       },
       update: async (cache) => {
-        try {
-          const existingSprints: any = await cache.readQuery({
-            query: GetSprintsDocument,
-            variables: { projectId },
-          });
+        const existingSprints: any = await cache.readQuery({
+          query: GetSprintsDocument,
+          variables: { projectId },
+        });
 
-          const newSprints = existingSprints.getSprints.sprints.map(
-            (sprint: any) => {
-              if (sprint.id === sprintData.id) {
-                return {
-                  ...sprint,
-                  title: values.sprintName,
-                  description: values.description,
-                };
-              }
-              return sprint;
+        const newSprints = existingSprints.getSprints.sprints.map(
+          (sprint: any) => {
+            if (sprint.id === sprintData.id) {
+              return {
+                ...sprint,
+                title: values.sprintName,
+                description: values.description,
+              };
             }
-          );
+            return sprint;
+          }
+        );
 
-          cache.writeQuery({
-            query: GetSprintsDocument,
-            data: { getSprints: { sprints: newSprints } },
-          });
-        } catch (err) {
-          console.log(err);
-        }
+        cache.writeQuery({
+          query: GetSprintsDocument,
+          data: { getSprints: { sprints: newSprints } },
+        });
       },
     });
+
+    if (res.data?.updateSprint.error) {
+      toast({
+        position: "bottom-right",
+        title: "Sprint Update Failed!",
+        description: res.data?.updateSprint.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      onClose();
+      return;
+    }
+
     onClose();
     toast({
       position: "bottom-right",
@@ -125,7 +135,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   };
 
   const handleDeleteSprint = async () => {
-    await deleteSprintMutation({
+    const res = await deleteSprintMutation({
       variables: { id: sprintData.id, projectId },
       update: async (cache) => {
         try {
@@ -148,6 +158,17 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       },
       refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
     });
+
+    if (res.data?.deleteSprint.error) {
+      toast({
+        position: "bottom-right",
+        title: "Sprint deletion Failed!",
+        description: res.data?.deleteSprint.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   // eslint-disable-next-line consistent-return
@@ -164,7 +185,8 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       });
       return null;
     }
-    await updateSprintMutation({
+
+    const res1 = await updateSprintMutation({
       variables: {
         projectId,
         options: {
@@ -173,7 +195,20 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         },
       },
     });
-    await updateSprintMutation({
+
+    if (res1.data?.updateSprint.error) {
+      toast({
+        position: "bottom-right",
+        title: "Sprint Update Failed!",
+        description: res1.data?.updateSprint.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return null;
+    }
+
+    const res2 = await updateSprintMutation({
       variables: {
         projectId,
         options: {
@@ -188,6 +223,19 @@ export const SprintItem: React.FC<Record<string, any>> = ({
         { query: GetSprintsDocument, variables: { projectId } },
       ],
     });
+
+    if (res2.data?.updateSprint.error) {
+      toast({
+        position: "bottom-right",
+        title: "Sprint Update Failed!",
+        description: res2.data?.updateSprint.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return null;
+    }
+
     toast({
       position: "bottom-right",
       title: "Sprint Started!",
@@ -199,8 +247,8 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   };
 
   // eslint-disable-next-line consistent-return
-  const handleCompleteSprint = async (values: Record<string, any>) => {
-    await updateSprintMutation({
+  const handleCompleteSprint = async () => {
+    const res = await updateSprintMutation({
       variables: {
         projectId,
         options: {
@@ -210,7 +258,21 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       },
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
+
+    if (res.data?.updateSprint.error) {
+      toast({
+        position: "bottom-right",
+        title: "Sprint Update Failed!",
+        description: res.data?.updateSprint.error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
     handleDeleteSprint();
+
     toast({
       position: "bottom-right",
       title: "Congrats, You completed your sprint!",
@@ -220,6 +282,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       isClosable: true,
     });
   };
+
   return (
     <>
       <Draggable key={sprintData.id} draggableId={sprintData.id} index={row}>
@@ -227,7 +290,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           return (
             <AccordionItem
               ref={provided.innerRef}
-              {...provided.dragHandleProps}
               {...provided.draggableProps}
               bgColor="white"
             >
@@ -235,6 +297,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
                 alignItems="center"
                 bgColor={sprintData.didStart ? "primary.400" : "achromatic.100"}
                 px={2}
+                {...provided.dragHandleProps}
               >
                 <Center w="40px" h="40px" overflow="hidden">
                   <AccordionButton

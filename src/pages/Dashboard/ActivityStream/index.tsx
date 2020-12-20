@@ -41,15 +41,6 @@ export const ActivityStream: React.FC = () => {
     setItems(userData);
   }
 
-  const makeRandomMessage = (): string => {
-    const messages = [
-      "completed this task",
-      "created this task",
-      "write this comment",
-    ];
-    return messages[_.random(0, messages.length - 1)];
-  };
-
   const dummyItems: { username: string; avatar: string; message: string }[] = [
     {
       username: "Ben award",
@@ -80,7 +71,7 @@ export const ActivityStream: React.FC = () => {
   ];
 
   const renderVisible = () => {
-    // TODO : dummy를 items로 바꾸기
+    // TODO : dummy를 items로 바꾸기 Notification 생성 후
     return dummyItems.slice(0, visible).map((item) => {
       return (
         <>
@@ -98,13 +89,7 @@ export const ActivityStream: React.FC = () => {
               justifyContent="flex-end"
               color="achromatic.600"
               pr={4}
-            >
-              {/* {`${formatDistanceStrict(
-                  new Date(Number(item.notification.createdAt)),
-                  new Date(),
-                  { addSuffix: true }
-                )}`} */}
-            </Flex>
+            />
           </StyledActivityStream>
           <Divider orientation="horizontal" />
         </>
