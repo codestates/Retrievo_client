@@ -77,7 +77,7 @@ export const AccessPermission: React.FC = () => {
   const [inviteUserMutation] = useInviteUserMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (loading) return <Spinner />;
+  if (loading) return <></>;
 
   const onSubmit = async (values: Record<string, string>, userId: string) => {
     const res = await updateProjectPermissionMutation({
