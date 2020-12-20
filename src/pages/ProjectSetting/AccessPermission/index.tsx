@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -28,7 +28,6 @@ import {
   useGetProjectQuery,
   useInviteUserMutation,
   useGetMeQuery,
-  RoleTypes,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import ModalLayout from "../../../layouts/Modal";
@@ -85,6 +84,17 @@ export const AccessPermission: React.FC = () => {
         projectId,
         isAdmin: values.role === "ADMIN",
         userId,
+      },
+
+      update: (cache, { data }) => {
+        console.log(data);
+        // cache.modify({
+        //   fields: {
+        //     getSprints: (existingProjectPermission, { toReference }) => {
+        //       return [...existingPROJECTPERMISSION, toReference(cacheId)];
+        //     },
+        //   },
+        // });
       },
     });
 
