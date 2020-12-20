@@ -60,6 +60,19 @@ export const BasicDetail: React.FC = () => {
   }: Record<string, string>) => {
     const res = await updateProjectName({
       variables: { projectId, name: projectName },
+      update: (cache, { data }) => {
+        if (!data) return;
+        if (!data.updateProjectName.project) return;
+        const cacheId = cache.identify(data.updateProjectName.project);
+        if (!cacheId) return;
+        cache.modify({
+          fields: {
+            project: (existingProject, { toReference }) => {
+              return { ...existingProject, project: toReference(cacheId) };
+            },
+          },
+        });
+      },
     });
 
     if (res.data?.updateProjectName.error) {
