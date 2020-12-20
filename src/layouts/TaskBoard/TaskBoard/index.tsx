@@ -49,6 +49,7 @@ export type TaskBoardProps = TaskCardProps & {
   boards: boardType[];
   projectId: string;
   sprintId: string;
+  setIsChanged?: (status: boolean) => void;
   handleBoardDelete: (
     id: string,
     newBoardId: string,
@@ -75,7 +76,8 @@ export type TaskBoardProps = TaskCardProps & {
     FetchResult<DeleteTaskMutation, Record<string, any>, Record<string, any>>
   >;
   handleTaskClick: (id: string) => void;
-  // lazyGetBoard: (options: Record<string, Record<string, string>>) => void;
+  boardLoading: boolean;
+  taskLoading: boolean;
 };
 
 const TaskBoard: React.FC<TaskBoardProps> = ({
@@ -86,6 +88,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   boards,
   projectId,
   sprintId,
+  boardLoading,
+  taskLoading,
+  setIsChanged,
   ...props
 }): ReactElement | null => {
   /* State */
@@ -105,11 +110,14 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   if (!board) return null;
 
+  if (!setIsChanged) return null;
+
   const taskConfig = {
     projectId,
     handleTaskClick,
     setIsDeleteTaskModalOpen,
     setDeletedTaskId,
+    setIsChanged,
   };
 
   const changeIconColor = (icon: ReactElement, color: string, size: string) => {
@@ -145,6 +153,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         status: "success",
         position: "bottom-right",
       });
+      setTimeout(() => {
+        setIsChanged(true);
+      }, 800);
       setIsDeleteModalOpen(false);
     }
   };
@@ -174,6 +185,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
+    setTimeout(() => {
+      setIsChanged(true);
+    }, 800);
     setIsEditModalOpen(false);
   };
 
@@ -203,6 +217,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
+    setTimeout(() => {
+      setIsChanged(true);
+    }, 800);
     setIsCreateTaskModalOpen(false);
   };
 
@@ -225,6 +242,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
+    setTimeout(() => {
+      setIsChanged(true);
+    }, 800);
     setIsDeleteTaskModalOpen(false);
   };
 
@@ -236,6 +256,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           index={task.boardRowIndex || index}
           draggableId={task.id}
           key={task.id}
+          isDragDisabled={boardLoading || taskLoading}
         >
           {(provided) => (
             <Box

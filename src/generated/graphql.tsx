@@ -210,6 +210,7 @@ export type Board = {
   id: Scalars["String"];
   title: Scalars["String"];
   project?: Project;
+  index?: Scalars["Float"];
   boardColumnIndex: Scalars["Float"];
   createdAt?: Scalars["String"];
   updatedAt?: Scalars["String"];

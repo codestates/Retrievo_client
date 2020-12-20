@@ -7,6 +7,7 @@ import Text from "../../../components/Text";
 import Heading, { headingEnum } from "../../../components/Heading";
 import Modal from "../../Modal/index";
 import { CreateBoardMutation } from "../../../generated/graphql";
+import Spinner from "../../../components/Spinner";
 
 export type boardType = {
   [key: string]: any;
@@ -20,11 +21,13 @@ export type SkeletonBoardProps = {
   ) => Promise<
     FetchResult<CreateBoardMutation, Record<string, any>, Record<string, any>>
   >;
+  setIsChanged: (status: boolean) => void;
 };
 
 const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
   handleBoardCreate,
   projectId,
+  setIsChanged,
 }): ReactElement => {
   const [isCreating, setIsCreating] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -60,6 +63,10 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
           status: "success",
           position: "bottom-right",
         });
+
+        setTimeout(() => {
+          setIsChanged(true);
+        }, 800);
       }
     } catch (err) {
       console.log(err);
