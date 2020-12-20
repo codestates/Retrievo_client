@@ -184,9 +184,7 @@ export const TaskBar: React.FC<taskProps> = ({
       if (res.data?.updateTask.error) {
         throw new Error(res.data?.updateTask.error.message);
       }
-      setTimeout(() => {
-        if (setIsChanged) setIsChanged(true);
-      }, 700);
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();
@@ -257,9 +255,7 @@ export const TaskBar: React.FC<taskProps> = ({
       if (res.data?.deleteTaskLabel.error) {
         throw new Error(res.data?.deleteTaskLabel.error.message);
       }
-      setTimeout(() => {
-        if (setIsChanged) setIsChanged(true);
-      }, 700);
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (error) {
       console.log("delete label Error", error);
@@ -295,9 +291,7 @@ export const TaskBar: React.FC<taskProps> = ({
       if (res.data?.createTaskLabel.error) {
         throw new Error(res.data?.createTaskLabel.error.message);
       }
-      setTimeout(() => {
-        if (setIsChanged) setIsChanged(true);
-      }, 700);
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (error) {
       console.log("create label Error", error);
@@ -371,9 +365,7 @@ export const TaskBar: React.FC<taskProps> = ({
         throw new Error(res.data.deleteUserTask.error.message);
       }
 
-      setTimeout(() => {
-        if (setIsChanged) setIsChanged(true);
-      }, 700);
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();
@@ -400,9 +392,7 @@ export const TaskBar: React.FC<taskProps> = ({
         throw new Error(res.data.createUserTask.error.message);
       }
 
-      setTimeout(() => {
-        if (setIsChanged) setIsChanged(true);
-      }, 700);
+      if (setIsChanged) setIsChanged(true);
       createSuccessToast();
     } catch (err) {
       createErrorToast();

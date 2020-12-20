@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect, useMemo } from "react";
 import { FetchResult } from "@apollo/client";
 import { Box, useToast } from "@chakra-ui/react";
 import {
@@ -92,7 +92,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   
    */
 
-  useEffect(() => {
+  useMemo(() => {
     console.log("isChange useEffect:", isChanged);
     console.log("boards:", boards); // 왜 삭제되지 않은 데이터가 들어오지?
     if (isChanged) {
@@ -103,7 +103,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isChanged, boards]);
+  }, [boards]);
 
   useEffect(() => {
     console.log("boardLists:", boardLists);

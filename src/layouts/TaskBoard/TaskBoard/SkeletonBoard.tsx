@@ -64,9 +64,9 @@ const SkeletonBoard: React.FC<SkeletonBoardProps> = ({
           position: "bottom-right",
         });
 
-        setTimeout(() => {
-          setIsChanged(true);
-        }, 800);
+        // setTimeout(() => {
+        setIsChanged(true);
+        // }, 800);
       }
     } catch (err) {
       console.log(err);

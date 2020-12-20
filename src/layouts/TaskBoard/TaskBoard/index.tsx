@@ -153,9 +153,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         status: "success",
         position: "bottom-right",
       });
-      setTimeout(() => {
-        setIsChanged(true);
-      }, 800);
+      // setTimeout(() => {
+      setIsChanged(true);
+      // }, 800);
       setIsDeleteModalOpen(false);
     }
   };
@@ -185,9 +185,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
-    setTimeout(() => {
-      setIsChanged(true);
-    }, 800);
+    // setTimeout(() => {
+    setIsChanged(true);
+    // }, 800);
     setIsEditModalOpen(false);
   };
 
@@ -217,9 +217,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
-    setTimeout(() => {
-      setIsChanged(true);
-    }, 800);
+    // setTimeout(() => {
+    setIsChanged(true);
+    // }, 800);
     setIsCreateTaskModalOpen(false);
   };
 
@@ -242,9 +242,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         position: "bottom-right",
       });
     }
-    setTimeout(() => {
-      setIsChanged(true);
-    }, 800);
+    // setTimeout(() => {
+    setIsChanged(true);
+    // }, 800);
     setIsDeleteTaskModalOpen(false);
   };
 
