@@ -16,6 +16,8 @@ export const TasksByAssignee: React.FC = () => {
     variables: { projectId },
   });
 
+  console.log(data);
+
   if (loading)
     return (
       <Center>

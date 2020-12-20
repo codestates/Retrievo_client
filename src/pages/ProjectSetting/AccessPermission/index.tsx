@@ -22,14 +22,12 @@ import Heading, { headingEnum } from "../../../components/Heading";
 
 import CustomAvatar from "../../../components/Avatar";
 import useLoadMore from "../../../hooks/useLoadMore";
-import { roleType } from "../../MyProfile/Forms/roleSelectInput";
 import {
   useUpdateProjectPermissionMutation,
   useGetProjectQuery,
   useInviteUserMutation,
   useGetMeQuery,
 } from "../../../generated/graphql";
-import Spinner from "../../../components/Spinner";
 import ModalLayout from "../../../layouts/Modal";
 import { useQuery } from "../../../hooks/useQuery";
 
@@ -61,9 +59,15 @@ export const AccessPermission: React.FC = () => {
   );
 
   if (data?.project?.project?.projectPermissions) {
-    const userData = data?.project?.project?.projectPermissions.map(
-      (projectPermission) => projectPermission.user
-    );
+    const userData = data?.project?.project?.projectPermissions
+      .map((projectPermission) => {
+        return {
+          ...projectPermission.user,
+          isAdmin: projectPermission.isAdmin,
+        };
+      })
+      .sort((a: any, b: any) => b.username - a.username);
+    console.log(userData);
     if (items.length < 1) {
       setItems(userData);
     }
@@ -82,7 +86,7 @@ export const AccessPermission: React.FC = () => {
     const res = await updateProjectPermissionMutation({
       variables: {
         projectId,
-        isAdmin: values.role === "ADMIN",
+        isAdmin: values.role === "Admin",
         userId,
       },
       update: (cache, { data }) => {
@@ -149,19 +153,10 @@ export const AccessPermission: React.FC = () => {
     onClose();
   };
 
-  const roles = [
-    { key: "Admin", value: "ADMIN" },
-    { key: "Member", value: "MEMBER" },
-  ];
-
-  const renderRoleOptions = () => {
-    return roles?.map((role: roleType) => {
-      return <option value={role.value}>{role.key}</option>;
-    });
-  };
-
   const renderVisible = () => {
     return items.slice(0, visible).map((item) => {
+      console.log(item);
+      console.log(item.isAdmin === true ? "Admin" : "Member");
       if (typeof item.notification !== "string") {
         return (
           <>
@@ -179,7 +174,9 @@ export const AccessPermission: React.FC = () => {
                 </Flex>
                 <Box style={isDesktop ? { width: "15%" } : { width: "33%" }}>
                   <Formik
-                    initialValues={{ role: item.role }}
+                    initialValues={{
+                      role: item.isAdmin === true ? "Admin" : "Member",
+                    }}
                     onSubmit={(values) => onSubmit(values, item.id)}
                   >
                     {({ submitForm, handleChange }) => {
@@ -193,10 +190,20 @@ export const AccessPermission: React.FC = () => {
                               handleChange(e);
                               submitForm();
                             }}
-                            defaultValue={item.role}
                             borderColor="achromatic.400"
                           >
-                            {renderRoleOptions()}
+                            <option
+                              value={item.isAdmin === true ? "Admin" : "Member"}
+                            >
+                              {item.isAdmin === true ? "Admin" : "Member"}
+                            </option>
+                            <option
+                              value={
+                                item.isAdmin === false ? "Admin" : "Member"
+                              }
+                            >
+                              {item.isAdmin === false ? "Admin" : "Member"}
+                            </option>
                           </Select>
                         </FormControl>
                       );
