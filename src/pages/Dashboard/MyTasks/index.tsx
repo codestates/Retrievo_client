@@ -37,6 +37,7 @@ export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
       const taskData = meData.getMe.user.userTask.filter((userTask) => {
         return userTask.task.project?.id === projectId;
       });
+
       setItems(taskData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
