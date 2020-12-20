@@ -98,14 +98,14 @@ const TopNav: React.FC<Record<string, never>> = () => {
           />
         ) : null}
         <Box>
-          <Link to="/notification">
-            <IconButton
-              fontSize="xl"
-              color="achromatic.700"
-              aria-label="notification"
-              iconButtonType={IconButtonType.notification}
-            />
-          </Link>
+          {/* <Link to="/notification"> */}
+          <IconButton
+            fontSize="xl"
+            color="achromatic.700"
+            aria-label="notification"
+            iconButtonType={IconButtonType.notification}
+          />
+          {/* </Link> */}
           <Link to={`${ROUTES.MY_PROFILE}?projectId=${projectId}`}>
             <IconButton
               fontSize="xl"

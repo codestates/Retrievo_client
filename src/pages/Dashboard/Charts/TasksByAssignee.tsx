@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import Chart from "../../../components/Chart";
 import { chartVariant } from "../../../components/Chart/types";
@@ -13,6 +14,7 @@ export const TasksByAssignee: React.FC = () => {
   const { data, loading } = useGetReportSummaryQuery({
     variables: { projectId },
   });
+
   if (loading) return <Spinner />;
   return (
     <>

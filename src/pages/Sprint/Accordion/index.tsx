@@ -37,7 +37,7 @@ export const Sprints: React.FC = () => {
   const startedSprint = sprints.find((sprint) => sprint.didStart);
   const completedSprint = sprints.find((sprint) => sprint.isCompleted);
 
-  const onDragEnd = (result: Record<string, any>) => {
+  const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;
     if (startedSprint) {
       if (
@@ -70,25 +70,23 @@ export const Sprints: React.FC = () => {
         return;
       }
     }
-    try {
-      updateSprintMutation({
-        variables: {
-          projectId,
-          options: {
-            id: result.draggableId,
-            row: result.destination.index,
-          },
+
+    const res = await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: result.draggableId,
+          row: result.destination.index,
         },
-        refetchQueries: [
-          { query: GetSprintsDocument, variables: { projectId } },
-        ],
-      });
-    } catch (err) {
-      console.log(err);
+      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+    });
+
+    if (res.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
-        title: "Error",
-        description: "Server Error",
+        title: "Sprint Update Failed!",
+        description: res.data?.updateSprint.error.message,
         status: "error",
         duration: 2000,
         isClosable: true,

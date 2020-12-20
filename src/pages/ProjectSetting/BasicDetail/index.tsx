@@ -12,18 +12,26 @@ import {
   GetMeDocument,
   GetProjectDocument,
   useDeleteProjectMutation,
+  useGetMeQuery,
   useGetProjectQuery,
   useUpdateProjectNameMutation,
 } from "../../../generated/graphql";
 import useQuery from "../../../hooks/useQuery";
 
 export const BasicDetail: React.FC = () => {
+  const toast = useToast();
   const urlQuery = useQuery();
   const projectId = urlQuery.get("projectId");
-  if (!projectId) return null;
   const history = useHistory();
+  const { data: getMeData } = useGetMeQuery();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const toast = useToast();
+  const [
+    updateProjectName,
+    { loading: updateLoading },
+  ] = useUpdateProjectNameMutation();
+
+  if (!projectId) return null;
 
   const { data, loading } = useGetProjectQuery({
     variables: { projectId },
@@ -36,12 +44,9 @@ export const BasicDetail: React.FC = () => {
     variables: { projectId },
   });
 
-  const [
-    updateProjectName,
-    { loading: updateLoading },
-  ] = useUpdateProjectNameMutation();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const myPermission = data?.project.project?.projectPermissions?.find(
+    (el) => el.user.id === getMeData?.getMe.user?.id
+  );
 
   if (updateLoading || deleteLoading || loading) return <Spinner />;
 
@@ -116,7 +121,7 @@ export const BasicDetail: React.FC = () => {
           initialValues={{
             projectName: data?.project.project?.name,
           }}
-          isSubmitButton
+          isSubmitButton={!!myPermission?.isAdmin}
           onSubmit={async (values) => {
             await handleUpdateProject(values);
           }}
@@ -126,6 +131,7 @@ export const BasicDetail: React.FC = () => {
               label="Project Name"
               name="projectName"
               placeholder="Enter Project Name..."
+              disabled={!myPermission?.isAdmin}
             />
           </Box>
         </CustomForm>
@@ -135,6 +141,7 @@ export const BasicDetail: React.FC = () => {
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
+          disabled={!myPermission?.isAdmin}
           title="Delete Project"
           buttonText="Delete Project"
           bgColor="fail"
