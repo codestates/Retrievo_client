@@ -85,16 +85,24 @@ export const AccessPermission: React.FC = () => {
         isAdmin: values.role === "ADMIN",
         userId,
       },
-
       update: (cache, { data }) => {
-        console.log(data);
-        // cache.modify({
-        //   fields: {
-        //     getSprints: (existingProjectPermission, { toReference }) => {
-        //       return [...existingPROJECTPERMISSION, toReference(cacheId)];
-        //     },
-        //   },
-        // });
+        if (!data?.updateProjectPermission.projectPermission) return;
+        const cacheId = cache.identify(
+          data.updateProjectPermission.projectPermission.project
+        );
+        if (!cacheId) return;
+        console.log(cache);
+        cache.modify({
+          fields: {
+            project: (existingProjectPermission, { toReference }) => {
+              console.log(existingProjectPermission);
+              return {
+                ...existingProjectPermission,
+                project: toReference(cacheId),
+              };
+            },
+          },
+        });
       },
     });
 
