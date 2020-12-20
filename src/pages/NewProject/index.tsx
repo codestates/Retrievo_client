@@ -34,7 +34,6 @@ const NewProject = (): ReactElement => {
   };
 
   const handleCreateProject = async ({ name }: fieldType) => {
-    console.log("------ start create:", name);
     try {
       const res = await createProject({
         variables: {

@@ -20,7 +20,7 @@ export const Sprints: React.FC = () => {
 
   const [
     updateSprintMutation,
-    { loading: updateLoading },
+    { loading: updateSprintLoading },
   ] = useUpdateSprintMutation();
   const toast = useToast();
 
@@ -32,10 +32,18 @@ export const Sprints: React.FC = () => {
   const sprints = data?.getSprints.sprints;
 
   if (loading) return <Spinner />;
+  if (updateSprintLoading) return <Spinner />;
   if (!sprints) return <Spinner />;
 
   const startedSprint = sprints.find((sprint) => sprint.didStart);
   const completedSprint = sprints.find((sprint) => sprint.isCompleted);
+
+  const reorder = (list: any[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
 
   const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;
@@ -70,21 +78,36 @@ export const Sprints: React.FC = () => {
         return;
       }
     }
-    try {
-      await updateSprintMutation({
-        variables: {
-          projectId,
-          options: {
+
+    const draggableSprint = sprints.find(
+      (sprint) => sprint.id === result.draggableId
+    );
+    if (!draggableSprint?.title) return;
+    const res = await updateSprintMutation({
+      variables: {
+        projectId,
+        options: {
+          id: result.draggableId,
+          row: result.destination.index,
+        },
+      },
+      optimisticResponse: {
+        updateSprint: {
+          __typename: "SprintResponse",
+          sprint: {
+            __typename: "Sprint",
             id: result.draggableId,
             row: result.destination.index,
+            title: draggableSprint.title,
           },
         },
-        refetchQueries: [
-          { query: GetSprintsDocument, variables: { projectId } },
-        ],
-      });
-    } catch (err) {
-      console.log(err);
+      },
+      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+    });
+
+    console.log(res);
+
+    if (res.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
         title: "Error",
