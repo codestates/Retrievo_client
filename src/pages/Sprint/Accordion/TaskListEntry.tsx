@@ -72,7 +72,10 @@ export const TaskListEntry: React.FC<taskListEntryProps> = ({
                       max={3}
                       size={AvatarSize.sm}
                       avatars={taskData.userTask.map(({ user }: any) => {
-                        return { name: user.username, src: user.avatar };
+                        return {
+                          name: user.username,
+                          src: user.avatar,
+                        };
                       })}
                     />
                   ) : (
