@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Divider, Box, Flex } from "@chakra-ui/react";
+import { Divider, Box, Flex, Center } from "@chakra-ui/react";
 import { ImClipboard } from "react-icons/im";
 import { GoChevronDown, GoChevronUp, GoChevronRight } from "react-icons/go";
 import useLoadMore from "../../../hooks/useLoadMore";
@@ -42,7 +42,12 @@ export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meData]);
 
-  if (meLoading) return <Spinner />;
+  if (meLoading)
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
 
   const renderVisible = () => {
     if (!items.length)
