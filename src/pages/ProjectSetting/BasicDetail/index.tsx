@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
-import { Box, Flex, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Center, Flex, useDisclosure, useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import InputField from "../../../components/Input"; // { InputFieldProps }
 import CustomForm from "../../../components/Form"; // { FormProps }
@@ -48,7 +48,12 @@ export const BasicDetail: React.FC = () => {
     (el) => el.user.id === getMeData?.getMe.user?.id
   );
 
-  if (updateLoading || deleteLoading || loading) return <Spinner />;
+  if (updateLoading || deleteLoading || loading)
+    return (
+      <Center mt="30vh">
+        <Spinner />
+      </Center>
+    );
 
   const handleUpdateProject = async ({
     projectName,
