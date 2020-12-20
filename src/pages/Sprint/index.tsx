@@ -10,6 +10,7 @@ import InputField from "../../components/Input";
 import TextAreaField from "../../components/TextArea";
 import {
   GetBoardsDocument,
+  GetProjectDocument,
   SetStartedSprintDocument,
   useCreateSprintMutation,
 } from "../../generated/graphql";
@@ -47,6 +48,7 @@ export const Sprint: React.FC<Record<string, never>> = () => {
       refetchQueries: [
         { query: GetBoardsDocument, variables: { projectId } },
         { query: SetStartedSprintDocument, variables: { projectId } },
+        { query: GetProjectDocument, variables: { projectId } },
       ],
     });
     if (res.data?.createSprint.error) {

@@ -35,11 +35,13 @@ const NewProject = (): ReactElement => {
 
   const handleCreateProject = async ({ name }: fieldType) => {
     try {
+      console.log("나는 name이야", name);
       const res = await createProject({
         variables: {
           name,
         },
       });
+      console.log(res);
       if (res.data?.createProject.error) {
         console.log("createProject err:", res.data?.createProject.error);
         createErrorToast();
@@ -48,7 +50,7 @@ const NewProject = (): ReactElement => {
       // TODO 생성된 프로젝트로 라우팅
       const projectId = res.data?.createProject.project?.id;
       if (!projectId) throw Error("no project id");
-      history.push(`/project/dashboard/${projectId}`);
+      history.push(`/project/dashboard?projectId=${projectId}`);
     } catch (err) {
       console.log("create new project error:", err);
       createErrorToast();

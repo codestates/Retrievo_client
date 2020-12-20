@@ -202,28 +202,6 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           didStart: true,
         },
       },
-    });
-
-    if (res1.data?.updateSprint.error) {
-      toast({
-        position: "bottom-right",
-        title: "Sprint Update Failed!",
-        description: res1.data?.updateSprint.error.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return null;
-    }
-
-    const res2 = await updateSprintMutation({
-      variables: {
-        projectId,
-        options: {
-          id: sprintData.id,
-          row: 0,
-        },
-      },
       refetchQueries: [
         { query: GetSprintsDocument, variables: { projectId } },
         { query: GetBoardsDocument, variables: { projectId } },
@@ -232,11 +210,12 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       ],
     });
 
-    if (res2.data?.updateSprint.error) {
+    console.log("왜 터지는 거야?", res1.data);
+    if (res1.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
         title: "Sprint Update Failed!",
-        description: res2.data?.updateSprint.error.message,
+        description: res1.data?.updateSprint.error.message,
         status: "error",
         duration: 2000,
         isClosable: true,
