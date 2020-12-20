@@ -70,23 +70,25 @@ export const Sprints: React.FC = () => {
         return;
       }
     }
-
-    const res = await updateSprintMutation({
-      variables: {
-        projectId,
-        options: {
-          id: result.draggableId,
-          row: result.destination.index,
+    try {
+      await updateSprintMutation({
+        variables: {
+          projectId,
+          options: {
+            id: result.draggableId,
+            row: result.destination.index,
+          },
         },
-      },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
-    });
-
-    if (res.data?.updateSprint.error) {
+        refetchQueries: [
+          { query: GetSprintsDocument, variables: { projectId } },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
       toast({
         position: "bottom-right",
-        title: "Sprint Update Failed!",
-        description: res.data?.updateSprint.error.message,
+        title: "Error",
+        description: "Server Error",
         status: "error",
         duration: 2000,
         isClosable: true,
