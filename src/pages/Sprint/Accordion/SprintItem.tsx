@@ -223,6 +223,36 @@ export const SprintItem: React.FC<Record<string, any>> = ({
       return null;
     }
 
+    // const res2 = await updateSprintMutation({
+    //   variables: {
+    //     projectId,
+    //     options: {
+    //       id: sprintData.id,
+    //       row: 0,
+    //     },
+    //   },
+    //   refetchQueries: [
+    //     { query: GetSprintsDocument, variables: { projectId } },
+    //     { query: GetBoardsDocument, variables: { projectId } },
+    //     { query: SetStartedSprintDocument, variables: { projectId } },
+    //     { query: GetSprintsDocument, variables: { projectId } },
+    //   ],
+    // });
+
+    // console.log("나는 res2야", res2);
+
+    // if (res2.data?.updateSprint.error) {
+    //   toast({
+    //     position: "bottom-right",
+    //     title: "Sprint Update Failed!",
+    //     description: res2.data?.updateSprint.error.message,
+    //     status: "error",
+    //     duration: 2000,
+    //     isClosable: true,
+    //   });
+    //   return null;
+    // }
+
     toast({
       position: "bottom-right",
       title: "Sprint Started!",
