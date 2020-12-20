@@ -13,6 +13,7 @@ import SkeletonBoard, { SkeletonBoardProps } from "../TaskBoard/SkeletonBoard";
 import { TaskUpdateOptions } from "../../../pages/Board";
 import {
   Board as boardType,
+  UpdateBoardMutation,
   UpdateTaskMutation,
 } from "../../../generated/graphql";
 
@@ -22,11 +23,18 @@ export type TaskBoardListProps = TaskBoardProps &
     projectId: string;
     boardLoading: boolean;
     taskLoading: boolean;
+    isChanged: boolean;
     handleTaskUpdate: (
       options: TaskUpdateOptions,
       projectId: string
     ) => Promise<
       FetchResult<UpdateTaskMutation, Record<string, any>, Record<string, any>>
+    >;
+    handleBoardDrag: (
+      options: TaskUpdateOptions,
+      projectId: string
+    ) => Promise<
+      FetchResult<UpdateBoardMutation, Record<string, any>, Record<string, any>>
     >;
   };
 
@@ -36,11 +44,15 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   sprintId,
   handleTaskUpdate,
   handleBoardUpdate,
+  handleBoardDrag,
   boardLoading,
   taskLoading,
+  isChanged,
+  setIsChanged,
   ...props
 }): ReactElement => {
   const [boardLists, setBoardLists] = useState(boards);
+  // const [isChanged, setIsChanged] = useState(false);
   const toast = useToast();
 
   const {
@@ -56,7 +68,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
   };
 
   const handleBoardUpdateToServer = async (options: Boardoptions) => {
-    await handleBoardUpdate(options, projectId);
+    await handleBoardDrag(options, projectId);
   };
 
   const boardConfig = {
@@ -69,20 +81,47 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     boards,
     projectId,
     sprintId,
+    boardLoading,
+    taskLoading,
+    setIsChanged,
   };
 
+  /**
+  지금 문제.. 
+  
+  
+   */
+
   useEffect(() => {
-    setBoardLists(boards);
-  }, [boards]);
+    console.log("isChange useEffect:", isChanged);
+    console.log("boards:", boards); // 왜 삭제되지 않은 데이터가 들어오지?
+    if (isChanged) {
+      console.log("다시 맵 시작");
+      const newBoards = boards.map((board, i) => ({ ...board, index: i }));
+      setBoardLists(newBoards);
+      setIsChanged(false);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isChanged, boards]);
+
+  useEffect(() => {
+    console.log("boardLists:", boardLists);
+  }, [boardLists]);
 
   const renderBoards = (boards: boardType[]) => {
-    return boards.map((currentBoard) => {
+    return boards.map((currentBoard, i) => {
       return (
         <Draggable
-          index={currentBoard.boardColumnIndex}
+          index={i}
+          // index={currentBoard.boardColumnIndex}
           draggableId={currentBoard.id}
           key={currentBoard.id}
-          isDragDisabled={currentBoard.boardColumnIndex === boards.length - 1}
+          isDragDisabled={
+            currentBoard.boardColumnIndex === boards.length - 1 ||
+            boardLoading ||
+            taskLoading
+          }
         >
           {(provided) => (
             <Box
@@ -253,22 +292,51 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
       }
 
       /* source와 destination 스왑하면서 boardColumnIndex도 수정하기 */
-      const copyBoardLists = [...boardLists];
+      let copyBoardLists = [...boardLists];
       const sourceBoard = copyBoardLists[source.index];
       copyBoardLists.splice(source.index, 1);
-      copyBoardLists.splice(destination.index, 0, sourceBoard);
 
-      const changedIndexBoardList = copyBoardLists.map((board, index) => {
-        return { ...board, boardColumnIndex: index };
-      });
+      // 뒤에서 앞으로 왔다
+      // => destination과 인덱스가 같거나 큰 애들을 +1해준다;
+      if (source.index > destination.index) {
+        copyBoardLists = copyBoardLists.map((board) => {
+          if (board.index === undefined || board.index === null) return board;
+          if (board.index >= destination.index && board.index < source.index) {
+            return { ...board, index: board.index + 1 };
+          }
+          return board;
+        });
+      }
+
+      if (source.index < destination.index) {
+        copyBoardLists = copyBoardLists.map((board) => {
+          if (board.index === undefined || board.index === null) return board;
+          if (board.index <= destination.index && board.index > source.index) {
+            return { ...board, index: board.index + 1 };
+          }
+          return board;
+        });
+      }
+      // Destination Index > Source Index
+      // => SourceIndex보다 크고
+      // => DestinationIndex보다 인덱스가 작은 애들을
+      // => +1해준다
+
+      const newSourceBoard = {
+        ...sourceBoard,
+        index: destination.index,
+      };
+      copyBoardLists.splice(destination.index, 0, newSourceBoard);
 
       /* 서버에 업데이트 */
       handleBoardUpdateToServer({
-        id: sourceBoard.id,
+        id: newSourceBoard.id,
         boardColumnIndex: destination.index,
       });
 
-      setBoardLists(changedIndexBoardList);
+      console.log(copyBoardLists);
+
+      setBoardLists(copyBoardLists);
     }
   };
 
@@ -276,7 +344,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="board" type="BOARD" direction="horizontal">
         {(provided) => (
-          <>
+          <Box position="relative">
             <Box
               display="flex"
               flexDir="row"
@@ -289,10 +357,11 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
               <SkeletonBoard
                 handleBoardCreate={handleBoardCreate}
                 projectId={projectId}
+                setIsChanged={setIsChanged}
                 // lazyGetBoard={lazyGetBoard}
               />
             </Box>
-          </>
+          </Box>
         )}
       </Droppable>
     </DragDropContext>
