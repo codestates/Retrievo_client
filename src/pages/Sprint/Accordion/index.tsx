@@ -105,8 +105,6 @@ export const Sprints: React.FC = () => {
       refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
 
-    console.log(res);
-
     if (res.data?.updateSprint.error) {
       toast({
         position: "bottom-right",
@@ -118,8 +116,6 @@ export const Sprints: React.FC = () => {
       });
     }
   };
-
-  console.log("나는 스프린츠에여", sprints);
 
   return (
     <>

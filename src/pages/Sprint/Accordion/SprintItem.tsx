@@ -164,7 +164,10 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           console.log(err);
         }
       },
-      refetchQueries: [{ query: GetBoardsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetBoardsDocument, variables: { projectId } },
+        { query: SetStartedSprintDocument, variables: { projectId } },
+      ],
     });
 
     if (res.data?.deleteSprint.error) {
@@ -242,7 +245,10 @@ export const SprintItem: React.FC<Record<string, any>> = ({
           isCompleted: true,
         },
       },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      refetchQueries: [
+        { query: GetSprintsDocument, variables: { projectId } },
+        { query: GetBoardsDocument, variables: { projectId } },
+      ],
     });
 
     if (res.data?.updateSprint.error) {
