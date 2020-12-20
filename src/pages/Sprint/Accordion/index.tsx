@@ -18,7 +18,10 @@ export const Sprints: React.FC = () => {
   const [selected, setSelected] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [updateSprintMutation] = useUpdateSprintMutation();
+  const [
+    updateSprintMutation,
+    { loading: updateLoading },
+  ] = useUpdateSprintMutation();
   const toast = useToast();
 
   if (!projectId) return null;
@@ -92,6 +95,8 @@ export const Sprints: React.FC = () => {
       });
     }
   };
+
+  console.log("나는 스프린츠에여", sprints);
 
   return (
     <>
