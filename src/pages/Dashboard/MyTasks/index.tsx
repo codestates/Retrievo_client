@@ -61,7 +61,7 @@ export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
           p={2}
           bg="achromatic.100"
         >
-          <Text color="achromatic.600">Noting to do. Dobby is free!!!</Text>
+          <Text color="achromatic.600">Nothing to do. Dobby is free!!!</Text>
         </Box>
       );
 
