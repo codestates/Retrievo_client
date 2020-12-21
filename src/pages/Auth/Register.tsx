@@ -101,7 +101,7 @@ const Register: React.FC<RegisterPropsType> = () => {
           />
         </Form>
         <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
-          <a href="http://retrievo.io/auth/google">
+          <a href="https://retrievo.io/auth/google">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.google}
@@ -112,7 +112,7 @@ const Register: React.FC<RegisterPropsType> = () => {
               mr={2}
             />
           </a>
-          <a href="http://retrievo.io/auth/github">
+          <a href="https://retrievo.io/auth/github">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.github}

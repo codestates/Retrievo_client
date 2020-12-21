@@ -48,9 +48,9 @@ const Landing: React.FC<Record<string, never>> = () => {
   const { routeToProject } = useProjectRoute();
   const { data, loading } = useGetMeQuery();
 
-  if (!loading && data?.getMe.user) {
-    history.push("/project/dashboard");
-  }
+  // if (!loading && data?.getMe.user) {
+  //   history.push("/project/dashboard");
+  // }
 
   const onCreateGuest = async () => {
     const response = await createGuest();
