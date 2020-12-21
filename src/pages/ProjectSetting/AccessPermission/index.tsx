@@ -91,7 +91,6 @@ export const AccessPermission: React.FC = () => {
           data.updateProjectPermission.projectPermission.project
         );
         if (!cacheId) return;
-        console.log(cache);
         cache.modify({
           fields: {
             project: (existingProjectPermission, { toReference }) => {
