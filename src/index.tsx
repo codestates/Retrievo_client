@@ -6,10 +6,11 @@ import App from "./App";
 
 const PROD = "https://retrievo.io/graphql";
 const DEV = "http://localhost:4000/graphql";
+const NET = "https://retrievo.netlify.app/";
 // eslint-disable-next-line import/prefer-default-export
 export const client = new ApolloClient({
   // uri: PROD,
-  uri: DEV,
+  uri: NET,
   cache: new InMemoryCache(),
   credentials: "include",
 });
