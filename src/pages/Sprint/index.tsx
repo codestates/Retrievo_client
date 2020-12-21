@@ -14,11 +14,11 @@ import {
   SetStartedSprintDocument,
   useCreateSprintMutation,
 } from "../../generated/graphql";
-import useQuery from "../../hooks/useQuery";
+import useParams from "../../hooks/useProjectParam";
 
 export const Sprint: React.FC<Record<string, never>> = () => {
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useParams();
+
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [createSprintMutation] = useCreateSprintMutation();

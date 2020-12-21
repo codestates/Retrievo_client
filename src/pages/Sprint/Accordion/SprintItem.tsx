@@ -36,8 +36,7 @@ import {
   SetStartedSprintDocument,
   useCreateTaskMutation,
 } from "../../../generated/graphql";
-import { useQuery } from "../../../hooks/useQuery";
-import { TaskOptions } from "../../../layouts/TaskBoard/TaskBoard";
+import useProjectIdParams from "../../../hooks/useProjectParam";
 
 export type sprintItemProps = {
   sprintData: Sprint;
@@ -57,8 +56,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   onTaskOpen,
 }) => {
   const toast = useToast();
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const projectId = useProjectIdParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");

@@ -29,10 +29,7 @@ const ProjectListDropdown: React.FC<ProjectListDropdownPropsType> = ({
     return projectPermissions?.map(({ project }: projectType, index) => {
       if (!project) return null;
       return (
-        <Link
-          key={project.id}
-          to={`/project/dashboard?projectId=${project.id}`}
-        >
+        <Link key={project.id} to={`/project/dashboard/${project.id}`}>
           <MenuItem
             value={project.name}
             // value="dummy"

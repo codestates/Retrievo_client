@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import * as yup from "yup";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InputField from "../../components/Input";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
@@ -12,6 +12,8 @@ import RoundButton, {
 } from "../../components/RoundButton";
 import { useRegisterMutation } from "../../generated/graphql";
 import useProjectRoute from "./useProjectRoute";
+import IconButton, { IconButtonType } from "../../components/IconButton";
+import ROUTES from "../../utils/RoutePath";
 
 export type RegisterPropsType = {
   sample?: string;
@@ -66,9 +68,20 @@ const Register: React.FC<RegisterPropsType> = () => {
       justifyContent="center"
       alignItems="center"
       flexDir="column"
+      position="relative"
     >
       <Heading headingType={headingEnum.auth}>Register</Heading>
       <Box w="70%">
+        <Box position="absolute" top="0" left="0">
+          <Link to={ROUTES.LANDING}>
+            <IconButton
+              size="lg"
+              color="achromatic.700"
+              aria-label="back to home"
+              iconButtonType={IconButtonType.close}
+            />
+          </Link>
+        </Box>
         <Form
           initialValues={initialValue}
           validationSchema={validationSchema}

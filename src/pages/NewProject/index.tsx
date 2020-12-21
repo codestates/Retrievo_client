@@ -52,7 +52,8 @@ const NewProject = (): ReactElement => {
       // TODO 생성된 프로젝트로 라우팅
       const projectId = res.data?.createProject.project?.id;
       if (!projectId) throw Error("no project id");
-      history.push(`/project/dashboard?projectId=${projectId}`);
+      console.log("-----newProject:", projectId);
+      history.push(`/project/dashboard/${projectId}`);
     } catch (err) {
       console.log("create new project error:", err);
       createErrorToast();

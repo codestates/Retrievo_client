@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 /* Layouts & types */
 import { Box, useDisclosure, Flex, useToast } from "@chakra-ui/react";
+import useProjectIdParam from "../../hooks/useProjectParam";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -27,11 +28,8 @@ import {
   SetStartedSprintDocument,
   useDeleteSprintMutation,
   GetSprintsDocument,
-  // useUpdateSprintMutation,
-  // GetSprintsDocument,
 } from "../../generated/graphql";
 /* hooks */
-import { useQuery } from "../../hooks/useQuery";
 
 export interface TaskUpdateOptions {
   id: string;
@@ -47,8 +45,7 @@ export interface SprintUpdateOptions {
 
 export const Board: React.FC<Record<string, never>> = () => {
   /* get projectId */
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const projectId = useProjectIdParam();
   if (!projectId) return null;
 
   /* state & hooks */

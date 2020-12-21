@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
@@ -7,9 +7,13 @@ import Heading, { headingEnum } from "../../components/Heading";
 import ProjectListDropdown from "./ProjectListDropdown";
 import IconButton, { IconButtonType } from "../../components/IconButton";
 import AvatarGroup, { AvatarSize } from "../../components/AvatarGroup";
-import { useGetMeQuery, useGetProjectQuery } from "../../generated/graphql";
-import useQuery from "../../hooks/useQuery";
+import {
+  useGetMeQuery,
+  useGetProjectQuery,
+  Project as ProjectType,
+} from "../../generated/graphql";
 import ROUTES from "../../utils/RoutePath";
+import useProjectIdParam from "../../hooks/useProjectParam";
 
 export type TopNavPropsType = {
   projectId: string;
@@ -17,16 +21,29 @@ export type TopNavPropsType = {
 
 const TopNav: React.FC<Record<string, never>> = () => {
   /* Project Query & Props */
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const history = useHistory();
+  const projectId = useProjectIdParam();
   const { data, loading } = useGetMeQuery();
 
-  if (!projectId) return null;
+  // projectId가 없으면 or 유효하지 않으면
+  // if (!projectId) {
+  //   history.push("/");
+  //   return null;
+  // }
+
+  console.log("------ProjectId", projectId);
 
   const projectPermissions = data?.getMe.user?.projectPermissions;
   const currentProject = projectPermissions?.find(
-    ({ project }) => project.id === projectId
+    ({ project }: { project: ProjectType }) => project.id === projectId
   );
+
+  console.log("currentProject", currentProject);
+  if (!currentProject || !projectId) {
+    history.push("/");
+    return null;
+  }
+
   const projectConfig = { projectPermissions, currentProject };
 
   /* User Query */
@@ -106,7 +123,7 @@ const TopNav: React.FC<Record<string, never>> = () => {
             iconButtonType={IconButtonType.notification}
           />
           {/* </Link> */}
-          <Link to={`${ROUTES.MY_PROFILE}?projectId=${projectId}`}>
+          <Link to={`${ROUTES.MY_PROFILE}`}>
             <IconButton
               fontSize="xl"
               color="achromatic.700"

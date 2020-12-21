@@ -29,11 +29,10 @@ import {
   useGetMeQuery,
 } from "../../../generated/graphql";
 import ModalLayout from "../../../layouts/Modal";
-import { useQuery } from "../../../hooks/useQuery";
+import useParams from "../../../hooks/useProjectParam";
 
 export const AccessPermission: React.FC = () => {
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useParams();
   const toast = useToast();
 
   if (!projectId) {

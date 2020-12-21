@@ -14,9 +14,10 @@ export const useProjectRoute = () => {
   console.log("getMe data:", data);
 
   if (data) {
+    console.log("뭐지?");
     if (data?.getMe.user?.projectPermissions[0]) {
       history.push(
-        `/project/dashboard?projectId=${data.getMe.user.projectPermissions[0].project.id}`
+        `/project/dashboard/${data.getMe.user.projectPermissions[0].project.id}`
       );
     } else {
       history.push("/new-project");

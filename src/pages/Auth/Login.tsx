@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 import Heading, { headingEnum } from "../../components/Heading";
 import Form from "../../components/Form";
 import InputField from "../../components/Input";
@@ -11,6 +12,8 @@ import RoundButton, {
 } from "../../components/RoundButton";
 import { useLoginMutation } from "../../generated/graphql";
 import useProjectRoute from "./useProjectRoute";
+import IconButton, { IconButtonType } from "../../components/IconButton";
+import ROUTES from "../../utils/RoutePath";
 
 const Login = (): ReactElement => {
   const { routeToProject } = useProjectRoute();
@@ -55,9 +58,20 @@ const Login = (): ReactElement => {
       justifyContent="center"
       alignItems="center"
       flexDir="column"
+      position="relative"
     >
       <Heading headingType={headingEnum.auth}>Login</Heading>
       <Box w="70%">
+        <Box position="absolute" top="0" right="0">
+          <Link to={ROUTES.LANDING}>
+            <IconButton
+              size="lg"
+              color="achromatic.700"
+              aria-label="back to home"
+              iconButtonType={IconButtonType.close}
+            />
+          </Link>
+        </Box>
         <Form
           initialValues={initialValue}
           validationSchema={validationSchema}

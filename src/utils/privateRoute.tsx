@@ -1,8 +1,8 @@
 /* eslint-disable indent */
 import React from "react";
-import { Route, Redirect, useParams, useLocation } from "react-router-dom";
+import { Route, Redirect, useParams } from "react-router-dom";
 import ROUTES from "./RoutePath";
-import useQuery from "../hooks/useQuery";
+// import useParams from "../hooks/useProjectParam";
 
 export type permissionType = "projectId" | "isSignIn" | "isNotSignIn";
 
@@ -13,8 +13,7 @@ interface routeProps {
 }
 
 export const ProjectRoute: React.FC<routeProps> = ({ ...rest }) => {
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const { projectId } = useParams<{ projectId: string }>();
   const isProjectId = !!projectId;
 
   const generateRoute = (validation: boolean) => {
@@ -25,3 +24,34 @@ export const ProjectRoute: React.FC<routeProps> = ({ ...rest }) => {
 };
 
 export default ProjectRoute;
+
+/**
+
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useParams
+} from "react-router-dom";
+
+function BlogPost() {
+  let { slug } = useParams();
+  return <div>Now showing post {slug}</div>;
+}
+
+ReactDOM.render(
+  <Router>
+    <Switch>
+      <Route exact path="/">
+        <HomePage />
+      </Route>
+      <Route path="/blog/:slug">
+        <BlogPost />
+      </Route>
+    </Switch>
+  </Router>,
+  node
+);
+ */

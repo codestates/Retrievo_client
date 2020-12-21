@@ -530,6 +530,7 @@ const Landing: React.FC<Record<string, never>> = () => {
         />
         <Flex flexDir="column" mt={180} position="relative">
           <Flex
+            justifyContent="flex-end"
             alignItems="center"
             bgColor="#DCE0E0"
             width="50rem"

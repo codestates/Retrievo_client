@@ -1,8 +1,7 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import theme from "./styles/theme";
-import ProjectRoute from "./utils/privateRoute";
 import ROUTE from "./utils/RoutePath";
 
 /* components */
@@ -26,20 +25,18 @@ const App: React.FC<Record<string, never>> = () => {
         <Switch>
           <Route exact path={ROUTE.LANDING} component={Landing} />
           <Route path={ROUTE.AUTH} component={Auth} />
-          <ProjectRoute path={ROUTE.DASHBOARD} component={Dashboard} />
-          <ProjectRoute path={ROUTE.BOARD} component={Board} />
-          <ProjectRoute path={ROUTE.SPRINT} component={Sprint} />
-          <ProjectRoute path={ROUTE.TIMELINE} component={Timeline} />
-          <ProjectRoute path={ROUTE.CALENDAR} component={Calendar} />
-          <ProjectRoute
-            path={ROUTE.PROJECT_SETTING}
-            component={ProjectSetting}
-          />
+          <Route path={ROUTE.DASHBOARD} component={Dashboard} />
+          <Route path={ROUTE.BOARD} component={Board} />
+          <Route path={ROUTE.SPRINT} component={Sprint} />
+          <Route path={ROUTE.TIMELINE} component={Timeline} />
+          <Route path={ROUTE.CALENDAR} component={Calendar} />
+          <Route path={ROUTE.PROJECT_SETTING} component={ProjectSetting} />
           <Route path={ROUTE.NEW_PROJECT} component={NewProject} />
           <Route path={ROUTE.MY_PROFILE} component={MyProfile} />
           <Route path={ROUTE.NOT_FOUND} component={NotFound} />
           <Route path={ROUTE.INVITATION} component={Invitation} />
-          {/* <Redirect path="*" to={ROUTE.NOT_FOUND} /> */}
+          <Redirect path="/project" to={ROUTE.LANDING} />
+          <Redirect path="*" to={ROUTE.NOT_FOUND} />
         </Switch>
       </ChakraProvider>
     </>
