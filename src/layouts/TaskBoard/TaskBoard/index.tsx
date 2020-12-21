@@ -324,7 +324,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
       </Box>
       <Box
         bgColor="primary.400"
-        h="100%"
         p={4}
         mb={4}
         borderRadius={10}

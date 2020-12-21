@@ -35,7 +35,8 @@ const Login = (): ReactElement => {
     const response = await login({
       variables: { options: { email, password, projectId: null } },
     });
-    if (response.data?.login.error?.message) {
+    if (response.data?.login.error) {
+      console.log(response.data?.login.error);
       setFieldError(
         response.data.login.error.field,
         response.data.login.error.message
@@ -81,7 +82,7 @@ const Login = (): ReactElement => {
           />
         </Form>
         <Box display="flex" justifyContent="center" alignItems="center" mt={7}>
-          <a href="http://retrievo.io/auth/google">
+          <a href="https://retrievo.io/auth/google">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.google}
@@ -92,7 +93,7 @@ const Login = (): ReactElement => {
               mr={2}
             />
           </a>
-          <a href="http://retrievo.io/auth/github">
+          <a href="https://retrievo.io/auth/github">
             <RoundButton
               aria-label="google login button"
               iconType={IconType.github}

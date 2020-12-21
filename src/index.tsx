@@ -8,8 +8,8 @@ const PROD = "https://retrievo.io/graphql";
 const DEV = "http://localhost:4000/graphql";
 // eslint-disable-next-line import/prefer-default-export
 export const client = new ApolloClient({
-  // uri: PROD,
-  uri: DEV,
+  uri: PROD,
+  // uri: DEV,
   cache: new InMemoryCache(),
   credentials: "include",
 });
