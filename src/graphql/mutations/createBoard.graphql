@@ -1,0 +1,37 @@
+mutation CreateBoard($title:String!, $projectId:String!){
+  createBoard(title:$title, projectId:$projectId){
+    boards{
+      id
+      title
+      boardColumnIndex
+      task{
+        id
+        title
+        boardRowIndex
+        sprintRowIndex
+        taskIndex
+        startDate
+        endDate
+        userTask{
+          user{
+            id
+            username
+            avatar
+          }
+        }
+        taskLabel {
+          label {
+            id
+            name
+            color
+          }
+        }
+      }
+    }
+    error{
+      message
+      code
+      field
+    }
+  }
+}

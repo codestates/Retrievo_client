@@ -1,0 +1,20 @@
+mutation CreateTaskLabel($taskId:String!,$name:String!,$color:String!,$projectId:String!){
+  createTaskLabel(taskId:$taskId,name:$name,color:$color,projectId:$projectId){
+    taskLabel{
+      id
+      task{
+        id
+        title
+      }
+      label{
+        id
+        name
+      }
+    }
+    error{
+      code
+      field
+      message
+    }
+  }
+}

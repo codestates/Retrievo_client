@@ -1,0 +1,37 @@
+mutation DeleteBoard($id:String!, $newBoardId:String!, $projectId:String!){
+  deleteBoard(id: $id, newBoardId:$newBoardId, projectId: $projectId) {
+    boards{
+      id
+      title
+      boardColumnIndex
+      task{
+        id
+        title
+        boardRowIndex
+        sprintRowIndex
+        taskIndex
+        startDate
+        endDate
+        userTask{
+          user{
+            id
+            username
+            avatar
+          }
+        }
+        taskLabel {
+          label {
+            id
+            name
+            color
+          }
+        }
+      }
+    }
+    error{
+      message
+      code
+      field
+    }
+  }
+}

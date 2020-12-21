@@ -25,6 +25,8 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   rules: {
     "react/jsx-filename-extension": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0,
     indent: ["error", 2],
     quotes: ["error", "double"],
     semi: ["error", "always"],
@@ -43,11 +45,12 @@ module.exports = {
       },
     ],
     "prettier/prettier": "error",
-    "no-unused-vars": "error",
-    "no-console": "warn",
+    "no-unused-vars": "off",
+    "no-console": "off",
     "click-events-have-key-events": "off",
     "max-classes-per-file": "off",
     "no-use-before-define": "off",
+    "react-hooks/rules-of-hooks": "warn",
     "@typescript-eslint/no-use-before-define": ["error"],
   },
 };

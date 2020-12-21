@@ -1,0 +1,40 @@
+query GetSprints($projectId: String!) {
+  getSprints(projectId: $projectId) {
+    sprints {
+      id
+      title
+      description
+      row
+      dueDate
+	  startedAt
+      didStart
+      isCompleted
+      task {
+        id
+        title
+        description
+        taskIndex
+        sprintRowIndex
+        completed
+        startDate
+        endDate
+        createdAt
+        updatedAt
+        userTask {
+          user {
+            username
+            email
+            avatar
+            role
+          }
+        }
+        board {
+          id
+          title
+        	createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+}

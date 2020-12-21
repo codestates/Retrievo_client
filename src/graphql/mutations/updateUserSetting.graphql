@@ -1,0 +1,9 @@
+mutation UpdateUserSetting($username: String, $password: String, $email: String) {
+  updateUserSetting (options: {username: $username, password: $password, email: $email}) {
+    error {
+      message
+      code
+      field
+    }
+  }
+}

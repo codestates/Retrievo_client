@@ -1,0 +1,14 @@
+mutation CreateGuest{
+  createGuest{
+   error{
+    field
+    message
+    code
+  } 
+    user{
+      id
+      username
+      role
+    }
+  }
+}

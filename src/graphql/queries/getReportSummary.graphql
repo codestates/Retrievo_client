@@ -1,0 +1,28 @@
+query GetReportSummary($projectId:String!) {
+	reportSummary(projectId:$projectId) {
+	    taskCountSummary {
+            overdueTasksCount
+            completedTasksCount
+            incompleteTasksCount
+            totalTasksCount
+        }
+    
+        tasksByAssignee {
+            userId
+            username
+            avatar
+            totalTasksCount
+            incompleteTasksCount
+            completedTasksCount
+            overdueTasksCount
+        }
+    
+ 		incompleteTaskStatus 
+        
+        error {
+            code
+            message
+            field
+        }
+    }
+}

@@ -1,0 +1,34 @@
+query GetMe{
+  getMe{
+    user {
+      id
+      username
+      email
+      avatar
+      role
+      projectPermissions{
+        project {
+          id
+          name
+        }
+      }
+      userTask {
+        task {
+          id
+          title
+          board {
+            title
+          }
+          project {
+            id
+          }
+        }
+      }
+    }
+    error {
+      code
+      message
+      field
+    }
+  }
+}

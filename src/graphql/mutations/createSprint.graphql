@@ -1,0 +1,15 @@
+mutation CreateSprint($projectId: String!, $title: String!, $description: String!) {
+  createSprint(projectId: $projectId, title: $title, description: $description) {
+    sprint {
+      id
+      title
+      description
+      row
+    }
+    error {
+      message
+      code
+      field
+    }
+  }
+}

@@ -1,0 +1,24 @@
+mutation CreateComment($taskId:String!,$options:CommentCreateInput!,$projectId:String!){
+  createComment(taskId:$taskId, options:$options,projectId:$projectId){
+    error{
+      field
+      message
+      code
+    }
+    comment{
+      id
+      rootCommentId
+      user{
+        username
+        avatar
+        id
+      }
+      task{
+        id
+        title
+      }
+      content
+      createdAt
+    }
+  }
+}

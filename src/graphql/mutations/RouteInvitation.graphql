@@ -1,0 +1,10 @@
+mutation RouteInvitation($keyToken:String!) {
+  routeInvitation(keyToken:$keyToken) {
+    success
+    error {
+      field
+      message
+      code
+    }
+  }
+}
