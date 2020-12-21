@@ -8,6 +8,7 @@ import Heading, { headingEnum } from "../../../components/Heading";
 import StyledBasicDetailWrapper from "./BasicDetail.styled";
 import ModalLayout from "../../../layouts/Modal";
 import Spinner from "../../../components/Spinner";
+import useParams from "../../../hooks/useProjectParam";
 import {
   GetMeDocument,
   GetProjectDocument,
@@ -16,12 +17,10 @@ import {
   useGetProjectQuery,
   useUpdateProjectNameMutation,
 } from "../../../generated/graphql";
-import useQuery from "../../../hooks/useQuery";
 
 export const BasicDetail: React.FC = () => {
   const toast = useToast();
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useParams();
   const history = useHistory();
   const { data: getMeData } = useGetMeQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();

@@ -10,11 +10,10 @@ import {
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import TaskBar from "../../../layouts/TaskBar";
-import useQuery from "../../../hooks/useQuery";
+import useProjectIdParam from "../../../hooks/useProjectParam";
 
 export const Sprints: React.FC = () => {
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const projectId = useProjectIdParam();
   const [selected, setSelected] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

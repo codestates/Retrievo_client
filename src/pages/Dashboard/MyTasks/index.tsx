@@ -9,15 +9,14 @@ import StyledListItem from "./MyTasks.styled";
 import { useGetMeQuery } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import Label from "../../../components/Label";
-import useQuery from "../../../hooks/useQuery";
+import useProjectIdParam from "../../../hooks/useProjectParam";
 
 interface MyTaskPropType {
   setSelectedTask: (id: string) => void;
 }
 
 export const MyTasks: React.FC<MyTaskPropType> = ({ setSelectedTask }): any => {
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useProjectIdParam();
   const { data: meData, loading: meLoading, refetch } = useGetMeQuery();
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 3);
   if (!projectId) return null;

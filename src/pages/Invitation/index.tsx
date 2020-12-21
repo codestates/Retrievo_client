@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useRouteInvitationMutation } from "../../generated/graphql";
-import useQuery from "../../hooks/useQuery";
+import useParams from "../../hooks/useProjectParam";
 
 export const Invitation: React.FC = () => {
   const [routeInvitationMutation] = useRouteInvitationMutation();
   const history = useHistory();
-  const query = useQuery();
-  const keyToken = query.get("projectCode");
+  const projectId = useParams();
+  const keyToken = projectId;
   if (!keyToken) {
     history.push("/not-found");
     return <></>;
@@ -15,7 +15,7 @@ export const Invitation: React.FC = () => {
 
   useEffect(() => {
     async function express() {
-      if (keyToken === null) return;
+      if (keyToken === null || keyToken === undefined) return;
       try {
         await routeInvitationMutation({
           variables: { keyToken },

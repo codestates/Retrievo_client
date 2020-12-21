@@ -6,7 +6,7 @@ import {
   useUpdateTaskMutation,
   GetSprintsDocument,
 } from "../../../generated/graphql";
-import useQuery from "../../../hooks/useQuery";
+import useProjectIdParams from "../../../hooks/useProjectParam";
 import TaskListEntry from "./TaskListEntry";
 
 type TaskListPropType = {
@@ -20,8 +20,7 @@ export const TaskList: React.FC<TaskListPropType> = ({
   setSelectedTask,
   onTaskOpen,
 }) => {
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const projectId = useProjectIdParams();
 
   const [updateTaskMutation] = useUpdateTaskMutation();
   const toast = useToast();

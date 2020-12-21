@@ -4,7 +4,7 @@ import { FiActivity } from "react-icons/fi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import _ from "lodash";
 import { useGetProjectQuery } from "../../../generated/graphql";
-import useQuery from "../../../hooks/useQuery";
+import useProjectParam from "../../../hooks/useProjectParam";
 // import { formatDistanceStrict } from "date-fns";
 import useLoadMore from "../../../hooks/useLoadMore";
 import Heading, { headingEnum } from "../../../components/Heading";
@@ -14,8 +14,7 @@ import CustomAvatar from "../../../components/Avatar";
 import Spinner from "../../../components/Spinner";
 
 export const ActivityStream: React.FC = () => {
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useProjectParam();
   const [items, setItems, visible, loadMore, reset] = useLoadMore([], 2);
   if (!projectId) return null;
 

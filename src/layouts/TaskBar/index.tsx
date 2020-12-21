@@ -63,7 +63,7 @@ import TextLabel from "./TextLabel";
 import Calendar, { calendarProps, dateIFC } from "../../components/Calendar";
 import IconButton from "../../components/IconButton";
 import LabelSearchInput from "../../components/LabelSearchInput";
-import useQuery from "../../hooks/useQuery";
+import useParams from "../../hooks/useProjectParam";
 import ModalLayout from "../Modal";
 
 const titleValidation = yup.object({
@@ -108,10 +108,7 @@ export const TaskBar: React.FC<taskProps> = ({
   const [deleteComment] = useDeleteCommentMutation();
   const { data: meData } = useGetMeQuery();
 
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
-  const history = useHistory();
-  if (!projectId) history.push(ROUTES.AUTH);
+  const projectId = useParams();
 
   useEffect(() => {
     if (!!isOpen && !!taskId && !!projectId) {

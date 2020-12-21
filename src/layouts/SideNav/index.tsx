@@ -5,7 +5,7 @@ import { BiChalkboard, BiCalendarEvent } from "react-icons/bi";
 import { CgBoard } from "react-icons/cg";
 import { FiClock, FiSettings, FiFastForward } from "react-icons/fi";
 import { IconContext } from "react-icons";
-import useQuery from "../../hooks/useQuery";
+import useProjectIdParam from "../../hooks/useProjectParam";
 
 export type MenuType = {
   path: string;
@@ -56,8 +56,7 @@ export const sideBarMenu = [
 ];
 
 const SideNav: React.FC<Record<string, never>> = (): ReactElement => {
-  const query = useQuery();
-  const projectId = query.get("projectId");
+  const projectId = useProjectIdParam();
 
   const changeIconColor = (icon: ReactElement) => {
     return (
@@ -72,7 +71,7 @@ const SideNav: React.FC<Record<string, never>> = (): ReactElement => {
   const renderMenu = () => {
     return sideBarMenu.map((menu) => {
       return (
-        <Link to={`${menu.path}?projectId=${projectId}`} key={menu.name}>
+        <Link to={`${menu.path}/${projectId}`} key={menu.name}>
           <Box
             bg={
               window.location.pathname.includes(menu.path)

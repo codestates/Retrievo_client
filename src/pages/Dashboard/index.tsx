@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 /* Layouts */
 import { Box, useDisclosure } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import SideNav from "../../layouts/SideNav";
 import TopNav from "../../layouts/TopNav";
 import PageHeading from "../../layouts/PageHeader";
@@ -16,6 +17,8 @@ import Charts from "./Charts";
 export const Dashboard: React.FC<Record<string, never>> = () => {
   const [selectedTask, setSelectedTask] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { projectId } = useParams<{ projectId: string }>();
+  console.log("proejctId Param Dashboard:", projectId);
 
   useEffect(() => {
     if (selectedTask) {

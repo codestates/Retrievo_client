@@ -9,13 +9,11 @@ import {
   Center,
 } from "@chakra-ui/react";
 import React from "react";
-import Spinner from "../../../components/Spinner";
 import { useGetReportSummaryQuery } from "../../../generated/graphql";
-import { useQuery } from "../../../hooks/useQuery";
+import useParams from "../../../hooks/useProjectParam";
 
 export const ReportCard: React.FC = () => {
-  const urlQuery = useQuery();
-  const projectId = urlQuery.get("projectId");
+  const projectId = useParams();
   if (!projectId) return null;
 
   const { data, loading } = useGetReportSummaryQuery({
