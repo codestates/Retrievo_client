@@ -50,9 +50,9 @@ const TopNav: React.FC<Record<string, never>> = () => {
     ({ project }: { project: ProjectType }) => project.id === projectId
   );
 
-  if (!currentProject) {
-    history.push("/new-project");
-  }
+  // if (!currentProject) {
+  //   history.push("/new-project");
+  // }
 
   const projectConfig = { projectPermissions, currentProject };
 

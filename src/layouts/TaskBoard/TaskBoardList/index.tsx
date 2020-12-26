@@ -86,12 +86,6 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({
     setIsChanged,
   };
 
-  /**
-  지금 문제.. 
-  
-  
-   */
-
   useMemo(() => {
     console.log("isChange useEffect:", isChanged);
     console.log("boards:", boards); // 왜 삭제되지 않은 데이터가 들어오지?

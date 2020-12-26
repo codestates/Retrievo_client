@@ -1,12 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from "react";
-import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
+import React, { useState, useMemo } from "react";
+import {
+  Accordion,
+  Box,
+  useToast,
+  useDisclosure,
+  Skeleton,
+  Stack,
+} from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import SprintItem from "./SprintItem";
 import {
   GetSprintsDocument,
   useGetSprintsQuery,
   useUpdateSprintMutation,
+  Sprint as sprintType,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import TaskBar from "../../../layouts/TaskBar";
@@ -15,6 +23,7 @@ import useProjectIdParam from "../../../hooks/useProjectParam";
 export const Sprints: React.FC = () => {
   const projectId = useProjectIdParam();
   const [selected, setSelected] = useState<null | string>(null);
+  const [newSprints, setNewSprints] = useState<null | any[]>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [
@@ -83,6 +92,7 @@ export const Sprints: React.FC = () => {
     );
     if (!draggableSprint?.title) return;
 
+    let newData;
     const res = await updateSprintMutation({
       variables: {
         projectId,
@@ -92,44 +102,28 @@ export const Sprints: React.FC = () => {
         },
       },
       update: (cache, { data }) => {
-        const existingSprintsRef = cache.readQuery<any>({
-          query: GetSprintsDocument,
-          variables: { projectId },
+        if (!data?.updateSprint || !data?.updateSprint.sprints) return;
+        newData = data?.updateSprint.sprints.map((sprint) => {
+          return { ...sprint, __typename: "Sprint" };
         });
-        console.log(data);
-        const existingSprints = existingSprintsRef.getSprints.sprints;
-        console.log(result.source.index);
-        console.log(result.destination.index);
-        if (!data) return;
-        if (!data.updateSprint.sprint) return;
-        const newSprints = reorder(
-          existingSprints,
-          result.source.index,
-          data.updateSprint.sprint.row
-        );
-        const newSprintsRef = {
-          ...existingSprintsRef,
-          getSprints: { sprints: newSprints },
-        };
+
         cache.writeQuery({
           query: GetSprintsDocument,
           variables: { projectId },
-          data: newSprintsRef,
+          data: {
+            getSprints: {
+              sprints: newData,
+            },
+          },
         });
-        console.log(newSprintsRef);
       },
-      // optimisticResponse: {
-      //   updateSprint: {
-      //     __typename: "SprintResponse",
-      //     sprint: {
-      //       __typename: "Sprint",
-      //       id: result.draggableId,
-      //       row: result.destination.index,
-      //       title: draggableSprint.title,
-      //     },
-      //   },
-      // },
-      // refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      optimisticResponse: {
+        __typename: "Mutation",
+        updateSprint: {
+          __typename: "SprintResponse",
+          sprints: newData,
+        },
+      },
     });
 
     if (res.data?.updateSprint.error) {
