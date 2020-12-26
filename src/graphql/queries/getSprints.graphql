@@ -6,7 +6,7 @@ query GetSprints($projectId: String!) {
       description
       row
       dueDate
-	  startedAt
+	    startedAt
       didStart
       isCompleted
       task {

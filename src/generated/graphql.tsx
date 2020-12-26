@@ -435,6 +435,7 @@ export type MutationDeleteSprintArgs = {
 
 export type MutationReadSprintNotificationArgs = {
   id: Scalars["String"];
+  projectId: Scalars["String"];
 };
 
 export type MutationCreateTaskArgs = {
@@ -1341,6 +1342,54 @@ export type UpdateSprintMutation = { __typename?: "Mutation" } & {
           | "row"
           | "dueDate"
           | "startedAt"
+        >
+      >;
+      sprints?: Maybe<
+        Array<
+          { __typename?: "Sprint" } & Pick<
+            Sprint,
+            | "id"
+            | "title"
+            | "description"
+            | "row"
+            | "dueDate"
+            | "startedAt"
+            | "didStart"
+            | "isCompleted"
+          > & {
+              task: Array<
+                { __typename?: "Task" } & Pick<
+                  Task,
+                  | "id"
+                  | "title"
+                  | "description"
+                  | "taskIndex"
+                  | "sprintRowIndex"
+                  | "completed"
+                  | "startDate"
+                  | "endDate"
+                  | "createdAt"
+                  | "updatedAt"
+                > & {
+                    userTask?: Maybe<
+                      Array<
+                        { __typename?: "UserTask" } & {
+                          user: { __typename?: "User" } & Pick<
+                            User,
+                            "username" | "email" | "avatar" | "role"
+                          >;
+                        }
+                      >
+                    >;
+                    board?: Maybe<
+                      { __typename?: "Board" } & Pick<
+                        Board,
+                        "id" | "title" | "createdAt" | "updatedAt"
+                      >
+                    >;
+                  }
+              >;
+            }
         >
       >;
       error?: Maybe<
@@ -3485,6 +3534,42 @@ export const UpdateSprintDocument = gql`
         row
         dueDate
         startedAt
+      }
+      sprints {
+        id
+        title
+        description
+        row
+        dueDate
+        startedAt
+        didStart
+        isCompleted
+        task {
+          id
+          title
+          description
+          taskIndex
+          sprintRowIndex
+          completed
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userTask {
+            user {
+              username
+              email
+              avatar
+              role
+            }
+          }
+          board {
+            id
+            title
+            createdAt
+            updatedAt
+          }
+        }
       }
       error {
         code
