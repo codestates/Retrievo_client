@@ -9,7 +9,6 @@ export const ROUTES = {
   CALENDAR: "/project/calendar/:projectId",
   PROJECT_SETTING: "/project/setting/:projectId",
   NEW_PROJECT: "/new-project",
-  MY_PROFILE: "/my-profile",
   NOT_FOUND: "/not-found",
 };
 export default ROUTES;

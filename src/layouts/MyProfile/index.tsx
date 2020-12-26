@@ -1,4 +1,4 @@
-import { Center, Container, useMediaQuery } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import React from "react";
 import Avatar from "../../components/Avatar";
 import Form from "./Forms";
@@ -10,18 +10,12 @@ import RoundButton, {
   ShadowType,
 } from "../../components/RoundButton";
 import StyledProfileWrapper from "./MyProfile.styled";
-import TopNav from "../../layouts/TopNav";
 
 export const MyProfile: React.FC<Record<string, never>> = () => {
-  const [isTablet] = useMediaQuery("(max-width: 80em)");
-
-  const maxW = isTablet ? "560px" : "30%";
-
   return (
     <>
-      <TopNav />
-      <Container maxW={maxW} mt={16}>
-        <Center mt={40}>
+      <Box m={6}>
+        <Center>
           <Heading headingType={headingEnum.page} fontSize="2.5rem">
             My Profile
           </Heading>
@@ -40,7 +34,7 @@ export const MyProfile: React.FC<Record<string, never>> = () => {
           </StyledProfileWrapper>
         </Center>
         <Form />
-      </Container>
+      </Box>
     </>
   );
 };

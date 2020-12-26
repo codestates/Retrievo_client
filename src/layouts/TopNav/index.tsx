@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import { GiSittingDog } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import Heading, { headingEnum } from "../../components/Heading";
@@ -14,6 +15,9 @@ import {
 } from "../../generated/graphql";
 import ROUTES from "../../utils/RoutePath";
 import useProjectIdParam from "../../hooks/useProjectParam";
+import ModalLayout from "../Modal";
+import MyProfile from "../MyProfile";
+import Spinner from "../../components/Spinner";
 
 export type TopNavPropsType = {
   projectId: string;
@@ -23,33 +27,35 @@ const TopNav: React.FC<Record<string, never>> = () => {
   /* Project Query & Props */
   const history = useHistory();
   const projectId = useProjectIdParam();
+
+  if (!projectId) {
+    history.push("/");
+    return null;
+  }
+
   const { data, loading } = useGetMeQuery();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { data: userData, loading: userLoading } = useGetProjectQuery({
+    variables: { projectId },
+  });
 
-  // projectId가 없으면 or 유효하지 않으면
-  // if (!projectId) {
-  //   history.push("/");
-  //   return null;
-  // }
-
-  console.log("------ProjectId", projectId);
+  if (loading) return <Spinner />;
+  if (!data) {
+    history.push("/");
+    return null;
+  }
 
   const projectPermissions = data?.getMe.user?.projectPermissions;
   const currentProject = projectPermissions?.find(
     ({ project }: { project: ProjectType }) => project.id === projectId
   );
 
-  console.log("currentProject", currentProject);
-  if (!currentProject || !projectId) {
-    history.push("/");
-    return null;
-  }
+  // if (!currentProject) {
+  //   history.push("/new-project");
+  // }
 
   const projectConfig = { projectPermissions, currentProject };
 
-  /* User Query */
-  const { data: userData, loading: userLoading } = useGetProjectQuery({
-    variables: { projectId },
-  });
   const usersInProject = userData?.project?.project?.projectPermissions;
   const mapUserToAvatar = () => {
     if (!usersInProject) return null;
@@ -115,22 +121,30 @@ const TopNav: React.FC<Record<string, never>> = () => {
           />
         ) : null}
         <Box>
-          {/* <Link to="/notification"> */}
           <IconButton
             fontSize="xl"
             color="achromatic.700"
             aria-label="notification"
             iconButtonType={IconButtonType.notification}
           />
-          {/* </Link> */}
-          <Link to={`${ROUTES.MY_PROFILE}`}>
-            <IconButton
-              fontSize="xl"
-              color="achromatic.700"
-              aria-label="project member list"
-              iconButtonType={IconButtonType.user}
-            />
-          </Link>
+
+          <ModalLayout
+            title=""
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            css={{ display: "none" }}
+            footer={false}
+          >
+            <MyProfile />
+          </ModalLayout>
+          <IconButton
+            onClick={onOpen}
+            fontSize="xl"
+            color="achromatic.700"
+            aria-label="profile"
+            iconButtonType={IconButtonType.user}
+          />
         </Box>
       </Box>
     </Box>
