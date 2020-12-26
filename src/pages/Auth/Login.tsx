@@ -39,13 +39,13 @@ const Login = (): ReactElement => {
       variables: { options: { email, password, projectId: null } },
     });
     if (response.data?.login.error) {
-      console.log(response.data?.login.error);
+      // console.log(response.data?.login.error);
       setFieldError(
         response.data.login.error.field,
         response.data.login.error.message
       );
     } else if (response.data?.login.user) {
-      routeToProject();
+      routeToProject(); // === refetch;
     }
   };
 

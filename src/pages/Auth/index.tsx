@@ -13,11 +13,12 @@ const RegisterAndLogin: React.FC<Record<string, never>> = () => {
   const type = query.get("type");
   const [isRegister, setIsRegister] = useState(type === "register");
   const { routeToProject } = useProjectRoute();
-  // const { data } = useGetMeQuery();
+  const { data } = useGetMeQuery();
 
-  // if (data?.getMe.user && data.getMe.user.role !== RoleTypes.Guest) {
-  //   routeToProject();
-  // }
+  if (data?.getMe.user && data.getMe.user.role !== RoleTypes.Guest) {
+    console.log("세션이 있댕!!!!!!!");
+    routeToProject();
+  }
 
   const changeCard = () => {
     setIsRegister(!isRegister);

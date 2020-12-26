@@ -37,7 +37,7 @@ export const Sprints: React.FC = () => {
   const startedSprint = sprints.find((sprint) => sprint.didStart);
   const completedSprint = sprints.find((sprint) => sprint.isCompleted);
 
-  const reorder = (list: any[], startIndex: number, endIndex: number) => {
+  const reorder = (list: any, startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -82,6 +82,7 @@ export const Sprints: React.FC = () => {
       (sprint) => sprint.id === result.draggableId
     );
     if (!draggableSprint?.title) return;
+
     const res = await updateSprintMutation({
       variables: {
         projectId,
@@ -90,18 +91,45 @@ export const Sprints: React.FC = () => {
           row: result.destination.index,
         },
       },
-      optimisticResponse: {
-        updateSprint: {
-          __typename: "SprintResponse",
-          sprint: {
-            __typename: "Sprint",
-            id: result.draggableId,
-            row: result.destination.index,
-            title: draggableSprint.title,
-          },
-        },
+      update: (cache, { data }) => {
+        const existingSprintsRef = cache.readQuery<any>({
+          query: GetSprintsDocument,
+          variables: { projectId },
+        });
+        console.log(data);
+        const existingSprints = existingSprintsRef.getSprints.sprints;
+        console.log(result.source.index);
+        console.log(result.destination.index);
+        if (!data) return;
+        if (!data.updateSprint.sprint) return;
+        const newSprints = reorder(
+          existingSprints,
+          result.source.index,
+          data.updateSprint.sprint.row
+        );
+        const newSprintsRef = {
+          ...existingSprintsRef,
+          getSprints: { sprints: newSprints },
+        };
+        cache.writeQuery({
+          query: GetSprintsDocument,
+          variables: { projectId },
+          data: newSprintsRef,
+        });
+        console.log(newSprintsRef);
       },
-      refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
+      // optimisticResponse: {
+      //   updateSprint: {
+      //     __typename: "SprintResponse",
+      //     sprint: {
+      //       __typename: "Sprint",
+      //       id: result.draggableId,
+      //       row: result.destination.index,
+      //       title: draggableSprint.title,
+      //     },
+      //   },
+      // },
+      // refetchQueries: [{ query: GetSprintsDocument, variables: { projectId } }],
     });
 
     if (res.data?.updateSprint.error) {

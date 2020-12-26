@@ -33,20 +33,20 @@ export const sideBarMenu = [
     path: "/project/board",
     description: "Manage your tasks by task status on kanban board",
   },
-  {
-    name: "Timeline",
-    icon: <FiClock />,
-    path: "/project/timeline",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-  },
-  {
-    name: "Calendar",
-    icon: <BiCalendarEvent />,
-    path: "/project/calendar",
-    description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-  },
+  // {
+  //   name: "Timeline",
+  //   icon: <FiClock />,
+  //   path: "/project/timeline",
+  //   description:
+  //     "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
+  // },
+  // {
+  //   name: "Calendar",
+  //   icon: <BiCalendarEvent />,
+  //   path: "/project/calendar",
+  //   description:
+  //     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  // },
   {
     name: "Setting",
     icon: <FiSettings />,

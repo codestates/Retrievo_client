@@ -7,6 +7,7 @@ export const useProjectRoute = () => {
     fetchPolicy: "network-only",
   });
   const history = useHistory();
+  // if (loading) return null;
 
   // 유저가 이미 getMe를 실행했던 경우 그 전의 getMe를 기억하고 있음
   // 유저가 이미 cache를 갖고 있어도 서버에서 getMe를 받아오고 싶음
@@ -14,7 +15,6 @@ export const useProjectRoute = () => {
   console.log("getMe data:", data);
 
   if (data) {
-    console.log("뭐지?");
     if (data?.getMe.user?.projectPermissions[0]) {
       history.push(
         `/project/dashboard/${data.getMe.user.projectPermissions[0].project.id}`
