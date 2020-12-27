@@ -1,20 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useMemo } from "react";
-import {
-  Accordion,
-  Box,
-  useToast,
-  useDisclosure,
-  Skeleton,
-  Stack,
-} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Accordion, Box, useToast, useDisclosure } from "@chakra-ui/react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import SprintItem from "./SprintItem";
 import {
   GetSprintsDocument,
   useGetSprintsQuery,
   useUpdateSprintMutation,
-  Sprint as sprintType,
+  // Sprint as sprintType,
 } from "../../../generated/graphql";
 import Spinner from "../../../components/Spinner";
 import TaskBar from "../../../layouts/TaskBar";
@@ -23,7 +16,7 @@ import useProjectIdParam from "../../../hooks/useProjectParam";
 export const Sprints: React.FC = () => {
   const projectId = useProjectIdParam();
   const [selected, setSelected] = useState<null | string>(null);
-  const [newSprints, setNewSprints] = useState<null | any[]>(null);
+  // const [newSprints, setNewSprints] = useState<null | any[]>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [
@@ -39,19 +32,19 @@ export const Sprints: React.FC = () => {
   });
   const sprints = data?.getSprints.sprints;
 
-  if (loading) return <Spinner />;
+  // if (loading) return <Spinner />;
   if (updateSprintLoading) return <Spinner />;
   if (!sprints) return <Spinner />;
 
   const startedSprint = sprints.find((sprint) => sprint.didStart);
   const completedSprint = sprints.find((sprint) => sprint.isCompleted);
 
-  const reorder = (list: any, startIndex: number, endIndex: number) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
+  // const reorder = (list: any, startIndex: number, endIndex: number) => {
+  //   const result = Array.from(list);
+  //   const [removed] = result.splice(startIndex, 1);
+  //   result.splice(endIndex, 0, removed);
+  //   return result;
+  // };
 
   const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;

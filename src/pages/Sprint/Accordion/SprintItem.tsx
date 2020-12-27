@@ -26,6 +26,7 @@ import InputField from "../../../components/Input";
 import TextAreaField from "../../../components/TextArea";
 import ModalLayout from "../../../layouts/Modal";
 import Heading, { headingEnum } from "../../../components/Heading";
+import Spinner from "../../../components/Spinner";
 import {
   useUpdateSprintMutation,
   useDeleteSprintMutation,
@@ -77,6 +78,7 @@ export const SprintItem: React.FC<Record<string, any>> = ({
   //   if (completedSprint.id === sprintData.id) return null;
   // }
 
+  if (updateSprintLoading) return <Spinner />;
   if (!sprintData.id) return null;
   if (!projectId) return null;
 
