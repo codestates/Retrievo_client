@@ -1,6 +1,7 @@
 import { AccordionPanel, Box, useToast } from "@chakra-ui/react";
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import Spinner from "../../../components/Spinner";
 import {
   Task,
   useUpdateTaskMutation,
@@ -22,9 +23,10 @@ export const TaskList: React.FC<TaskListPropType> = ({
 }) => {
   const projectId = useProjectIdParams();
 
-  const [updateTaskMutation] = useUpdateTaskMutation();
+  const [updateTaskMutation, { loading }] = useUpdateTaskMutation();
   const toast = useToast();
   if (!projectId) return null;
+  if (loading) return <Spinner />;
 
   const onDragEnd = async (result: Record<string, any>) => {
     if (!result.destination) return;
