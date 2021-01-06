@@ -2,7 +2,6 @@ import React from "react";
 import { Slide } from "react-awesome-reveal";
 import {
   Box,
-  Button,
   Heading as ChakraHeading,
   Flex,
   Image,
@@ -22,6 +21,7 @@ import {
   BackgroundShapePupple,
   BackgroundShapeTeal,
 } from "./background.styled";
+import Button from "./components/Button/Button.styled";
 
 /* Image File */
 import Shape1 from "../../asset/img/shape1.png";
@@ -136,15 +136,7 @@ const Landing: React.FC<Record<string, never>> = () => {
             Retrievo
           </ChakraHeading>
           <Link to="/auth?type=sign-in">
-            <Button
-              border="2px solid white"
-              bgColor="white"
-              color="#7499E"
-              borderRadius={5}
-              w={170}
-              py={5}
-              mr={3}
-            >
+            <Button borderColor="#fff" backgroundColor="#fff" color="#774499">
               SignIn
             </Button>
           </Link>
@@ -182,6 +174,7 @@ const Landing: React.FC<Record<string, never>> = () => {
           <Box
             display="grid"
             gridTemplateColumns="1fr 1fr"
+            alignItems="center"
             width="100%"
             maxW="80vw"
           >
@@ -234,27 +227,19 @@ const Landing: React.FC<Record<string, never>> = () => {
                   bg="#67499E"
                 >
                   <Button
-                    border="2px solid #67499E"
-                    bgColor="white"
+                    borderColor="#67499E"
+                    backgroundColor="#fff"
                     color="#67499E"
-                    borderRadius={5}
-                    w={170}
-                    py={5}
-                    mr={3}
                     onClick={onCreateGuest}
-                    textAlign="center"
                   >
                     Take tour
                   </Button>
                 </Tooltip>
                 <Link to="/auth?type=register">
                   <Button
-                    border="2px solid #31D5BF"
-                    bgColor="primary.200"
-                    color="white"
-                    borderRadius={5}
-                    w={170}
-                    py={5}
+                    borderColor="#31D5BF"
+                    backgroundColor="#31D5BF"
+                    color="#fff"
                   >
                     Register
                   </Button>
@@ -273,8 +258,8 @@ const Landing: React.FC<Record<string, never>> = () => {
                 url="https://retrievo-api-graphqi.s3.ap-northeast-2.amazonaws.com/board.mp4"
                 playing
                 loop
-                width="630"
-                height="450"
+                width="100%"
+                height="100%"
               />
             </Box>
           </Box>
@@ -497,7 +482,7 @@ const Landing: React.FC<Record<string, never>> = () => {
               </Text>
             </Slide>
           </Box>
-          <Box>
+          <Box zIndex={999}>
             <Bar
               data={chartData}
               options={chartOptions}
@@ -533,7 +518,9 @@ const Landing: React.FC<Record<string, never>> = () => {
             justifyContent="flex-end"
             alignItems="center"
             bgColor="#DCE0E0"
-            width="50rem"
+            maxW={1000}
+            w="full"
+            overflow="hidden"
             py={2}
             px={3}
             borderTopRadius="xl"
@@ -563,8 +550,8 @@ const Landing: React.FC<Record<string, never>> = () => {
           <Image
             src={TaskBoard}
             alt="Board_example_image"
-            width="50rem"
-            h="35rem"
+            maxW={800}
+            w="full"
             objectFit="contain"
             borderBottomRadius="xl"
             boxShadow="2xl"
@@ -578,7 +565,6 @@ const Landing: React.FC<Record<string, never>> = () => {
             position="absolute"
             right="-6rem"
             bottom="4rem"
-            // transform="rotate(-2deg)"
           />
         </Flex>
         <Flex flexDir="column" ml={20} mt={300}>
@@ -591,7 +577,7 @@ const Landing: React.FC<Record<string, never>> = () => {
               right="-6rem"
               bottom="4rem"
             />
-            <Box position="relative" w={500}>
+            <Box position="relative" w="full" maxW={800}>
               <Box
                 w={450}
                 h={8}
@@ -622,6 +608,7 @@ const Landing: React.FC<Record<string, never>> = () => {
         bg="white"
         zIndex={999}
         position="relative"
+        overflow="hidden"
       >
         <Flex
           flexDir="column"
@@ -649,12 +636,9 @@ const Landing: React.FC<Record<string, never>> = () => {
               bg="#67499E"
             >
               <Button
-                border="2px solid #31D5BF"
-                bgColor="white"
+                borderColor="#31D5BF"
+                backgroundColor="#fff"
                 color="#31D5BF"
-                borderRadius={5}
-                w={170}
-                py={5}
                 onClick={onCreateGuest}
               >
                 Take tour
